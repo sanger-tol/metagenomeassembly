@@ -22,13 +22,14 @@ workflow YAML_INPUT {
         .flatten()
         .multiMap { data ->
                 pacbio: ( data.pacbio ? [
-                    [ id: data.tolid ], 
+                    [ id: data.tolid ],
                     data.pacbio.reads.collect { file(it, checkIfExists: true) }
                 ] : [] )
+                // hic: if(data.hic) { [ [ id: data.tolid ], data.hic.cram.collect { file(it, checkIfExists: true) } ] }
                 hic: ( data.hic ? [
-                    [ id: data.tolid ], 
+                    [ id: data.tolid ],
                     data.hic.cram.collect { file(it, checkIfExists: true) }
-                ] : Channel.empty() )
+                ] : [] )
         }
         .set{ group }
 

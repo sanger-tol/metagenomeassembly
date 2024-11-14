@@ -14,11 +14,11 @@ process BWAMEM2_MEM {
     val   sort_bam
 
     output:
-    tuple val(meta), path("*.sam")  , emit: sam , optional:true
-    tuple val(meta), path("*.bam")  , emit: bam , optional:true
-    tuple val(meta), path("*.cram") , emit: cram, optional:true
-    tuple val(meta), path("*.crai") , emit: crai, optional:true
-    tuple val(meta), path("*.csi")  , emit: csi , optional:true
+    tuple val(meta3), path("*.sam")  , emit: sam , optional:true
+    tuple val(meta3), path("*.bam")  , emit: bam , optional:true
+    tuple val(meta3), path("*.cram") , emit: cram, optional:true
+    tuple val(meta3), path("*.crai") , emit: crai, optional:true
+    tuple val(meta3), path("*.csi")  , emit: csi , optional:true
     path  "versions.yml"            , emit: versions
 
     when:

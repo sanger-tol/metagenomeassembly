@@ -1,4 +1,4 @@
-tolid: test
+tolid: xyTesTing1
 pacbio:
   reads:
     - https://github.com/prototaxites/lrm_testdata/raw/refs/heads/main/subsampled.pacbio.part_001.fa.gz

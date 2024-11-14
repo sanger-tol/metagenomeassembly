@@ -13,6 +13,12 @@
                     "bwamem2/mem": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/bwamem2/mem/bwamem2-mem.diff"
+                    },
+                    "coverm/contig": {
+                        "branch": "master",
+                        "git_sha": "b4c2b037719d63aa5a1b82706b3d9ad12b98c15f",
                         "installed_by": ["modules"]
                     },
                     "hmmer/hmmsearch": {
@@ -28,7 +34,8 @@
                     "metabat2/metabat2": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/metabat2/metabat2/metabat2-metabat2.diff"
                     },
                     "metamdbg/asm": {
                         "branch": "master",
@@ -38,7 +45,8 @@
                     "minimap2/align": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/minimap2/align/minimap2-align.diff"
                     },
                     "multiqc": {
                         "branch": "master",
@@ -53,6 +61,11 @@
                     "samtools/fastq": {
                         "branch": "master",
                         "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/sort": {
+                        "branch": "master",
+                        "git_sha": "b7800db9b069ed505db3f9d91b8c72faea9be17b",
                         "installed_by": ["modules"]
                     }
                 }

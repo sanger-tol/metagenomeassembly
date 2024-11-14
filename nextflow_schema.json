@@ -60,10 +60,6 @@
                 "enable_binning": {
                     "type": "boolean",
                     "default": true
-                },
-                "binning_tools": {
-                    "type": "string",
-                    "default": "metabat2,maxbin2,bin3c,metator"
                 }
             }
         },
@@ -170,5 +166,15 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "enable_metabat2": {
+            "type": "boolean",
+            "default": true
+        },
+        "enable_metator": {
+            "type": "boolean",
+            "default": true
+        }
+    }
 }

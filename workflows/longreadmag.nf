@@ -10,6 +10,7 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
+include { BINNING                } from '../subworkflows/local/binning'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 
 /*
@@ -22,7 +23,7 @@ workflow LONGREADMAG {
     take:
     pacbio // channel: pacbio read in from yaml
     hic    // channel: hic cram file from yaml
-    
+
     main:
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
@@ -41,9 +42,13 @@ workflow LONGREADMAG {
             hic
         )
 
-        // if(params.enable_binning) {
-        //     BINNING()
-        // }
+        if(params.enable_binning) {
+            BINNING(
+                ASSEMBLY.out.assemblies,
+                READ_MAPPING.out.depths,
+                READ_MAPPING.out.hic_bam
+            )
+        }
     }
     //
     // Collate and save software versions
