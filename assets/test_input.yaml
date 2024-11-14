@@ -1,0 +1,8 @@
+tolid: test
+pacbio:
+  reads:
+    - https://github.com/prototaxites/lrm_testdata/raw/refs/heads/main/subsampled.pacbio.part_001.fa.gz
+    - https://github.com/prototaxites/lrm_testdata/raw/refs/heads/main/subsampled.pacbio.part_002.fa.gz
+hic:
+  cram:
+    - https://github.com/prototaxites/lrm_testdata/raw/refs/heads/main/hic.cram

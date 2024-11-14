@@ -16,9 +16,8 @@
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/yaml",
+                    "pattern": "^\\S+\\.yaml$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
@@ -33,6 +32,54 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                }
+            }
+        },
+        "new_group_1": {
+            "title": "New Group 1",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_assembly": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "enable_metamdbg": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        "new_group_2": {
+            "title": "New Group 2",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_binning": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "binning_tools": {
+                    "type": "string",
+                    "default": "metabat2,maxbin2,bin3c,metator"
+                }
+            }
+        },
+        "new_group_3": {
+            "title": "New Group 3",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_dastool": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "enable_magscot": {
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
@@ -111,8 +158,15 @@
         {
             "$ref": "#/$defs/input_output_options"
         },
-        
-        
+        {
+            "$ref": "#/$defs/new_group_1"
+        },
+        {
+            "$ref": "#/$defs/new_group_2"
+        },
+        {
+            "$ref": "#/$defs/new_group_3"
+        },
         {
             "$ref": "#/$defs/generic_options"
         }
