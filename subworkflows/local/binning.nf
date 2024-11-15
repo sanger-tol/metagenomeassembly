@@ -55,7 +55,8 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_maxbin2_bins)
     }
 
-    if(params.enable_bin3c) {
+    // Bin3C is not available in conda - only run if we are not running with the conda profile
+    if(params.enable_bin3c && !(workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1)) {
         ch_bin3c_mkmap_input = assemblies
             | combine(hic_bam, by: 0)
 
