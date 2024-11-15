@@ -13,7 +13,7 @@ workflow ASSEMBLY {
             METAMDBG_ASM(hifi_reads, 'hifi')
 
             ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
-                | map { meta, contigs -> 
+                | map { meta, contigs ->
                     def meta_new = meta + [assembler: "metamdbg"]
                     [meta_new, contigs]
                 }
@@ -21,7 +21,7 @@ workflow ASSEMBLY {
         }
     }
 
-    emit: 
+    emit:
     assemblies = ch_assemblies
     versions   = ch_versions
 }

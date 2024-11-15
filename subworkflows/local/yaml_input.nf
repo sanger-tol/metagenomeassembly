@@ -11,27 +11,39 @@ workflow YAML_INPUT {
     main:
     // ch_versions = Channel.empty()
 
-    Channel.from(input_file)
+    yamlfile = Channel.from(input_file)
         .map { file -> readYAML(file) }
-        .set { yamlfile }
 
     //
     // LOGIC: PARSES THE TOP LEVEL OF YAML VALUES
     //
-    yamlfile
-        .flatten()
-        .multiMap { data ->
-                pacbio: ( data.pacbio ? [
+    input = yamlfile
+        | flatten()
+        | multiMap { data ->
+                pacbio_fasta: ( data.pacbio ? [
                     [ id: data.tolid ],
-                    data.pacbio.reads.collect { file(it, checkIfExists: true) }
-                ] : [] )
-                // hic: if(data.hic) { [ [ id: data.tolid ], data.hic.cram.collect { file(it, checkIfExists: true) } ] }
-                hic: ( data.hic ? [
+                    data.pacbio.fasta.collect { file(it, checkIfExists: true) }
+                ] : error("ERROR: Pacbio reads not provided! Pipeline will not run as there is nothing to do.") )
+                hic_cram: ( data.hic ? [
                     [ id: data.tolid ],
                     data.hic.cram.collect { file(it, checkIfExists: true) }
                 ] : [] )
+                hic_enzymes: ( data.hic ?
+                    data.hic.enzymes.collect { it } :
+                    error("ERROR: Hi-C files provided but no enzymes!")
+                )
         }
-        .set{ group }
+
+    ch_pacbio_fasta = input.pacbio_fasta
+        | filter { !it.isEmpty() }
+
+    ch_hic_cram = input.hic_cram
+        | filter { !it.isEmpty() }
+
+    // collect as have to ensure this is a value channel
+    ch_hic_enzymes = input.hic_enzymes
+        | filter { !it.isEmpty() }
+        | collect
 
     //
     // LOGIC: PARSES THE SECOND LEVEL OF YAML VALUES PER ABOVE OUTPUT CHANNEL
@@ -58,8 +70,7 @@ workflow YAML_INPUT {
     //     .set { tolid_version }
 
     emit:
-    // assembly_id                      = tolid_version
-    pacbio = group.pacbio
-    hic    = group.hic
-    // versions                         = ch_versions.ifEmpty(null)
+    pacbio_fasta = ch_pacbio_fasta
+    hic_cram     = ch_hic_cram
+    hic_enzymes  = ch_hic_enzymes
 }

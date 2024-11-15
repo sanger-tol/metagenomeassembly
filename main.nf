@@ -28,8 +28,9 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_long
 workflow SANGERTOL_LONGREADMAG {
 
     take:
-    pacbio // channel: samplesheet read in from --input
-    hic    // channel: samplesheet read in from --input
+    pacbio_fasta // channel: pacbio fasta read in from --input
+    hic_cram     // channel: hic cram read in from --input
+    hic_enzymes  // channel: hic enzymes read in from --input
 
     main:
 
@@ -37,8 +38,9 @@ workflow SANGERTOL_LONGREADMAG {
     // WORKFLOW: Run pipeline
     //
     LONGREADMAG (
-        pacbio,
-        hic
+        pacbio_fasta,
+        hic_cram,
+        hic_enzymes
     )
     // emit:
     // multiqc_report = LONGREADMAG.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -68,8 +70,9 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     SANGERTOL_LONGREADMAG (
-        PIPELINE_INITIALISATION.out.pacbio,
-        PIPELINE_INITIALISATION.out.hic
+        PIPELINE_INITIALISATION.out.pacbio_fasta,
+        PIPELINE_INITIALISATION.out.hic_cram,
+        PIPELINE_INITIALISATION.out.hic_enzymes,
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -77,7 +80,7 @@ workflow {
     // PIPELINE_COMPLETION (
     //     params.outdir,
     //     params.monochrome_logs,
-        
+
     //     SANGERTOL_LONGREADMAG.out.multiqc_report
     // )
 }

@@ -9,6 +9,7 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
+include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { BINNING                } from '../subworkflows/local/binning'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
@@ -21,15 +22,20 @@ include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 
 workflow LONGREADMAG {
     take:
-    pacbio // channel: pacbio read in from yaml
-    hic    // channel: hic cram file from yaml
+    pacbio_fasta // channel: pacbio read in from yaml
+    hic_cram     // channel: hic cram files from yaml
+    hic_enzymes  // channel: hic enzyme list from yaml
 
     main:
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
 
+    PREPARE_DATA(
+        hic_cram
+    )
+
     if(params.enable_assembly) {
-        ASSEMBLY(pacbio)
+        ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
 
         // if(params.enable_magscot) {
@@ -38,15 +44,16 @@ workflow LONGREADMAG {
 
         READ_MAPPING(
             ASSEMBLY.out.assemblies,
-            pacbio,
-            hic
+            pacbio_fasta,
+            PREPARE_DATA.out.hic_reads
         )
 
         if(params.enable_binning) {
             BINNING(
                 ASSEMBLY.out.assemblies,
                 READ_MAPPING.out.depths,
-                READ_MAPPING.out.hic_bam
+                READ_MAPPING.out.hic_bam,
+                hic_enzymes
             )
         }
     }

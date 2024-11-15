@@ -1,4 +1,3 @@
-
 process METATOR_PIPELINE {
     tag "$meta.id"
     label 'process_medium'

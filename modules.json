@@ -21,6 +21,11 @@
                         "git_sha": "b4c2b037719d63aa5a1b82706b3d9ad12b98c15f",
                         "installed_by": ["modules"]
                     },
+                    "gawk": {
+                        "branch": "master",
+                        "git_sha": "97321eded31a12598837a476d3615300af413bb7",
+                        "installed_by": ["modules"]
+                    },
                     "hmmer/hmmsearch": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
@@ -29,7 +34,8 @@
                     "maxbin2": {
                         "branch": "master",
                         "git_sha": "283613159e079152f1336cef0db1c836086206e0",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/maxbin2/maxbin2.diff"
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
@@ -59,6 +65,11 @@
                         "installed_by": ["modules"]
                     },
                     "samtools/fastq": {
+                        "branch": "master",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/merge": {
                         "branch": "master",
                         "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
                         "installed_by": ["modules"]
