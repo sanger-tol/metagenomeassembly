@@ -21,6 +21,16 @@
                         "git_sha": "b4c2b037719d63aa5a1b82706b3d9ad12b98c15f",
                         "installed_by": ["modules"]
                     },
+                    "dastool/dastool": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"]
+                    },
+                    "dastool/fastatocontig2bin": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"]
+                    },
                     "gawk": {
                         "branch": "master",
                         "git_sha": "97321eded31a12598837a476d3615300af413bb7",

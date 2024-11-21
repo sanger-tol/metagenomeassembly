@@ -1,15 +1,17 @@
-include { GAWK as MAXBIN2_DEPTHS } from '../../modules/nf-core/gawk/main'
-include { METABAT2_METABAT2      } from '../../modules/nf-core/metabat2/metabat2/main'
-include { MAXBIN2                } from '../../modules/nf-core/maxbin2/main'
-include { BIN3C_MKMAP            } from '../../modules/local/bin3c/mkmap/main.nf'
-include { BIN3C_CLUSTER          } from '../../modules/local/bin3c/cluster/main.nf'
+include { BIN3C_MKMAP                      } from '../../modules/local/bin3c/mkmap/main.nf'
+include { BIN3C_CLUSTER                    } from '../../modules/local/bin3c/cluster/main.nf'
+include { MAXBIN2                          } from '../../modules/nf-core/maxbin2/main'
+include { GAWK as MAXBIN2_DEPTHS           } from '../../modules/nf-core/gawk/main'
+include { METABAT2_METABAT2                } from '../../modules/nf-core/metabat2/metabat2/main'
+include { METATOR_PIPELINE                 } from '../../modules/local/metator/pipeline/main'
 
 workflow BINNING {
     take:
-    assemblies
-    pacbio_depths
-    hic_bam
-    hic_enzymes
+    assemblies      // channel: [[meta], contigs]
+    pacbio_depths   // channel: [[meta], depths_file]
+    hic_reads       // channel: [[meta], [r1, r2]]
+    hic_bam         // channel: [[meta], bam]
+    hic_enzymes     // channel: [enz1, enz2], value
 
     main:
     ch_versions = Channel.empty()
@@ -24,10 +26,7 @@ workflow BINNING {
         ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
 
         ch_metabat2_bins =  METABAT2_METABAT2.out.fasta
-            | map { meta, fasta ->
-                def meta_new = meta + [binner: "METABAT2"]
-                [meta_new, fasta]
-            }
+            | map { meta, fasta -> [meta + [binner: "MetaBat2"], fasta] }
         ch_bins = ch_bins.mix(ch_metabat2_bins)
     }
 
@@ -48,10 +47,7 @@ workflow BINNING {
         )
 
         ch_maxbin2_bins =  MAXBIN2.out.binned_fastas
-            | map { meta, fasta ->
-                def meta_new = meta + [binner: "MAXBIN2"]
-                [meta_new, fasta]
-            }
+            | map { meta, fasta -> [meta + [binner: "MaxBin2"], fasta] }
         ch_bins = ch_bins.mix(ch_maxbin2_bins)
     }
 
@@ -73,11 +69,29 @@ workflow BINNING {
         )
 
         ch_bin3c_bins =  BIN3C_CLUSTER.out.fasta
-            | map { meta, fasta ->
-                def meta_new = meta + [binner: "BIN3C"]
-                [meta_new, fasta]
-            }
+            | map { meta, fasta -> [meta + [binner: "Bin3C"], fasta] }
         ch_bins = ch_bins.mix(ch_bin3c_bins)
+    }
+
+    if(params.enable_metator) {
+        ch_assemblies_combine = assemblies
+            | map {meta, contigs -> [ meta.subMap('id'), meta, contigs ]}
+
+        ch_metator_input = ch_assemblies_combine
+            | combine(hic_reads, by: 0)
+            | map { meta_join, meta_assembly, contigs, hic -> [meta_assembly, contigs, hic]}
+            | combine(pacbio_depths, by: 0)
+
+        METATOR_PIPELINE(ch_metator_input, hic_enzymes)
+
+        ch_versions = ch_versions.mix(
+            METATOR_PIPELINE.out.versions
+        )
+
+        ch_metator_bins =  METATOR_PIPELINE.out.bins
+            | map { meta, fasta -> [meta + [binner: "Metator"], fasta] }
+        ch_bins = ch_bins.mix(ch_metator_bins)
+
     }
 
     emit:

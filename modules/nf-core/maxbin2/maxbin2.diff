@@ -8,16 +8,17 @@ Changes in 'maxbin2/main.nf':
  
      output:
 -    tuple val(meta), path("*.fasta.gz")   , emit: binned_fastas
-+    tuple val(meta), path("*.fasta")      , emit: binned_fastas
++    tuple val(meta), path("*.fa")         , emit: binned_fastas
      tuple val(meta), path("*.summary")    , emit: summary
      tuple val(meta), path("*.abundance")  , emit: abundance   , optional: true
      tuple val(meta), path("*.log.gz")     , emit: log
-@@ -47,7 +47,7 @@
+@@ -47,7 +47,8 @@
          $args \\
          -out $prefix
  
 -    gzip *.fasta *.noclass *.tooshort *log *.marker
 +    gzip *.noclass *.tooshort *log *.marker
++    find . -name '*.fasta' -type f -exec sh -c 'name={}; mv \$name \${name%.fasta}.fa' \\;
  
      cat <<-END_VERSIONS > versions.yml
      "${task.process}":

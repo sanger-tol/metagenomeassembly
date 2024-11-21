@@ -9,9 +9,10 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
-include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { BINNING                } from '../subworkflows/local/binning'
+include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
+include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 
 /*
@@ -38,10 +39,6 @@ workflow LONGREADMAG {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
 
-        // if(params.enable_magscot) {
-        //     GENE_PREDICTION(ASSEMBLY.out.assemblies)
-        // }
-
         READ_MAPPING(
             ASSEMBLY.out.assemblies,
             pacbio_fasta,
@@ -52,9 +49,17 @@ workflow LONGREADMAG {
             BINNING(
                 ASSEMBLY.out.assemblies,
                 READ_MAPPING.out.depths,
+                PREPARE_DATA.out.hic_reads,
                 READ_MAPPING.out.hic_bam,
                 hic_enzymes
             )
+
+            if(params.enable_bin_refinement) {
+                BIN_REFINEMENT(
+                    ASSEMBLY.out.assemblies,
+                    BINNING.out.bins
+                )
+            }
         }
     }
     //

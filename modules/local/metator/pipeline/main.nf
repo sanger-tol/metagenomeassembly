@@ -4,12 +4,12 @@ process METATOR_PIPELINE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'community.wave.seqera.io/library/metator:8499357cd4065779' :
-        'oras://community.wave.seqera.io/library/metator:dc370f87fbdefd93' }"
+        'oras://community​.wave​.seqera​.io/library/metator:6da10b3046cef708' :
+        'community.wave.seqera.io/library/metator:366d773d23cc8da8' }"
 
     input:
-    tuple val(meta), path(contigs)
-    tuple val(meta2), path(hic_reads)
+    tuple val(meta), path(contigs), path(hic_input), path(depths)
+    val hic_enzymes
 
     output:
     tuple val(meta), path("bin_summary.txt")  , emit: bin_summary
@@ -21,14 +21,31 @@ process METATOR_PIPELINE {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args   ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args           = task.ext.args   ?: ''
+    def prefix         = task.ext.prefix ?: "${meta.id}"
+    def enzyme_input   = hic_enzymes ? "-e ${hic_enzymes.join(",")}" : ""
+    def depth_input    = depths ? "--depth ${depths}" : ""
+    def assembly_input = contigs =~ /\.gz$/ ? "${contigs.getBaseName()}" : contigs
+    def gunzip         = contigs =~ /\.gz$/ ? "gunzip -c ${contigs} > ${assembly_input}" : ""
     """
+    ## do this until we get better container image!
+    wget https://github.com/koszullab/metaTOR/raw/refs/heads/master/external/louvain-generic.tar.gz
+    tar -xvzf louvain-generic.tar.gz
+    cd gen-louvain
+    make
+    cd ..
+    export LOUVAIN_PATH=gen-louvain/
+
+    $gunzip
+
     metator pipeline \\
-        -1 ${hic_reads[0]} \\
-        -2 ${hic_reads[1]} \\
-        -a ${contigs} \\
+        --forward ${hic_input[0]} \\
+        --reverse ${hic_input[1]} \\
+        --assembly ${assembly_input} \\
+        ${enzyme_input} \\
+        ${depth_input} \\
         -t ${task.cpus} \\
+        --prefix ${prefix} \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml

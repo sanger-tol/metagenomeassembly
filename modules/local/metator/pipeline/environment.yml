@@ -19,11 +19,13 @@ dependencies:
   - pandas==1.5.3
   - hicstuff
   - checkm-genome=1.2.3
+  - gxx
+  - make
   - pip:
-    - micomplete==1.1.1
-    - metator
-    - pytest
-    - pylint
-    - codecov
-    - pytest-cov
-    - pytest-pylint
+      - micomplete==1.1.1
+      - metator
+      - pytest
+      - pylint
+      - codecov
+      - pytest-cov
+      - pytest-pylint

@@ -13,14 +13,14 @@ workflow READ_MAPPING {
     main:
     ch_versions = Channel.empty()
 
-    if(params.enable_metator) {
+    if(params.enable_metator || params.enable_bin3c) {
         BWAMEM2_INDEX(assemblies)
 
         BWAMEM2_MEM(
             hic,
             BWAMEM2_INDEX.out.index,
             assemblies,
-            false
+            false // sort independently
         )
 
         SORT_HIC_BAM(BWAMEM2_MEM.out.bam, [[],[]])

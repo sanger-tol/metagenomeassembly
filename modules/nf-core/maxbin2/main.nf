@@ -11,7 +11,7 @@ process MAXBIN2 {
     tuple val(meta), path(contigs), path(reads), path(abund)
 
     output:
-    tuple val(meta), path("*.fasta")      , emit: binned_fastas
+    tuple val(meta), path("*.fa")         , emit: binned_fastas
     tuple val(meta), path("*.summary")    , emit: summary
     tuple val(meta), path("*.abundance")  , emit: abundance   , optional: true
     tuple val(meta), path("*.log.gz")     , emit: log
@@ -48,6 +48,7 @@ process MAXBIN2 {
         -out $prefix
 
     gzip *.noclass *.tooshort *log *.marker
+    find . -name '*.fasta' -type f -exec sh -c 'name={}; mv \$name \${name%.fasta}.fa' \\;
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
