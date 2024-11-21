@@ -1,6 +1,8 @@
-include { DASTOOL_FASTATOCONTIG2BIN } from '../../modules/nf-core/dastool/fastatocontig2bin/main'
-include { DASTOOL_DASTOOL           } from '../../modules/nf-core/dastool/dastool/main'
-include { PYRODIGAL                 } from '../../modules/nf-core/pyrodigal/main'
+include { DASTOOL_FASTATOCONTIG2BIN                 } from '../../modules/nf-core/dastool/fastatocontig2bin/main'
+include { DASTOOL_DASTOOL                           } from '../../modules/nf-core/dastool/dastool/main'
+include { HMMER_HMMSEARCH as HMMSEARCH_GTDB_PFAM    } from '../../modules/nf-core/hmmer/hmmsearch/main'
+include { HMMER_HMMSEARCH as HMMSEARCH_GTDB_TIGRFAM } from '../../modules/nf-core/hmmer/hmmsearch/main'
+include { PYRODIGAL                                 } from '../../modules/nf-core/pyrodigal/main'
 
 workflow BIN_REFINEMENT {
     take:
@@ -37,7 +39,18 @@ workflow BIN_REFINEMENT {
     if(params.enable_magscot) {
         PYRODIGAL(assemblies, 'gff')
 
+        ch_hmmsearch_gtdb_pfam_input = PYRODIGAL.out.faa
+            | map { meta, faa ->
+                [meta, file(params.hmm_gtdb_pfam), faa, false, true, false]
+            }
 
+        ch_hmmsearch_gtdb_tigrfam_input = PYRODIGAL.out.faa
+            | map { meta, faa ->
+                [meta, file(params.hmm_gtdb_tigrfam), faa, false, true, false]
+            }
+
+        HMMSEARCH_GTDB_PFAM(ch_hmmsearch_gtdb_pfam_input)
+        HMMSEARCH_GTDB_TIGRFAM(ch_hmmsearch_gtdb_tigrfam_input)
     }
 
     emit:
