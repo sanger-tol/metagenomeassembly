@@ -4,8 +4,8 @@ process METATOR_PIPELINE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/metator:dc370f87fbdefd93' :
-        'community.wave.seqera.io/library/metator:8499357cd4065779' }"
+        'community.wave.seqera.io/library/metator:8499357cd4065779' :
+        'oras://community.wave.seqera.io/library/metator:dc370f87fbdefd93' }"
 
     input:
     tuple val(meta), path(contigs)
