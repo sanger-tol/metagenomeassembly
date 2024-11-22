@@ -21,13 +21,17 @@ process HMMER_HMMSEARCH {
     task.ext.when == null || task.ext.when
 
     script:
-    def args       = task.ext.args   ?: ''
-    def prefix     = task.ext.prefix ?: "${meta.id}"
-    output         = "${prefix}.txt"
-    alignment      = write_align     ? "-A ${prefix}.sto" : ''
-    target_summary = write_target    ? "--tblout ${prefix}.tbl" : ''
-    domain_summary = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
+    def args        = task.ext.args   ?: ''
+    def prefix      = task.ext.prefix ?: "${meta.id}"
+    output          = "${prefix}.txt"
+    alignment       = write_align     ? "-A ${prefix}.sto" : ''
+    target_summary  = write_target    ? "--tblout ${prefix}.tbl" : ''
+    domain_summary  = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
+    def seqdb_input = seqdb =~ /\.gz$/ ? "${seqdb.getBaseName()}" : seqdb
+    def gunzip      = seqdb =~ /\.gz$/ ? "gunzip -c ${seqdb} > ${seqdb_input}" : ""
     """
+    $gunzip
+    
     hmmsearch \\
         $args \\
         --cpu $task.cpus \\
@@ -36,7 +40,7 @@ process HMMER_HMMSEARCH {
         $target_summary \\
         $domain_summary \\
         $hmmfile \\
-        $seqdb
+        $seqdb_input
 
     gzip --no-name *.txt \\
         ${write_align ? '*.sto' : ''} \\
