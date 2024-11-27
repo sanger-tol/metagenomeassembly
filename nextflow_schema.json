@@ -243,6 +243,7 @@
         },
         {
             "$ref": "#/$defs/bin_refinement_options"
+        },
         {
             "$ref": "#/$defs/institutional_config_options"
         },
