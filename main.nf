@@ -74,7 +74,6 @@ workflow {
     PIPELINE_COMPLETION (
         params.outdir,
         params.monochrome_logs,
-        
         SANGERTOL_LONGREADMAG.out.multiqc_report
     )
 }
