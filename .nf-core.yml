@@ -77,9 +77,6 @@ lint:
     - validation.help.afterText
     - validation.summary.beforeText
     - validation.summary.afterText
-    - config_defaults:
-        - params.hmm_gtdb_pfam
-        - params.hmm_gtdb_tigrfam
   readme:
     - nextflow_badge
     - nextflow_badge
@@ -90,16 +87,14 @@ repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
   description: Construct MAGs from long reads.
-  force: true
+  force: false
   is_nfcore: false
   name: longreadmag
   org: sanger-tol
   outdir: .
   skip_features:
-    - github
     - igenomes
     - github_badges
-    - nf_core_configs
     - codespaces
     - fastqc
     - email

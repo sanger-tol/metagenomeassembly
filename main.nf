@@ -77,12 +77,13 @@ workflow {
     //
     // SUBWORKFLOW: Run completion tasks
     //
+
     // PIPELINE_COMPLETION (
     //     params.outdir,
     //     params.monochrome_logs,
-
     //     SANGERTOL_LONGREADMAG.out.multiqc_report
     // )
+
 }
 
 /*
