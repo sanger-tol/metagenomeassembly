@@ -93,10 +93,8 @@ template:
   org: sanger-tol
   outdir: .
   skip_features:
-  - github
   - igenomes
   - github_badges
-  - nf_core_configs
   - codespaces
   - fastqc
   - email
