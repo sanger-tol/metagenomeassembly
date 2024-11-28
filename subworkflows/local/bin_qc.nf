@@ -1,6 +1,6 @@
 include { CHECKM2_DATABASEDOWNLOAD } from '../../modules/nf-core/checkm2/databasedownload/main'
-include { CHECKM2_PREDICT } from '../../modules/nf-core/checkm2/predict/main'
-include { SEQKIT_STATS } from '../modules/nf-core/seqkit/stats/main'
+include { CHECKM2_PREDICT          } from '../../modules/nf-core/checkm2/predict/main'
+include { SEQKIT_STATS             } from '../../modules/nf-core/seqkit/stats/main'
 
 workflow BIN_QC {
     take:
