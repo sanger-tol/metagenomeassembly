@@ -14,6 +14,7 @@ include { BINNING                } from '../subworkflows/local/binning'
 include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
 include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
+include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +66,11 @@ workflow LONGREADMAG {
 
             ch_bins = BINNING.out.bins
                 | mix(BIN_REFINEMENT.out.refined_bins)
+
+            if(params.enable_binqc) {
+                BIN_QC(ch_bins)
+                ch_versions = ch_versions.mix(BIN_QC.out.versions)
+            }
         }
     }
     //
