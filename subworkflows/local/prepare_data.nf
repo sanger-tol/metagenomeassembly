@@ -26,6 +26,12 @@ workflow PREPARE_DATA {
     HIC_TO_FASTQ(ch_hic_cram, false)
     ch_hic_fastq = HIC_TO_FASTQ.out.fastq
 
+    ch_versions = ch_versions
+        | mix(
+            MERGE_HIC_CRAM.out.versions,
+            HIC_TO_FASTQ.out.versions
+        )
+
     emit:
     hic_reads = ch_hic_fastq
     versions  = ch_versions

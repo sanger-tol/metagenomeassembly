@@ -34,6 +34,7 @@ workflow LONGREADMAG {
     PREPARE_DATA(
         hic_cram
     )
+    ch_versions = ch_versions.mix(PREPARE_DATA.out.versions)
 
     if(params.enable_assembly) {
         ASSEMBLY(pacbio_fasta)
@@ -44,6 +45,7 @@ workflow LONGREADMAG {
             pacbio_fasta,
             PREPARE_DATA.out.hic_reads
         )
+        ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
         if(params.enable_binning) {
             BINNING(
@@ -60,18 +62,21 @@ workflow LONGREADMAG {
                     BINNING.out.bins
                 )
             }
+
+            ch_bins = BINNING.out.bins
+                | BIN_REFINEMENT.out.refined_bins
         }
     }
     //
     // Collate and save software versions
     //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name:  ''  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
+    // softwareVersionsToYAML(ch_versions)
+    //     .collectFile(
+    //         storeDir: "${params.outdir}/pipeline_info",
+    //         name:  ''  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+    //         sort: true,
+    //         newLine: true
+    //     ).set { ch_collated_versions }
 
 
     // //

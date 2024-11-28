@@ -25,6 +25,13 @@ workflow READ_MAPPING {
 
         SORT_HIC_BAM(BWAMEM2_MEM.out.bam, [[],[]])
         ch_hic_bam = SORT_HIC_BAM.out.bam
+
+        ch_versions = ch_versions
+            | mix(
+                BWAMEM2_INDEX.out.versions,
+                BWAMEM2_MEM.out.versions,
+                SORT_HIC_BAM.out.versions
+            )
     } else {
         ch_hic_bam   = Channel.empty()
     }
@@ -47,9 +54,6 @@ workflow READ_MAPPING {
 
     ch_versions = ch_versions
         | mix(
-            BWAMEM2_INDEX.out.versions,
-            BWAMEM2_MEM.out.versions,
-            SORT_HIC_BAM.out.versions,
             MINIMAP2_ALIGN.out.versions,
             COVERM_CONTIG.out.versions
         )

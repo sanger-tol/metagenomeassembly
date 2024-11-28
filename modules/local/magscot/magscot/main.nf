@@ -26,5 +26,10 @@ process MAGSCOT_MAGSCOT {
     mv MAGScoT.scores.out ${prefix}.MAGScoT.scores.out
     mv MAGScoT.refined.out ${prefix}.MAGScoT.refined.out
     mv MAGScoT.refined.contig_to_bin.out ${prefix}.MAGScoT.refined.contig_to_bin.out
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        magscot: 1.1
+    END_VERSIONS
     """
 }

@@ -37,9 +37,6 @@ lint:
   multiqc_config:
     - report_comment
   nextflow_config:
-    - config_default:
-      - params.hmm_gtdb_pfam
-      - params.hmm_gtdb_tigrfam
     - process.cpus
     - process.memory
     - process.time

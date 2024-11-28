@@ -2,8 +2,7 @@ include { DASTOOL_DASTOOL                           } from '../../modules/nf-cor
 include { DASTOOL_FASTATOCONTIG2BIN                 } from '../../modules/nf-core/dastool/fastatocontig2bin/main'
 include { GAWK as PROCESS_HMM_TBLOUT                } from '../../modules/nf-core/gawk/main'
 include { GAWK as MAGSCOT_PROCESS_CONTIG2BIN        } from '../../modules/nf-core/gawk/main'
-include { HMMER_HMMSEARCH as HMMSEARCH_GTDB_PFAM    } from '../../modules/nf-core/hmmer/hmmsearch/main'
-include { HMMER_HMMSEARCH as HMMSEARCH_GTDB_TIGRFAM } from '../../modules/nf-core/hmmer/hmmsearch/main'
+include { HMMER_HMMSEARCH                           } from '../../modules/nf-core/hmmer/hmmsearch/main'
 include { MAGSCOT_CONTIG2BIN2FASTA                  } from '../../modules/local/magscot/contig2bin2fasta/main'
 include { MAGSCOT_MAGSCOT                           } from '../../modules/local/magscot/magscot/main'
 include { PYRODIGAL                                 } from '../../modules/nf-core/pyrodigal/main'
@@ -18,10 +17,11 @@ workflow BIN_REFINEMENT {
     ch_refined_bins = Channel.empty()
 
     DASTOOL_FASTATOCONTIG2BIN(bins, 'fa')
+    ch_versions = ch_versions.mix(DASTOOL_FASTATOCONTIG2BIN.out.versions)
 
     if(params.enable_dastool) {
         ch_contig2bins_to_merge = DASTOOL_FASTATOCONTIG2BIN.out.fastatocontig2bin
-            | map {meta, tsv -> [meta.subMap(['id', 'assembler']), tsv] }
+            | map {meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
             | groupTuple(by: 0)
 
         ch_dastool_input = assemblies
@@ -29,10 +29,7 @@ workflow BIN_REFINEMENT {
 
         DASTOOL_DASTOOL(ch_dastool_input, [], [])
 
-        ch_versions = ch_versions.mix(
-            DASTOOL_FASTATOCONTIG2BIN.out.versions,
-            DASTOOL_DASTOOL.out.versions
-        )
+        ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
 
         ch_dastool_bins = DASTOOL_DASTOOL.out.bins
             | map {meta, fasta -> [ meta + [binner: "DASTool"], fasta ]}
@@ -43,21 +40,20 @@ workflow BIN_REFINEMENT {
     if(params.enable_magscot) {
         PYRODIGAL(assemblies, 'gff')
 
-        ch_hmmsearch_gtdb_pfam_input = PYRODIGAL.out.faa
-            | map { meta, faa ->
-                [meta, file(params.hmm_gtdb_pfam), faa, false, true, false]
+        ch_magscot_gtdb_hmm_db = Channel.of(
+            file(params.hmm_gtdb_pfam),
+            file(params.hmm_gtdb_tigrfam)
+        )
+
+        ch_hmmsearch_gtdb_input = PYRODIGAL.out.faa
+            | combine(ch_magscot_gtdb_hmm_db)
+            | map { meta, faa, hmmfile ->
+                [ meta, hmmfile, faa, false, true, false ]
             }
 
-        ch_hmmsearch_gtdb_tigrfam_input = PYRODIGAL.out.faa
-            | map { meta, faa ->
-                [meta, file(params.hmm_gtdb_tigrfam), faa, false, true, false]
-            }
+        HMMER_HMMSEARCH(ch_hmmsearch_gtdb_input)
 
-        HMMSEARCH_GTDB_PFAM(ch_hmmsearch_gtdb_pfam_input)
-        HMMSEARCH_GTDB_TIGRFAM(ch_hmmsearch_gtdb_tigrfam_input)
-
-        ch_hmm_output = HMMSEARCH_GTDB_PFAM.out.target_summary
-            | mix(HMMSEARCH_GTDB_TIGRFAM.out.target_summary)
+        ch_hmm_output = HMMER_HMMSEARCH.out.target_summary
             | groupTuple(by: 0)
 
         PROCESS_HMM_TBLOUT(ch_hmm_output, [])
@@ -68,7 +64,7 @@ workflow BIN_REFINEMENT {
         )
 
         ch_magscot_contig2bin = MAGSCOT_PROCESS_CONTIG2BIN.out.output
-            | map { meta, c2b -> [ meta.subMap(['id', 'assembler']), c2b ] }
+            | map { meta, c2b -> [ meta - meta.subMap(['binner']), c2b ] }
             | groupTuple(by: 0)
 
         ch_magscot_input = PROCESS_HMM_TBLOUT.out.output
@@ -85,6 +81,16 @@ workflow BIN_REFINEMENT {
             | map { meta, rbins -> [ meta + [binner: "magscot"], rbins] }
 
         ch_refined_bins = ch_refined_bins.mix(ch_magscot_bins)
+
+        ch_versions = ch_versions
+            | mix(
+                PYRODIGAL.out.versions,
+                HMMER_HMMSEARCH.out.versions,
+                PROCESS_HMM_TBLOUT.out.versions,
+                MAGSCOT_PROCESS_CONTIG2BIN.out.versions,
+                MAGSCOT_MAGSCOT.out.versions,
+                MAGSCOT_CONTIG2BIN2FASTA.out.versions
+            )
     }
 
     emit:
