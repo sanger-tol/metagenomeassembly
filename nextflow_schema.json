@@ -17,7 +17,7 @@
                     "format": "file-path",
                     "exists": true,
                     "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.(yaml|yml)$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
@@ -32,6 +32,22 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                }
+            }
+        },
+        "assembly_options": {
+            "title": "Assembly options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_assembly": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "enable_metamdbg": {
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
@@ -63,24 +79,8 @@
                 }
             }
         },
-        "assembly_options": {
-            "title": "Assembly options",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "enable_assembly": {
-                    "type": "boolean",
-                    "default": true
-                },
-                "enable_metamdbg": {
-                    "type": "boolean",
-                    "default": true
-                }
-            }
-        },
-        "new_group_3": {
-            "title": "New Group 3",
+        "bin_refinement_options": {
+            "title": "Bin refinement options",
             "type": "object",
             "description": "",
             "default": "",
@@ -101,6 +101,29 @@
                     "type": "string"
                 },
                 "hmm_gtdb_tigrfam": {
+                    "type": "string"
+                }
+            }
+        },
+        "new_group_1": {
+            "title": "New Group 1",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_binqc": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "enable_checkm2": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "checkm2_db_version": {
+                    "type": "integer",
+                    "default": 5571251
+                },
+                "checkm2_local_db": {
                     "type": "string"
                 }
             }
@@ -229,13 +252,16 @@
             "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/$defs/binning_options"
-        },
-        {
             "$ref": "#/$defs/assembly_options"
         },
         {
-            "$ref": "#/$defs/new_group_3"
+            "$ref": "#/$defs/binning_options"
+        },
+        {
+            "$ref": "#/$defs/bin_refinement_options"
+        },
+        {
+            "$ref": "#/$defs/new_group_1"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

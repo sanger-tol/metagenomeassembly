@@ -16,6 +16,16 @@
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/bwamem2/mem/bwamem2-mem.diff"
                     },
+                    "checkm2/databasedownload": {
+                        "branch": "master",
+                        "git_sha": "e17652681c856afaf2e240ba4c98bf4631a0fe2d",
+                        "installed_by": ["modules"]
+                    },
+                    "checkm2/predict": {
+                        "branch": "master",
+                        "git_sha": "e17652681c856afaf2e240ba4c98bf4631a0fe2d",
+                        "installed_by": ["modules"]
+                    },
                     "coverm/contig": {
                         "branch": "master",
                         "git_sha": "b4c2b037719d63aa5a1b82706b3d9ad12b98c15f",
@@ -89,6 +99,11 @@
                     "samtools/sort": {
                         "branch": "master",
                         "git_sha": "b7800db9b069ed505db3f9d91b8c72faea9be17b",
+                        "installed_by": ["modules"]
+                    },
+                    "seqkit/stats": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     }
                 }
