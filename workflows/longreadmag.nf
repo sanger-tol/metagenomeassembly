@@ -64,7 +64,7 @@ workflow LONGREADMAG {
             }
 
             ch_bins = BINNING.out.bins
-                | BIN_REFINEMENT.out.refined_bins
+                | mix(BIN_REFINEMENT.out.refined_bins)
         }
     }
     //
