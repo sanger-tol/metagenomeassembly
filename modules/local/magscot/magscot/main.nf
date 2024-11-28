@@ -11,6 +11,7 @@ process MAGSCOT_MAGSCOT {
     tuple val(meta), path("*.scores.out")       , emit: scores
     tuple val(meta), path("*.refined.out")      , emit: refined
     tuple val(meta), path("*.contig_to_bin.out"), emit: contig2bin
+    path("versions.yml")                        , emit: versions
 
     script:
     def args   = task.ext.args   ?: ''
