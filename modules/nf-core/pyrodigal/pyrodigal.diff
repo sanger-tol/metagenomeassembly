@@ -1,0 +1,27 @@
+Changes in module 'nf-core/pyrodigal'
+'modules/nf-core/pyrodigal/environment.yml' is unchanged
+'modules/nf-core/pyrodigal/meta.yml' is unchanged
+Changes in 'pyrodigal/main.nf':
+--- modules/nf-core/pyrodigal/main.nf
++++ modules/nf-core/pyrodigal/main.nf
+@@ -1,6 +1,6 @@
+ process PYRODIGAL {
+     tag "$meta.id"
+-    label 'process_single'
++    label 'process_medium'
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+@@ -28,6 +28,7 @@
+     pigz -cdf ${fasta} > pigz_fasta.fna
+ 
+     pyrodigal \\
++        --jobs ${task.cpus} \\
+         $args \\
+         -i pigz_fasta.fna \\
+         -f $output_format \\
+
+'modules/nf-core/pyrodigal/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/pyrodigal/tests/tags.yml' is unchanged
+'modules/nf-core/pyrodigal/tests/main.nf.test' is unchanged
+************************************************************

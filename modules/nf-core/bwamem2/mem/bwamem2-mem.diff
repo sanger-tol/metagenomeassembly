@@ -1,5 +1,6 @@
 Changes in module 'nf-core/bwamem2/mem'
 'modules/nf-core/bwamem2/mem/environment.yml' is unchanged
+'modules/nf-core/bwamem2/mem/meta.yml' is unchanged
 Changes in 'bwamem2/mem/main.nf':
 --- modules/nf-core/bwamem2/mem/main.nf
 +++ modules/nf-core/bwamem2/mem/main.nf
@@ -21,8 +22,7 @@ Changes in 'bwamem2/mem/main.nf':
  
      when:
 
-'modules/nf-core/bwamem2/mem/meta.yml' is unchanged
-'modules/nf-core/bwamem2/mem/tests/main.nf.test' is unchanged
 'modules/nf-core/bwamem2/mem/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/bwamem2/mem/tests/tags.yml' is unchanged
+'modules/nf-core/bwamem2/mem/tests/main.nf.test' is unchanged
 ************************************************************
