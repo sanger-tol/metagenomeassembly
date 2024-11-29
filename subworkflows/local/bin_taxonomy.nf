@@ -11,10 +11,10 @@ workflow BIN_TAXONOMY {
     if(checkm2_summary) {
         ch_bin_scores = checkm2_summary
             | splitCsv(header: true, sep: '\t')
-            | map { row ->
+            | map { meta, row ->
                 def completeness  = Double.parseDouble(row.'Completeness')
                 def contamination = Double.parseDouble(row.'Contamination')
-                [row.'Bin Id' + ".fa", completeness, contamination]
+                [row.'Name' + ".fa", completeness, contamination]
             }
 
         ch_filtered_bins = bins
@@ -31,9 +31,8 @@ workflow BIN_TAXONOMY {
     }
 
     if(params.enable_gtdbtk && params.gtdbtk_db) {
-        gtdbtk_db = Channel.of(
-            [ "GTDBTk", file(params.gtdbtk_db, checkIfExists: true) ]
-        )
+        gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
+            | collect | map { ["gtdb" ,it] }
         gtdbtk_mash = params.gtdbtk_mash_db ? file(params.gtdbtk_mash_db, checkIfExists: true) : []
 
         GTDBTK_CLASSIFYWF(
