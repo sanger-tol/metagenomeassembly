@@ -26,13 +26,17 @@ workflow BIN_QC {
                 CHECKM2_DATABASEDOWNLOAD.out.versions,
                 CHECKM2_PREDICT.out.versions
             )
+
+        ch_checkm2_tsv = CHECKM2_PREDICT.out.checkm2_tsv
+    } else {
+        ch_checkm2_tsv = Channel.empty()
     }
 
     SEQKIT_STATS(bins)
     ch_versions = ch_versions.mix(SEQKIT_STATS.out.versions)
 
     emit:
-    checkm   = params.enable_checkm2 ? CHECKM2_PREDICT.out.checkm2_tsv : []
-    stats    = SEQKIT_STATS.out.stats
-    versions = ch_versions
+    checkm_tsv = ch_checkm2_tsv
+    stats      = SEQKIT_STATS.out.stats
+    versions   = ch_versions
 }

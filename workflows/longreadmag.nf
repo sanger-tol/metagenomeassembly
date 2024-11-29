@@ -12,7 +12,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_long
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { BINNING                } from '../subworkflows/local/binning'
 include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
-include { BIN_TAXONOMY           } from '../subworkflows/local/taxonomy'
+include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
 include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
 include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
@@ -68,13 +68,23 @@ workflow LONGREADMAG {
             ch_bins = BINNING.out.bins
                 | mix(BIN_REFINEMENT.out.refined_bins)
 
+            if(params.collate_bins) {
+                ch_bins = ch_bins
+                    | map { meta, bins ->
+                        [ meta - meta.subMap('binner'), bins]
+                    }
+                    | transpose
+                    | groupTuple(by: 0)
+            }
+
             if(params.enable_binqc) {
                 BIN_QC(ch_bins)
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
             }
 
             if(params.enable_taxonomy) {
-                BIN_TAXONOMY(bins)
+                ch_checkm2_tsv = params.enable_binqc ? BIN_QC.out.checkm_tsv : Channel.empty()
+                BIN_TAXONOMY(ch_bins, ch_checkm2_tsv)
             }
         }
     }

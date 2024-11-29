@@ -3,25 +3,44 @@ include { GTDBTK_CLASSIFYWF } from '../../modules/nf-core/gtdbtk/classifywf/main
 workflow BIN_TAXONOMY {
     take:
     bins
-    // checkm2_summary
+    checkm2_summary
 
     main:
     ch_versions = Channel.empty()
 
-    // ch_bin_scores = checkm2_summary
-    //     | splitCsv(header: true, sep: '\t')
-    //     | map { row ->
-    //         def completeness  = Double.parseDouble(row.'Completeness')
-    //         def contamination = Double.parseDouble(row.'Contamination')
-    //         [row.'Bin Id' + ".fa", completeness, contamination]
-    //     }
+    if(checkm2_summary) {
+        ch_bin_scores = checkm2_summary
+            | splitCsv(header: true, sep: '\t')
+            | map { row ->
+                def completeness  = Double.parseDouble(row.'Completeness')
+                def contamination = Double.parseDouble(row.'Contamination')
+                [row.'Bin Id' + ".fa", completeness, contamination]
+            }
+
+        ch_filtered_bins = bins
+            | transpose()
+            | map { meta, bin -> [bin.getName(), bin, meta]}
+            | join(ch_bin_scores, failOnDuplicate: true)
+            | filter { // it[3] = completeness, it[4] = contamination
+                it[3] >= params.gtdbtk_min_completeness && it[4] <= params.gtdbtk_max_contamination
+            }
+            | map { [ it[2], it[1] ] } // [meta, bin]
+            | groupTuple(by: 0)
+    } else {
+        ch_filtered_bins = bins
+    }
 
     if(params.enable_gtdbtk && params.gtdbtk_db) {
+        gtdbtk_db = Channel.of(
+            [ "GTDBTk", file(params.gtdbtk_db, checkIfExists: true) ]
+        )
+        gtdbtk_mash = params.gtdbtb_mash_db ? file(params.gtdbtb_mash_db, checkIfExists: true) : []
+
         GTDBTK_CLASSIFYWF(
             bins,
-            ["GTDBTk", file(params.gtdbtk_db)],
+            gtdbtk_db,
             false,
-            file(params.gtdbtb_mash_db)
+            gtdbtk_mash
         )
         ch_versions = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
     }
