@@ -34,7 +34,7 @@ workflow BIN_TAXONOMY {
         gtdbtk_db = Channel.of(
             [ "GTDBTk", file(params.gtdbtk_db, checkIfExists: true) ]
         )
-        gtdbtk_mash = params.gtdbtb_mash_db ? file(params.gtdbtb_mash_db, checkIfExists: true) : []
+        gtdbtk_mash = params.gtdbtk_mash_db ? file(params.gtdbtk_mash_db, checkIfExists: true) : []
 
         GTDBTK_CLASSIFYWF(
             bins,
