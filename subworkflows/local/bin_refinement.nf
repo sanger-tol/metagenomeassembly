@@ -31,16 +31,22 @@ workflow BIN_REFINEMENT {
         ch_dastool_input = assemblies
             | combine(ch_contig2bins_to_merge, by: 0)
 
+        ch_proteins_for_dastool = PYRODIGAL.out.faa
+            | map { it[1] } // pull out faa
+
         DASTOOL_DASTOOL(
             ch_dastool_input,
-            PYRODIGAL.out.faa,
+            ch_proteins_for_dastool,
             []
         )
 
         ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
 
+        ch_dastool_bin_input = assemblies
+            | combine(DASTOOL_DASTOOL.out.contig2bin, by: 0)
+
         DASTOOL_BINS(
-            DASTOOL_DASTOOL.out.contig2bin, 2, 1
+            ch_dastool_bin_input, 2, 1
         )
 
         ch_dastool_bins = DASTOOL_BINS.out.bins

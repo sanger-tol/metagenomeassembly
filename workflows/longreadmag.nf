@@ -71,7 +71,7 @@ workflow LONGREADMAG {
             if(params.collate_bins) {
                 ch_bins = ch_bins
                     | map { meta, bins ->
-                        [ meta - meta.subMap('binner'), bins]
+                        [ meta + [binner: "all"], bins]
                     }
                     | transpose
                     | groupTuple(by: 0)
