@@ -1,4 +1,4 @@
-process MAGSCOT_CONTIG2BIN2FASTA {
+process CONTIG2BIN2FASTA {
     tag "${meta.id}"
     label "process_low"
 
@@ -9,6 +9,8 @@ process MAGSCOT_CONTIG2BIN2FASTA {
 
     input:
     tuple val(meta), path(contigs), path(contig2bin)
+    val bincol
+    val contigcol
 
     output:
     tuple val(meta), path("*.fa"), emit: bins
@@ -18,10 +20,10 @@ process MAGSCOT_CONTIG2BIN2FASTA {
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    sed 1d ${contig2bin} | awk '{print \$1}' | sort -u | while read bin
+    grep -v "binnew" ${contig2bin} | awk '{print \$${bincol}}' | sort -u | while read bin
     do
         binno=\${bin//[^0-9]/}
-        grep -w \${bin} ${contig2bin} | awk '{print \$2}' > ${prefix}_\${binno}.ctglst
+        grep -w \${bin} ${contig2bin} | awk '{print \$${contigcol}}' > ${prefix}_\${binno}.ctglst
         seqkit grep -f ${prefix}_\${binno}.ctglst ${contigs} > ${prefix}_\${binno}.fa
     done
 

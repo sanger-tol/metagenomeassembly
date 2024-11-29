@@ -105,8 +105,20 @@
                 }
             }
         },
-        "new_group_1": {
-            "title": "New Group 1",
+        "new_group_2": {
+            "title": "New Group 2",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "collate_bins": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        "bin_qc_options": {
+            "title": "Bin QC options",
             "type": "object",
             "description": "",
             "default": "",
@@ -125,6 +137,36 @@
                 },
                 "checkm2_local_db": {
                     "type": "string"
+                }
+            }
+        },
+        "new_group_1": {
+            "title": "New Group 1",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_taxonomy": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "enable_gtdbtk": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "gtdbtk_db": {
+                    "type": "string"
+                },
+                "gtdbtk_mash_db": {
+                    "type": "string"
+                },
+                "gtdbtk_min_completeness": {
+                    "type": "integer",
+                    "default": 50
+                },
+                "gtdbtk_max_contamination": {
+                    "type": "integer",
+                    "default": 10
                 }
             }
         },
@@ -259,6 +301,12 @@
         },
         {
             "$ref": "#/$defs/bin_refinement_options"
+        },
+        {
+            "$ref": "#/$defs/new_group_2"
+        },
+        {
+            "$ref": "#/$defs/bin_qc_options"
         },
         {
             "$ref": "#/$defs/new_group_1"
