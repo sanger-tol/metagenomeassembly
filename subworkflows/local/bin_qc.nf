@@ -11,7 +11,7 @@ workflow BIN_QC {
 
     if(params.enable_checkm2) {
         if(!params.checkm2_local_db) {
-            CHECKM2_DATABASEDOWNLOAD(params.checkm2_version)
+            CHECKM2_DATABASEDOWNLOAD(params.checkm2_db_version)
             ch_checkm2_db = CHECKM2_DATABASEDOWNLOAD.out.database
         } else {
             ch_checkm2_db = Channel.of(

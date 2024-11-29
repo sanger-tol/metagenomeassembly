@@ -11,10 +11,11 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { BINNING                } from '../subworkflows/local/binning'
+include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
+include { BIN_TAXONOMY           } from '../subworkflows/local/taxonomy'
 include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
 include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
-include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,6 +71,10 @@ workflow LONGREADMAG {
             if(params.enable_binqc) {
                 BIN_QC(ch_bins)
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
+            }
+
+            if(params.enable_taxonomy) {
+                BIN_TAXONOMY(bins)
             }
         }
     }
