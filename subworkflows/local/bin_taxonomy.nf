@@ -36,7 +36,7 @@ workflow BIN_TAXONOMY {
         gtdbtk_mash = params.gtdbtk_mash_db ? file(params.gtdbtk_mash_db, checkIfExists: true) : []
 
         GTDBTK_CLASSIFYWF(
-            bins,
+            ch_filtered_bins,
             gtdbtk_db,
             false,
             gtdbtk_mash
