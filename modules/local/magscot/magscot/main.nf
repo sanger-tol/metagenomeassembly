@@ -29,7 +29,7 @@ process MAGSCOT_MAGSCOT {
 
     ## magscot puts out contig2bin file in wrong format
     awk 'NR > 1 {print \$2 \$1}' MAGScoT.refined.contig_to_bin.out > ${prefix}.MAGScoT.refined.contig_to_bin.out
-    rm MAGScoT.refined.contig_to_bin.outcd
+    rm MAGScoT.refined.contig_to_bin.out
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
