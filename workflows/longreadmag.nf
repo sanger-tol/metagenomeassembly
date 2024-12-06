@@ -61,12 +61,16 @@ workflow LONGREADMAG {
             if(params.enable_bin_refinement) {
                 BIN_REFINEMENT(
                     ASSEMBLY.out.assemblies,
+                    ASSEMBLY.out.proteins,
                     BINNING.out.bins
                 )
             }
 
             ch_bins = BINNING.out.bins
                 | mix(BIN_REFINEMENT.out.refined_bins)
+
+            ch_contig2bins = BINNING.out.contig2bin
+                | mix(BIN_REFINEMENT.out.contig2bin)
 
             if(params.collate_bins) {
                 ch_bins = ch_bins

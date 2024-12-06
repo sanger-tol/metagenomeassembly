@@ -1,5 +1,7 @@
 include { BIN3C_MKMAP                      } from '../../modules/local/bin3c/mkmap/main.nf'
 include { BIN3C_CLUSTER                    } from '../../modules/local/bin3c/cluster/main.nf'
+include { CONTIG2BIN2FASTA                 } from '../../modules/local/contig2bin2fasta/main'
+include { DASTOOL_FASTATOCONTIG2BIN        } from '../../modules/nf-core/dastool/fastatocontig2bin/main.nf'
 include { MAXBIN2                          } from '../../modules/nf-core/maxbin2/main'
 include { GAWK as MAXBIN2_DEPTHS           } from '../../modules/nf-core/gawk/main'
 include { METABAT2_METABAT2                } from '../../modules/nf-core/metabat2/metabat2/main'
@@ -14,8 +16,9 @@ workflow BINNING {
     hic_enzymes     // channel: [enz1, enz2], value
 
     main:
-    ch_versions = Channel.empty()
-    ch_bins     = Channel.empty()
+    ch_versions   = Channel.empty()
+    ch_bins       = Channel.empty()
+    ch_contig2bin = Channel.empty()
 
     // join assembly and depths together
     if(params.enable_metabat2) {
@@ -91,10 +94,14 @@ workflow BINNING {
         ch_metator_bins =  METATOR_PIPELINE.out.bins
             | map { meta, fasta -> [meta + [binner: "metator"], fasta] }
         ch_bins = ch_bins.mix(ch_metator_bins)
-
     }
 
+    DASTOOL_FASTATOCONTIG2BIN(ch_bins, 'fa')
+    ch_contig2bin = ch_contig2bin.mix(DASTOOL_FASTATOCONTIG2BIN.out.fastatocontig2bin)
+    ch_versions = ch_versions.mix(DASTOOL_FASTATOCONTIG2BIN.out.versions)
+
     emit:
-    bins     = ch_bins
-    versions = ch_versions
+    bins       = ch_bins
+    contig2bin = ch_contig2bin
+    versions   = ch_versions
 }

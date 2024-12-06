@@ -9,22 +9,22 @@ process CONTIG2BIN2FASTA {
 
     input:
     tuple val(meta), path(contigs), path(contig2bin)
-    val bincol
-    val contigcol
+    val input_is_prodigal_aa
 
     output:
-    tuple val(meta), path("*.fa"), emit: bins
-    path("versions.yml")         , emit: versions
+    tuple val(meta), path("*.fa*"), emit: bins
+    path("versions.yml")          , emit: versions
 
     script:
-    def args   = task.ext.args   ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args      = task.ext.args   ?: ''
+    def prefix    = task.ext.prefix ?: ""
+    def extension = input_is_prodigal_aa ? "faa" : "fa"
+    def input_aa  = input_is_prodigal_aa ? "_.*" : ""
     """
-    grep -v "binnew" ${contig2bin} | awk '{print \$${bincol}}' | sort -u | while read bin
+    awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
-        binno=\${bin//[^0-9]/}
-        grep -w \${bin} ${contig2bin} | awk '{print \$${contigcol}}' > ${prefix}_\${binno}.ctglst
-        seqkit grep -f ${prefix}_\${binno}.ctglst ${contigs} > ${prefix}_\${binno}.fa
+        grep -w \${bin} ${contig2bin} | awk '{print \$1${input_aa}}' > \${bin}.ctglst
+        seqkit grep -f \${bin}.ctglst ${contigs} > \${bin}.${extension}
     done
 
     cat <<-END_VERSIONS > versions.yml

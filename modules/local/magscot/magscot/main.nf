@@ -26,7 +26,10 @@ process MAGSCOT_MAGSCOT {
 
     mv MAGScoT.scores.out ${prefix}.MAGScoT.scores.out
     mv MAGScoT.refined.out ${prefix}.MAGScoT.refined.out
-    mv MAGScoT.refined.contig_to_bin.out ${prefix}.MAGScoT.refined.contig_to_bin.out
+
+    ## magscot puts out contig2bin file in wrong format
+    awk 'NR > 1 {print \$2 \$1}' MAGScoT.refined.contig_to_bin.out > ${prefix}.MAGScoT.refined.contig_to_bin.out
+    rm MAGScoT.refined.contig_to_bin.outcd
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

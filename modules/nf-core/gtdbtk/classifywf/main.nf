@@ -9,6 +9,8 @@ process GTDBTK_CLASSIFYWF {
     tuple val(db_name), path("database/*")
     val use_pplacer_scratch_dir
     path mash_db
+    path bacteria_md
+    path archaea_md
 
     output:
     tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv")        , emit: summary
@@ -20,6 +22,7 @@ process GTDBTK_CLASSIFYWF {
     tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv")   , emit: failed  , optional: true
     tuple val(meta), path("gtdbtk.${prefix}.log")                  , emit: log
     tuple val(meta), path("gtdbtk.${prefix}.warnings.log")         , emit: warnings
+    tuple val(meta), path("gtdbtk.${prefix}_ncbi.tsv")             , emit: ncbi    , optional: true
     path ("versions.yml"), emit: versions
 
     when:
@@ -30,7 +33,9 @@ process GTDBTK_CLASSIFYWF {
     def pplacer_scratch = use_pplacer_scratch_dir ? "--scratch_dir pplacer_tmp" : ""
     def mash_mode       = mash_db                 ? "--mash_db ${mash_db}"      : "--skip_ani_screen"
     prefix = task.ext.prefix ?: "${meta.id}"
-
+    def run_ncbi = (bacteria_md || archaea_md) ? true : false
+    def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
+    def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
     """
     export GTDBTK_DATA_PATH="\${PWD}/database"
     if [ ${pplacer_scratch} != "" ] ; then
@@ -45,6 +50,15 @@ process GTDBTK_CLASSIFYWF {
         --cpus ${task.cpus} \\
         ${mash_mode} \\
         ${pplacer_scratch}
+
+    if [ "${run_ncbi}" == "true" ]; then
+        gtdb_to_ncbi_majority_vote.py \\
+            --gtdbtk_output_dir . \\
+            ${bac_md} \\
+            ${ar_md} \\
+            --gtdbtk_prefix ${prefix} \\
+            --output_file gtdbtk.${prefix}_ncbi.tsv
+    fi
 
     ## If mash db given, classify/ and identify/ directories won't be created
     if [[ -d classify/ && \$(ls -A classify/) ]]; then
