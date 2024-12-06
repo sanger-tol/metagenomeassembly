@@ -62,7 +62,7 @@ workflow LONGREADMAG {
                 BIN_REFINEMENT(
                     ASSEMBLY.out.assemblies,
                     ASSEMBLY.out.proteins,
-                    BINNING.out.bins
+                    BINNING.out.contig2bin
                 )
             }
 

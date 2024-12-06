@@ -105,8 +105,8 @@
                 }
             }
         },
-        "new_group_2": {
-            "title": "New Group 2",
+        "pipeline_options": {
+            "title": "Pipeline options",
             "type": "object",
             "description": "",
             "default": "",
@@ -140,8 +140,8 @@
                 }
             }
         },
-        "new_group_1": {
-            "title": "New Group 1",
+        "bin_taxonomy_options": {
+            "title": "Bin taxonomy options",
             "type": "object",
             "description": "",
             "default": "",
@@ -157,7 +157,10 @@
                 "gtdbtk_db": {
                     "type": "string"
                 },
-                "gtdbtk_mash_db": {
+                "gtdb_bac120_metadata": {
+                    "type": "string"
+                },
+                "gtdb_ar53_metadata": {
                     "type": "string"
                 },
                 "gtdbtk_min_completeness": {
@@ -303,13 +306,13 @@
             "$ref": "#/$defs/bin_refinement_options"
         },
         {
-            "$ref": "#/$defs/new_group_2"
+            "$ref": "#/$defs/pipeline_options"
         },
         {
             "$ref": "#/$defs/bin_qc_options"
         },
         {
-            "$ref": "#/$defs/new_group_1"
+            "$ref": "#/$defs/bin_taxonomy_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
