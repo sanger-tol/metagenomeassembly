@@ -17,7 +17,7 @@ process CONTIG2BIN2FASTA {
 
     script:
     def args      = task.ext.args   ?: ''
-    def prefix    = task.ext.prefix ?: ""
+    def prefix    = task.ext.prefix ?: "${meta.id}"
     def extension = input_is_prodigal_aa ? "faa" : "fa"
     def input_aa  = input_is_prodigal_aa ? "_.*" : ""
     """

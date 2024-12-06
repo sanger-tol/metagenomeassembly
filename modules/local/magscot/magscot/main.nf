@@ -28,7 +28,7 @@ process MAGSCOT_MAGSCOT {
     mv MAGScoT.refined.out ${prefix}.MAGScoT.refined.out
 
     ## magscot puts out contig2bin file in wrong format
-    awk 'NR > 1 {print \$2 \$1}' MAGScoT.refined.contig_to_bin.out > ${prefix}.MAGScoT.refined.contig_to_bin.out
+    awk 'BEGIN{OFS="\t"} NR > 1 {print \$2,\$1}' MAGScoT.refined.contig_to_bin.out > ${prefix}.MAGScoT.refined.contig_to_bin.out
     rm MAGScoT.refined.contig_to_bin.out
 
     cat <<-END_VERSIONS > versions.yml
