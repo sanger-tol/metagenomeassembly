@@ -23,8 +23,8 @@ workflow ASSEMBLY {
         }
 
         PYRODIGAL(ch_assemblies, 'gff')
-        ch_proteins = ch_proteins.mix(PYRODIGAL.out.faa)
         ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
+        ch_proteins = ch_proteins.mix(PYRODIGAL.out.faa)
     }
 
     emit:

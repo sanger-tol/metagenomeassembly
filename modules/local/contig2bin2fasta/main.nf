@@ -16,15 +16,16 @@ process CONTIG2BIN2FASTA {
     path("versions.yml")          , emit: versions
 
     script:
-    def args      = task.ext.args   ?: ''
-    def prefix    = task.ext.prefix ?: "${meta.id}"
-    def extension = input_is_prodigal_aa ? "faa" : "fa"
-    def input_aa  = input_is_prodigal_aa ? "_.*" : ""
+    def args        = task.ext.args   ?: ''
+    def prefix      = task.ext.prefix ?: "${meta.id}"
+    def extension   = input_is_prodigal_aa ? "faa" : "fa"
+    def input_aa    = input_is_prodigal_aa ? "_.*" : ""
+    def seqkit_mode = input_is_prodigal_aa ? "-rf" : "-f"
     """
     awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
-        grep -w \${bin} ${contig2bin} | awk '{print \$1${input_aa}}' > \${bin}.ctglst
-        seqkit grep -f \${bin}.ctglst ${contigs} > \${bin}.${extension}
+        grep -w \${bin} ${contig2bin} | awk '{print \$1\"${input_aa}\"}' > \${bin}.ctglst
+        seqkit grep ${seqkit_mode} \${bin}.ctglst ${contigs} > \${bin}.${extension}
     done
 
     cat <<-END_VERSIONS > versions.yml

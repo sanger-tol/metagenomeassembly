@@ -1,12 +1,12 @@
-include { DASTOOL_DASTOOL                    } from '../../modules/nf-core/dastool/dastool/main'
-include { DASTOOL_FASTATOCONTIG2BIN          } from '../../modules/nf-core/dastool/fastatocontig2bin/main'
-include { GAWK as PROCESS_HMM_TBLOUT         } from '../../modules/nf-core/gawk/main'
-include { GAWK as MAGSCOT_PROCESS_CONTIG2BIN } from '../../modules/nf-core/gawk/main'
-include { GAWK as RENAME_DASTOOL_BINS        } from '../../modules/nf-core/gawk/main'
-include { HMMER_HMMSEARCH                    } from '../../modules/nf-core/hmmer/hmmsearch/main'
-include { CONTIG2BIN2FASTA as MAGSCOT_BINS   } from '../../modules/local/contig2bin2fasta/main'
-include { CONTIG2BIN2FASTA as DASTOOL_BINS   } from '../../modules/local/contig2bin2fasta/main'
-include { MAGSCOT_MAGSCOT                    } from '../../modules/local/magscot/magscot/main'
+include { DASTOOL_DASTOOL                         } from '../../modules/nf-core/dastool/dastool/main'
+include { DASTOOL_FASTATOCONTIG2BIN               } from '../../modules/nf-core/dastool/fastatocontig2bin/main'
+include { GAWK as GAWK_PROCESS_HMM_TBLOUT         } from '../../modules/nf-core/gawk/main'
+include { GAWK as GAWK_MAGSCOT_PROCESS_CONTIG2BIN } from '../../modules/nf-core/gawk/main'
+include { GAWK as GAWK_RENAME_DASTOOL_BINS        } from '../../modules/nf-core/gawk/main'
+include { HMMER_HMMSEARCH                         } from '../../modules/nf-core/hmmer/hmmsearch/main'
+include { CONTIG2BIN2FASTA as MAGSCOT_BINS        } from '../../modules/local/contig2bin2fasta/main'
+include { CONTIG2BIN2FASTA as DASTOOL_BINS        } from '../../modules/local/contig2bin2fasta/main'
+include { MAGSCOT_MAGSCOT                         } from '../../modules/local/magscot/magscot/main'
 
 workflow BIN_REFINEMENT {
     take:

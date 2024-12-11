@@ -1,4 +1,6 @@
-include { GTDBTK_CLASSIFYWF } from '../../modules/nf-core/gtdbtk/classifywf/main'
+include { GTDBTK_CLASSIFYWF               } from '../../modules/nf-core/gtdbtk/classifywf/main'
+include { GAWK as GAWK_EXTRACT_NCBI_NAMES } from '../../modules/nf-core/gawk/main'
+include { TAXONKIT_NAME2TAXID             } from '../../modules/nf-core/taxonkit/name2taxid/main'
 
 workflow BIN_TAXONOMY {
     take:
@@ -47,9 +49,30 @@ workflow BIN_TAXONOMY {
             ch_gtdb_bac120_metadata,
             ch_gtdb_ar53_metadata
         )
-        ch_versions     = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
-        ch_gtdb_summary = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
-        ch_gtdb_ncbi    = ch_gtdb_ncbi.mix(GTDBTK_CLASSIFYWF.out.ncbi)
+        ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
+        ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
+
+        if(params.ncbi_taxonomy_dir){
+            GAWK_EXTRACT_NCBI_NAMES(ch_gtdb_ncbi, file("${baseDir}/assets/extract_ncbi_name.awk"))
+
+            ch_gtdb_ncbi_for_taxonkit = GTDBTK_CLASSIFYWF.out.ncbi
+                | map { meta, tsv -> [ meta, [], tsv ] }
+
+            TAXONKIT_NAME2TAXID(
+                ch_gtdb_ncbi_for_taxonkit,
+                file(params.ncbi_taxonomy_dir)
+            )
+
+            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(TAXONKIT_NAME2TAXID.out.tsv)
+
+            ch_versions = ch_versions
+                | mix(
+                    GAWK_EXTRACT_NCBI_NAMES.out.versions,
+                    TAXONKIT_NAME2TAXID.out.versions
+                )
+        } else {
+            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_CLASSIFYWF.out.ncbi)
+        }
     }
 
     emit:

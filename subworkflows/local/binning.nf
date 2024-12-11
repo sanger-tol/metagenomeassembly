@@ -1,11 +1,11 @@
-include { BIN3C_MKMAP                      } from '../../modules/local/bin3c/mkmap/main.nf'
-include { BIN3C_CLUSTER                    } from '../../modules/local/bin3c/cluster/main.nf'
-include { CONTIG2BIN2FASTA                 } from '../../modules/local/contig2bin2fasta/main'
-include { DASTOOL_FASTATOCONTIG2BIN        } from '../../modules/nf-core/dastool/fastatocontig2bin/main.nf'
-include { MAXBIN2                          } from '../../modules/nf-core/maxbin2/main'
-include { GAWK as MAXBIN2_DEPTHS           } from '../../modules/nf-core/gawk/main'
-include { METABAT2_METABAT2                } from '../../modules/nf-core/metabat2/metabat2/main'
-include { METATOR_PIPELINE                 } from '../../modules/local/metator/pipeline/main'
+include { BIN3C_MKMAP                 } from '../../modules/local/bin3c/mkmap/main.nf'
+include { BIN3C_CLUSTER               } from '../../modules/local/bin3c/cluster/main.nf'
+include { CONTIG2BIN2FASTA            } from '../../modules/local/contig2bin2fasta/main'
+include { DASTOOL_FASTATOCONTIG2BIN   } from '../../modules/nf-core/dastool/fastatocontig2bin/main.nf'
+include { MAXBIN2                     } from '../../modules/nf-core/maxbin2/main'
+include { GAWK as GAWK_MAXBIN2_DEPTHS } from '../../modules/nf-core/gawk/main'
+include { METABAT2_METABAT2           } from '../../modules/nf-core/metabat2/metabat2/main'
+include { METATOR_PIPELINE            } from '../../modules/local/metator/pipeline/main'
 
 workflow BINNING {
     take:
@@ -20,7 +20,6 @@ workflow BINNING {
     ch_bins       = Channel.empty()
     ch_contig2bin = Channel.empty()
 
-    // join assembly and depths together
     if(params.enable_metabat2) {
         ch_metabat_input = assemblies
             | combine(pacbio_depths, by: 0)
@@ -54,7 +53,10 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_maxbin2_bins)
     }
 
-    // Bin3C is not available in conda - only run if we are not running with the conda profile
+    //
+    // LOGIC: Bin3C is not available in conda
+    //        only run if we are not running with the conda profile
+    //
     if(params.enable_bin3c && !(workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1)) {
         ch_bin3c_mkmap_input = assemblies
             | combine(hic_bam, by: 0)
@@ -96,6 +98,10 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_metator_bins)
     }
 
+    
+    //
+    // LOGIC: Process all outputs into contig2bin format
+    //
     DASTOOL_FASTATOCONTIG2BIN(ch_bins, 'fa')
     ch_contig2bin = ch_contig2bin.mix(DASTOOL_FASTATOCONTIG2BIN.out.fastatocontig2bin)
     ch_versions = ch_versions.mix(DASTOOL_FASTATOCONTIG2BIN.out.versions)
