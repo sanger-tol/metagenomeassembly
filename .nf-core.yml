@@ -38,8 +38,6 @@ lint:
     - validation.summary.afterText
   readme:
     - nextflow_badge
-    - nextflow_badge
-    - nextflow_badge
 nf_core_version: 3.0.2
 org_path: null
 repository_type: pipeline

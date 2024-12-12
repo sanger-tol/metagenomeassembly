@@ -78,9 +78,9 @@ workflow LONGREADMAG {
 
             //
             // LOGIC: Convert nucleotide bins to amino acid bins using the
-            //        predicted proteins from pyrodigal 
-            //        as downstream steps rerun this many times
-            // 
+            //        predicted proteins from pyrodigal as many downstream processes
+            //        repeat protein prediction
+            //
             ch_c2b_to_join = ch_contig2bins
                 | map { meta, c2b -> [meta - meta.subMap("binner"), meta, c2b] }
             ch_bin_to_protein_input = ch_c2b_to_join
@@ -90,11 +90,10 @@ workflow LONGREADMAG {
             BINS_TO_PROTEIN(ch_bin_to_protein_input, true)
             ch_aa_bins = BINS_TO_PROTEIN.out.bins
 
-
             //
             // LOGIC: (optional) collate bins from different binning steps into
             //        single input to reduce redundant high-memory processes
-            // 
+            //
             if(params.collate_bins) {
                 ch_bins = ch_bins
                     | map { meta, bins ->
@@ -121,6 +120,7 @@ workflow LONGREADMAG {
 
             if(params.enable_taxonomy) {
                 BIN_TAXONOMY(ch_aa_bins, ch_checkm2_tsv)
+                ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
             }
         }
     }

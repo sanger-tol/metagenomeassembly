@@ -33,12 +33,12 @@
                     },
                     "dastool/dastool": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "6d736588f4af4bc9b615bd7189442bd4272ae26e",
                         "installed_by": ["modules"]
                     },
                     "dastool/fastatocontig2bin": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "6d736588f4af4bc9b615bd7189442bd4272ae26e",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
@@ -66,7 +66,7 @@
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "6d736588f4af4bc9b615bd7189442bd4272ae26e",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/metabat2/metabat2/metabat2-metabat2.diff"
                     },

@@ -12,7 +12,13 @@ workflow BIN_TAXONOMY {
     ch_gtdb_summary = Channel.empty()
     ch_gtdb_ncbi    = Channel.empty()
 
-    // this code modified from nf-core/mag
+    //
+    // LOGIC: GTDB-Tk classifications are only accurate for bins with high
+    //        completeness and low contamination as it needs a good number
+    //        of single-copy genes for accurate placement - filter input
+    //        bins using the checkm2 summary scores.
+    //
+    //        This code is adapted from nf-core/mag
     if(checkm2_summary) {
         ch_bin_scores = checkm2_summary
             | splitCsv(header: true, sep: '\t')
@@ -52,8 +58,12 @@ workflow BIN_TAXONOMY {
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
 
+        // GTDB to NCBI classifications lack a taxid
+        // Pull out the highest level taxonomic rank from classifications and
+        // get its taxid
         if(params.ncbi_taxonomy_dir){
             GAWK_EXTRACT_NCBI_NAMES(ch_gtdb_ncbi, file("${baseDir}/assets/extract_ncbi_name.awk"))
+            ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
             ch_gtdb_ncbi_for_taxonkit = GTDBTK_CLASSIFYWF.out.ncbi
                 | map { meta, tsv -> [ meta, [], tsv ] }
@@ -62,14 +72,9 @@ workflow BIN_TAXONOMY {
                 ch_gtdb_ncbi_for_taxonkit,
                 file(params.ncbi_taxonomy_dir)
             )
+            ch_versions = ch_versions.mix(TAXONKIT_NAME2TAXID.out.versions)
 
             ch_gtdb_ncbi = ch_gtdb_ncbi.mix(TAXONKIT_NAME2TAXID.out.tsv)
-
-            ch_versions = ch_versions
-                | mix(
-                    GAWK_EXTRACT_NCBI_NAMES.out.versions,
-                    TAXONKIT_NAME2TAXID.out.versions
-                )
         } else {
             ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_CLASSIFYWF.out.ncbi)
         }

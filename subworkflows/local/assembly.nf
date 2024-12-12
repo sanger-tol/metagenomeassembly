@@ -13,6 +13,7 @@ workflow ASSEMBLY {
     if(hifi_reads) {
         if(params.enable_metamdbg) {
             METAMDBG_ASM(hifi_reads, 'hifi')
+            ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 
             ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
                 | map { meta, contigs ->
