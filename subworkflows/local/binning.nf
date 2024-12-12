@@ -36,7 +36,7 @@ workflow BINNING {
         ch_versions = ch_versions.mix(GAWK_MAXBIN2_DEPTHS.out.versions)
 
         ch_maxbin2_input = assemblies
-            | combine(MAXBIN2_DEPTHS.out.output, by: 0)
+            | combine(GAWK_MAXBIN2_DEPTHS.out.output, by: 0)
             | map { meta, contigs, depths ->
                 [meta, contigs, [], depths]
             }

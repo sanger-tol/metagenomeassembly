@@ -14,7 +14,8 @@ include { BINNING                             } from '../subworkflows/local/binn
 include { BIN_QC                              } from '../subworkflows/local/bin_qc.nf'
 include { BIN_TAXONOMY                        } from '../subworkflows/local/bin_taxonomy'
 include { BIN_REFINEMENT                      } from '../subworkflows/local/bin_refinement'
-include { CONTIG2BIN2FASTA as BINS_TO_PROTEIN } from '../modules/local/contig2bin2fasta/main'
+include { BIN_SUMMARY                         } from '../modules/local/bin_summary'
+include { CONTIG2BIN2FASTA as BINS_TO_PROTEIN } from '../modules/local/contig2bin2fasta'
 include { PREPARE_DATA                        } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING                        } from '../subworkflows/local/read_mapping'
 
@@ -113,14 +114,36 @@ workflow LONGREADMAG {
             if(params.enable_binqc) {
                 BIN_QC(ch_bins, ch_aa_bins)
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
-                ch_checkm2_tsv = BIN_QC.out.checkm_tsv
-            } else {
-                ch_checkm2_tsv = Channel.empty()
-            }
 
-            if(params.enable_taxonomy) {
-                BIN_TAXONOMY(ch_aa_bins, ch_checkm2_tsv)
-                ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
+                if(params.enable_taxonomy) {
+                    BIN_TAXONOMY(ch_aa_bins, BIN_QC.out.checkm2_tsv)
+                    ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
+
+                    ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_ncbi
+                } else {
+                    ch_taxonomy_tsv = Channel.empty()
+                }
+
+                if(params.enable_summary) {
+                    ch_stats_collated = BIN_QC.out.stats
+                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | groupTuple(by: 0)
+
+                    ch_checkm2_collated = BIN_QC.out.checkm2_tsv
+                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | groupTuple(by: 0)
+
+                    ch_taxonomy_collated = ch_taxonomy_tsv
+                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | groupTuple(by: 0)
+
+                    ch_bin_summary_input = ch_stats_collated
+                        | combine(ch_checkm2_collated, by: 0)
+                        | combine(ch_taxonomy_collated, by: 0)
+
+                    BIN_SUMMARY(ch_bin_summary_input)
+                    ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
+                }
             }
         }
     }

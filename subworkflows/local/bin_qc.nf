@@ -37,7 +37,7 @@ workflow BIN_QC {
     ch_versions = ch_versions.mix(SEQKIT_STATS.out.versions)
 
     emit:
-    checkm_tsv = ch_checkm2_tsv
-    stats      = SEQKIT_STATS.out.stats
-    versions   = ch_versions
+    checkm2_tsv = ch_checkm2_tsv
+    stats       = SEQKIT_STATS.out.stats
+    versions    = ch_versions
 }
