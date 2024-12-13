@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { LONGREADMAG  } from './workflows/longreadmag'
+include { LONGREADMAG             } from './workflows/longreadmag'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_longreadmag_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_longreadmag_pipeline'
 /*
@@ -77,12 +77,11 @@ workflow {
     //
     // SUBWORKFLOW: Run completion tasks
     //
-
-    // PIPELINE_COMPLETION (
-    //     params.outdir,
-    //     params.monochrome_logs,
-    //     SANGERTOL_LONGREADMAG.out.multiqc_report
-    // )
+    PIPELINE_COMPLETION (
+        params.outdir,
+        params.monochrome_logs,
+        []
+    )
 
 }
 

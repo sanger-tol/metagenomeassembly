@@ -60,7 +60,8 @@ process METATOR_PIPELINE {
     """
     touch bin_summary.txt
     touch binning.txt
-    mkdir final_bin
+    mkdir bins
+    touch bins/${prefix}_metator_1.fa
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -1,4 +1,4 @@
-process CONTIG2BIN2FASTA {
+process CONTIG2BINTOFASTA {
     tag "${meta.id}"
     label "process_low"
 
@@ -9,7 +9,6 @@ process CONTIG2BIN2FASTA {
 
     input:
     tuple val(meta), path(contigs), path(contig2bin)
-    val input_is_prodigal_aa
 
     output:
     tuple val(meta), path("*.fa*"), emit: bins
@@ -18,14 +17,11 @@ process CONTIG2BIN2FASTA {
     script:
     def args        = task.ext.args   ?: ''
     def prefix      = task.ext.prefix ?: "${meta.id}"
-    def extension   = input_is_prodigal_aa ? "faa" : "fa"
-    def input_aa    = input_is_prodigal_aa ? "_.*" : ""
-    def seqkit_mode = input_is_prodigal_aa ? "-rf" : "-f"
     """
     awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
-        grep -w \${bin} ${contig2bin} | awk '{print \$1\"${input_aa}\"}' > \${bin}.ctglst
-        seqkit grep ${seqkit_mode} \${bin}.ctglst ${contigs} > \${bin}.${extension}
+        grep -w \${bin} ${contig2bin} | awk '{ print \$1 }' > \${bin}.ctglst
+        seqkit grep -f \${bin}.ctglst ${contigs} > \${bin}.fa
     done
 
     cat <<-END_VERSIONS > versions.yml

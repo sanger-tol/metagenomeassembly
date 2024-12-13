@@ -1,6 +1,6 @@
 include { BIN3C_MKMAP                 } from '../../modules/local/bin3c/mkmap/main.nf'
 include { BIN3C_CLUSTER               } from '../../modules/local/bin3c/cluster/main.nf'
-include { DASTOOL_FASTATOCONTIG2BIN   } from '../../modules/nf-core/dastool/fastatocontig2bin/main.nf'
+include { FASTATOCONTIG2BIN           } from '../../modules/local/fastatocontig2bin/main.nf'
 include { MAXBIN2                     } from '../../modules/nf-core/maxbin2/main'
 include { GAWK as GAWK_MAXBIN2_DEPTHS } from '../../modules/nf-core/gawk/main'
 include { METABAT2_METABAT2           } from '../../modules/nf-core/metabat2/metabat2/main'
@@ -94,9 +94,9 @@ workflow BINNING {
     //
     // LOGIC: Process all outputs into contig2bin format
     //
-    DASTOOL_FASTATOCONTIG2BIN(ch_bins, 'fa')
-    ch_contig2bin = ch_contig2bin.mix(DASTOOL_FASTATOCONTIG2BIN.out.fastatocontig2bin)
-    ch_versions = ch_versions.mix(DASTOOL_FASTATOCONTIG2BIN.out.versions)
+    FASTATOCONTIG2BIN(ch_bins, 'fa')
+    ch_contig2bin = ch_contig2bin.mix(FASTATOCONTIG2BIN.out.contig2bin)
+    ch_versions = ch_versions.mix(FASTATOCONTIG2BIN.out.versions)
 
     emit:
     bins       = ch_bins

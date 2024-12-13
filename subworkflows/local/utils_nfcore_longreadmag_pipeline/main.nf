@@ -10,6 +10,7 @@
 
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 include { YAML_INPUT                } from '../yaml_input.nf'
@@ -84,7 +85,6 @@ workflow PIPELINE_COMPLETION {
     take:
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-
     multiqc_report  //  string: Path to MultiQC report
 
     main:

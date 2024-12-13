@@ -56,7 +56,7 @@ process GTDBTK_CLASSIFYWF {
             --gtdbtk_output_dir . \\
             ${bac_md} \\
             ${ar_md} \\
-            --gtdbtk_prefix ${prefix} \\
+            --gtdbtk_prefix gtdbtk.${prefix} \\
             --output_file gtdbtk.${prefix}_ncbi.tsv
     fi
 

@@ -12,9 +12,9 @@ process CHECKM2_PREDICT {
     tuple val(dbmeta), path(db)
 
     output:
-    tuple val(meta), path("${prefix}")                   , emit: checkm2_output
-    tuple val(meta), path("${prefix}/quality_report.tsv"), emit: checkm2_tsv
-    path("versions.yml")                                 , emit: versions
+    tuple val(meta), path("${prefix}")                     , emit: checkm2_output
+    tuple val(meta), path("${prefix}/*.quality_report.tsv"), emit: checkm2_tsv
+    path("versions.yml")                                   , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -30,6 +30,8 @@ process CHECKM2_PREDICT {
         --threads ${task.cpus} \\
         --database_path ${db} \\
         ${args}
+
+    mv ${prefix}/quality_report.tsv ${prefix}/${prefix}.quality_report.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -25,12 +25,12 @@ workflow BIN_TAXONOMY {
             | map { meta, row ->
                 def completeness  = Double.parseDouble(row.'Completeness')
                 def contamination = Double.parseDouble(row.'Contamination')
-                [row.'Name' + ".fa", completeness, contamination]
+                [row.'Name', completeness, contamination]
             }
 
         ch_filtered_bins = bins
             | transpose()
-            | map { meta, bin -> [bin.getName(), bin, meta]}
+            | map { meta, bin -> [bin.getBaseName(), bin, meta]}
             | join(ch_bin_scores, failOnDuplicate: true)
             | filter { // it[3] = completeness, it[4] = contamination
                 it[3] >= params.gtdbtk_min_completeness && it[4] <= params.gtdbtk_max_contamination
@@ -44,16 +44,16 @@ workflow BIN_TAXONOMY {
     if(params.enable_gtdbtk && params.gtdbtk_db) {
         ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
             | collect | map { ["gtdb", it] }
-        ch_gtdb_bac120_metadata = params.gtdb_bac120_metadata ? Channel.of(file(params.gtdb_bac120_metadata)) : []
-        ch_gtdb_ar53_metadata = params.gtdb_ar53_metadata ? Channel.of(file(params.gtdb_ar53_metadata)) : []
+
+        ch_gtdbtk_mash_db = params.gtdbtk_mash_db ? file(params.gtdbtk_mash_db) : []
 
         GTDBTK_CLASSIFYWF(
             ch_filtered_bins,
             ch_gtdbtk_db,
             false,
-            [],
-            ch_gtdb_bac120_metadata,
-            ch_gtdb_ar53_metadata
+            ch_gtdbtk_mash_db,
+            file(params.gtdb_bac120_metadata),
+            file(params.gtdb_ar53_metadata)
         )
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)

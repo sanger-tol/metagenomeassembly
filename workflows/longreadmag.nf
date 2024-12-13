@@ -5,19 +5,19 @@
 */
 
 // include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap                    } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
-include { ASSEMBLY                            } from '../subworkflows/local/assembly'
-include { BINNING                             } from '../subworkflows/local/binning'
-include { BIN_QC                              } from '../subworkflows/local/bin_qc.nf'
-include { BIN_TAXONOMY                        } from '../subworkflows/local/bin_taxonomy'
-include { BIN_REFINEMENT                      } from '../subworkflows/local/bin_refinement'
-include { BIN_SUMMARY                         } from '../modules/local/bin_summary'
-include { CONTIG2BIN2FASTA as BINS_TO_PROTEIN } from '../modules/local/contig2bin2fasta'
-include { PREPARE_DATA                        } from '../subworkflows/local/prepare_data'
-include { READ_MAPPING                        } from '../subworkflows/local/read_mapping'
+include { paramsSummaryMap                     } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc                 } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText               } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
+include { ASSEMBLY                             } from '../subworkflows/local/assembly'
+include { BINNING                              } from '../subworkflows/local/binning'
+include { BIN_QC                               } from '../subworkflows/local/bin_qc.nf'
+include { BIN_TAXONOMY                         } from '../subworkflows/local/bin_taxonomy'
+include { BIN_REFINEMENT                       } from '../subworkflows/local/bin_refinement'
+include { BIN_SUMMARY                          } from '../modules/local/bin_summary'
+include { CONTIG2BINTOFASTA as BINS_TO_PROTEIN } from '../modules/local/contig2bintofasta'
+include { PREPARE_DATA                         } from '../subworkflows/local/prepare_data'
+include { READ_MAPPING                         } from '../subworkflows/local/read_mapping'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,20 +78,6 @@ workflow LONGREADMAG {
                 | mix(BIN_REFINEMENT.out.contig2bin)
 
             //
-            // LOGIC: Convert nucleotide bins to amino acid bins using the
-            //        predicted proteins from pyrodigal as many downstream processes
-            //        repeat protein prediction
-            //
-            ch_c2b_to_join = ch_contig2bins
-                | map { meta, c2b -> [meta - meta.subMap("binner"), meta, c2b] }
-            ch_bin_to_protein_input = ch_c2b_to_join
-                | combine(ch_proteins, by: 0)
-                | map { meta, meta_c2b, c2b, faa -> [ meta_c2b, faa, c2b ] }
-
-            BINS_TO_PROTEIN(ch_bin_to_protein_input, true)
-            ch_aa_bins = BINS_TO_PROTEIN.out.bins
-
-            //
             // LOGIC: (optional) collate bins from different binning steps into
             //        single input to reduce redundant high-memory processes
             //
@@ -102,21 +88,14 @@ workflow LONGREADMAG {
                     }
                     | transpose
                     | groupTuple(by: 0)
-
-                ch_aa_bins = ch_aa_bins
-                    | map { meta, bins ->
-                        [ meta.subMap("id") + [assembler: "all"] + [binner: "all"], bins]
-                    }
-                    | transpose
-                    | groupTuple(by: 0)
             }
 
             if(params.enable_binqc) {
-                BIN_QC(ch_bins, ch_aa_bins)
+                BIN_QC(ch_bins)
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
                 if(params.enable_taxonomy) {
-                    BIN_TAXONOMY(ch_aa_bins, BIN_QC.out.checkm2_tsv)
+                    BIN_TAXONOMY(ch_bins, BIN_QC.out.checkm2_tsv)
                     ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
 
                     ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_ncbi

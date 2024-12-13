@@ -5,7 +5,6 @@ include { SEQKIT_STATS             } from '../../modules/nf-core/seqkit/stats/ma
 workflow BIN_QC {
     take:
     bins
-    aa_bins
 
     main:
     ch_versions = Channel.empty()
@@ -20,7 +19,7 @@ workflow BIN_QC {
             )
         }
 
-        CHECKM2_PREDICT(aa_bins, ch_checkm2_db)
+        CHECKM2_PREDICT(bins, ch_checkm2_db)
 
         ch_versions = ch_versions
             | mix(
