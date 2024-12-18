@@ -7,7 +7,7 @@ process BIN3C_CLUSTER {
     tuple val(meta), path(contigs), path(map)
 
     output:
-    tuple val(meta), path("*.fa")         , emit: fasta, optional: true
+    tuple val(meta), path("*.fa.gz")      , emit: fasta, optional: true
     tuple val(meta), path("*.[!fna,log]*"), emit: clustering
     tuple val(meta), path("*.log")        , emit: log
     path("versions.yml")                  , emit: versions
@@ -27,11 +27,12 @@ process BIN3C_CLUSTER {
 
     # bin3c renames contigs, we don't want that
     for bin in bin3c/fasta/*.fna; do
-        basename=`basename \$bin`
-        awk -F" " '{if(\$1~">"){print ">" substr(\$2,8)}else{print \$0}}' \$bin > ${prefix}.\${basename%.fna}.fa
+        bn=`basename \$bin .fna`
+        awk -F" " '{if(\$1~">"){print ">" substr(\$2,8)}else{print \$0}}' \$bin > ${prefix}.\${bn}.fa
     done
 
     find bin3c -maxdepth 1 -type f -exec sh -c 'name=`basename {}`; mv {} ${prefix}.\$name' \\;
+    gzip *.fa
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

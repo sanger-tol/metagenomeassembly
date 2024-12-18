@@ -10,10 +10,10 @@ process METATOR_PIPELINE {
     val hic_enzymes
 
     output:
-    tuple val(meta), path("bin_summary.txt")          , emit: bin_summary
-    tuple val(meta), path("binning.txt")              , emit: contig2bin
-    tuple val(meta), path("bins/*.fa"), emit: bins
-    path "versions.yml"                               , emit: versions
+    tuple val(meta), path("bin_summary.txt") , emit: bin_summary
+    tuple val(meta), path("binning.txt")     , emit: contig2bin
+    tuple val(meta), path("bins/*.fa.gz")    , emit: bins
+    path "versions.yml"                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -45,6 +45,8 @@ process METATOR_PIPELINE {
         binname=`basename \$bin`
         awk -F" " '{if(\$1~">"){ print \$1 } else { print \$0 } }' \$bin > bins/\${binname}
     done
+
+    gzip bins/*.fa
 
     rm -r final_bin_unscaffold
 

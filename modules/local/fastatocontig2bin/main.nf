@@ -16,19 +16,28 @@ process FASTATOCONTIG2BIN {
     path("versions.yml")          , emit: versions
 
     script:
-    def args        = task.ext.args   ?: ''
-    def prefix      = task.ext.prefix ?: "${meta.id}"
+    def args              = task.ext.args   ?: ''
+    def prefix            = task.ext.prefix ?: "${meta.id}"
+    def compressed_bins   = bins.findAll { it.getExtension() == "gz" }
+    def decompress_bins   = compressed_bins.size() > 0 ? "gunzip ${compressed_bins.join(" ")}" : ""
+    def clean_bins        = bins.collect { it.toString() - ~/\.gz$/ }
+    def remove_compressed = compressed_bins.size() > 0 ? "rm ${compressed_bins.collect { it.toString() - ~/\.gz$/ }.join(" ")}" : ""
     """
+    ${decompress_bins}
+
     awk \\
         'BEGIN { OFS = "\t" }
         BEGINFILE {
-            cmd=sprintf("basename %s .%s", FILENAME, "${extension}")
-            cmd | getline bin
+            bin = FILENAME
+            sub(".*/", "", bin)
+            sub(/\\.[^\\.]+\$/, "", bin)
         }
         /^>/ {
             sub(/>/, "", \$1)
-            print \$1,bin
-        }' ${bins} > ${prefix}.tsv
+            print \$1, bin
+        }' ${clean_bins.join(" ")} > ${prefix}.tsv
+
+    ${remove_compressed}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

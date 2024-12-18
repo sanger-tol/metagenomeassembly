@@ -1,6 +1,7 @@
 include { CHECKM2_DATABASEDOWNLOAD } from '../../modules/nf-core/checkm2/databasedownload/main'
 include { CHECKM2_PREDICT          } from '../../modules/nf-core/checkm2/predict/main'
 include { SEQKIT_STATS             } from '../../modules/nf-core/seqkit/stats/main'
+include { PROKKA                   } from '../../modules/nf-core/prokka/main'
 
 workflow BIN_QC {
     take:
@@ -8,6 +9,9 @@ workflow BIN_QC {
 
     main:
     ch_versions = Channel.empty()
+
+    SEQKIT_STATS(bins)
+    ch_versions = ch_versions.mix(SEQKIT_STATS.out.versions)
 
     if(params.enable_checkm2) {
         if(!params.checkm2_local_db) {
@@ -32,8 +36,9 @@ workflow BIN_QC {
         ch_checkm2_tsv = Channel.empty()
     }
 
-    SEQKIT_STATS(bins)
-    ch_versions = ch_versions.mix(SEQKIT_STATS.out.versions)
+    if(params.enable_prokka) {
+
+    }
 
     emit:
     checkm2_tsv = ch_checkm2_tsv

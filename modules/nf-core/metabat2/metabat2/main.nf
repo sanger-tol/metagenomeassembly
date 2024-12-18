@@ -15,7 +15,7 @@ process METABAT2_METABAT2 {
     tuple val(meta), path("*.lowDepth.fa.gz")                    , optional:true, emit: lowdepth
     tuple val(meta), path("*.unbinned.fa.gz")                    , optional:true, emit: unbinned
     tuple val(meta), path("*.tsv.gz")                            , optional:true, emit: membership
-    tuple val(meta), path("*[!lowDepth|tooShort|unbinned].fa")   , optional:true, emit: fasta
+    tuple val(meta), path("*[!lowDepth|tooShort|unbinned].fa.gz"), optional:true, emit: fasta
     path "versions.yml"                                                         , emit: versions
 
     when:
@@ -35,7 +35,7 @@ process METABAT2_METABAT2 {
         -o ${prefix}
 
     gzip -cn ${prefix} > ${prefix}.tsv.gz
-    ## find . -name "*.fa" -type f | xargs -t -n 1 bgzip -@ ${task.cpus}
+    find . -name "*.fa" -type f | xargs -t -n 1 bgzip -@ ${task.cpus}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

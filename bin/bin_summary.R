@@ -103,6 +103,9 @@ read_taxonomy <- function(file) {
             ncbi_classification = `Majority vote NCBI classification`,
             taxid)
     }
+    # gtdb doesn't drop the extension
+    df <- df |>
+        mutate(bin = str_extract(bin, "(.*)\\.[^\\.]+$", group = 1))
 
     return(df)
 }

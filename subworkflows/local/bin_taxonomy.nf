@@ -30,7 +30,7 @@ workflow BIN_TAXONOMY {
 
         ch_filtered_bins = bins
             | transpose()
-            | map { meta, bin -> [bin.getBaseName(), bin, meta]}
+            | map { meta, bin -> [bin.getSimpleName(), bin, meta]}
             | join(ch_bin_scores, failOnDuplicate: true)
             | filter { // it[3] = completeness, it[4] = contamination
                 it[3] >= params.gtdbtk_min_completeness && it[4] <= params.gtdbtk_max_contamination
