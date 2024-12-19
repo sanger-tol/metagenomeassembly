@@ -117,24 +117,6 @@
                 }
             }
         },
-        "pipeline_options": {
-            "title": "Pipeline options",
-            "type": "object",
-            "description": "General options relating to pipeline operation.",
-            "default": "",
-            "properties": {
-                "enable_summary": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Produce a final summary file about each genome bin."
-                },
-                "collate_bins": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "For post-binning steps, collate all bins together so they operate as a single group. May save time when working with small numbers of bins."
-                }
-            }
-        },
         "bin_qc_options": {
             "title": "Bin QC options",
             "type": "object",
@@ -152,13 +134,18 @@
                     "description": "Enable QC using CheckM2."
                 },
                 "checkm2_db_version": {
-                    "type": "string",
-                    "default": 5571251,
+                    "type": "number",
+                    "default": 5571251.0,
                     "description": "If no local CheckM2 database provided, the Zenodo record ID of a CheckM2 database to download."
                 },
                 "checkm2_local_db": {
                     "type": "string",
                     "description": "Path to a local diamond database file for CheckM2."
+                },
+                "enable_prokka": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable non-coding RNA annotation of genome bins using Prokka."
                 }
             }
         },
@@ -209,6 +196,24 @@
                 "ncbi_taxonomy_dir": {
                     "type": "string",
                     "description": "Path to directory containing the names.dmp, nodes.dmp, delnodes.dmp, and merged.dmp files from the NCBI taxdump archive (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)"
+                }
+            }
+        },
+        "pipeline_options": {
+            "title": "Pipeline options",
+            "type": "object",
+            "description": "General options relating to pipeline operation.",
+            "default": "",
+            "properties": {
+                "enable_summary": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Produce a final summary file about each genome bin."
+                },
+                "collate_bins": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "For post-binning steps, collate all bins together so they operate as a single group. May save time when working with small numbers of bins."
                 }
             }
         },
@@ -345,13 +350,13 @@
             "$ref": "#/$defs/bin_refinement_options"
         },
         {
-            "$ref": "#/$defs/pipeline_options"
-        },
-        {
             "$ref": "#/$defs/bin_qc_options"
         },
         {
             "$ref": "#/$defs/bin_taxonomy_options"
+        },
+        {
+            "$ref": "#/$defs/pipeline_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
