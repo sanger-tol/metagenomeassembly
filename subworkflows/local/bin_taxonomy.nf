@@ -62,10 +62,10 @@ workflow BIN_TAXONOMY {
         // Pull out the highest level taxonomic rank from classifications and
         // get its taxid
         if(params.ncbi_taxonomy_dir){
-            GAWK_EXTRACT_NCBI_NAMES(ch_gtdb_ncbi, file("${baseDir}/assets/extract_ncbi_name.awk"))
+            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_CLASSIFYWF.out.ncbi, file("${baseDir}/bin/extract_ncbi_name.awk"))
             ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
-            ch_gtdb_ncbi_for_taxonkit = GTDBTK_CLASSIFYWF.out.ncbi
+            ch_gtdb_ncbi_for_taxonkit = GAWK_EXTRACT_NCBI_NAMES.out.output
                 | map { meta, tsv -> [ meta, [], tsv ] }
 
             TAXONKIT_NAME2TAXID(

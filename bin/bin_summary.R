@@ -1,5 +1,10 @@
 #!/usr/bin/env Rscript
 
+## Collates the various bin-level summary TSV files exported at
+## various points in the longreadmag pipeline run
+##
+## Author: Jim Downie, 2024
+
 library(optparse)
 library(tidyverse)
 
@@ -10,7 +15,7 @@ parser <- add_option(
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by seqkit stats",
+    help = "Comma-separated list of TSV files output by seqkit stats.",
     metavar="filename"
 )
 
@@ -20,7 +25,7 @@ parser <- add_option(
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by checkm2 predict",
+    help = "Comma-separated list of TSV files output by checkm2 predict.",
     metavar="filename"
 )
 
@@ -30,7 +35,17 @@ parser <- add_option(
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by GTDB-Tk",
+    help = "Comma-separated list of TSV files output by GTDB-Tk.",
+    metavar="filename"
+)
+
+parser <- add_option(
+    object = parser,
+    opt_str = c("-r", "--rrnas"),
+    type = "character",
+    action = "store",
+    default = NULL,
+    help = "Comma-separated list of TSV files output by GAWK_PROKKA_SUMMARY.",
     metavar="filename"
 )
 
@@ -66,6 +81,10 @@ parser <- add_option(
 
 input <- parse_args(parser)
 
+## Functions to read in summary information about each bin
+## Each should be named in the format "read_X", and X
+## should be the full name of one of the arguments defined in
+## the optparse section
 read_stats <- function(file) {
     df <- read_tsv(file) |>
         mutate(
@@ -78,7 +97,7 @@ read_stats <- function(file) {
     return(df)
 }
 
-read_checkm <- function(file) {
+read_checkm2 <- function(file) {
     df <- read_tsv(file) |>
         select(bin = Name,
             completeness = Completeness,
@@ -91,7 +110,7 @@ read_checkm <- function(file) {
 
 read_taxonomy <- function(file) {
     df <- read_tsv(file)
-    if(ncol(df) > 3) {
+    if(ncol(df) == 3) {
         df <- select(df,
             bin = `Genome ID`,
             gtdb_classification = `GTDB classification`,
@@ -110,28 +129,31 @@ read_taxonomy <- function(file) {
     return(df)
 }
 
-data <- list()
-if(rlang::has_name(input, "stats")) {
-    stats_files <- unlist(str_split(input$stats, ","))
-    stats_df <- map(stats_files, read_stats) |> list_rbind()
-    data <- c(data, list(stats_df))
-} else {
-    stop("Error: no stats file provided!")
+read_rrnas <- function(file) {
+    df <- read_tsv(file)
+    return(df)
 }
 
-if(rlang::has_name(input, "checkm2")) {
-    checkm_files <- unlist(str_split(input$checkm2, ","))
-    checkm_df <- map(checkm_files, read_checkm) |> list_rbind()
-    data <- c(data, list(checkm_df))
+## Takes the arg input list and a defined input type
+## Check if the arg has been passed, then split the string into
+## filenames, read them, and call the relevant
+## read_X function
+split_and_read <- function(input, input_type) {
+    if(!is.null(pluck(input, input_type))){
+        function_name <- paste0("read_", input_type)
+        files <- unlist(str_split(pluck(input, input_type), ","))
+        df <- map(files, \(x) do.call(function_name, list(file = x))) |>
+            list_rbind()
+        return(df)
+    }
 }
 
-if(rlang::has_name(input, "taxonomy")) {
-    tax_files <- unlist(str_split(input$taxonomy, ","))
-    tax_df <- map(tax_files, read_taxonomy) |> list_rbind()
-    data <- c(data, list(tax_df))
-}
-
-summary <- reduce(data, \(x, y) left_join(x, y, by = "bin"))
+## Map across all input types, read them, discard any that weren't provided
+## and then bind them all together by bin
+input_types <- c("stats", "checkm2", "taxonomy", "rrnas")
+summary <- map(input_types, \(x) split_and_read(input, x)) |>
+    discard(is.null) |>
+    reduce(\(x, y) left_join(x, y, by = "bin"))
 
 write_tsv(summary, glue::glue("{input$prefix}.bin_summary.tsv"))
 

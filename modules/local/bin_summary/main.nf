@@ -1,4 +1,5 @@
 process BIN_SUMMARY {
+    tag "${meta.id}"
     label "process_low"
 
     conda "${moduleDir}/environment.yml"
@@ -7,7 +8,10 @@ process BIN_SUMMARY {
         'community.wave.seqera.io/library/r-base_r-tidyverse_r-optparse:fb0e94661e2bf4e0' }"
 
     input:
-    tuple val(meta), path(stats), path(checkm2), path(taxonomy)
+    tuple val(meta), path(stats)
+    tuple val(meta), path(checkm2)
+    tuple val(meta), path(taxonomy)
+    tuple val(meta), path(prokka)
 
     output:
     tuple val(meta), path("*.bin_summary.tsv"), emit: summary
@@ -19,8 +23,10 @@ process BIN_SUMMARY {
     def stats_input  = stats    ? "--stats ${stats.join(",")}"       : ""
     def checkm_input = checkm2  ? "--checkm ${checkm2.join(",")}"    : ""
     def tax_input    = taxonomy ? "--taxonomy ${taxonomy.join(",")}" : ""
+    def prokka_input = prokka   ? "--prokka ${prokka.join(",")}"     : ""
     """
     bin_summary.R \\
+        -o ${prefix} \\
         ${stats_input} \\
         ${checkm_input} \\
         ${tax_input} \\

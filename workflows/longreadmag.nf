@@ -71,18 +71,24 @@ workflow LONGREADMAG {
                 )
             }
 
-            ch_bins = BINNING.out.bins
+            ch_bin_sets = BINNING.out.bins
                 | mix(BIN_REFINEMENT.out.refined_bins)
 
-            ch_contig2bins = BINNING.out.contig2bin
-                | mix(BIN_REFINEMENT.out.contig2bin)
+            // Channel with each bin as individual entry
+            ch_bins_individual = ch_bin_sets
+                | transpose
+                | map { meta, bin ->
+                    // Can't use getSimpleName() as some bin names are like ["a.1.fa.gz", "a.2.fa.gz"]
+                    def meta_new = meta + [binid: bin.getBaseName() - ~/\.[^\.]+$/]
+                    [ meta_new, bin ]
+                }
 
             //
             // LOGIC: (optional) collate bins from different binning steps into
             //        single input to reduce redundant high-memory processes
             //
             if(params.collate_bins) {
-                ch_bins = ch_bins
+                ch_bin_sets = ch_bin_sets
                     | map { meta, bins ->
                         [ meta.subMap("id") + [assembler: "all"] + [binner: "all"], bins]
                     }
@@ -91,11 +97,17 @@ workflow LONGREADMAG {
             }
 
             if(params.enable_binqc) {
-                BIN_QC(ch_bins)
+                BIN_QC(
+                    ch_bin_sets,
+                    ch_bins_individual
+                )
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
                 if(params.enable_taxonomy) {
-                    BIN_TAXONOMY(ch_bins, BIN_QC.out.checkm2_tsv)
+                    BIN_TAXONOMY(
+                        ch_bin_sets,
+                        BIN_QC.out.checkm2_tsv
+                    )
                     ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
 
                     ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_ncbi
@@ -105,22 +117,27 @@ workflow LONGREADMAG {
 
                 if(params.enable_summary) {
                     ch_stats_collated = BIN_QC.out.stats
-                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
 
                     ch_checkm2_collated = BIN_QC.out.checkm2_tsv
-                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
 
                     ch_taxonomy_collated = ch_taxonomy_tsv
-                        | map { meta, stats -> [ meta.subMap('id'), stats] }
+                        | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
 
-                    ch_bin_summary_input = ch_stats_collated
-                        | combine(ch_checkm2_collated, by: 0)
-                        | combine(ch_taxonomy_collated, by: 0)
+                    ch_prokka_collated = BIN_QC.out.prokka_summary
+                        | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                        | groupTuple(by: 0)
 
-                    BIN_SUMMARY(ch_bin_summary_input)
+                    BIN_SUMMARY(
+                        ch_stats_collated,
+                        ch_checkm2_collated,
+                        ch_taxonomy_collated,
+                        ch_prokka_collated
+                    )
                     ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
                 }
             }
