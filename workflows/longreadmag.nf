@@ -150,7 +150,7 @@ workflow LONGREADMAG {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  'longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }

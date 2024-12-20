@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 def readYAML( yamlfile ) {
-    return new org.yaml.snakeyaml.Yaml().load( new FileReader( yamlfile.toString() ) )
+    return new org.yaml.snakeyaml.Yaml().load(yamlfile.text)
 }
 
 workflow YAML_INPUT {
@@ -10,9 +10,8 @@ workflow YAML_INPUT {
 
     main:
     // ch_versions = Channel.empty()
-
-    yamlfile = Channel.from(input_file)
-        .map { file -> readYAML(file) }
+    yamlfile = Channel.fromPath(input_file)
+        | map { file -> readYAML(file) }
 
     //
     // LOGIC: PARSES THE TOP LEVEL OF YAML VALUES
@@ -21,11 +20,11 @@ workflow YAML_INPUT {
         | flatten()
         | multiMap { data ->
                 pacbio_fasta: ( data.pacbio ? [
-                    [ id: data.tolid ],
+                    [ id: data.id ],
                     data.pacbio.fasta.collect { file(it, checkIfExists: true) }
                 ] : error("ERROR: Pacbio reads not provided! Pipeline will not run as there is nothing to do.") )
                 hic_cram: ( data.hic ? [
-                    [ id: data.tolid ],
+                    [ id: data.id ],
                     data.hic.cram.collect { file(it, checkIfExists: true) }
                 ] : [] )
                 hic_enzymes: ( data.hic ?
