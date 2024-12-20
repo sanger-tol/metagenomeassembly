@@ -1,0 +1,19 @@
+{
+    "Params: default": {
+        "content": [
+            0,
+            null,
+            [
+                "pipeline_info"
+            ],
+            [
+                "params_2024-12-20_11-18-21.json:md5,948745d6c0c12ac3ead0100ae3d904c6"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-20T11:18:22.153429"
+    }
+}

@@ -83,6 +83,16 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with MetaTor."
+                },
+                "minimum_contig_size": {
+                    "type": "integer",
+                    "default": 3000,
+                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
+                },
+                "min_hifi_perc_identity": {
+                    "type": "integer",
+                    "default": 97,
+                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
                 }
             }
         },
@@ -134,8 +144,8 @@
                     "description": "Enable QC using CheckM2."
                 },
                 "checkm2_db_version": {
-                    "type": "number",
-                    "default": 5571251.0,
+                    "type": "string",
+                    "default": "5571251",
                     "description": "If no local CheckM2 database provided, the Zenodo record ID of a CheckM2 database to download."
                 },
                 "checkm2_local_db": {
@@ -330,7 +340,7 @@
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
                     "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "default": "https://raw.githubusercontent.com/prototaxites/lrm_testdata/refs/heads/main/",
                     "hidden": true
                 }
             }

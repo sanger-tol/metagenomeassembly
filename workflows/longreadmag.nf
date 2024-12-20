@@ -35,9 +35,7 @@ workflow LONGREADMAG {
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
 
-    PREPARE_DATA(
-        hic_cram
-    )
+    PREPARE_DATA(hic_cram)
     ch_versions = ch_versions.mix(PREPARE_DATA.out.versions)
 
     if(params.enable_assembly) {
@@ -61,6 +59,7 @@ workflow LONGREADMAG {
                 READ_MAPPING.out.hic_bam,
                 hic_enzymes
             )
+            ch_versions = ch_versions.mix(BINNING.out.versions)
             ch_contig2bin = BINNING.out.contig2bin
 
             if(params.enable_bin_refinement) {
@@ -69,12 +68,14 @@ workflow LONGREADMAG {
                     ch_proteins,
                     ch_contig2bin
                 )
+                ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
             }
 
+            // Bins grouped by assembly/binner in a list [[meta], [bin1, bin2...]]
             ch_bin_sets = BINNING.out.bins
                 | mix(BIN_REFINEMENT.out.refined_bins)
 
-            // Channel with each bin as individual entry
+            // Channel with each bin as individual entry [ [meta], bin1 ], [ [meta], bin2 ]
             ch_bins_individual = ch_bin_sets
                 | transpose
                 | map { meta, bin ->
@@ -146,14 +147,13 @@ workflow LONGREADMAG {
     //
     // Collate and save software versions
     //
-    // softwareVersionsToYAML(ch_versions)
-    //     .collectFile(
-    //         storeDir: "${params.outdir}/pipeline_info",
-    //         name:  ''  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
-    //         sort: true,
-    //         newLine: true
-    //     ).set { ch_collated_versions }
-
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name:  'longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
 
     // //
     // // MODULE: MultiQC

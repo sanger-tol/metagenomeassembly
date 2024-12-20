@@ -156,11 +156,3 @@ summary <- map(input_types, \(x) split_and_read(input, x)) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))
 
 write_tsv(summary, glue::glue("{input$prefix}.bin_summary.tsv"))
-
-writeLines(
-    c("BIN_SUMMARY:",
-        paste0("    R: ", paste0(R.Version()[c("major","minor")], collapse = ".")),
-        paste0("    tidyverse: ", packageVersion("tidyverse"))
-    ),
-    "versions.yml"
-)

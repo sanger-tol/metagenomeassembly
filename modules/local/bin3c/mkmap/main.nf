@@ -13,6 +13,9 @@ process BIN3C_MKMAP {
     path("versions.yml")           , emit: versions
 
     script:
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        error "ERROR: Bin3C is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_bin3c false"
+    }
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     // if(!hic_enzymes) error("Error: no enzymes entry found in Hi-C meta object!")
