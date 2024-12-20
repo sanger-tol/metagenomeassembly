@@ -4,13 +4,21 @@ Changes in module 'nf-core/prokka'
 Changes in 'prokka/main.nf':
 --- modules/nf-core/prokka/main.nf
 +++ modules/nf-core/prokka/main.nf
-@@ -1,5 +1,5 @@
+@@ -1,11 +1,11 @@
  process PROKKA {
 -    tag "$meta.id"
 +    tag "${meta.id}"
      label 'process_low'
  
      conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+-        'https://depot.galaxyproject.org/singularity/prokka:1.14.6--pl5321hdfd78af_4' :
+-        'biocontainers/prokka:1.14.6--pl5321hdfd78af_4' }"
++        'oras://community.wave.seqera.io/library/prokka_openjdk:6ee087933c41335a' :
++        'community.wave.seqera.io/library/prokka_openjdk:fa5e94a172289f67' }"
+ 
+     input:
+     tuple val(meta), path(fasta)
 @@ -31,18 +31,26 @@
      task.ext.when == null || task.ext.when
  

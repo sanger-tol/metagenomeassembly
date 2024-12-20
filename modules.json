@@ -61,9 +61,8 @@
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
-                        "git_sha": "6d736588f4af4bc9b615bd7189442bd4272ae26e",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/metabat2/metabat2/metabat2-metabat2.diff"
+                        "git_sha": "cc217b9d56fe9d8aee2e152f6fc31ba8e5cba952",
+                        "installed_by": ["modules"]
                     },
                     "metamdbg/asm": {
                         "branch": "master",
