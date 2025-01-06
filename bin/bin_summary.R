@@ -41,11 +41,21 @@ parser <- add_option(
 
 parser <- add_option(
     object = parser,
-    opt_str = c("-r", "--rrnas"),
+    opt_str = c("-l", "--trnas"),
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by GAWK_PROKKA_SUMMARY.",
+    help = "Comma-separated list of TSV files output by GAWK_TRNASCAN_SUMMARY.",
+    metavar="filename"
+)
+
+parser <- add_option(
+    object = parser,
+    opt_str = c("-g", "--rrnas"),
+    type = "character",
+    action = "store",
+    default = NULL,
+    help = "Comma-separated list of TSV files output by BIN_RRNAS",
     metavar="filename"
 )
 
@@ -129,10 +139,8 @@ read_taxonomy <- function(file) {
     return(df)
 }
 
-read_rrnas <- function(file) {
-    df <- read_tsv(file)
-    return(df)
-}
+read_trnas <- read_tsv
+read_rrnas <- read_tsv
 
 ## Takes the arg input list and a defined input type
 ## Check if the arg has been passed, then split the string into
@@ -150,7 +158,7 @@ split_and_read <- function(input, input_type) {
 
 ## Map across all input types, read them, discard any that weren't provided
 ## and then bind them all together by bin
-input_types <- c("stats", "checkm2", "taxonomy", "rrnas")
+input_types <- c("stats", "checkm2", "taxonomy", "trnas", "rrnas")
 summary <- map(input_types, \(x) split_and_read(input, x)) |>
     discard(is.null) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))

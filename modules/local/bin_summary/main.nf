@@ -11,7 +11,8 @@ process BIN_SUMMARY {
     tuple val(meta), path(stats)
     tuple val(meta), path(checkm2)
     tuple val(meta), path(taxonomy)
-    tuple val(meta), path(prokka)
+    tuple val(meta), path(trnascan)
+    tuple val(meta), path(rrna)
 
     output:
     tuple val(meta), path("*.bin_summary.tsv"), emit: summary
@@ -23,13 +24,16 @@ process BIN_SUMMARY {
     def stats_input  = stats    ? "--stats ${stats.join(",")}"       : ""
     def checkm_input = checkm2  ? "--checkm ${checkm2.join(",")}"    : ""
     def tax_input    = taxonomy ? "--taxonomy ${taxonomy.join(",")}" : ""
-    def prokka_input = prokka   ? "--prokka ${prokka.join(",")}"     : ""
+    def trna_input   = trnascan ? "--trnas ${trnascan.join(",")}"    : ""
+    def rrna_input   = rrna     ? "--rrnas ${rrna.join(",")}"        : ""
     """
     bin_summary.R \\
         -o ${prefix} \\
         ${stats_input} \\
         ${checkm_input} \\
         ${tax_input} \\
+        ${trna_input} \\
+        ${rrna_input} \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml

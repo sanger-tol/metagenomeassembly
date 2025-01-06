@@ -53,6 +53,19 @@
                 }
             }
         },
+        "assembly_qc_options": {
+            "title": "Assembly QC options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_rrna_prediction": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                }
+            }
+        },
         "binning_options": {
             "title": "Binning options",
             "type": "object",
@@ -152,10 +165,10 @@
                     "type": "string",
                     "description": "Path to a local diamond database file for CheckM2."
                 },
-                "enable_prokka": {
+                "enable_trnascan_se": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enable non-coding RNA annotation of genome bins using Prokka."
+                    "description": "Predict tRNAs in genome bins using tRNAscan-SE."
                 }
             }
         },
@@ -352,6 +365,9 @@
         },
         {
             "$ref": "#/$defs/assembly_options"
+        },
+        {
+            "$ref": "#/$defs/assembly_qc_options"
         },
         {
             "$ref": "#/$defs/binning_options"
