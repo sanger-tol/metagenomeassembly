@@ -1,20 +1,19 @@
-process HMMER_HMMSEARCH {
+process INFERNAL_CMSEARCH {
     tag "$meta.id"
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/hmmer:3.4--hdbdd923_1' :
-        'biocontainers/hmmer:3.4--hdbdd923_1' }"
+        'https://depot.galaxyproject.org/singularity/infernal:1.1.5--pl5321h7b50bb2_4' :
+        'biocontainers/infernal:1.1.5--pl5321h7b50bb2_4' }"
 
     input:
-    tuple val(meta), path(hmmfile), path(seqdb), val(write_align), val(write_target), val(write_domain)
+    tuple val(meta), path(cmfile), path(seqdb), val(write_align), val(write_target)
 
     output:
     tuple val(meta), path('*.txt.gz')   , emit: output
     tuple val(meta), path('*.sto.gz')   , emit: alignments    , optional: true
     tuple val(meta), path('*.tbl.gz')   , emit: target_summary, optional: true
-    tuple val(meta), path('*.domtbl.gz'), emit: domain_summary, optional: true
     path "versions.yml"                 , emit: versions
 
     when:
@@ -26,33 +25,30 @@ process HMMER_HMMSEARCH {
     output          = "${prefix}.txt"
     alignment       = write_align     ? "-A ${prefix}.sto" : ''
     target_summary  = write_target    ? "--tblout ${prefix}.tbl" : ''
-    domain_summary  = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
     def seqdb_input = seqdb.toString() - ~/\.gz$/
     def gunzip      = seqdb.getExtension() == "gz" ? "gunzip -c ${seqdb} > ${seqdb_input}" : ""
     def cleanup     = seqdb.getExtension() == "gz" ? "rm ${seqdb_input}" : ""
     """
-    $gunzip
-    
-    hmmsearch \\
+    ${gunzip}
+
+    cmsearch \\
         $args \\
-        --cpu $task.cpus \\
-        -o $output \\
-        $alignment \\
-        $target_summary \\
-        $domain_summary \\
-        $hmmfile \\
-        $seqdb_input
+        --cpu ${task.cpus} \\
+        -o ${output} \\
+        ${alignment} \\
+        ${target_summary} \\
+        ${cmfile} \\
+        ${seqdb_input}
 
     gzip --no-name *.txt \\
         ${write_align ? '*.sto' : ''} \\
-        ${write_target ? '*.tbl' : ''} \\
-        ${write_domain ? '*.domtbl' : ''}
+        ${write_target ? '*.tbl' : ''}
 
     ${cleanup}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hmmer: \$(hmmsearch -h | grep -o '^# HMMER [0-9.]*' | sed 's/^# HMMER *//')
+        infernal: \$(hmmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
     END_VERSIONS
     """
 
@@ -61,17 +57,15 @@ process HMMER_HMMSEARCH {
     """
     touch "${prefix}.txt"
     ${write_align ? "touch ${prefix}.sto" : ''} \\
-    ${write_target ? "touch ${prefix}.tbl" : ''} \\
-    ${write_domain ? "touch ${prefix}.domtbl" : ''}
+    ${write_target ? "touch ${prefix}.tbl" : ''}
 
     gzip --no-name *.txt \\
         ${write_align ? '*.sto' : ''} \\
-        ${write_target ? '*.tbl' : ''} \\
-        ${write_domain ? '*.domtbl' : ''}
+        ${write_target ? '*.tbl' : ''}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hmmer: \$(hmmsearch -h | grep -o '^# HMMER [0-9.]*' | sed 's/^# HMMER *//')
+        infernal: \$(hmmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
     END_VERSIONS
     """
 }

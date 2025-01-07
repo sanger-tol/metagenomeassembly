@@ -1,19 +1,30 @@
-include { CHECKM2_DATABASEDOWNLOAD    } from '../../modules/nf-core/checkm2/databasedownload/main'
-include { CHECKM2_PREDICT             } from '../../modules/nf-core/checkm2/predict/main'
-include { SEQKIT_STATS                } from '../../modules/nf-core/seqkit/stats/main'
-include { PROKKA                      } from '../../modules/nf-core/prokka/main'
-include { GAWK as GAWK_PROKKA_SUMMARY } from '../../modules/nf-core/gawk/main'
+include { BIN_RRNAS                         } from '../../modules/local/bin_rrnas/main'
+include { CHECKM2_DATABASEDOWNLOAD          } from '../../modules/nf-core/checkm2/databasedownload/main'
+include { CHECKM2_PREDICT                   } from '../../modules/nf-core/checkm2/predict/main'
+include { SEQKIT_STATS as SEQKIT_STATS_BINS } from '../../modules/nf-core/seqkit/stats/main'
+include { TRNASCAN_SE                       } from '../../modules/local/trnascan_se/main'
+include { GAWK as GAWK_TRNASCAN_SUMMARY     } from '../../modules/nf-core/gawk/main'
 
 workflow BIN_QC {
     take:
     bin_sets
-    bins
+    contig2bin
+    assembly_rrna_tbl
 
     main:
     ch_versions = Channel.empty()
 
-    SEQKIT_STATS(bin_sets)
-    ch_versions = ch_versions.mix(SEQKIT_STATS.out.versions)
+    // Channel with each bin as individual entry [meta, bin1], [meta, bin2]
+    ch_bins_individual = bin_sets
+        | transpose
+        | map { meta, bin ->
+            // Can't use getSimpleName() as some bin names are like ["a.1.fa.gz", "a.2.fa.gz"]
+            def meta_new = meta + [binid: bin.getBaseName() - ~/\.[^\.]+$/]
+            [ meta_new, bin ]
+        }
+
+    SEQKIT_STATS_BINS(bin_sets)
+    ch_versions = ch_versions.mix(SEQKIT_STATS_BINS.out.versions)
 
     if(params.enable_checkm2) {
         if(!params.checkm2_local_db) {
@@ -38,11 +49,11 @@ workflow BIN_QC {
         ch_checkm2_tsv = Channel.empty()
     }
 
-    if(params.enable_prokka) {
-        PROKKA(bins, [], [])
-        ch_versions = ch_versions.mix(PROKKA.out.versions)
+    if(params.enable_trnascan_se) {
+        TRNASCAN_SE(ch_bins_individual, [], [], [])
+        ch_versions = ch_versions.mix(TRNASCAN_SE.out.versions)
 
-        ch_prokka_tsvs = PROKKA.out.tsv
+        ch_trna_tsvs = TRNASCAN_SE.out.tsv
             | map { meta, tsv ->
                 def group = ["id", "assembler", "binner"]
                 meta_new = params.collate_bins ? [id: meta.id, assembler: "all", binner: "all"] : meta.subMap(group)
@@ -50,17 +61,34 @@ workflow BIN_QC {
             }
             | groupTuple(by: 0)
 
-        GAWK_PROKKA_SUMMARY(ch_prokka_tsvs, file("${baseDir}/bin/prokka_summary.awk"))
-        ch_versions = ch_versions.mix(GAWK_PROKKA_SUMMARY.out.versions)
+        GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${baseDir}/bin/trnascan_summary.awk"))
+        ch_versions = ch_versions.mix(GAWK_TRNASCAN_SUMMARY.out.versions)
 
-        ch_prokka_summary = GAWK_PROKKA_SUMMARY.out.output
+        ch_trnascan_summary = GAWK_TRNASCAN_SUMMARY.out.output
     } else {
-        ch_prokka_summary = Channel.empty()
+        ch_trnascan_summary = Channel.empty()
+    }
+
+    if(params.enable_rrna_prediction) {
+        ch_bin_rrna_input = contig2bin
+            | map {meta, c2b ->
+                def meta_join = meta - meta.subMap("binner")
+                [ meta_join, meta, c2b ]
+            }
+            | combine(assembly_rrna_tbl, by: 0)
+            | map { meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
+
+        BIN_RRNAS(ch_bin_rrna_input)
+        ch_versions = ch_versions.mix(BIN_RRNAS.out.versions)
+        ch_rrna_summary = BIN_RRNAS.out.tsv
+    } else {
+        ch_rrna_summary = Channel.empty()
     }
 
     emit:
-    stats          = SEQKIT_STATS.out.stats
-    checkm2_tsv    = ch_checkm2_tsv
-    prokka_summary = ch_prokka_summary
-    versions       = ch_versions
+    stats            = SEQKIT_STATS_BINS.out.stats
+    checkm2_tsv      = ch_checkm2_tsv
+    trnascan_summary = ch_trnascan_summary
+    rrna_summary     = ch_rrna_summary
+    versions         = ch_versions
 }

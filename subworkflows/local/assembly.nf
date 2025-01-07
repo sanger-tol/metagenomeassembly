@@ -1,5 +1,4 @@
 include { METAMDBG_ASM } from '../../modules/nf-core/metamdbg/asm/main'
-include { PYRODIGAL    } from '../../modules/nf-core/pyrodigal/main'
 
 workflow ASSEMBLY {
     take:
@@ -22,14 +21,9 @@ workflow ASSEMBLY {
                 }
             ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
         }
-
-        PYRODIGAL(ch_assemblies, 'gff')
-        ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
-        ch_proteins = ch_proteins.mix(PYRODIGAL.out.faa)
     }
 
     emit:
     assemblies = ch_assemblies
-    proteins   = ch_proteins
     versions   = ch_versions
 }

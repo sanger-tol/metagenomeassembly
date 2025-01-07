@@ -1,21 +1,25 @@
+include { CONTIG2BINTOFASTA                       } from '../../modules/local/contig2bintofasta/main'
 include { DASTOOL_DASTOOL                         } from '../../modules/nf-core/dastool/dastool/main'
 include { GAWK as GAWK_PROCESS_HMM_TBLOUT         } from '../../modules/nf-core/gawk/main'
 include { GAWK as GAWK_MAGSCOT_PROCESS_CONTIG2BIN } from '../../modules/nf-core/gawk/main'
 include { GAWK as GAWK_RENAME_BINS                } from '../../modules/nf-core/gawk/main'
 include { HMMER_HMMSEARCH                         } from '../../modules/nf-core/hmmer/hmmsearch/main'
-include { CONTIG2BINTOFASTA                       } from '../../modules/local/contig2bintofasta/main'
 include { MAGSCOT_MAGSCOT                         } from '../../modules/local/magscot/magscot/main'
+include { PYRODIGAL                               } from '../../modules/nf-core/pyrodigal/main'
 
 workflow BIN_REFINEMENT {
     take:
     assemblies
-    proteins
     contig2bin
 
     main:
     ch_versions               = Channel.empty()
     ch_refined_bins           = Channel.empty()
     ch_refined_contig2bin_raw = Channel.empty()
+
+    PYRODIGAL(assemblies, 'gff')
+    ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
+    ch_proteins = PYRODIGAL.out.faa
 
     if(params.enable_dastool) {
         ch_contig2bins_to_merge = contig2bin
@@ -24,7 +28,7 @@ workflow BIN_REFINEMENT {
 
         ch_dastool_input = assemblies
             | combine(ch_contig2bins_to_merge, by: 0)
-            | combine(proteins, by: 0)
+            | combine(ch_proteins, by: 0)
 
         DASTOOL_DASTOOL(ch_dastool_input, [])
         ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
@@ -46,7 +50,7 @@ workflow BIN_REFINEMENT {
             file(params.hmm_gtdb_tigrfam)
         )
 
-        ch_hmmsearch_gtdb_input = proteins
+        ch_hmmsearch_gtdb_input = ch_proteins
             | combine(ch_magscot_gtdb_hmm_db)
             | map { meta, faa, hmmfile ->
                 [ meta, hmmfile, faa, false, true, false ]

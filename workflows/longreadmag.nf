@@ -10,12 +10,12 @@ include { paramsSummaryMultiqc                 } from '../subworkflows/nf-core/u
 include { softwareVersionsToYAML               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText               } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
 include { ASSEMBLY                             } from '../subworkflows/local/assembly'
+include { ASSEMBLY_QC                          } from '../subworkflows/local/assembly_qc'
 include { BINNING                              } from '../subworkflows/local/binning'
 include { BIN_QC                               } from '../subworkflows/local/bin_qc.nf'
 include { BIN_TAXONOMY                         } from '../subworkflows/local/bin_taxonomy'
 include { BIN_REFINEMENT                       } from '../subworkflows/local/bin_refinement'
 include { BIN_SUMMARY                          } from '../modules/local/bin_summary'
-include { CONTIG2BINTOFASTA as BINS_TO_PROTEIN } from '../modules/local/contig2bintofasta'
 include { PREPARE_DATA                         } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING                         } from '../subworkflows/local/read_mapping'
 
@@ -42,7 +42,10 @@ workflow LONGREADMAG {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
         ch_assemblies = ASSEMBLY.out.assemblies
-        ch_proteins = ASSEMBLY.out.proteins
+
+        ASSEMBLY_QC(ch_assemblies)
+        ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
+        ch_assembly_rrna = ASSEMBLY_QC.out.rrna
 
         READ_MAPPING(
             ch_assemblies,
@@ -59,37 +62,26 @@ workflow LONGREADMAG {
                 READ_MAPPING.out.hic_bam,
                 hic_enzymes
             )
-            ch_versions = ch_versions.mix(BINNING.out.versions)
+            ch_versions   = ch_versions.mix(BINNING.out.versions)
+            ch_bins       = BINNING.out.bins
             ch_contig2bin = BINNING.out.contig2bin
 
             if(params.enable_bin_refinement) {
                 BIN_REFINEMENT(
                     ch_assemblies,
-                    ch_proteins,
                     ch_contig2bin
                 )
-                ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
+                ch_versions   = ch_versions.mix(BIN_REFINEMENT.out.versions)
+                ch_bins       = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
+                ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)
             }
-
-            // Bins grouped by assembly/binner in a list [[meta], [bin1, bin2...]]
-            ch_bin_sets = BINNING.out.bins
-                | mix(BIN_REFINEMENT.out.refined_bins)
-
-            // Channel with each bin as individual entry [ [meta], bin1 ], [ [meta], bin2 ]
-            ch_bins_individual = ch_bin_sets
-                | transpose
-                | map { meta, bin ->
-                    // Can't use getSimpleName() as some bin names are like ["a.1.fa.gz", "a.2.fa.gz"]
-                    def meta_new = meta + [binid: bin.getBaseName() - ~/\.[^\.]+$/]
-                    [ meta_new, bin ]
-                }
 
             //
             // LOGIC: (optional) collate bins from different binning steps into
             //        single input to reduce redundant high-memory processes
             //
             if(params.collate_bins) {
-                ch_bin_sets = ch_bin_sets
+                ch_bins = ch_bins
                     | map { meta, bins ->
                         [ meta.subMap("id") + [assembler: "all"] + [binner: "all"], bins]
                     }
@@ -99,14 +91,15 @@ workflow LONGREADMAG {
 
             if(params.enable_binqc) {
                 BIN_QC(
-                    ch_bin_sets,
-                    ch_bins_individual
+                    ch_bins,
+                    ch_contig2bin,
+                    ch_assembly_rrna
                 )
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
                 if(params.enable_taxonomy) {
                     BIN_TAXONOMY(
-                        ch_bin_sets,
+                        ch_bins,
                         BIN_QC.out.checkm2_tsv
                     )
                     ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
@@ -129,7 +122,11 @@ workflow LONGREADMAG {
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
 
-                    ch_prokka_collated = BIN_QC.out.prokka_summary
+                    ch_trnascan_collated = BIN_QC.out.trnascan_summary
+                        | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                        | groupTuple(by: 0)
+
+                    ch_rrna_collated = BIN_QC.out.rrna_summary
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
 
@@ -137,23 +134,24 @@ workflow LONGREADMAG {
                         ch_stats_collated,
                         ch_checkm2_collated,
                         ch_taxonomy_collated,
-                        ch_prokka_collated
+                        ch_trnascan_collated,
+                        ch_rrna_collated
                     )
                     ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
                 }
             }
         }
     }
-    //
-    // Collate and save software versions
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
+    // //
+    // // Collate and save software versions
+    // //
+    // softwareVersionsToYAML(ch_versions)
+    //     .collectFile(
+    //         storeDir: "${params.outdir}/pipeline_info",
+    //         name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+    //         sort: true,
+    //         newLine: true
+    //     ).set { ch_collated_versions }
 
     // //
     // // MODULE: MultiQC
