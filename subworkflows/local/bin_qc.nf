@@ -72,10 +72,11 @@ workflow BIN_QC {
     if(params.enable_rrna_prediction) {
         ch_bin_rrna_input = contig2bin
             | map {meta, c2b ->
-                def meta_new = meta - meta.subMap("binner")
-                [ meta_new, c2b ]
+                def meta_join = meta - meta.subMap("binner")
+                [ meta_join, meta, c2b ]
             }
             | combine(assembly_rrna_tbl, by: 0)
+            | map { meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
 
         BIN_RRNAS(ch_bin_rrna_input)
         ch_versions = ch_versions.mix(BIN_RRNAS.out.versions)

@@ -62,7 +62,7 @@ workflow LONGREADMAG {
                 READ_MAPPING.out.hic_bam,
                 hic_enzymes
             )
-            ch_versions = ch_versions.mix(BINNING.out.versions
+            ch_versions   = ch_versions.mix(BINNING.out.versions)
             ch_bins       = BINNING.out.bins
             ch_contig2bin = BINNING.out.contig2bin
 
@@ -71,7 +71,7 @@ workflow LONGREADMAG {
                     ch_assemblies,
                     ch_contig2bin
                 )
-                ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
+                ch_versions   = ch_versions.mix(BIN_REFINEMENT.out.versions)
                 ch_bins       = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
                 ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)
             }
@@ -142,16 +142,16 @@ workflow LONGREADMAG {
             }
         }
     }
-    //
-    // Collate and save software versions
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
+    // //
+    // // Collate and save software versions
+    // //
+    // softwareVersionsToYAML(ch_versions)
+    //     .collectFile(
+    //         storeDir: "${params.outdir}/pipeline_info",
+    //         name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+    //         sort: true,
+    //         newLine: true
+    //     ).set { ch_collated_versions }
 
     // //
     // // MODULE: MultiQC

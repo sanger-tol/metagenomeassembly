@@ -25,8 +25,9 @@ process BIN_RRNAS {
     echo -e "bin\tn_ssu\tn_lsu\tn_5s" > ${prefix}.rrna_summary.tsv
     awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
-        awk -v bin=\$bin '\$2 == bin {print \$1}' ${contig2bin} > ${bin}.pattern
-        grep -f ${bin}.pattern ${tbl_in} | awk -v bin=\${bin} \\
+        awk -v bin=\$bin '\$2 == bin {print \$1}' ${contig2bin} > \${bin}.pattern
+        ## grep returns 1 on no match so need to wrap to catch failures in pipefail mode
+        { grep -wFf \${bin}.pattern ${tbl_in} || test \$? = 1; } | awk -v bin=\${bin} \\
         'BEGIN {
             OFS = "\t"
             n_5s  = 0
@@ -36,7 +37,7 @@ process BIN_RRNAS {
         \$3 ~ /5S/  { n_5s++  }
         \$3 ~ /SSU/ { n_ssu++ }
         \$3 ~ /LSU/ { n_lsu++ }
-        END { print bin, n_ssu, n_lsu, n_5s}
+        END { print bin, n_ssu, n_lsu, n_5s }
         ' - >> ${prefix}.rrna_summary.tsv
     done
 
