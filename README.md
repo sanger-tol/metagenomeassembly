@@ -12,7 +12,7 @@ using PacBio HiFi data and (optionally) Hi-C Illumina data.
 2. Maps HiFi and (optionally) Hi-C reads to the assembly
 3. Bins the assembly using MetaBat2, MaxBin2, Bin3C, and Metator
 4. (optionally) refine the bins using DAS_Tool or MagScoT
-5. Assesses the completeness and contamination of bins using CheckM2 and assessing ncRNA content using Prokka
+5. Assesses the completeness and contamination of bins using CheckM2 and assesses ncRNA content using tRNAscan-SE for tRNA and Infernal+Rfam for rRNA
 6. Assigns taxonomy to medium-quality and above bins using GTDB-Tk
 7. Summarises information at the bin level
 
