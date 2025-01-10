@@ -21,6 +21,9 @@ lint:
     - docs/images/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
   multiqc_config:
     - report_comment
   nextflow_config:
@@ -36,6 +39,10 @@ lint:
     - validation.help.afterText
     - validation.summary.beforeText
     - validation.summary.afterText
+    - config_defaults:
+        - params.hmm_gtdb_pfam
+        - params.hmm_gtdb_tigrfam
+        - params.checkm2_db_version
   readme:
     - nextflow_badge
 nf_core_version: 3.0.2

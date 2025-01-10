@@ -26,6 +26,7 @@ workflow ASSEMBLY_QC {
             }
 
         INFERNAL_CMSEARCH(ch_infernal_input)
+        ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
         ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary
     } else {
         ch_rrna_preds = Channel.empty()

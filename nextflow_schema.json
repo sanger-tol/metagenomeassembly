@@ -222,8 +222,8 @@
                 }
             }
         },
-        "pipeline_options": {
-            "title": "Pipeline options",
+        "summary_options": {
+            "title": "Summary options",
             "type": "object",
             "description": "General options relating to pipeline operation.",
             "default": "",
@@ -232,6 +232,16 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Produce a final summary file about each genome bin."
+                },
+                "completeness_score": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Multiplier for completeness when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
+                },
+                "contamination_score": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "Multiplier for contamination when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
                 }
             }
         },
@@ -377,7 +387,7 @@
             "$ref": "#/$defs/bin_taxonomy_options"
         },
         {
-            "$ref": "#/$defs/pipeline_options"
+            "$ref": "#/$defs/summary_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
