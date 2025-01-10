@@ -159,8 +159,8 @@
                     "description": "Enable QC using CheckM2."
                 },
                 "checkm2_db_version": {
-                    "type": "string",
-                    "default": "5571251",
+                    "type": "integer",
+                    "default": 5571251,
                     "description": "If no local CheckM2 database provided, the Zenodo record ID of a CheckM2 database to download."
                 },
                 "checkm2_local_db": {

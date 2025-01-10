@@ -36,7 +36,7 @@ workflow BIN_QC {
             | groupTuple(by: 0)
 
         if(!params.checkm2_local_db) {
-            CHECKM2_DATABASEDOWNLOAD(params.checkm2_db_version)
+            CHECKM2_DATABASEDOWNLOAD("${params.checkm2_db_version}")
             ch_versions   = ch_versions.mix(CHECKM2_DATABASEDOWNLOAD.out.versions)
             ch_checkm2_db = CHECKM2_DATABASEDOWNLOAD.out.database
         } else {
