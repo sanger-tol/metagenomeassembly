@@ -232,11 +232,6 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Produce a final summary file about each genome bin."
-                },
-                "collate_bins": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "For post-binning steps, collate all bins together so they operate as a single group. May save time when working with small numbers of bins."
                 }
             }
         },

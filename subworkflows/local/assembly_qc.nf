@@ -1,4 +1,5 @@
-include { SEQKIT_STATS as SEQKIT_STATS_ASSEMBLIES } from '../../modules/nf-core/seqkit/stats/main'
+include { FIND_CIRCLES                            } from '../../modules/local/find_circles/main'
+include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../modules/local/genome_stats/main'
 include { INFERNAL_CMSEARCH                       } from '../../modules/local/infernal/cmsearch/main'
 
 workflow ASSEMBLY_QC {
@@ -8,8 +9,14 @@ workflow ASSEMBLY_QC {
     main:
     ch_versions = Channel.empty()
 
-    SEQKIT_STATS_ASSEMBLIES(assemblies)
-    ch_versions = ch_versions.mix(SEQKIT_STATS_ASSEMBLIES.out.versions)
+    FIND_CIRCLES(assemblies)
+    ch_versions = ch_versions.mix(FIND_CIRCLES.out.versions)
+
+    ch_genome_stats_input = assemblies
+        | combine(FIND_CIRCLES.out.circles, by: 0)
+
+    GENOME_STATS_ASSEMBLIES(ch_genome_stats_input)
+    ch_versions = ch_versions.mix(GENOME_STATS_ASSEMBLIES.out.versions)
 
     if(params.enable_rrna_prediction) {
         ch_infernal_input = assemblies
@@ -25,7 +32,8 @@ workflow ASSEMBLY_QC {
     }
 
     emit:
-    stats    = SEQKIT_STATS_ASSEMBLIES.out.stats
-    rrna     = ch_rrna_preds
-    versions = ch_versions
+    stats        = GENOME_STATS_ASSEMBLIES.out.stats
+    circle_list  = FIND_CIRCLES.out.circles
+    rrna         = ch_rrna_preds
+    versions     = ch_versions
 }

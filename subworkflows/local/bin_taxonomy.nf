@@ -4,13 +4,21 @@ include { TAXONKIT_NAME2TAXID             } from '../../modules/nf-core/taxonkit
 
 workflow BIN_TAXONOMY {
     take:
-    bins
+    bin_sets
     checkm2_summary
 
     main:
     ch_versions     = Channel.empty()
     ch_gtdb_summary = Channel.empty()
     ch_gtdb_ncbi    = Channel.empty()
+
+    // GTDB-Tk is memory-intensive and loads a large database.
+    // Collate all bins together so it operates in a single process.
+    ch_bins = bin_sets
+        | map { meta, bins ->
+            [ meta - meta.subMap(["assembler", "binner"]), bins]
+        }
+        | transpose
 
     //
     // LOGIC: GTDB-Tk classifications are only accurate for bins with high
@@ -28,8 +36,7 @@ workflow BIN_TAXONOMY {
                 [row.'Name', completeness, contamination]
             }
 
-        ch_filtered_bins = bins
-            | transpose()
+        ch_filtered_bins = ch_bins
             | map { meta, bin -> [bin.getSimpleName(), bin, meta]}
             | join(ch_bin_scores, failOnDuplicate: true)
             | filter { // it[3] = completeness, it[4] = contamination
@@ -38,7 +45,8 @@ workflow BIN_TAXONOMY {
             | map { [ it[2], it[1] ] } // [meta, bin]
             | groupTuple(by: 0)
     } else {
-        ch_filtered_bins = bins
+        ch_filtered_bins = ch_bins
+            | groupTuple(by: 0)
     }
 
     if(params.enable_gtdbtk && params.gtdbtk_db) {

@@ -15,8 +15,9 @@ process BIN_SUMMARY {
     tuple val(meta), path(rrna)
 
     output:
-    tuple val(meta), path("*.bin_summary.tsv"), emit: summary
-    path("versions.yml")                      , emit: versions
+    tuple val(meta), path("*.bin_summary.tsv")  , emit: bin_summary
+    tuple val(meta), path("*.group_summary.tsv"), emit: group_summary
+    path("versions.yml")                        , emit: versions
 
     script:
     def args         = task.ext.args   ?: ''
