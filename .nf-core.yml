@@ -1,4 +1,3 @@
-bump_version: null
 lint:
   files_exist:
     - .github/ISSUE_TEMPLATE/bug_report.yml
@@ -81,8 +80,7 @@ lint:
     - nextflow_badge
     - nextflow_badge
     - nextflow_badge
-nf_core_version: 3.0.2
-org_path: null
+nf_core_version: 3.1.1
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -102,4 +100,3 @@ template:
     - slackreport
     - seqera_platform
   version: 1.0.0dev
-update: null
