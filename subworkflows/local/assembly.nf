@@ -7,7 +7,6 @@ workflow ASSEMBLY {
     main:
     ch_versions   = Channel.empty()
     ch_assemblies = Channel.empty()
-    ch_proteins   = Channel.empty()
 
     if(hifi_reads) {
         if(params.enable_metamdbg) {
