@@ -16,6 +16,9 @@ process MAGSCOT_MAGSCOT {
     script:
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        error "ERROR: MagScoT is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_magscot false"
+    }
     """
     cat ${contig2bin} > input.tsv
 

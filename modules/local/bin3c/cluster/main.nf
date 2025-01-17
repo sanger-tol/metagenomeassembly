@@ -1,5 +1,6 @@
 process BIN3C_CLUSTER {
     tag "${meta.id}"
+    label "process_medium"
 
     container "docker.io/cerebis/bin3c:latest"
 
