@@ -121,7 +121,7 @@ Taxonomic classification of bins with [GTDB-TK](https://github.com/Ecogenomics/G
   - `taxonomy/gtdbtk.[sampleid].filtered.tsv`: A list of genomes with an insufficient number of amino acids in MSA.
   - `taxonomy/gtdbtk.[sampleid].failed_genomes.tsv`: TSV of genomes which failed classification by GTDB-TK.
   - `taxonomy/gtdbtk.[sampleid].log`: The console output of GTDB-Tk saved to disk.
-  - `taxonomy/gtdbtk.[sampleid].warnings.log`: The verbose output of any GTDB-Tk warnings which were encountered. 
+  - `taxonomy/gtdbtk.[sampleid].warnings.log`: The verbose output of any GTDB-Tk warnings which were encountered.
 
 </details>
 
@@ -133,7 +133,7 @@ Summarising key information into a final table, scoring and classification of bi
 <summary>Output files</summary>
 
 - `bins/`
-  - `[sampleid].bin_summary.tsv`: Bin level summary with statistics, completeness/contamination checks, ncRNA content, and taxonomic classifications. 
+  - `[sampleid].bin_summary.tsv`: Bin level summary with statistics, completeness/contamination checks, ncRNA content, and taxonomic classifications.
   - `[sampleid].group_summary.tsv`: Aggregated summary for each assembly:binner combination showing the counts of bins in each quality category.
 
 </details>

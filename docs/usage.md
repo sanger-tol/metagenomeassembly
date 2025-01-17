@@ -4,7 +4,7 @@
 
 ## Introduction
 
-`sanger-tol/longreadmag` is a pipeline for *single-sample* assembly and binning of metagenomic reads, and thus at present co-assembly and co-binning are not supported operations. Input to the pipeline is passed via the `--input` parameter, which takes a YAML file that describes the metadata and data locations of the single sample for processing. This YAML file must have at least the `id` and `pacbio: fasta:` fields specified, as shown in the examples below.
+`sanger-tol/longreadmag` is a pipeline for _single-sample_ assembly and binning of metagenomic reads, and thus at present co-assembly and co-binning are not supported operations. Input to the pipeline is passed via the `--input` parameter, which takes a YAML file that describes the metadata and data locations of the single sample for processing. This YAML file must have at least the `id` and `pacbio: fasta:` fields specified, as shown in the examples below.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -14,9 +14,9 @@
 
 Raw PacBio HiFi reads must be provided to the pipeline in the `pacbio: fasta:` field. For binning metagenome assemblies with Hi-C, Hi-C sequencing input in CRAM format must be described in the input YAML in the `hic: cram:` field, and the list of enzymes used during Hi-C library preparation must be provided in the `hic: enzymes:` field. Currently, the fields below are the only ones supported by `sanger-tol/longreadmag`; in the future, fields supporting more input data formats and other sample metadata may be supported.
 
-*Currently, the pipeline contains no pre-processing steps for read QC, and so input HiFi and Hi-C reads must be QC'd prior to running the pipeline.*
+_Currently, the pipeline contains no pre-processing steps for read QC, and so input HiFi and Hi-C reads must be QC'd prior to running the pipeline._
 
-```yaml title="input.yaml"
+````yaml title="input.yaml"
 id: SampleName
 pacbio:
   fasta:
@@ -42,7 +42,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run sanger-tol/longreadmag --input ./input.yaml --outdir ./results  -profile docker
-```
+````
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
