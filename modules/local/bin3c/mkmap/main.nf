@@ -1,5 +1,6 @@
 process BIN3C_MKMAP {
     tag "${meta.id}"
+    label "process_medium"
 
     container "docker.io/cerebis/bin3c:latest"
 

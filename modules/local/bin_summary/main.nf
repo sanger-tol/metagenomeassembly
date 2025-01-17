@@ -8,16 +8,16 @@ process BIN_SUMMARY {
         'community.wave.seqera.io/library/r-base_r-tidyverse_r-optparse:fb0e94661e2bf4e0' }"
 
     input:
-    tuple val(meta), path(stats)
-    tuple val(meta), path(checkm2)
-    tuple val(meta), path(taxonomy)
-    tuple val(meta), path(trnascan)
-    tuple val(meta), path(rrna)
+    tuple val(meta) , path(stats)
+    tuple val(meta2), path(checkm2)
+    tuple val(meta3), path(taxonomy)
+    tuple val(meta4), path(trnascan)
+    tuple val(meta5), path(rrna)
 
     output:
-    tuple val(meta), path("*.bin_summary.tsv")  , emit: bin_summary
-    tuple val(meta), path("*.group_summary.tsv"), emit: group_summary
-    path("versions.yml")                        , emit: versions
+    path("*.bin_summary.tsv")  , emit: bin_summary
+    path("*.group_summary.tsv"), emit: group_summary
+    path("versions.yml")       , emit: versions
 
     script:
     def args         = task.ext.args   ?: ''

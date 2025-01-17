@@ -21,7 +21,7 @@ workflow BIN_QC {
             [ meta_join, meta, bins ]
         }
         | combine(circular_list, by: 0)
-        | map { meta_join, meta, bins, circles -> [ meta, bins, circles ] }
+        | map { _meta_join, meta, bins, circles -> [ meta, bins, circles ] }
 
     GENOME_STATS_BINS(ch_genome_stats_input)
     ch_versions = ch_versions.mix(GENOME_STATS_BINS.out.versions)
@@ -83,7 +83,7 @@ workflow BIN_QC {
                 [ meta_join, meta, c2b ]
             }
             | combine(assembly_rrna_tbl, by: 0)
-            | map { meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
+            | map { _meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
 
         BIN_RRNAS(ch_bin_rrna_input)
         ch_versions = ch_versions.mix(BIN_RRNAS.out.versions)
