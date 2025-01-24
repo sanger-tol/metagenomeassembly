@@ -34,7 +34,7 @@
                     },
                     "dastool/dastool": {
                         "branch": "master",
-                        "git_sha": "6d736588f4af4bc9b615bd7189442bd4272ae26e",
+                        "git_sha": "98482ba29059481f492eba168290b5b7e75ec90a",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
