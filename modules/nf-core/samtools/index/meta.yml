@@ -1,7 +1,7 @@
-name: samtools_sort
-description: Sort SAM/BAM/CRAM file
+name: samtools_index
+description: Index SAM/BAM/CRAM file
 keywords:
-  - sort
+  - index
   - bam
   - sam
   - cram
@@ -22,51 +22,20 @@ input:
         description: |
           Groovy Map containing sample information
           e.g. [ id:'test', single_end:false ]
-    - bam:
+    - input:
         type: file
-        description: BAM/CRAM/SAM file(s)
-        pattern: "*.{bam,cram,sam}"
-  - - meta2:
-        type: map
-        description: |
-          Groovy Map containing reference information
-          e.g. [ id:'genome' ]
-    - fasta:
-        type: file
-        description: Reference genome FASTA file
-        pattern: "*.{fa,fasta,fna}"
-        optional: true
+        description: input file
 output:
-  - bam:
+  - bai:
       - meta:
           type: map
           description: |
             Groovy Map containing sample information
             e.g. [ id:'test', single_end:false ]
-      - "*.bam":
+      - "*.bai":
           type: file
-          description: Sorted BAM file
-          pattern: "*.{bam}"
-  - cram:
-      - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-            e.g. [ id:'test', single_end:false ]
-      - "*.cram":
-          type: file
-          description: Sorted CRAM file
-          pattern: "*.{cram}"
-  - crai:
-      - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-            e.g. [ id:'test', single_end:false ]
-      - "*.crai":
-          type: file
-          description: CRAM index file (optional)
-          pattern: "*.crai"
+          description: BAM/CRAM/SAM index file
+          pattern: "*.{bai,crai,sai}"
   - csi:
       - meta:
           type: map
@@ -75,8 +44,18 @@ output:
             e.g. [ id:'test', single_end:false ]
       - "*.csi":
           type: file
-          description: BAM index file (optional)
-          pattern: "*.csi"
+          description: CSI index file
+          pattern: "*.{csi}"
+  - crai:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+      - "*.crai":
+          type: file
+          description: BAM/CRAM/SAM index file
+          pattern: "*.{bai,crai,sai}"
   - versions:
       - versions.yml:
           type: file
@@ -85,8 +64,8 @@ output:
 authors:
   - "@drpatelh"
   - "@ewels"
-  - "@matthdsm"
+  - "@maxulysse"
 maintainers:
   - "@drpatelh"
   - "@ewels"
-  - "@matthdsm"
+  - "@maxulysse"

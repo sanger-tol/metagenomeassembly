@@ -14,7 +14,6 @@ include { BIN_QC                               } from '../subworkflows/local/bin
 include { BIN_TAXONOMY                         } from '../subworkflows/local/bin_taxonomy'
 include { BIN_REFINEMENT                       } from '../subworkflows/local/bin_refinement'
 include { BIN_SUMMARY                          } from '../modules/local/bin_summary'
-include { PREPARE_DATA                         } from '../subworkflows/local/prepare_data'
 include { READ_MAPPING                         } from '../subworkflows/local/read_mapping'
 
 /*
@@ -33,9 +32,6 @@ workflow LONGREADMAG {
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
 
-    PREPARE_DATA(hic_cram)
-    ch_versions = ch_versions.mix(PREPARE_DATA.out.versions)
-
     if(params.enable_assembly) {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
@@ -49,7 +45,7 @@ workflow LONGREADMAG {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            PREPARE_DATA.out.hic_reads
+            hic_cram
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
@@ -57,7 +53,6 @@ workflow LONGREADMAG {
             BINNING(
                 ch_assemblies,
                 READ_MAPPING.out.depths,
-                PREPARE_DATA.out.hic_reads,
                 READ_MAPPING.out.hic_bam,
                 hic_enzymes
             )

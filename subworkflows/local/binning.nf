@@ -11,7 +11,6 @@ workflow BINNING {
     take:
     assemblies      // channel: [[meta], contigs]
     pacbio_depths   // channel: [[meta], depths_file]
-    hic_reads       // channel: [[meta], [r1, r2]]
     hic_bam         // channel: [[meta], bam]
     hic_enzymes     // channel: [enz1, enz2], value
 
