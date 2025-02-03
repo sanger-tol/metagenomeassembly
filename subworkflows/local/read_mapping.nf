@@ -1,4 +1,4 @@
-include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM } from '../../modules/nf-core/samtools/sort/main'
+include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM } from '../../modules/nf-core/samtools/merge/main'
 include { BWAMEM2_INDEX                            } from '../../modules/nf-core/bwamem2/index/main'
 include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT   } from '../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
 include { MINIMAP2_ALIGN                           } from '../../modules/nf-core/minimap2/align/main'
@@ -39,10 +39,19 @@ workflow READ_MAPPING {
         )
         ch_versions = ch_versions.mix(CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT.out.versions)
 
-        SAMTOOLS_MERGE_HIC_BAM(CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT.out.bam, [], [])
+        ch_bam_to_merge = CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT.out.bam
+            | groupTuple(by: 0)
+            | branch { meta, bam ->
+                merge: bam.size() > 1
+                asis: true
+            }
+
+        SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [], [])
         ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
 
         ch_hic_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam
+            | mix(ch_bam_to_merge.asis)
+
     } else {
         ch_hic_bam   = Channel.empty()
     }

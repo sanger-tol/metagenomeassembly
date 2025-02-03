@@ -66,6 +66,19 @@
                 }
             }
         },
+        "read_mapping_options": {
+            "title": "Read mapping options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "hic_mapping_cram_bin_size": {
+                    "type": "integer",
+                    "default": 10000,
+                    "description": "When mapping Hi-C, map each CRAM file in slices of this size."
+                }
+            }
+        },
         "binning_options": {
             "title": "Binning options",
             "type": "object",
@@ -387,6 +400,9 @@
         },
         {
             "$ref": "#/$defs/assembly_qc_options"
+        },
+        {
+            "$ref": "#/$defs/read_mapping_options"
         },
         {
             "$ref": "#/$defs/binning_options"

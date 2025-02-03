@@ -7,7 +7,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
         'biocontainers/mulled-v2-1a6fe65bd6674daba65066aa796ed8f5e8b4687b:688e175eb0db54de17822ba7810cc9e20fa06dd5-0' }"
 
     input:
-    tuple val(meta), path(cramfile), path(cramindex), val(range)
+    tuple val(meta), path(cram), path(crai), val(range)
     tuple val(meta2), path(index)
     tuple val(meta3), path(reference)
 
@@ -29,7 +29,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
     """
     INDEX=`find -L ./ -name "*.amb" | sed 's/\\.amb\$//'`
 
-    cram_filter ${args} -n ${range[0]}-${range[1]} ${cramfile} - | \\
+    cram_filter ${args} -n ${range[0]}-${range[1]} ${cram} - | \\
         samtools fastq ${args1} | \\
         bwa-mem2 mem ${args2} -t ${task.cpus} \${INDEX} - | \\
         samtools fixmate ${args3} - - | \\

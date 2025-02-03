@@ -35,11 +35,17 @@ workflow YAML_INPUT {
                 )
         }
 
+    ch_pacbio_fasta = input.pacbio_fasta
+
+    // Check if CRAM files are accompanied by an index
+    // Index those that aren't
     ch_hic_cram_raw = input.hic_cram
         | filter { !it.isEmpty() }
+        | transpose()
         | branch { meta, cram ->
-            have_index: file(cram.getBaseName() + ".crai", checkIfExists: true)
-                return [ meta, cram, file(cram.getBaseName() + ".crai", checkIfExists: true) ]
+            def index = cram.getParent() + "/" + cram.getBaseName() + ".crai"
+            have_index: file(index).exists()
+                return [ meta, cram, file(index, checkIfExists: true) ]
             no_index: true
                 return [ meta, cram ]
         }
