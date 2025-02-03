@@ -3,18 +3,19 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap                     } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc                 } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText               } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
-include { ASSEMBLY                             } from '../subworkflows/local/assembly'
-include { ASSEMBLY_QC                          } from '../subworkflows/local/assembly_qc'
-include { BINNING                              } from '../subworkflows/local/binning'
-include { BIN_QC                               } from '../subworkflows/local/bin_qc.nf'
-include { BIN_TAXONOMY                         } from '../subworkflows/local/bin_taxonomy'
-include { BIN_REFINEMENT                       } from '../subworkflows/local/bin_refinement'
-include { BIN_SUMMARY                          } from '../modules/local/bin_summary'
-include { READ_MAPPING                         } from '../subworkflows/local/read_mapping'
+include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
+include { ASSEMBLY               } from '../subworkflows/local/assembly'
+include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
+include { BINNING                } from '../subworkflows/local/binning'
+include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
+include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
+include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
+include { BIN_SUMMARY            } from '../modules/local/bin_summary'
+include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
+include { PREPARE_DATA           } from '../subworkflows/local/prepare_data'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,6 +33,9 @@ workflow LONGREADMAG {
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
 
+    PREPARE_DATA(hic_cram)
+    ch_versions = ch_versions.mix(PREPARE_DATA.out.versions)
+
     if(params.enable_assembly) {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
@@ -45,7 +49,7 @@ workflow LONGREADMAG {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            hic_cram
+            PREPARE_DATA.out.hic_cram
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 

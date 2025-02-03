@@ -13,7 +13,7 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
-include { YAML_INPUT                } from '../yaml_input.nf'
+include { YAML_INPUT                } from '../../../modules/local/yaml_input'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,13 +64,22 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
+    YAML_INPUT(file(input))
 
-    YAML_INPUT(input)
+    ch_pacbio_fasta = YAML_INPUT.out.pacbio_fasta
+
+    ch_hic_cram = YAML_INPUT.out.hic_cram
+        | filter { !it[1].isEmpty() }
+
+    // collect as have to ensure this is a value channel
+    ch_hic_enzymes = YAML_INPUT.out.hic_enzymes
+        | filter { !it.isEmpty() }
+        | collect
 
     emit:
-    pacbio_fasta = YAML_INPUT.out.pacbio_fasta
-    hic_cram     = YAML_INPUT.out.hic_cram
-    hic_enzymes  = YAML_INPUT.out.hic_enzymes
+    pacbio_fasta = ch_pacbio_fasta
+    hic_cram     = ch_hic_cram
+    hic_enzymes  = ch_hic_enzymes
     versions     = ch_versions
 }
 
