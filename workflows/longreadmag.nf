@@ -33,9 +33,6 @@ workflow LONGREADMAG {
     ch_versions = Channel.empty()
     // ch_multiqc_files = Channel.empty()
 
-    PREPARE_DATA(hic_cram)
-    ch_versions = ch_versions.mix(PREPARE_DATA.out.versions)
-
     if(params.enable_assembly) {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
@@ -49,7 +46,7 @@ workflow LONGREADMAG {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            PREPARE_DATA.out.hic_reads
+            hic_cram
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 

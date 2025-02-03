@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
 
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/samtools/index/main'
+
 def readYAML( yamlfile ) {
     return new org.yaml.snakeyaml.Yaml().load(yamlfile.text)
 }
@@ -9,7 +11,7 @@ workflow YAML_INPUT {
     input_file  // params.input
 
     main:
-    // ch_versions = Channel.empty()
+    ch_versions = Channel.empty()
     yamlfile = Channel.fromPath(input_file)
         | map { file -> readYAML(file) }
 
@@ -33,43 +35,29 @@ workflow YAML_INPUT {
                 )
         }
 
-    ch_pacbio_fasta = input.pacbio_fasta
+    ch_hic_cram_raw = input.hic_cram
         | filter { !it.isEmpty() }
+        | branch { meta, cram ->
+            have_index: file(cram.getBaseName() + ".crai", checkIfExists: true)
+                return [ meta, cram, file(cram.getBaseName() + ".crai", checkIfExists: true) ]
+            no_index: true
+                return [ meta, cram ]
+        }
 
-    ch_hic_cram = input.hic_cram
-        | filter { !it.isEmpty() }
+    SAMTOOLS_INDEX(ch_hic_cram_raw.no_index)
+    ch_versions = SAMTOOLS_INDEX.out.versions
+
+    ch_hic_cram = ch_hic_cram_raw.have_index
+        | mix(SAMTOOLS_INDEX.out.crai)
 
     // collect as have to ensure this is a value channel
     ch_hic_enzymes = input.hic_enzymes
         | filter { !it.isEmpty() }
         | collect
 
-    //
-    // LOGIC: PARSES THE SECOND LEVEL OF YAML VALUES PER ABOVE OUTPUT CHANNEL
-    //
-    // group
-    //     .assembly
-    //     .multiMap { data ->
-    //                 assem_level:        data.assem_level
-    //                 assem_version:      data.assem_version
-    //                 sample_id:          data.sample_id
-    //                 latin_name:         data.latin_name
-    //                 defined_class:      data.defined_class
-    //                 project_id:         data.project_id
-    //         }
-    //     .set { assembly_data }
-
-    // //
-    // // LOGIC: COMBINE SOME CHANNELS INTO VALUES REQUIRED DOWNSTREAM
-    // //
-    // assembly_data.sample_id
-    //     .combine( assembly_data.assem_version )
-    //     .map { it1, it2 ->
-    //         ("${it1}_${it2}")}
-    //     .set { tolid_version }
-
     emit:
     pacbio_fasta = ch_pacbio_fasta
     hic_cram     = ch_hic_cram
     hic_enzymes  = ch_hic_enzymes
+    versions     = ch_versions
 }

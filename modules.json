@@ -10,12 +10,6 @@
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
-                    "bwamem2/mem": {
-                        "branch": "master",
-                        "git_sha": "2d20463181b1c38981a02e90d3084b5f9fa8d540",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/bwamem2/mem/bwamem2-mem.diff"
-                    },
                     "checkm2/databasedownload": {
                         "branch": "master",
                         "git_sha": "ad43b5d5d464698d11b599b004adc1c00615ef1b",
@@ -81,19 +75,15 @@
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/pyrodigal/pyrodigal.diff"
                     },
-                    "samtools/fastq": {
+                    "samtools/index": {
                         "branch": "master",
                         "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/samtools/index/samtools-index.diff"
                     },
                     "samtools/merge": {
                         "branch": "master",
                         "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
-                        "installed_by": ["modules"]
-                    },
-                    "samtools/sort": {
-                        "branch": "master",
-                        "git_sha": "b7800db9b069ed505db3f9d91b8c72faea9be17b",
                         "installed_by": ["modules"]
                     },
                     "taxonkit/name2taxid": {
