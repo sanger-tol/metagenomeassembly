@@ -45,7 +45,7 @@ workflow LONGREADMAG {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            PREPARE_DATA.out.hic_cram
+            hic_cram
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
