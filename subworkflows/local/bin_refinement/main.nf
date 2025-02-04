@@ -1,11 +1,11 @@
-include { CONTIG2BINTOFASTA                       } from '../../modules/local/contig2bintofasta/main'
-include { DASTOOL_DASTOOL                         } from '../../modules/nf-core/dastool/dastool/main'
-include { GAWK as GAWK_PROCESS_HMM_TBLOUT         } from '../../modules/nf-core/gawk/main'
-include { GAWK as GAWK_MAGSCOT_PROCESS_CONTIG2BIN } from '../../modules/nf-core/gawk/main'
-include { GAWK as GAWK_RENAME_BINS                } from '../../modules/nf-core/gawk/main'
-include { HMMER_HMMSEARCH                         } from '../../modules/nf-core/hmmer/hmmsearch/main'
-include { MAGSCOT_MAGSCOT                         } from '../../modules/local/magscot/magscot/main'
-include { PYRODIGAL                               } from '../../modules/nf-core/pyrodigal/main'
+include { CONTIG2BINTOFASTA                       } from '../../../modules/local/contig2bintofasta/main'
+include { DASTOOL_DASTOOL                         } from '../../../modules/nf-core/dastool/dastool/main'
+include { GAWK as GAWK_PROCESS_HMM_TBLOUT         } from '../../../modules/nf-core/gawk/main'
+include { GAWK as GAWK_MAGSCOT_PROCESS_CONTIG2BIN } from '../../../modules/nf-core/gawk/main'
+include { GAWK as GAWK_RENAME_BINS                } from '../../../modules/nf-core/gawk/main'
+include { HMMER_HMMSEARCH                         } from '../../../modules/nf-core/hmmer/hmmsearch/main'
+include { MAGSCOT_MAGSCOT                         } from '../../../modules/local/magscot/magscot/main'
+include { PYRODIGAL                               } from '../../../modules/nf-core/pyrodigal/main'
 
 workflow BIN_REFINEMENT {
     take:

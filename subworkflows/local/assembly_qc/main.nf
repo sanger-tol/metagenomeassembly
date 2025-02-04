@@ -1,6 +1,6 @@
-include { FIND_CIRCLES                            } from '../../modules/local/find_circles/main'
-include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../modules/local/genome_stats/main'
-include { INFERNAL_CMSEARCH                       } from '../../modules/local/infernal/cmsearch/main'
+include { FIND_CIRCLES                            } from '../../../modules/local/find_circles/main'
+include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
+include { INFERNAL_CMSEARCH                       } from '../../../modules/local/infernal/cmsearch/main'
 
 workflow ASSEMBLY_QC {
     take:

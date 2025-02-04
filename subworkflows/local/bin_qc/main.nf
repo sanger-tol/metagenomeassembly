@@ -1,9 +1,9 @@
-include { BIN_RRNAS                         } from '../../modules/local/bin_rrnas/main'
-include { CHECKM2_DATABASEDOWNLOAD          } from '../../modules/nf-core/checkm2/databasedownload/main'
-include { CHECKM2_PREDICT                   } from '../../modules/nf-core/checkm2/predict/main'
-include { GENOME_STATS as GENOME_STATS_BINS } from '../../modules/local/genome_stats/main'
-include { TRNASCAN_SE                       } from '../../modules/local/trnascan_se/main'
-include { GAWK as GAWK_TRNASCAN_SUMMARY     } from '../../modules/nf-core/gawk/main'
+include { BIN_RRNAS                         } from '../../../modules/local/bin_rrnas/main'
+include { CHECKM2_DATABASEDOWNLOAD          } from '../../../modules/nf-core/checkm2/databasedownload/main'
+include { CHECKM2_PREDICT                   } from '../../../modules/nf-core/checkm2/predict/main'
+include { GENOME_STATS as GENOME_STATS_BINS } from '../../../modules/local/genome_stats/main'
+include { TRNASCAN_SE                       } from '../../../modules/local/trnascan_se/main'
+include { GAWK as GAWK_TRNASCAN_SUMMARY     } from '../../../modules/nf-core/gawk/main'
 
 workflow BIN_QC {
     take:

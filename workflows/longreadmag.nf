@@ -10,7 +10,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_long
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
 include { BINNING                } from '../subworkflows/local/binning'
-include { BIN_QC                 } from '../subworkflows/local/bin_qc.nf'
+include { BIN_QC                 } from '../subworkflows/local/bin_qc'
 include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
 include { BIN_REFINEMENT         } from '../subworkflows/local/bin_refinement'
 include { BIN_SUMMARY            } from '../modules/local/bin_summary'

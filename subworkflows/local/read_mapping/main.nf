@@ -1,9 +1,9 @@
-include { BWAMEM2_INDEX                             } from '../../modules/nf-core/bwamem2/index/main'
-include { COVERM_CONTIG                             } from '../../modules/nf-core/coverm/contig/main'
-include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT    } from '../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
-include { MINIMAP2_ALIGN                            } from '../../modules/nf-core/minimap2/align/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HIC_CRAM } from '../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM  } from '../../modules/nf-core/samtools/merge/main'
+include { BWAMEM2_INDEX                             } from '../../../modules/nf-core/bwamem2/index/main'
+include { COVERM_CONTIG                             } from '../../../modules/nf-core/coverm/contig/main'
+include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT    } from '../../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
+include { MINIMAP2_ALIGN                            } from '../../../modules/nf-core/minimap2/align/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HIC_CRAM } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM  } from '../../../modules/nf-core/samtools/merge/main'
 
 workflow READ_MAPPING {
     take:
