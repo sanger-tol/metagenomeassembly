@@ -44,8 +44,7 @@ lint:
         - params.checkm2_db_version
   readme:
     - nextflow_badge
-org_path: null
-nf_core_version: 3.1.1
+nf_core_version: 3.2.0
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
