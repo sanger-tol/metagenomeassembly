@@ -1,8 +1,9 @@
-include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM } from '../../modules/nf-core/samtools/merge/main'
-include { BWAMEM2_INDEX                            } from '../../modules/nf-core/bwamem2/index/main'
-include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT   } from '../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
-include { MINIMAP2_ALIGN                           } from '../../modules/nf-core/minimap2/align/main'
-include { COVERM_CONTIG                            } from '../../modules/nf-core/coverm/contig/main'
+include { BWAMEM2_INDEX                             } from '../../modules/nf-core/bwamem2/index/main'
+include { COVERM_CONTIG                             } from '../../modules/nf-core/coverm/contig/main'
+include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT    } from '../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
+include { MINIMAP2_ALIGN                            } from '../../modules/nf-core/minimap2/align/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HIC_CRAM } from '../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM  } from '../../modules/nf-core/samtools/merge/main'
 
 workflow READ_MAPPING {
     take:
@@ -14,10 +15,29 @@ workflow READ_MAPPING {
     ch_versions = Channel.empty()
 
     if(params.enable_metator || params.enable_bin3c) {
+        // Check if CRAM files are accompanied by an index
+        // Get indexes, and index those that aren't
+        ch_hic_cram_raw = hic_cram
+            | transpose()
+            | branch { meta, cram ->
+                def cram_file = file(cram, checkIfExists: true)
+                def index = cram_file.getParent() + "/" + cram_file.getBaseName() + ".crai"
+                have_index: file(index).exists()
+                    return [ meta, cram_file, file(index, checkIfExists: true) ]
+                no_index: true
+                    return [ meta, cram_file ]
+            }
+
+        SAMTOOLS_INDEX_HIC_CRAM(ch_hic_cram_raw.no_index)
+        ch_versions = SAMTOOLS_INDEX_HIC_CRAM.out.versions
+
+        ch_hic_cram = ch_hic_cram_raw.have_index
+            | mix(SAMTOOLS_INDEX_HIC_CRAM.out.crai)
+
         BWAMEM2_INDEX(assemblies)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
 
-        ch_cram_chunks = hic_cram
+        ch_cram_chunks = ch_hic_cram
             | map { meta, cram, crai ->
                 def n_slices = crai.countLines(decompress: true) - 1
                 def size = params.hic_mapping_cram_bin_size

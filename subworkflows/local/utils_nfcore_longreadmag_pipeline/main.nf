@@ -13,7 +13,7 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
-include { YAML_INPUT                } from '../../../modules/local/yaml_input'
+include { READ_YAML                 } from '../../../modules/local/read_yaml'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,7 +64,7 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    YAML_INPUT(file(input))
+    READ_YAML(file(input))
 
     ch_pacbio_fasta = YAML_INPUT.out.pacbio_fasta
 

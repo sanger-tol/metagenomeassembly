@@ -2,7 +2,7 @@ def readYAML(yamlfile) {
     return new org.yaml.snakeyaml.Yaml().load(yamlfile.text)
 }
 
-process YAML_INPUT {
+process READ_YAML {
     executor "local"
 
     input:
