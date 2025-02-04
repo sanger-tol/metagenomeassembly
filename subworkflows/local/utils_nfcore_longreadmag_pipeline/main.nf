@@ -66,13 +66,13 @@ workflow PIPELINE_INITIALISATION {
     //
     READ_YAML(file(input))
 
-    ch_pacbio_fasta = YAML_INPUT.out.pacbio_fasta
+    ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
 
-    ch_hic_cram = YAML_INPUT.out.hic_cram
+    ch_hic_cram = READ_YAML.out.hic_cram
         | filter { !it[1].isEmpty() }
 
     // collect as have to ensure this is a value channel
-    ch_hic_enzymes = YAML_INPUT.out.hic_enzymes
+    ch_hic_enzymes = READ_YAML.out.hic_enzymes
         | filter { !it.isEmpty() }
         | collect
 
