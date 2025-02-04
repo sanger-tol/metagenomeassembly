@@ -21,12 +21,9 @@ process FIND_CIRCLES {
     def prefix      = task.ext.prefix ?: "${meta.id}"
     def clean_input = input.toString() - ~/\.gz$/
     def unzip       = input.getExtension() == "gz" ? "zcat ${input} | \\" : "cat ${input} | \\"
-    switch("${meta.assembler}") {
-        case "metamdbg": regex = "&& /circular=yes/"; break
-        default:
-            regex = "&& /\$-/" // This regex will never match anything
-            log.warn("WARN: Assembler ${meta.assembler} is not supported for circle counting.")
-            break
+    def regex       = "&& /\$-/" // This regex will never match anything
+    if(meta.assembler == "metamdbg") {
+        regex = "&& /circular=yes/"
     }
     """
     ${unzip}

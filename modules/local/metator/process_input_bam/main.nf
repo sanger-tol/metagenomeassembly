@@ -17,12 +17,12 @@ process METATOR_PROCESS_INPUT_BAM {
     script:
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    switch(direction) {
-        case "fwd": flag = "0x40"; break
-        case "rev": flag = "0x80" ; break
-        default:
-            error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
-            break
+    if(direction == "fwd") {
+        flag = "0x40"
+    } else if (direction == "rev") {
+        flag = "0x80"
+    } else {
+        error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
     }
     """
     samtools view --threads ${task.cpus-1} -f ${flag} -o temp.bam ${bam}
@@ -45,12 +45,12 @@ process METATOR_PROCESS_INPUT_BAM {
     stub:
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    switch(direction) {
-        case "fwd": flag = "0x40"; break
-        case "rev": flag = "0x80" ; break
-        default:
-            error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
-            break
+    if(direction == "fwd") {
+        flag = "0x40"
+    } else if (direction == "rev") {
+        flag = "0x80"
+    } else {
+        error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
     }
     """
     touch ${prefix}.${direction}.bam
