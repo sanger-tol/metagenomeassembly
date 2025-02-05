@@ -8,18 +8,16 @@ workflow ASSEMBLY {
     ch_versions   = Channel.empty()
     ch_assemblies = Channel.empty()
 
-    if(hifi_reads) {
-        if(params.enable_metamdbg) {
-            METAMDBG_ASM(hifi_reads, 'hifi')
-            ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
+    if(params.enable_metamdbg) {
+        METAMDBG_ASM(hifi_reads, 'hifi')
+        ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 
-            ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
-                | map { meta, contigs ->
-                    def meta_new = meta + [assembler: "metamdbg"]
-                    [meta_new, contigs]
-                }
-            ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
-        }
+        ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
+            | map { meta, contigs ->
+                def meta_new = meta + [assembler: "metamdbg"]
+                [ meta_new, contigs ]
+            }
+        ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
     }
 
     emit:
