@@ -210,12 +210,12 @@
                 },
                 "gtdb_bac120_metadata": {
                     "type": "string",
-                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/bac120_metadata.tsv.gz",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release220/220.0/bac120_metadata_r220.tsv.gz",
                     "description": "Path to the GTDB-Tk bac120 metadata file."
                 },
                 "gtdb_ar53_metadata": {
                     "type": "string",
-                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/ar53_metadata.tsv.gz",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release220/220.0/ar53_metadata_r220.tsv.gz",
                     "description": "Path to the GTDB-Tk ar53 metadata file."
                 },
                 "gtdbtk_mash_db": {
