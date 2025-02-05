@@ -21,7 +21,7 @@ workflow READ_MAPPING {
             | transpose()
             | branch { meta, cram ->
                 def cram_file = file(cram, checkIfExists: true)
-                def index = cram_file.getParent() + "/" + cram_file.getBaseName() + ".crai"
+                def index = cram + ".crai"
                 have_index: file(index).exists()
                     return [ meta, cram_file, file(index, checkIfExists: true) ]
                 no_index: true
