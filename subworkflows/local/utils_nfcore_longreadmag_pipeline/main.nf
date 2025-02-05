@@ -76,11 +76,72 @@ workflow PIPELINE_INITIALISATION {
         | filter { !it.isEmpty() }
         | collect
 
+    //
+    // Create channels for input database files
+    //
+
+    // rRNA covariance models
+    if(params.rfam_rrna_cm) {
+        ch_rfam_rrna_cm = Channel.of(
+            file(params.rfam_rrna_cm, checkIfExists: true)
+        )
+    } else {
+        ch_rfam_rrna_cm = Channel.empty()
+    }
+
+    // MagScoT hmm models
+    if(params.enable_magscot && params.hmm_gtdb_pfam && params.hmm_gtdb_tigrfam) {
+        ch_magscot_gtdb_hmm_db = Channel.of(
+            file(params.hmm_gtdb_pfam   , checkIfExists: true),
+            file(params.hmm_gtdb_tigrfam, checkIfExists: true)
+        )
+    } else {
+        ch_magscot_gtdb_hmm_db = Channel.empty()
+    }
+
+    // CheckM2 database
+    if(params.checkm2_db) {
+        ch_checkm2_db = Channel.of(
+            [
+                [id: "checkm2"],
+                file(params.checkm2_db, checkIfExists: true)
+            ]
+        )
+    } else {
+        ch_checkm2_db = Channel.empty()
+    }
+
+    // GTDB-Tk databasez
+    if(params.gtdbtk_db) {
+        ch_gtdbtk_db = Channel.of(
+            [
+                [id: "gtdb"],
+                file(params.gtdbtk_db, checkIfExists: true)
+            ]
+        )
+    } else {
+        ch_gtdbtk_db = Channel.empty()
+    }
+
+    // GTDB-Tk mash database
+    if(params.gtdbtk_mash_db) {
+        ch_gtdbtk_mash_db = Channel.of(
+            [ file(params.gtdbtk_mash_db, checkIfExists: true) ]
+        )
+    } else {
+        ch_gtdbtk_mash_db = Channel.empty()
+    }
+
     emit:
-    pacbio_fasta = ch_pacbio_fasta
-    hic_cram     = ch_hic_cram
-    hic_enzymes  = ch_hic_enzymes
-    versions     = ch_versions
+    pacbio_fasta        = ch_pacbio_fasta
+    hic_cram            = ch_hic_cram
+    hic_enzymes         = ch_hic_enzymes
+    rfam_rrna_cm        = ch_rfam_rrna_cm
+    magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
+    checkm2_db          = ch_checkm2_db
+    gtdbtk_db           = ch_gtdbtk_db
+    gtdbtk_mash_db      = ch_gtdbtk_mash_db
+    versions            = ch_versions
 }
 
 /*

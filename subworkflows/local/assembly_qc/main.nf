@@ -5,6 +5,7 @@ include { INFERNAL_CMSEARCH                       } from '../../../modules/local
 workflow ASSEMBLY_QC {
     take:
     assemblies // [meta, assembly.fa.gz]
+    rfam_rrna_cm
 
     main:
     ch_versions = Channel.empty()
@@ -20,8 +21,8 @@ workflow ASSEMBLY_QC {
 
     if(params.enable_rrna_prediction) {
         ch_infernal_input = assemblies
-            | map { meta, contigs ->
-                def cmfile = file("${baseDir}/assets/rRNA.cm")
+            | combine(rfam_rrna_cm)
+            | map { meta, contigs, cmfile ->
                 [ meta, cmfile, contigs, false, true ]
             }
 

@@ -63,6 +63,12 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                },
+                "rfam_rrna_cm": {
+                    "type": "string",
+                    "description": "Covariance model for rRNA preditiction from RFAM.",
+                    "default": "${baseDir}/assets/rRNA.cm",
+                    "format": "file-path"
                 }
             }
         },
@@ -146,12 +152,12 @@
                 "hmm_gtdb_pfam": {
                     "type": "string",
                     "description": "Path to the GTDB r207 Pfam HMM database.",
-                    "default": "/lustre/scratch123/tol/teams/tola/users/jd42/longreadmag_testing/longreadmag/assets/gtdbtk_rel207_Pfam-A.hmm"
+                    "default": "${baseDir}/assets/gtdbtk_rel207_Pfam-A.hmm"
                 },
                 "hmm_gtdb_tigrfam": {
                     "type": "string",
                     "description": "Path to the GTDB r207 TigrFam HMM database.",
-                    "default": "/lustre/scratch123/tol/teams/tola/users/jd42/longreadmag_testing/longreadmag/assets/gtdbtk_rel207_tigrfam.hmm"
+                    "default": "${baseDir}/assets/gtdbtk_rel207_tigrfam.hmm"
                 }
             }
         },
@@ -171,14 +177,9 @@
                     "default": true,
                     "description": "Enable QC using CheckM2."
                 },
-                "checkm2_db_version": {
-                    "type": "integer",
-                    "default": 5571251,
-                    "description": "If no local CheckM2 database provided, the Zenodo record ID of a CheckM2 database to download."
-                },
-                "checkm2_local_db": {
+                "checkm2_db": {
                     "type": "string",
-                    "description": "Path to a local diamond database file for CheckM2."
+                    "description": "Path to a local diamond database file for CheckM2. If not provided, the CheckM2 database will automatically be downloaded."
                 },
                 "enable_trnascan_se": {
                     "type": "boolean",

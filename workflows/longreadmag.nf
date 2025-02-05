@@ -24,20 +24,24 @@ include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 
 workflow LONGREADMAG {
     take:
-    pacbio_fasta // channel: pacbio read in from yaml
-    hic_cram     // channel: hic cram files from yaml
-    hic_enzymes  // channel: hic enzyme list from yaml
+    pacbio_fasta        // channel: pacbio read in from yaml
+    hic_cram            // channel: hic cram files from yaml
+    hic_enzymes         // channel: hic enzyme list from yaml
+    rfam_rrna_cm        // channel: rRNA cm file from params
+    magscot_gtdb_hmm_db // channel: magscot hmm files from params
+    checkm2_db          // channel: checkm2 db from params
+    gtdbtk_db           // channel: gtdbtk db from params
+    gtdbtk_mash_db      // channel: gtdbtk mash db from params
 
     main:
     ch_versions = Channel.empty()
-    // ch_multiqc_files = Channel.empty()
 
     if(params.enable_assembly) {
         ASSEMBLY(pacbio_fasta)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
         ch_assemblies = ASSEMBLY.out.assemblies
 
-        ASSEMBLY_QC(ch_assemblies)
+        ASSEMBLY_QC(ch_assemblies, rfam_rrna_cm)
         ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
         ch_assembly_rrna = ASSEMBLY_QC.out.rrna
         ch_circles = ASSEMBLY_QC.out.circle_list
@@ -63,7 +67,8 @@ workflow LONGREADMAG {
             if(params.enable_bin_refinement) {
                 BIN_REFINEMENT(
                     ch_assemblies,
-                    ch_contig2bin
+                    ch_contig2bin,
+                    magscot_gtdb_hmm_db
                 )
                 ch_versions   = ch_versions.mix(BIN_REFINEMENT.out.versions)
                 ch_bins       = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
@@ -75,14 +80,17 @@ workflow LONGREADMAG {
                     ch_bins,
                     ch_contig2bin,
                     ch_circles,
-                    ch_assembly_rrna
+                    ch_assembly_rrna,
+                    checkm2_db
                 )
                 ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
                 if(params.enable_taxonomy) {
                     BIN_TAXONOMY(
                         ch_bins,
-                        BIN_QC.out.checkm2_tsv
+                        BIN_QC.out.checkm2_tsv,
+                        gtdbtk_db,
+                        gtdbtk_mash_db
                     )
                     ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
 
@@ -124,16 +132,16 @@ workflow LONGREADMAG {
             }
         }
     }
-    // //
-    // // Collate and save software versions
-    // //
-    // softwareVersionsToYAML(ch_versions)
-    //     .collectFile(
-    //         storeDir: "${params.outdir}/pipeline_info",
-    //         name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
-    //         sort: true,
-    //         newLine: true
-    //     ).set { ch_collated_versions }
+    //
+    // Collate and save software versions
+    //
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        )//.set { ch_collated_versions }
 
     emit:
     versions       = ch_versions                 // channel: [ path(versions.yml) ]

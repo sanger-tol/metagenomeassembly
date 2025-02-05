@@ -11,6 +11,7 @@ workflow BIN_REFINEMENT {
     take:
     assemblies
     contig2bin
+    magscot_gtdb_hmm_db
 
     main:
     ch_versions               = Channel.empty()
@@ -45,13 +46,9 @@ workflow BIN_REFINEMENT {
         //        Run hmmsearch using the provided hmm files on the predicted
         //        proteins for each assembly and process with gawk
         //
-        ch_magscot_gtdb_hmm_db = Channel.of(
-            file(params.hmm_gtdb_pfam),
-            file(params.hmm_gtdb_tigrfam)
-        )
 
         ch_hmmsearch_gtdb_input = ch_proteins
-            | combine(ch_magscot_gtdb_hmm_db)
+            | combine(magscot_gtdb_hmm_db)
             | map { meta, faa, hmmfile ->
                 [ meta, hmmfile, faa, false, true, false ]
             }

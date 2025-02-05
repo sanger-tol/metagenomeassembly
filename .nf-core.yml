@@ -41,7 +41,7 @@ lint:
     - config_defaults:
         - params.hmm_gtdb_pfam
         - params.hmm_gtdb_tigrfam
-        - params.checkm2_db_version
+        - params.rfam_rrna_cm
   readme:
     - nextflow_badge
 nf_core_version: 3.2.0

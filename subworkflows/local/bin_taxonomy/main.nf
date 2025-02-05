@@ -6,6 +6,8 @@ workflow BIN_TAXONOMY {
     take:
     bin_sets
     checkm2_summary
+    gtdbtk_db
+    gtdbtk_mash_db
 
     main:
     ch_versions     = Channel.empty()
@@ -50,16 +52,11 @@ workflow BIN_TAXONOMY {
     }
 
     if(params.enable_gtdbtk && params.gtdbtk_db) {
-        ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
-            | collect | map { ["gtdb", it] }
-
-        ch_gtdbtk_mash_db = params.gtdbtk_mash_db ? file(params.gtdbtk_mash_db) : []
-
         GTDBTK_CLASSIFYWF(
             ch_filtered_bins,
-            ch_gtdbtk_db,
+            gtdbtk_db,
             false,
-            ch_gtdbtk_mash_db,
+            gtdbtk_mash_db,
             file(params.gtdb_bac120_metadata),
             file(params.gtdb_ar53_metadata)
         )

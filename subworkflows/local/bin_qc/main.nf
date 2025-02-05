@@ -11,6 +11,7 @@ workflow BIN_QC {
     contig2bin
     circular_list
     assembly_rrna_tbl
+    checkm2_db
 
     main:
     ch_versions = Channel.empty()
@@ -35,14 +36,12 @@ workflow BIN_QC {
             | transpose
             | groupTuple(by: 0)
 
-        if(!params.checkm2_local_db) {
-            CHECKM2_DATABASEDOWNLOAD("${params.checkm2_db_version}")
+        if(!params.checkm2_db) {
+            CHECKM2_DATABASEDOWNLOAD("5571251")
             ch_versions   = ch_versions.mix(CHECKM2_DATABASEDOWNLOAD.out.versions)
             ch_checkm2_db = CHECKM2_DATABASEDOWNLOAD.out.database
         } else {
-            ch_checkm2_db = Channel.of(
-                [ [id: "CheckM2"], file(params.checkm2_local_db) ]
-            )
+            ch_checkm2_db = checkm2_db
         }
 
         CHECKM2_PREDICT(ch_bins_for_checkm, ch_checkm2_db)
@@ -78,7 +77,7 @@ workflow BIN_QC {
 
     if(params.enable_rrna_prediction) {
         ch_bin_rrna_input = contig2bin
-            | map {meta, c2b ->
+            | map { meta, c2b ->
                 def meta_join = meta - meta.subMap("binner")
                 [ meta_join, meta, c2b ]
             }
