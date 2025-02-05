@@ -42,11 +42,10 @@ workflow READ_MAPPING {
                 def n_slices = crai.countLines(decompress: true) - 1
                 def size = params.hic_mapping_cram_bin_size
                 def n_bins = n_slices.intdiv(size)
-                def slices = []
-                for (chunk in 0..n_bins) {
+                def slices = (0..n_bins).collect { chunk ->
                     def lower = chunk == 0 ? 0 : (chunk * size) + 1
                     def upper = chunk == n_bins ? n_slices : (chunk + 1) * size
-                    slices << [ lower, upper ]
+                    return [ lower, upper ]
                 }
                 [ meta, cram, crai, slices ]
             }
