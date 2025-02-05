@@ -30,7 +30,7 @@ workflow BIN_TAXONOMY {
     if(checkm2_summary) {
         ch_bin_scores = checkm2_summary
             | splitCsv(header: true, sep: '\t')
-            | map { meta, row ->
+            | map { _meta, row ->
                 def completeness  = Double.parseDouble(row.'Completeness')
                 def contamination = Double.parseDouble(row.'Contamination')
                 [row.'Name', completeness, contamination]

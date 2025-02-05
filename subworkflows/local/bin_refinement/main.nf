@@ -109,7 +109,7 @@ workflow BIN_REFINEMENT {
 
         ch_contig2bintofasta_input = assemblies
             | combine(ch_c2b_to_combine, by: 0)
-            | map { meta, contigs, meta_c2b, c2b -> [ meta_c2b, contigs, c2b ]}
+            | map { _meta, contigs, meta_c2b, c2b -> [ meta_c2b, contigs, c2b ]}
 
         CONTIG2BINTOFASTA(ch_contig2bintofasta_input)
         ch_versions = ch_versions.mix(CONTIG2BINTOFASTA.out.versions)

@@ -60,7 +60,7 @@ workflow READ_MAPPING {
 
         ch_bam_to_merge = CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT.out.bam
             | groupTuple(by: 0)
-            | branch { meta, bam ->
+            | branch { _meta, bam ->
                 merge: bam.size() > 1
                 asis: true
             }
