@@ -50,11 +50,14 @@ workflow READ_MAPPING {
                 [ meta, cram, crai, slices ]
             }
             | transpose()
+            | combine(BWAMEM2_INDEX.out.index)
+            | combine(assemblies)
+            | map { _meta, cram, crai, slices, _meta_index, index, meta_assembly, assembly ->
+                [ meta_assembly, cram, crai, slices, index, assembly ]
+            }
 
         CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT(
-            ch_cram_chunks,
-            BWAMEM2_INDEX.out.index,
-            assemblies
+            ch_cram_chunks
         )
         ch_versions = ch_versions.mix(CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT.out.versions)
 
@@ -65,7 +68,7 @@ workflow READ_MAPPING {
                 asis: true
             }
 
-        SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [], [])
+        SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [[],[]], [[],[]])
         ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
 
         ch_hic_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam

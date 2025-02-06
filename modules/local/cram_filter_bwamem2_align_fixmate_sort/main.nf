@@ -7,12 +7,10 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
         'biocontainers/mulled-v2-1a6fe65bd6674daba65066aa796ed8f5e8b4687b:688e175eb0db54de17822ba7810cc9e20fa06dd5-0' }"
 
     input:
-    tuple val(meta), path(cram), path(crai), val(range)
-    tuple val(meta2), path(index)
-    tuple val(meta3), path(reference)
+    tuple val(meta), path(cram), path(crai), val(range), path(index), path(reference)
 
     output:
-    tuple val(meta3), path("*.bam"), emit: bam
+    tuple val(meta), path("*.bam"), emit: bam
     path "versions.yml"            , emit: versions
 
     when:

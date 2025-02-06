@@ -121,10 +121,15 @@
                     "default": 3000,
                     "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
                 },
-                "min_hifi_perc_identity": {
+                "minimum_hifi_perc_identity": {
                     "type": "integer",
                     "default": 97,
                     "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
+                },
+                "minimum_bin_size": {
+                    "type": "integer",
+                    "default": 150000,
+                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 and Bin3C, but not Metator or MaxBin2."
                 }
             }
         },
