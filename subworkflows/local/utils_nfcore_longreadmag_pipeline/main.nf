@@ -116,7 +116,7 @@ workflow PIPELINE_INITIALISATION {
         ch_gtdbtk_db = Channel.of(
             [
                 [id: "gtdb"],
-                file(params.gtdbtk_db, checkIfExists: true)
+                file(params.gtdbtk_db, checkIfExists: true).listFiles()
             ]
         )
     } else {
