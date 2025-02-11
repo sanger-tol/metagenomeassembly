@@ -103,22 +103,27 @@ workflow LONGREADMAG {
                     ch_stats_collated = BIN_QC.out.stats
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
+                        | ifEmpty([[],[]])
 
                     ch_checkm2_collated = BIN_QC.out.checkm2_tsv
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
+                        | ifEmpty([[],[]])
 
                     ch_taxonomy_collated = ch_taxonomy_tsv
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
+                        | ifEmpty([[],[]])
 
                     ch_trnascan_collated = BIN_QC.out.trnascan_summary
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
+                        | ifEmpty([[],[]])
 
                     ch_rrna_collated = BIN_QC.out.rrna_summary
                         | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
                         | groupTuple(by: 0)
+                        | ifEmpty([[],[]])
 
                     BIN_SUMMARY(
                         ch_stats_collated,

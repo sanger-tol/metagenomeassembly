@@ -113,12 +113,9 @@ workflow PIPELINE_INITIALISATION {
 
     // GTDB-Tk databasez
     if(params.gtdbtk_db) {
-        ch_gtdbtk_db = Channel.of(
-            [
-                [id: "gtdb"],
-                file(params.gtdbtk_db, checkIfExists: true).listFiles()
-            ]
-        )
+        ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
+            | collect
+            | map { [[id: "gtdb"], it] }
     } else {
         ch_gtdbtk_db = Channel.empty()
     }
@@ -129,7 +126,7 @@ workflow PIPELINE_INITIALISATION {
             [ file(params.gtdbtk_mash_db, checkIfExists: true) ]
         )
     } else {
-        ch_gtdbtk_mash_db = Channel.empty()
+        ch_gtdbtk_mash_db = []
     }
 
     emit:
