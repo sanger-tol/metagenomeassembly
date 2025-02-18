@@ -76,7 +76,7 @@ workflow READ_MAPPING {
 
             ch_merged_bam = SAMTOOLS_CATSORT_HIC_BAM.out.bam
         } else { // == "merge"
-            SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge)
+            SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [[],[]], [[], []])
             ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
 
             ch_merged_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam
