@@ -7,7 +7,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
         'biocontainers/mulled-v2-1a6fe65bd6674daba65066aa796ed8f5e8b4687b:688e175eb0db54de17822ba7810cc9e20fa06dd5-0' }"
 
     input:
-    tuple val(meta), path(cram), path(crai), val(range), path(index), path(reference)
+    tuple val(meta), path(cram), path(crai), val(chunkn), val(range), path(index), path(reference)
 
     output:
     tuple val(meta), path("*.bam"), emit: bam
@@ -22,6 +22,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
     def args2 = task.ext.args2 ?: ''
     def args3 = task.ext.args3 ?: ''
     def args4 = task.ext.args4 ?: ''
+    def args5 = task.ext.args5 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     // Please be aware one of the tools here required mem = 28 * reference size!!!
     """
@@ -31,7 +32,8 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
         samtools fastq ${args1} | \\
         bwa-mem2 mem ${args2} -t ${task.cpus} \${INDEX} - | \\
         samtools fixmate ${args3} - - | \\
-        samtools sort ${args4} -@${task.cpus} -T ${prefix}_tmp -o ${prefix}.bam -
+        samtools view -h ${args4} |\\
+        samtools sort ${args5} -@${task.cpus} -T ${prefix}_tmp -o ${prefix}.bam -
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

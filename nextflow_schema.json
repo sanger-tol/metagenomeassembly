@@ -27,11 +27,6 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
-                },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
                 }
             }
         },
@@ -83,6 +78,19 @@
                     "type": "integer",
                     "default": 10000,
                     "description": "When mapping Hi-C, map each CRAM file in slices of this size."
+                },
+                "hic_mapping_minq": {
+                    "type": "integer",
+                    "default": 60,
+                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Bin3C or Metator.",
+                    "minimum": 0
+                },
+                "hic_mapping_merge_mode": {
+                    "type": "string",
+                    "default": "merge",
+                    "enum": ["merge", "cat"],
+                    "description": "Which method to use to merge the chunked Hi-C bam files back together. One of \"merge\" (samtools merge) or \"cat\" (samtools cat).",
+                    "help_text": "\"merge\" is safer and uses samtools merge, which will ensure that the name sorting is retained among all reads in the final output bam. However, in cases where there is a lot of Hi-C data, the merge operation can be very slow. In this case, \"cat\" is presented as an alternative, using heuristics to concatenate the bam files together using samtools cat. This requires that the initial input CRAM files are sorted by read name so that the chunks represent sets of consecutively named reads, and may fall down when there are multiple Hi-C CRAM libraries, especially if there are multiple read groups in a single library."
                 }
             }
         },

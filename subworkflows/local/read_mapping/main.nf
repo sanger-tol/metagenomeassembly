@@ -1,9 +1,10 @@
-include { BWAMEM2_INDEX                             } from '../../../modules/nf-core/bwamem2/index/main'
-include { COVERM_CONTIG                             } from '../../../modules/nf-core/coverm/contig/main'
-include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT    } from '../../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
-include { MINIMAP2_ALIGN                            } from '../../../modules/nf-core/minimap2/align/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HIC_CRAM } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM  } from '../../../modules/nf-core/samtools/merge/main'
+include { BWAMEM2_INDEX                                } from '../../../modules/nf-core/bwamem2/index/main'
+include { COVERM_CONTIG                                } from '../../../modules/nf-core/coverm/contig/main'
+include { CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT       } from '../../../modules/local/cram_filter_bwamem2_align_fixmate_sort/main'
+include { MINIMAP2_ALIGN                               } from '../../../modules/nf-core/minimap2/align/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HIC_CRAM    } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_MERGE as SAMTOOLS_MERGE_HIC_BAM     } from '../../../modules/nf-core/samtools/merge/main'
+include { SAMTOOLS_CATSORT as SAMTOOLS_CATSORT_HIC_BAM } from '../../../modules/local/samtools_catsort/main'
 
 workflow READ_MAPPING {
     take:
@@ -47,13 +48,14 @@ workflow READ_MAPPING {
                     def upper = chunk == n_bins ? n_slices : (chunk + 1) * size
                     return [ lower, upper ]
                 }
-                [ meta, cram, crai, slices ]
+                def chunkn = (0..n_bins)
+                [ meta, cram, crai, chunkn, slices ]
             }
             | transpose()
             | combine(BWAMEM2_INDEX.out.index)
             | combine(assemblies)
-            | map { _meta, cram, crai, slices, _meta_index, index, meta_assembly, assembly ->
-                [ meta_assembly, cram, crai, slices, index, assembly ]
+            | map { _meta, cram, crai, chunkn, slices, _meta_index, index, meta_assembly, assembly ->
+                [ meta_assembly, cram, crai, chunkn, slices, index, assembly ]
             }
 
         CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT(
@@ -68,10 +70,19 @@ workflow READ_MAPPING {
                 asis: true
             }
 
-        SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [[],[]], [[],[]])
-        ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
+        if (params.hic_mapping_merge_mode == "cat") {
+            SAMTOOLS_CATSORT_HIC_BAM(ch_bam_to_merge.merge)
+            ch_versions = ch_versions.mix(SAMTOOLS_CATSORT_HIC_BAM.out.versions)
 
-        ch_hic_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam
+            ch_merged_bam = SAMTOOLS_CATSORT_HIC_BAM.out.bam
+        } else { // == "merge"
+            SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge)
+            ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
+
+            ch_merged_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam
+        }
+
+        ch_hic_bam = ch_merged_bam
             | mix(ch_bam_to_merge.asis)
 
     } else {
