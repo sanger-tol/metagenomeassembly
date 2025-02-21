@@ -63,4 +63,5 @@ template:
     - adaptivecard
     - slackreport
     - seqera_platform
+    - multiqc
   version: 1.0.0dev
