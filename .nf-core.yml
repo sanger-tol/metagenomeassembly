@@ -6,6 +6,7 @@ lint:
     - assets/email_template.html
     - assets/sendmail_template.txt
     - assets/email_template.txt
+    - assets/multiqc_config.yml
     - CODE_OF_CONDUCT.md
     - assets/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_light.png
@@ -17,14 +18,14 @@ lint:
     - .prettierignore
     - CODE_OF_CONDUCT.md
     - assets/nf-core-longreadmag_logo_light.png
+    - assets/multiqc_config.yml
     - docs/images/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
     - .github/workflows/branch.yml
     - .github/workflows/linting_comment.yml
     - .github/workflows/linting.yml
-  multiqc_config:
-    - report_comment
+  multiqc_config: False
   nextflow_config:
     - process.cpus
     - process.memory
