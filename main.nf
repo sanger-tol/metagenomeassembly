@@ -29,6 +29,7 @@ workflow SANGERTOL_LONGREADMAG {
 
     take:
     pacbio_fasta // channel: pacbio fasta read in from --input
+    assembly     // channel: pre-existing assembly read in from --input
     hic_cram     // channel: hic cram read in from --input
     hic_enzymes  // channel: hic enzymes read in from --input
     rfam_rrna_cm // channel: rrna cm file from params.rfam_rrna_cm
@@ -44,6 +45,7 @@ workflow SANGERTOL_LONGREADMAG {
     //
     LONGREADMAG (
         pacbio_fasta,
+        assembly,
         hic_cram,
         hic_enzymes,
         rfam_rrna_cm,
@@ -81,6 +83,7 @@ workflow {
     //
     SANGERTOL_LONGREADMAG (
         PIPELINE_INITIALISATION.out.pacbio_fasta,
+        PIPELINE_INITIALISATION.out.assembly,
         PIPELINE_INITIALISATION.out.hic_cram,
         PIPELINE_INITIALISATION.out.hic_enzymes,
         PIPELINE_INITIALISATION.out.rfam_rrna_cm,

@@ -12,11 +12,11 @@
 
 ### Full samplesheet
 
-Raw PacBio HiFi reads must be provided to the pipeline in the `pacbio: fasta:` field. For binning metagenome assemblies with Hi-C, Hi-C sequencing input in CRAM format must be described in the input YAML in the `hic: cram:` field, and the list of enzymes used during Hi-C library preparation must be provided in the `hic: enzymes:` field. Currently, the fields below are the only ones supported by `sanger-tol/longreadmag`; in the future, fields supporting more input data formats and other sample metadata may be supported.
+Raw PacBio HiFi reads must be provided to the pipeline in the `pacbio: fasta:` field. For binning metagenome assemblies with Hi-C, Hi-C sequencing input in CRAM format must be described in the input YAML in the `hic: cram:` field, and the list of enzymes used during Hi-C library preparation must be provided in the `hic: enzymes:` field.
 
 _Currently, the pipeline contains no pre-processing steps for read QC, and so input HiFi and Hi-C reads must be QC'd prior to running the pipeline._
 
-````yaml title="input.yaml"
+```yaml title="input.yaml"
 id: SampleName
 pacbio:
   fasta:
@@ -32,7 +32,19 @@ hic:
     - enzyme_name_1 (e.g. DpnII)
     - enzyme_name_1 (e.g. HinfI)
     - ...
-```                                             |
+```
+
+It is possible to just run the read mapping and binning parts of the pipeline by providing a path to an existing assembly in the YAML.
+In this case, the assembly stage is skipped. The extra fields in the input YAML are as follows:
+
+```yaml
+assembly:
+  fasta: /path/to/contigs.fasta.gz
+  assembler: assembler_name (e.g. metamdbg)
+```
+
+Note that some assembler-specific features of the pipeline (such as identification of circular contigs) may not operate if providing
+contigs from an unsupported assembler.
 
 An [example samplesheet](../assets/example_input.yaml) has been provided with the pipeline.
 
@@ -42,7 +54,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run sanger-tol/longreadmag --input ./input.yaml --outdir ./results  -profile docker
-````
+```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 

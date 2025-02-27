@@ -25,6 +25,7 @@ include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 workflow LONGREADMAG {
     take:
     pacbio_fasta        // channel: pacbio read in from yaml
+    assembly            // channel: pre-built metagenome assembly
     hic_cram            // channel: hic cram files from yaml
     hic_enzymes         // channel: hic enzyme list from yaml
     rfam_rrna_cm        // channel: rRNA cm file from params
@@ -35,11 +36,15 @@ workflow LONGREADMAG {
 
     main:
     ch_versions = Channel.empty()
+    ch_assemblies = assembly
 
     if(params.enable_assembly) {
-        ASSEMBLY(pacbio_fasta)
-        ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
-        ch_assemblies = ASSEMBLY.out.assemblies
+        // Only run assembly if one not provided
+        if(!assembly) {
+            ASSEMBLY(pacbio_fasta)
+            ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
+            ch_assemblies = ch_assemblies.mix(ASSEMBLY.out.assemblies)
+        }
 
         ASSEMBLY_QC(ch_assemblies, rfam_rrna_cm)
         ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)

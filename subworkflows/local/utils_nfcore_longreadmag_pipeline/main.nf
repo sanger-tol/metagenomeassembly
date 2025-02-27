@@ -61,14 +61,17 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    //
     // Create channel from input file provided through params.input
-    //
+    // and filter out results with empty lists to remove non-provided
+    // inputs
     READ_YAML(file(input))
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
 
     ch_hic_cram = READ_YAML.out.hic_cram
+        | filter { !it[1].isEmpty() }
+
+    ch_assembly = READ_YAML.out.assembly
         | filter { !it[1].isEmpty() }
 
     // collect as have to ensure this is a value channel
@@ -111,7 +114,7 @@ workflow PIPELINE_INITIALISATION {
         ch_checkm2_db = Channel.empty()
     }
 
-    // GTDB-Tk databasez
+    // GTDB-Tk database
     if(params.gtdbtk_db) {
         ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
             | collect
@@ -131,6 +134,7 @@ workflow PIPELINE_INITIALISATION {
 
     emit:
     pacbio_fasta        = ch_pacbio_fasta
+    assembly            = ch_assembly
     hic_cram            = ch_hic_cram
     hic_enzymes         = ch_hic_enzymes
     rfam_rrna_cm        = ch_rfam_rrna_cm
