@@ -23,7 +23,8 @@ process SAMTOOLS_CATSORT {
     def bam_groups = bams.groupBy{ bam -> (bam.getName() =~ /\d+\/(.*\.cram)/)[0][1] }
         .collect { _cram, files -> [_cram, files.sort(false) { bam -> (bam.getName() =~ /\.(\d+)\.bam/)[0][1].toInteger() } ]}
     // and for each cram file concatenate them to a temp bam file
-    def cat_bams = bam_groups.collect { cram, files -> "samtools cat -o ${cram}.temp.bam ${files.join(" ")}" }.join("\n")
+    // join is "\n    " in order to ensure correct indentation
+    def cat_bams = bam_groups.collect { cram, files -> "samtools cat -o ${cram}.temp.bam ${files.join(" ")}" }.join("\n    ")
     """
     if [ -f bams_to_sort.tsv ]; then
         rm bams_to_sort.tsv
