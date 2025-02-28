@@ -9,6 +9,9 @@ workflow ASSEMBLY {
     ch_assemblies = Channel.empty()
 
     if(params.enable_metamdbg) {
+        //
+        // MODULE: Assemble PacBio reads using metaMDBG
+        //
         METAMDBG_ASM(hifi_reads, 'hifi')
         ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 

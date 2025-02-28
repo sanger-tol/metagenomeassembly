@@ -10,12 +10,18 @@ workflow ASSEMBLY_QC {
     main:
     ch_versions = Channel.empty()
 
+    //
+    // MODULE: Identify which contigs are circular
+    //
     FIND_CIRCLES(assemblies)
     ch_versions = ch_versions.mix(FIND_CIRCLES.out.versions)
 
     ch_genome_stats_input = assemblies
         | combine(FIND_CIRCLES.out.circles, by: 0)
 
+    //
+    // MODULE: Calculate assembly statistics, including counts of circles
+    //
     GENOME_STATS_ASSEMBLIES(ch_genome_stats_input)
     ch_versions = ch_versions.mix(GENOME_STATS_ASSEMBLIES.out.versions)
 
@@ -26,6 +32,9 @@ workflow ASSEMBLY_QC {
                 [ meta, cmfile, contigs, false, true ]
             }
 
+        //
+        // MODULE: Identify rRNA genes in the assembly using Infernal
+        //
         INFERNAL_CMSEARCH(ch_infernal_input)
         ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
         ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary

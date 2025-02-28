@@ -61,13 +61,14 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    // Create channel from input file provided through params.input
-    // and filter out results with empty lists to remove non-provided
-    // inputs
+    //
+    // MODULE: Create channels from input file provided through params.input
+    //
     READ_YAML(file(input), params.enable_assembly)
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
 
+    // filter out results with empty lists to remove non-provided inputs
     ch_hic_cram = READ_YAML.out.hic_cram
         | filter { !it[1].isEmpty() }
 

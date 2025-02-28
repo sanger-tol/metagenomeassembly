@@ -29,15 +29,26 @@ workflow READ_MAPPING {
                     return [ meta, cram_file ]
             }
 
+        //
+        // MODULE: Index CRAM files without indexes
+        //
         SAMTOOLS_INDEX_HIC_CRAM(ch_hic_cram_raw.no_index)
         ch_versions = SAMTOOLS_INDEX_HIC_CRAM.out.versions
 
         ch_hic_cram = ch_hic_cram_raw.have_index
             | mix(SAMTOOLS_INDEX_HIC_CRAM.out.crai)
 
+        //
+        // MODULE: Create bwa-mem2 index for assembly
+        //
         BWAMEM2_INDEX(assemblies)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
 
+        //
+        // LOGIC: for each CRAM file, count the number of slices in the
+        // index. Produce chunk indexes so that we can map over slices
+        // of the CRAM file in parallel.
+        //
         ch_cram_chunks = ch_hic_cram
             | map { meta, cram, crai ->
                 def n_slices = crai.countLines(decompress: true) - 1
@@ -58,6 +69,9 @@ workflow READ_MAPPING {
                 [ meta_assembly, cram, crai, chunkn, slices, index, assembly ]
             }
 
+        //
+        // MODULE: Align Hi-C reads from CRAM file for a given chunk using bwa-mem2
+        //
         CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT(
             ch_cram_chunks
         )
@@ -70,12 +84,25 @@ workflow READ_MAPPING {
                 asis: true
             }
 
+        //
+        // LOGIC: Decide whether to merge chunks using SAMTOOLS_CAT (fast)
+        // or SAMTOOLS_MERGE (slower but safe)
+        //
         if (params.hic_mapping_merge_mode == "cat") {
+            //
+            // MODULE: Merge bam files using a "CATSORT" - cat name-sorted
+            // bams arising from each CRAM file in order, then identify
+            // heuristically the order of CRAM files using read IDS
+            // Not guaranteed to produce sorted output! (but usually should)
+            //
             SAMTOOLS_CATSORT_HIC_BAM(ch_bam_to_merge.merge)
             ch_versions = ch_versions.mix(SAMTOOLS_CATSORT_HIC_BAM.out.versions)
 
             ch_merged_bam = SAMTOOLS_CATSORT_HIC_BAM.out.bam
         } else { // == "merge"
+            //
+            // MODULE: Merge bams by name using samtools merge
+            //
             SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [[],[]], [[], []])
             ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
 
@@ -89,6 +116,9 @@ workflow READ_MAPPING {
         ch_hic_bam   = Channel.empty()
     }
 
+    //
+    // MODULE: Align PacBio reads to assembly using minimap2
+    //
     MINIMAP2_ALIGN(
         pacbio,
         assemblies,
@@ -99,6 +129,9 @@ workflow READ_MAPPING {
     )
     ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
 
+    //
+    // MODULE: Calculate per-contig coverage using coverm
+    //
     COVERM_CONTIG(
         MINIMAP2_ALIGN.out.bam,
         [[],[]], // reference

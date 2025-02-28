@@ -23,6 +23,9 @@ workflow BINNING {
         ch_metabat_input = assemblies
             | combine(pacbio_depths, by: 0)
 
+        //
+        // MODULE: Bin assembly using Metabat2
+        //
         METABAT2_METABAT2(ch_metabat_input)
         ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
 
@@ -32,6 +35,9 @@ workflow BINNING {
     }
 
     if(params.enable_maxbin2) {
+        //
+        // MODULE: Convert depth to correct format for MaxBin2
+        //
         GAWK_MAXBIN2_DEPTHS(pacbio_depths, [])
         ch_versions = ch_versions.mix(GAWK_MAXBIN2_DEPTHS.out.versions)
 
@@ -41,6 +47,9 @@ workflow BINNING {
                 [meta, contigs, [], depths]
             }
 
+        //
+        // MODULE: Bin assembly using MaxBin2
+        //
         MAXBIN2(ch_maxbin2_input)
         ch_versions = ch_versions.mix(MAXBIN2.out.versions)
 
@@ -53,12 +62,18 @@ workflow BINNING {
         ch_bin3c_mkmap_input = assemblies
             | combine(hic_bam, by: 0)
 
+        //
+        // MODULE: Create Hi-C contact map for Bin3C
+        //
         BIN3C_MKMAP(ch_bin3c_mkmap_input, hic_enzymes)
         ch_versions = ch_versions.mix(BIN3C_MKMAP.out.versions)
 
         ch_bin3c_cluster_input = assemblies
             | combine(BIN3C_MKMAP.out.map, by: 0)
 
+        //
+        // MODULE: Cluster Bin3C contact map and write bins
+        //
         BIN3C_CLUSTER(ch_bin3c_cluster_input)
         ch_versions = ch_versions.mix(BIN3C_CLUSTER.out.versions)
 
@@ -68,28 +83,16 @@ workflow BINNING {
     }
 
     if(params.enable_metator) {
-        // Old code (keep for now) - run Metator in mapping mode,
-        // providing hi-c reads as input rather than bam files
-        /*
-        ch_assemblies_combine = assemblies
-            | map {meta, contigs -> [ meta.subMap('id'), meta, contigs ]}
-
-        ch_metator_input = ch_assemblies_combine
-            | combine(hic_reads, by: 0)
-            | map { meta_join, meta_assembly, contigs, hic -> [meta_assembly, contigs, hic, []]}
-
-        METATOR_PIPELINE(ch_metator_input, hic_enzymes)
-        ch_versions = ch_versions.mix(METATOR_PIPELINE.out.versions)
-        */
-
-        // Metator expects us to have aligned forward and reverse reads
-        // independently of one another - munge the bam file
-        // to filter out forward and reverse reads and remove mate information
-        // from SAM flags: bitwise and(flag, 3860)
         ch_directions = Channel.of("fwd", "rev")
         ch_hic_bam_to_process = hic_bam
             | combine(ch_directions)
 
+        //
+        // MODULE: Metator expects us to have aligned forward and reverse reads
+        // independently of one another - munge the bam file
+        // to filter out forward and reverse reads and remove mate information
+        // from SAM flags: bitwise and(flag, 3860)
+        //
         METATOR_PROCESS_INPUT_BAM(ch_hic_bam_to_process)
         ch_versions = ch_versions.mix(METATOR_PROCESS_INPUT_BAM.out.versions)
 
@@ -99,7 +102,9 @@ workflow BINNING {
             | map { meta, bams, contigs ->
                 [ meta, contigs, bams.sort(), [] ]
             }
-
+        //
+        // MODULE: Bin assembly using Metator
+        //
         METATOR_PIPELINE(ch_metator_input, hic_enzymes)
         ch_versions = ch_versions.mix(METATOR_PIPELINE.out.versions)
 
@@ -109,7 +114,7 @@ workflow BINNING {
     }
 
     //
-    // LOGIC: Process all outputs into contig2bin format
+    // MODULE: Create contig2bin maps for all output bins
     //
     FASTATOCONTIG2BIN(ch_bins, 'fa')
     ch_contig2bin = ch_contig2bin.mix(FASTATOCONTIG2BIN.out.contig2bin)

@@ -52,6 +52,9 @@ workflow BIN_TAXONOMY {
     }
 
     if(params.enable_gtdbtk && params.gtdbtk_db) {
+        //
+        // MODULE: Classify bins using GTDB-Tk
+        //
         GTDBTK_CLASSIFYWF(
             ch_filtered_bins,
             gtdbtk_db,
@@ -63,16 +66,19 @@ workflow BIN_TAXONOMY {
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
 
-        // GTDB to NCBI classifications lack a taxid
-        // Pull out the highest level taxonomic rank from classifications and
-        // get its taxid
         if(params.ncbi_taxonomy_dir){
+            //
+            // MODULE: Extract the NCBI names from the GTDB-Tk summary file
+            //
             GAWK_EXTRACT_NCBI_NAMES(GTDBTK_CLASSIFYWF.out.ncbi, file("${baseDir}/bin/extract_ncbi_name.awk"))
             ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
             ch_gtdb_ncbi_for_taxonkit = GAWK_EXTRACT_NCBI_NAMES.out.output
                 | map { meta, tsv -> [ meta, [], tsv ] }
 
+            //
+            // MODULE: Get taxids for these names
+            //
             TAXONKIT_NAME2TAXID(
                 ch_gtdb_ncbi_for_taxonkit,
                 file(params.ncbi_taxonomy_dir)

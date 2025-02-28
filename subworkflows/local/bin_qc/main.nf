@@ -24,6 +24,9 @@ workflow BIN_QC {
         | combine(circular_list, by: 0)
         | map { _meta_join, meta, bins, circles -> [ meta, bins, circles ] }
 
+    //
+    // MODULE: Calculate bin statistics, including counts of circles
+    //
     GENOME_STATS_BINS(ch_genome_stats_input)
     ch_versions = ch_versions.mix(GENOME_STATS_BINS.out.versions)
 
@@ -37,6 +40,9 @@ workflow BIN_QC {
             | groupTuple(by: 0)
 
         if(!params.checkm2_db) {
+            //
+            // MODULE: Download the CheckM2 database
+            //
             CHECKM2_DATABASEDOWNLOAD("5571251")
             ch_versions   = ch_versions.mix(CHECKM2_DATABASEDOWNLOAD.out.versions)
             ch_checkm2_db = CHECKM2_DATABASEDOWNLOAD.out.database
@@ -44,6 +50,9 @@ workflow BIN_QC {
             ch_checkm2_db = checkm2_db
         }
 
+        //
+        // MODULE: Estimate bin completeness/contamination using CheckM2
+        //
         CHECKM2_PREDICT(ch_bins_for_checkm, ch_checkm2_db)
         ch_versions = ch_versions.mix(CHECKM2_PREDICT.out.versions)
         ch_checkm2_tsv = CHECKM2_PREDICT.out.checkm2_tsv
@@ -60,6 +69,9 @@ workflow BIN_QC {
                 [ meta_new, bin ]
             }
 
+        //
+        // MODULE: Find tRNAs in bins
+        //
         TRNASCAN_SE(ch_bins_for_trnascan, [], [], [])
         ch_versions = ch_versions.mix(TRNASCAN_SE.out.versions)
 
@@ -67,6 +79,9 @@ workflow BIN_QC {
             | map { meta, tsv -> [ meta.subMap(["id", "assembler", "binner"]), tsv ] }
             | groupTuple(by: 0)
 
+        //
+        // MODULE: Summarise tRNA results for each bin
+        //
         GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${baseDir}/bin/trnascan_summary.awk"))
         ch_versions = ch_versions.mix(GAWK_TRNASCAN_SUMMARY.out.versions)
 
@@ -84,6 +99,9 @@ workflow BIN_QC {
             | combine(assembly_rrna_tbl, by: 0)
             | map { _meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
 
+        //
+        // MODULE: Summarise identified rRNAs across bins
+        //
         BIN_RRNAS(ch_bin_rrna_input)
         ch_versions = ch_versions.mix(BIN_RRNAS.out.versions)
         ch_rrna_summary = BIN_RRNAS.out.tsv

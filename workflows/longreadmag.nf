@@ -45,20 +45,30 @@ workflow LONGREADMAG {
         ch_assembly_input = pacbio_fasta
             | combine(ch_assemblies.ifEmpty([[:], false]))
             | filter { it[3] == false }
-            | map { meta_reads, reads, meta_assembly, assembly ->
+            | map { meta_reads, reads, _meta_assembly, _assembly ->
                 [ meta_reads, reads ]
             }
-
+        //
+        // SUBWORKFLOW: Assemble PacBio hifi reads
+        //
         ASSEMBLY(ch_assembly_input)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
         ch_assemblies = ch_assemblies.mix(ASSEMBLY.out.assemblies)
     }
 
+    //
+    // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
+    // check contig circularity
+    //
     ASSEMBLY_QC(ch_assemblies, rfam_rrna_cm)
     ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
 
+    //
+    // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
+    // reads to the assembly and estimate per-contig coverages
+    //
     READ_MAPPING(
         ch_assemblies,
         pacbio_fasta,
@@ -67,6 +77,9 @@ workflow LONGREADMAG {
     ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
     if(params.enable_binning) {
+        //
+        // SUBWORKFLOW: Bin the assembly using binning tools
+        //
         BINNING(
             ch_assemblies,
             READ_MAPPING.out.depths,
@@ -78,6 +91,9 @@ workflow LONGREADMAG {
         ch_contig2bin = BINNING.out.contig2bin
 
         if(params.enable_bin_refinement) {
+            //
+            // SUBWORKFLOW: Refine bins using DAS_Tool and MAGScoT
+            //
             BIN_REFINEMENT(
                 ch_assemblies,
                 ch_contig2bin,
@@ -89,6 +105,10 @@ workflow LONGREADMAG {
         }
 
         if(params.enable_binqc) {
+            //
+            // SUBWORKFLOW: QC of bins - completeness/contamination using
+            // CheckM2, statistics, tRNAs + ncRNAs
+            //
             BIN_QC(
                 ch_bins,
                 ch_contig2bin,
@@ -99,6 +119,10 @@ workflow LONGREADMAG {
             ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
             if(params.enable_taxonomy) {
+                //
+                // SUBWORKFLOW: Taxonomic classification of bins using
+                // GTDB-Tk and conversion of classifications to NCBI taxonomy
+                //
                 BIN_TAXONOMY(
                     ch_bins,
                     BIN_QC.out.checkm2_tsv,
@@ -138,6 +162,10 @@ workflow LONGREADMAG {
                     | groupTuple(by: 0)
                     | ifEmpty([[],[]])
 
+                //
+                // SUBWORKFLOW: Collate all bin information into tabular
+                // output, and summarise across binners
+                //
                 BIN_SUMMARY(
                     ch_stats_collated,
                     ch_checkm2_collated,
