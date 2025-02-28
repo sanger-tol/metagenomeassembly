@@ -1,68 +1,31 @@
 lint:
   files_exist:
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/ISSUE_TEMPLATE/feature_request.yml
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - .github/CONTRIBUTING.md
-    - .github/.dockstore.yml
-    - conf/igenomes.config
+    - .github/ISSUE_TEMPLATE/config.yml
     - conf/igenomes_ignored.config
     - conf/igenomes.config
     - assets/email_template.html
     - assets/sendmail_template.txt
     - assets/email_template.txt
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/ISSUE_TEMPLATE/feature_request.yml
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - .github/CONTRIBUTING.md
-    - .github/.dockstore.yml
-    - conf/igenomes.config
-    - conf/igenomes_ignored.config
-    - assets/email_template.html
-    - assets/sendmail_template.txt
-    - assets/email_template.txt
+    - assets/multiqc_config.yml
     - CODE_OF_CONDUCT.md
     - assets/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_dark.png
-    - .github/ISSUE_TEMPLATE/config.yml
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
   files_unchanged:
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/ISSUE_TEMPLATE/config.yml
-    - .github/ISSUE_TEMPLATE/feature_request.yml
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - .github/workflows/branch.yml
-    - .github/workflows/linting_comment.yml
-    - .github/workflows/linting.yml
     - .github/CONTRIBUTING.md
-    - .github/.dockstore.yml
-    - .github/CONTRIBUTING.md
-    - .prettierignore
-    - .prettierignore
-    - .prettierignore
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/ISSUE_TEMPLATE/config.yml
-    - .github/ISSUE_TEMPLATE/feature_request.yml
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - .github/workflows/branch.yml
-    - .github/workflows/linting_comment.yml
-    - .github/workflows/linting.yml
-    - .github/CONTRIBUTING.md
-    - .github/.dockstore.yml
-    - .github/CONTRIBUTING.md
-    - .prettierignore
-    - .prettierignore
     - .prettierignore
     - CODE_OF_CONDUCT.md
     - assets/nf-core-longreadmag_logo_light.png
+    - assets/multiqc_config.yml
     - docs/images/nf-core-longreadmag_logo_light.png
     - docs/images/nf-core-longreadmag_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
-  included_configs: false
-  multiqc_config:
-    - report_comment
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+  multiqc_config: False
   nextflow_config:
     - process.cpus
     - process.memory
@@ -76,9 +39,11 @@ lint:
     - validation.help.afterText
     - validation.summary.beforeText
     - validation.summary.afterText
+    - config_defaults:
+        - params.hmm_gtdb_pfam
+        - params.hmm_gtdb_tigrfam
+        - params.rfam_rrna_cm
   readme:
-    - nextflow_badge
-    - nextflow_badge
     - nextflow_badge
 nf_core_version: 3.2.0
 repository_type: pipeline
@@ -99,4 +64,5 @@ template:
     - adaptivecard
     - slackreport
     - seqera_platform
+    - multiqc
   version: 1.0.0dev

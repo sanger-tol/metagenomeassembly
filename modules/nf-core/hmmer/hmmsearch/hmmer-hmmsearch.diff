@@ -1,0 +1,52 @@
+Changes in module 'nf-core/hmmer/hmmsearch'
+'modules/nf-core/hmmer/hmmsearch/environment.yml' is unchanged
+'modules/nf-core/hmmer/hmmsearch/meta.yml' is unchanged
+Changes in 'hmmer/hmmsearch/main.nf':
+--- modules/nf-core/hmmer/hmmsearch/main.nf
++++ modules/nf-core/hmmer/hmmsearch/main.nf
+@@ -21,13 +21,18 @@
+     task.ext.when == null || task.ext.when
+ 
+     script:
+-    def args       = task.ext.args   ?: ''
+-    def prefix     = task.ext.prefix ?: "${meta.id}"
+-    output         = "${prefix}.txt"
+-    alignment      = write_align     ? "-A ${prefix}.sto" : ''
+-    target_summary = write_target    ? "--tblout ${prefix}.tbl" : ''
+-    domain_summary = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
++    def args        = task.ext.args   ?: ''
++    def prefix      = task.ext.prefix ?: "${meta.id}"
++    output          = "${prefix}.txt"
++    alignment       = write_align     ? "-A ${prefix}.sto" : ''
++    target_summary  = write_target    ? "--tblout ${prefix}.tbl" : ''
++    domain_summary  = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
++    def seqdb_input = seqdb.toString() - ~/\.gz$/
++    def gunzip      = seqdb.getExtension() == "gz" ? "gunzip -c ${seqdb} > ${seqdb_input}" : ""
++    def cleanup     = seqdb.getExtension() == "gz" ? "rm ${seqdb_input}" : ""
+     """
++    $gunzip
++    
+     hmmsearch \\
+         $args \\
+         --cpu $task.cpus \\
+@@ -36,12 +41,14 @@
+         $target_summary \\
+         $domain_summary \\
+         $hmmfile \\
+-        $seqdb
++        $seqdb_input
+ 
+     gzip --no-name *.txt \\
+         ${write_align ? '*.sto' : ''} \\
+         ${write_target ? '*.tbl' : ''} \\
+         ${write_domain ? '*.domtbl' : ''}
++
++    ${cleanup}
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+'modules/nf-core/hmmer/hmmsearch/tests/tags.yml' is unchanged
+'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test' is unchanged
+'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test.snap' is unchanged
+************************************************************
