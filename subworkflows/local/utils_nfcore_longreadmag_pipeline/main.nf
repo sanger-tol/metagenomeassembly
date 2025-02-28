@@ -64,7 +64,7 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     // and filter out results with empty lists to remove non-provided
     // inputs
-    READ_YAML(file(input))
+    READ_YAML(file(input), params.enable_assembly)
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
 
@@ -79,10 +79,7 @@ workflow PIPELINE_INITIALISATION {
         | filter { !it.isEmpty() }
         | collect
 
-    //
     // Create channels for input database files
-    //
-
     // rRNA covariance models
     if(params.rfam_rrna_cm) {
         ch_rfam_rrna_cm = Channel.of(

@@ -7,6 +7,7 @@ process READ_YAML {
 
     input:
     val(yaml)
+    val(enable_assembly)
 
     output:
     tuple val(meta)    , val(pacbio)  , emit: pacbio_fasta
@@ -25,9 +26,13 @@ process READ_YAML {
     if(input?.hic?.cram && !input?.hic?.enzymes) {
         error("ERROR: Hi-C files provided but no enzymes!")
     }
-    if(input?.assembly?.fasta && !input?.assembly?.assembler) {
-        error("ERROR: Assembly FASTA provided but the assembler was not named!!")
+    if(!input?.assembly?.fasta && !enable_assembly) {
+        error("ERROR: Assembly mode was not enabled, but a pre-existing assembly was not provided!")
     }
+    if(input?.assembly?.fasta && !input?.assembly?.assembler) {
+        error("ERROR: Assembly FASTA provided but the assembler was not named!")
+    }
+
 
     // Generate meta map
     id          = input.id
