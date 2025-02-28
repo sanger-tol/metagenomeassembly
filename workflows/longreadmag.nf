@@ -39,13 +39,13 @@ workflow LONGREADMAG {
     ch_assemblies = assembly
 
     if(params.enable_assembly) {
-        // Only provide reads to ASSEMBLY subwf if ch_assemblies is 
+        // Only provide reads to ASSEMBLY subwf if ch_assemblies is
         // empty - cross reads with assembly channel, which gets
         // false if empty, and filter to just keep false entries
         ch_assembly_input = pacbio_fasta
             | combine(ch_assemblies.ifEmpty([[:], false]))
             | filter { it[3] == false }
-            | map { meta_reads, reads, meta_assembly, assembly -> 
+            | map { meta_reads, reads, meta_assembly, assembly ->
                 [ meta_reads, reads ]
             }
 
