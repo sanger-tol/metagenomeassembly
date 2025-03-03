@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 ## Collates the various bin-level summary TSV files exported at
-## various points in the longreadmag pipeline run
+## various points in the metagenomeassembly pipeline run
 ##
 ## Author: Jim Downie, 2024
 

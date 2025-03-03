@@ -1,4 +1,4 @@
-# sanger-tol/longreadmag: Citations
+# sanger-tol/metagenomeassembly: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

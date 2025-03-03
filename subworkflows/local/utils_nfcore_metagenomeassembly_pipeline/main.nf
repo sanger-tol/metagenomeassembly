@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the sanger-tol/longreadmag pipeline
+// Subworkflow with functionality specific to the sanger-tol/metagenomeassembly pipeline
 //
 
 /*
