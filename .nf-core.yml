@@ -8,19 +8,19 @@ lint:
     - assets/email_template.txt
     - assets/multiqc_config.yml
     - CODE_OF_CONDUCT.md
-    - assets/nf-core-longreadmag_logo_light.png
-    - docs/images/nf-core-longreadmag_logo_light.png
-    - docs/images/nf-core-longreadmag_logo_dark.png
+    - assets/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
   files_unchanged:
     - .github/CONTRIBUTING.md
     - .prettierignore
     - CODE_OF_CONDUCT.md
-    - assets/nf-core-longreadmag_logo_light.png
+    - assets/nf-core-metagenomeassembly_logo_light.png
     - assets/multiqc_config.yml
-    - docs/images/nf-core-longreadmag_logo_light.png
-    - docs/images/nf-core-longreadmag_logo_dark.png
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
     - .github/workflows/branch.yml
     - .github/workflows/linting_comment.yml
@@ -52,7 +52,7 @@ template:
   description: Construct MAGs from long reads.
   force: false
   is_nfcore: false
-  name: longreadmag
+  name: metagenomeassembly
   org: sanger-tol
   outdir: .
   skip_features:

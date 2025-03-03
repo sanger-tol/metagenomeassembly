@@ -6,7 +6,7 @@
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longreadmag_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
 include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
 include { BINNING                } from '../subworkflows/local/binning'
@@ -22,7 +22,7 @@ include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow LONGREADMAG {
+workflow METAGENOMEASSEMBLY {
     take:
     pacbio_fasta        // channel: pacbio read in from yaml
     assembly            // channel: pre-built metagenome assembly, optional
@@ -183,7 +183,7 @@ workflow LONGREADMAG {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  'sangertol_longreadmag_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            name:  'sangertol_metagenomeassembly_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         )//.set { ch_collated_versions }

@@ -1,14 +1,14 @@
-# sanger-tol/longreadmag
+# sanger-tol/metagenomeassembly
 
 ## Introduction
 
-**sanger-tol/longreadmag** is a bioinformatics pipeline for the assembly and binning of metagenomes
+**sanger-tol/metagenomeassembly** is a bioinformatics pipeline for the assembly and binning of metagenomes
 using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
 <!--  nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
 
-1. Assembles raw reads using ([`metaMDBG`](https://github.com/GaetanBenoitDev/metaMDBG))
+1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG).
 2. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).
 3. Bins the assembly using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), [Bin3C](https://github.com/cerebis/bin3C) (Hi-C binning), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
 4. (optionally) refine the bins using [DAS_Tool](https://github.com/cmks/DAS_Tool) and [MagScoT](https://github.com/ikmb/MAGScoT).
@@ -46,7 +46,7 @@ hic:
 Now, you can run the pipeline using:
 
 ```bash
-nextflow run sanger-tol/longreadmag \
+nextflow run sanger-tol/metagenomeassembly \
    -profile <docker/singularity/.../institute> \
    --input input.yaml \
    --outdir <OUTDIR>
@@ -57,7 +57,7 @@ nextflow run sanger-tol/longreadmag \
 
 ## Credits
 
-sanger-tol/longreadmag was originally written by Jim Downie, Will Eagles, Noah Gettle.
+sanger-tol/metagenomeassembly was originally written by Jim Downie, Will Eagles, Noah Gettle.
 
 <!-- We thank the following people for their extensive assistance in the development of this pipeline: -->
 
@@ -68,7 +68,7 @@ If you would like to contribute to this pipeline, please see the [contributing g
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use sanger-tol/longreadmag for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use sanger-tol/metagenomeassembly for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 

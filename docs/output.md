@@ -1,4 +1,4 @@
-# sanger-tol/longreadmag: Output
+# sanger-tol/metagenomeassembly: Output
 
 ## Introduction
 
@@ -12,7 +12,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Assembly](#assembly) - Metagenomic assembly of raw PacBio HiFi reads.
 - [Assembly QC](#assembly-qc) - QC of metagenome assemblies including statistics and rRNA identification.
-- [Read mapping](#read-mapping) - Contigs and log files from assembly with metaMDBG.
+- [Read mapping](#read-mapping) - Mapping of PacBio HiFi reads and Illumina Hi-C reads to the assembly for coverage estimation and contact map generation.
 - [Binning](#binning) - Binning of total metagenome assemblies into genome bins.
 - [Bin refinement](#bin-refinement) - Refining of genome bins by assessing single-copy gene content.
 - [Bin QC](#bin-refinement) - QC of genome bins including basic statistics, rRNA content assessment, and tRNA annotation.

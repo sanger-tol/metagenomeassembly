@@ -1,6 +1,6 @@
 {
-    "name": "sanger-tol/longreadmag",
-    "homePage": "https://github.com/sanger-tol/longreadmag",
+    "name": "sanger-tol/metagenomeassembly",
+    "homePage": "https://github.com/sanger-tol/metagenomeassembly",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
