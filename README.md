@@ -5,8 +5,9 @@
 **sanger-tol/metagenomeassembly** is a bioinformatics pipeline for the assembly and binning of metagenomes
 using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
-<!--  nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
+![sanger-tol/metagenomeassembly workflow diagram](docs/images/metagenomeassembly.metromap.png)
+
+## Pipeline summary
 
 1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG).
 2. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).

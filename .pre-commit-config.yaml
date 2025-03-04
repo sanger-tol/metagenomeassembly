@@ -11,4 +11,4 @@ repos:
     hooks:
       - id: editorconfig-checker
         alias: ec
-        exclude: .*(\.hmm$|.*\.cm$)
+        exclude: .*(\.hmm$|.*\.cm$|\.drawio)
