@@ -48,6 +48,7 @@ process BIN_SUMMARY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.bin_summary.tsv
+    touch ${prefix}.group_summary.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
