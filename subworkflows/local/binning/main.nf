@@ -38,7 +38,7 @@ workflow BINNING {
         //
         // MODULE: Convert depth to correct format for MaxBin2
         //
-        GAWK_MAXBIN2_DEPTHS(pacbio_depths, [])
+        GAWK_MAXBIN2_DEPTHS(pacbio_depths, "${projectDir}/bin/convert_depths_maxbin2.awk")
         ch_versions = ch_versions.mix(GAWK_MAXBIN2_DEPTHS.out.versions)
 
         ch_maxbin2_input = assemblies
