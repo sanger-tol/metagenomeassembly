@@ -13,7 +13,7 @@ process GAWK {
     val(disable_redirect_output)
 
     output:
-    tuple val(meta), path("${prefix}.${suffix}"), emit: output
+    tuple val(meta), path("*.${suffix}"), emit: output
     path "versions.yml"                         , emit: versions
 
     when:
