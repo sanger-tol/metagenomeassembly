@@ -82,7 +82,7 @@ workflow BIN_QC {
         //
         // MODULE: Summarise tRNA results for each bin
         //
-        GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${projectDir}/bin/trnascan_summary.awk"))
+        GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${projectDir}/bin/trnascan_summary.awk"), false)
         ch_versions = ch_versions.mix(GAWK_TRNASCAN_SUMMARY.out.versions)
 
         ch_trnascan_summary = GAWK_TRNASCAN_SUMMARY.out.output

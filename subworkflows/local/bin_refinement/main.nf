@@ -71,7 +71,7 @@ workflow BIN_REFINEMENT {
         //
         // MODULE: Process HMM output to summarise per-contig
         //
-        GAWK_PROCESS_HMM_TBLOUT(ch_hmm_output, [])
+        GAWK_PROCESS_HMM_TBLOUT(ch_hmm_output, [], false)
         ch_versions = ch_versions.mix(GAWK_PROCESS_HMM_TBLOUT.out.versions)
 
         //
@@ -80,7 +80,8 @@ workflow BIN_REFINEMENT {
         //
         GAWK_MAGSCOT_PROCESS_CONTIG2BIN(
             contig2bin,
-            []
+            [],
+            false
         )
         ch_versions = ch_versions.mix(GAWK_MAGSCOT_PROCESS_CONTIG2BIN.out.versions)
 
@@ -115,7 +116,7 @@ workflow BIN_REFINEMENT {
         //
         // MODULE: Rename bins inside contig2bin files
         //
-        GAWK_RENAME_BINS(ch_refined_contig2bin_raw, [])
+        GAWK_RENAME_BINS(ch_refined_contig2bin_raw, [], false)
         ch_versions = ch_versions.mix(GAWK_RENAME_BINS.out.versions)
         ch_refined_contig2bin = GAWK_RENAME_BINS.out.output
 
