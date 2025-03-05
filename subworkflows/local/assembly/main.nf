@@ -9,6 +9,7 @@ workflow ASSEMBLY {
     main:
     ch_versions   = Channel.empty()
     ch_assemblies = Channel.empty()
+        | mix(assembly)
 
     if(params.enable_metamdbg) {
         //
@@ -26,6 +27,7 @@ workflow ASSEMBLY {
     }
 
     GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
+    ch_assemblies = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
         | map { meta, fasta, unc_size ->
             [ meta + [decompressed_size: unc_size.toInteger()], fasta ]
         }
