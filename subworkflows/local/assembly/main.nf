@@ -1,8 +1,11 @@
-include { METAMDBG_ASM } from '../../../modules/nf-core/metamdbg/asm/main'
+include { METAMDBG_ASM               } from '../../../modules/nf-core/metamdbg/asm/main'
+include { GZIP_GET_DECOMPRESSED_SIZE } from '../../../modules/local/gzip_get_decompressed_size/main'
+include { GUNZIP_GET_DECOMPRESSED_SIZE } from '../../../modules/local/gunzip_get_decompressed_size/main.nf'
 
 workflow ASSEMBLY {
     take:
     hifi_reads
+    assembly
 
     main:
     ch_versions   = Channel.empty()
@@ -22,6 +25,14 @@ workflow ASSEMBLY {
             }
         ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
     }
+
+    GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
+        | map { meta, fasta, unc_size ->
+            [ meta + [decompressed_size: unc_size.toInteger()], fasta ]
+        }
+    ch_versions = ch_versions.mix(GZIP_GET_DECOMPRESSED_SIZE.out.versions)
+
+    ch_assemblies = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
 
     emit:
     assemblies = ch_assemblies

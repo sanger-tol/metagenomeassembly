@@ -18,7 +18,7 @@ workflow BIN_TAXONOMY {
     // Collate all bins together so it operates in a single process.
     ch_bins = bin_sets
         | map { meta, bins ->
-            [ meta - meta.subMap(["assembler", "binner"]), bins]
+            [ meta.subMap("id"), bins]
         }
         | transpose
 
