@@ -117,7 +117,7 @@ workflow BINNING {
     // MODULE: Create contig2bin maps for all output bins
     //
     FASTATOCONTIG2BIN(ch_bins, file("bin/fastatocontig2bin.awk"), false)
-    ch_contig2bin = ch_contig2bin.mix(FASTATOCONTIG2BIN.out.contig2bin)
+    ch_contig2bin = ch_contig2bin.mix(FASTATOCONTIG2BIN.out.output)
     ch_versions = ch_versions.mix(FASTATOCONTIG2BIN.out.versions)
 
     emit:
