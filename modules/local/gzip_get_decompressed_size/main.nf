@@ -16,7 +16,7 @@ process GZIP_GET_DECOMPRESSED_SIZE {
 
     script:
     """
-    uncompressed_size=\${gzip -l --quiet ${file} | awk '{print \$2}'}
+    uncompressed_size=\$(gzip -l --quiet ${file} | awk '{print \$2}')
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
