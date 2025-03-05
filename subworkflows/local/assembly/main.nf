@@ -1,6 +1,5 @@
 include { METAMDBG_ASM               } from '../../../modules/nf-core/metamdbg/asm/main'
 include { GZIP_GET_DECOMPRESSED_SIZE } from '../../../modules/local/gzip_get_decompressed_size/main'
-include { GUNZIP_GET_DECOMPRESSED_SIZE } from '../../../modules/local/gunzip_get_decompressed_size/main.nf'
 
 workflow ASSEMBLY {
     take:
