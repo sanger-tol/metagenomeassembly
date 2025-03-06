@@ -7,9 +7,9 @@ BEGIN { OFS = "\t" }
 BEGINFILE {
     bin = FILENAME
     sub(".*/", "", bin)
-    sub(/\\.[^\\.]+\$/, "", bin)
+    sub(/\.[^\.]+$/, "", bin)
 }
 /^>/ {
-    sub(/>/, "", \$1)
-    print \$1, bin
+    sub(/>/, "", $1)
+    print $1, bin
 }
