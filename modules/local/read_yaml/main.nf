@@ -19,21 +19,6 @@ process READ_YAML {
     // Read input
     def input = readYAML(yaml)
 
-    // Check input types
-    if(!input?.pacbio?.fasta) {
-        error("ERROR: Pacbio reads not provided! Pipeline will not run as there is nothing to do.")
-    }
-    if(input?.hic?.cram && !input?.hic?.enzymes) {
-        error("ERROR: Hi-C files provided but no enzymes!")
-    }
-    if(!input?.assembly?.fasta && !enable_assembly) {
-        error("ERROR: Assembly mode was not enabled, but a pre-existing assembly was not provided!")
-    }
-    if(input?.assembly?.fasta && !input?.assembly?.assembler) {
-        error("ERROR: Assembly FASTA provided but the assembler was not named!")
-    }
-
-
     // Generate meta map
     id          = input.id
     meta        = [id: id]
