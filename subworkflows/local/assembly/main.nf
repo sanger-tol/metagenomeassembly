@@ -28,7 +28,7 @@ workflow ASSEMBLY {
 
     //
     // MODULE: To aid in setting resource requirements, get the decompressed
-    // size of the assembly using gzip -l, and add it to the meta map as 
+    // size of the assembly using gzip -l, and add it to the meta map as
     // meta.decompressed size
     //
     GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
