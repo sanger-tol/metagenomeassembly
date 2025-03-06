@@ -116,7 +116,7 @@ workflow BINNING {
     //
     // MODULE: Create contig2bin maps for all output bins
     //
-    GAWK_FASTATOCONTIG2BIN(ch_bins, file("bin/fastatocontig2bin.awk"), false)
+    GAWK_FASTATOCONTIG2BIN(ch_bins, file("${projectDir}/bin/fastatocontig2bin.awk"), false)
     ch_contig2bin = ch_contig2bin.mix(GAWK_FASTATOCONTIG2BIN.out.output)
     ch_versions = ch_versions.mix(GAWK_FASTATOCONTIG2BIN.out.versions)
 

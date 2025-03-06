@@ -70,7 +70,7 @@ workflow BIN_TAXONOMY {
             //
             // MODULE: Extract the NCBI names from the GTDB-Tk summary file
             //
-            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_CLASSIFYWF.out.ncbi, file("${baseDir}/bin/extract_ncbi_name.awk"), false)
+            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_CLASSIFYWF.out.ncbi, file("${projectDir}/bin/extract_ncbi_name.awk"), false)
             ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
             ch_gtdb_ncbi_for_taxonkit = GAWK_EXTRACT_NCBI_NAMES.out.output

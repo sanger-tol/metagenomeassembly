@@ -26,6 +26,11 @@ workflow ASSEMBLY {
         ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
     }
 
+    //
+    // MODULE: To aid in setting resource requirements, get the decompressed
+    // size of the assembly using gzip -l, and add it to the meta map as 
+    // meta.decompressed size
+    //
     GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
     ch_assemblies_extrameta = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
         | map { meta, fasta, unc_size ->

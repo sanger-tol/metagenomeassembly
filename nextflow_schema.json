@@ -63,7 +63,7 @@
                 "rfam_rrna_cm": {
                     "type": "string",
                     "description": "Covariance model for rRNA preditiction from RFAM.",
-                    "default": "${baseDir}/assets/rRNA.cm",
+                    "default": "${projectDir}/assets/rRNA.cm",
                     "format": "file-path",
                     "pattern": "^\\S+\\.cm$"
                 }
@@ -167,14 +167,14 @@
                 "hmm_gtdb_pfam": {
                     "type": "string",
                     "description": "Path to the GTDB r207 Pfam HMM database.",
-                    "default": "${baseDir}/assets/gtdbtk_rel207_Pfam-A.hmm",
+                    "default": "${projectDir}/assets/gtdbtk_rel207_Pfam-A.hmm",
                     "pattern": "^\\S+\\.hmm$",
                     "format": "file-path"
                 },
                 "hmm_gtdb_tigrfam": {
                     "type": "string",
                     "description": "Path to the GTDB r207 TigrFam HMM database.",
-                    "default": "${baseDir}/assets/gtdbtk_rel207_tigrfam.hmm",
+                    "default": "${projectDir}/assets/gtdbtk_rel207_tigrfam.hmm",
                     "pattern": "^\\S+\\.hmm$",
                     "format": "file-path"
                 }
