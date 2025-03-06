@@ -14,6 +14,6 @@ NR == 1 {
 }
 NR > 1 {
     for(i=4; i<=NF; i+=2) {
-        print $1, $(i) > file[i] "maxbin2.depth.tsv"
+        print $1, $(i) > file[i] ".maxbin2.depth.tsv"
     }
 }
