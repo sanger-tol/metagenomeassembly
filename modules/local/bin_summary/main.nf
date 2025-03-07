@@ -40,7 +40,7 @@ process BIN_SUMMARY {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         R: \$(Rscript -e 'cat(paste0(R.Version()[c("major","minor")], collapse = "."))')
-        tidyverse: \$(Rscript -e 'cat(packageVersion("tidyverse"))')
+        tidyverse: \$(Rscript -e 'cat(as.character(packageVersion("tidyverse")))')
     END_VERSIONS
     """
 

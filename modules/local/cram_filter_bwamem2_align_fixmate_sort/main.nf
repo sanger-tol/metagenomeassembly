@@ -3,8 +3,8 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
     label "process_high"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-1a6fe65bd6674daba65066aa796ed8f5e8b4687b:688e175eb0db54de17822ba7810cc9e20fa06dd5-0' :
-        'biocontainers/mulled-v2-1a6fe65bd6674daba65066aa796ed8f5e8b4687b:688e175eb0db54de17822ba7810cc9e20fa06dd5-0' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/64/64331f1a8dcc5b05c0d857da127ca7ac64002c9c6a4daeec61f3ac39b0f7f0b4/data' :
+        'community.wave.seqera.io/library/bwa-mem2_samtools_staden_io_lib:3663e5a9df52096b' }"
 
     input:
     tuple val(meta), path(cram), path(crai), val(chunkn), val(range), path(index), path(reference)
@@ -39,7 +39,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
     "${task.process}":
         staden_io_lib: \$(io_lib-config --version 2>&1)
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//' )
-        bwa-mem2: \$(bwa-mem2 --version | sed 's/bwa-mem2 //g')
+        bwamem2: \$(echo \$(bwa-mem2 version 2>&1) | sed 's/.* //')
     END_VERSIONS
     """
 

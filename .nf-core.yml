@@ -7,6 +7,7 @@ lint:
     - assets/sendmail_template.txt
     - assets/email_template.txt
     - assets/multiqc_config.yml
+    - assets/methods_description_template.yml
     - CODE_OF_CONDUCT.md
     - assets/nf-core-metagenomeassembly_logo_light.png
     - docs/images/nf-core-metagenomeassembly_logo_light.png
