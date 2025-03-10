@@ -48,7 +48,7 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 | bwamem2/index                          | bwa-mem2                          | -            | 2.2.1               |
 | checkm2_predict                        | checkm2                           | -            | 1.0.2               |
 | checkm2_databasedownload               | aria2                             | -            | 1.36.0              |
-| contig2bintofasta                      | seqkit                            | -            | 2.8.0               |
+| contig2bintofasta                      | seqkit                            | -            | 2.9.0               |
 | coverm/contig                          | coverm                            | -            | 0.7                 |
 | cram_filter_bwamem2_align_fixmate_sort | staden_io_lib, samtools, bwa-mem2 | -            | 1.15.0, 1.21, 2.2.1 |
 | dastool/dastool                        | dastool                           | -            | 1.1.7               |
