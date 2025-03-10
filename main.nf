@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sanger-tol/longreadmag
+    sanger-tol/metagenomeassembly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/sanger-tol/longreadmag
+    Github : https://github.com/sanger-tol/metagenomeassembly
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,9 +13,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { LONGREADMAG  } from './workflows/longreadmag'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_longreadmag_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_longreadmag_pipeline'
+include { METAGENOMEASSEMBLY  } from './workflows/metagenomeassembly'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_long
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow SANGERTOL_LONGREADMAG {
+workflow SANGERTOL_METAGENOMEASSEMBLY {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -35,11 +35,9 @@ workflow SANGERTOL_LONGREADMAG {
     //
     // WORKFLOW: Run pipeline
     //
-    LONGREADMAG (
+    METAGENOMEASSEMBLY (
         samplesheet
     )
-    emit:
-    multiqc_report = LONGREADMAG.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,16 +63,19 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    SANGERTOL_LONGREADMAG (
+    SANGERTOL_METAGENOMEASSEMBLY (
         PIPELINE_INITIALISATION.out.samplesheet
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
     PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        SANGERTOL_LONGREADMAG.out.multiqc_report
+        params.hook_url,
     )
 }
 

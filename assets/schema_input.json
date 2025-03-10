@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/longreadmag/master/assets/schema_input.json",
-    "title": "sanger-tol/longreadmag pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/sanger-tol/metagenomeassembly/master/assets/schema_input.json",
+    "title": "sanger-tol/metagenomeassembly pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {

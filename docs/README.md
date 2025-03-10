@@ -1,6 +1,6 @@
-# sanger-tol/longreadmag: Documentation
+# sanger-tol/metagenomeassembly: Documentation
 
-The sanger-tol/longreadmag documentation is split into the following pages:
+The sanger-tol/metagenomeassembly documentation is split into the following pages:
 
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.

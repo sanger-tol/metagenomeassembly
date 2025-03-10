@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the sanger-tol/longreadmag pipeline
+description: Suggest an idea for the sanger-tol/metagenomeassembly pipeline
 labels: enhancement
 body:
   - type: textarea
