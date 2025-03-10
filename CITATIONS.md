@@ -72,7 +72,7 @@
 
 - [Metator](https://github.com/koszullab/metaTOR/)
 
-> Baudry, L., Foutel-Rodier, T., Thierry, A., Koszul, R., Marbouty, M., 2019. MetaTOR: A Computational Pipeline to Recover High-Quality Metagenomic Bins From Mammalian Gut Proximity-Ligation (meta3C) Libraries. Front. Genet. 10. https://doi.org/10.3389/fgene.2019.00753
+  > Baudry, L., Foutel-Rodier, T., Thierry, A., Koszul, R., Marbouty, M., 2019. MetaTOR: A Computational Pipeline to Recover High-Quality Metagenomic Bins From Mammalian Gut Proximity-Ligation (meta3C) Libraries. Front. Genet. 10. https://doi.org/10.3389/fgene.2019.00753
 
 - [minimap2](https://github.com/lh3/minimap2)
 
