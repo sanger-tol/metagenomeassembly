@@ -58,12 +58,9 @@ template:
   outdir: .
   skip_features:
     - igenomes
-    - github_badges
     - codespaces
     - fastqc
-    - email
     - adaptivecard
-    - slackreport
     - seqera_platform
     - multiqc
   version: 1.0.0dev
