@@ -10,9 +10,9 @@
 
 ## Pipeline tools
 
-- [Aria2](https://aria2.github.io/)
+- [Aria2](https://aria2.github.io/)
 
-> aria2 [WWW Document], n.d. URL https://aria2.github.io/ (accessed 3.7.25).
+  > aria2 [WWW Document], n.d. URL https://aria2.github.io/ (accessed 3.7.25).
 
 - [bin3C](https://github.com/cerebis/bin3C)
 
@@ -23,11 +23,12 @@
   > Vasimuddin, Md., Misra, S., Li, H., Aluru, S., 2019. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems, in: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). Presented at the 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS), pp. 314–324. https://doi.org/10.1109/IPDPS.2019.00041
 
 - [CheckM2](https://github.com/chklovski/CheckM2)
+
   > Chklovski, A., Parks, D.H., Woodcroft, B.J., Tyson, G.W., 2023. CheckM2: a rapid, scalable and accurate tool for assessing microbial genome quality using machine learning. Nat Methods 20, 1203–1212. https://doi.org/10.1038/s41592-023-01940-w
 
-- [Coverm](https://github.com/wwood/CoverM)
+- [Coverm](https://github.com/wwood/CoverM)
 
-> Aroney, S.T.N., Newell, R.J.P., Nissen, J.N., Camargo, A.P., Tyson, G.W., Woodcroft, B.J., 2025. CoverM: Read alignment statistics for metagenomics. https://doi.org/10.48550/arXiv.2501.11217
+  > Aroney, S.T.N., Newell, R.J.P., Nissen, J.N., Camargo, A.P., Tyson, G.W., Woodcroft, B.J., 2025. CoverM: Read alignment statistics for metagenomics. https://doi.org/10.48550/arXiv.2501.11217
 
 - [DAS_Tool](https://github.com/cmks/DAS_Tool)
 
@@ -66,9 +67,10 @@
   > Kang, D.D., Li, F., Kirton, E., Thomas, A., Egan, R., An, H., Wang, Z., 2019. MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies. PeerJ 7, e7359. https://doi.org/10.7717/peerj.7359
 
 - [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG)
+
   > Benoit, G., Raguideau, S., James, R., Phillippy, A.M., Chikhi, R., Quince, C., 2024. High-quality metagenome assembly from long accurate reads with metaMDBG. Nat Biotechnol 42, 1378–1383. https://doi.org/10.1038/s41587-023-01983-6
 
-- [Metator](https://github.com/koszullab/metaTOR/)
+- [Metator](https://github.com/koszullab/metaTOR/)
 
 > Baudry, L., Foutel-Rodier, T., Thierry, A., Koszul, R., Marbouty, M., 2019. MetaTOR: A Computational Pipeline to Recover High-Quality Metagenomic Bins From Mammalian Gut Proximity-Ligation (meta3C) Libraries. Front. Genet. 10. https://doi.org/10.3389/fgene.2019.00753
 
@@ -101,11 +103,12 @@
   > Shen, W., Ren, H., 2021. TaxonKit: A practical and efficient NCBI taxonomy toolkit. Journal of Genetics and Genomics, Special issue on Microbiome 48, 844–850. https://doi.org/10.1016/j.jgg.2021.03.006
 
 - [tidyverse](https://www.tidyverse.org/)
+
   > Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L.D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T.L., Miller, E., Bache, S.M., Müller, K., Ooms, J., Robinson, D., Seidel, D.P., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the tidyverse. Journal of Open Source Software 4, 1686. https://doi.org/10.21105/joss.01686
 
-- [tRNAScan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE)
+- [tRNAScan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE)
 
-> Chan, P.P., Lin, B.Y., Mak, A.J., Lowe, T.M., 2021. tRNAscan-SE 2.0: improved detection and functional classification of transfer RNA genes. Nucleic Acids Research 49, 9077–9096. https://doi.org/10.1093/nar/gkab688
+  > Chan, P.P., Lin, B.Y., Mak, A.J., Lowe, T.M., 2021. tRNAscan-SE 2.0: improved detection and functional classification of transfer RNA genes. Nucleic Acids Research 49, 9077–9096. https://doi.org/10.1093/nar/gkab688
 
 ## Software packaging/containerisation tools
 
