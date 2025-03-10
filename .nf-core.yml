@@ -3,9 +3,6 @@ lint:
     - .github/ISSUE_TEMPLATE/config.yml
     - conf/igenomes_ignored.config
     - conf/igenomes.config
-    - assets/email_template.html
-    - assets/sendmail_template.txt
-    - assets/email_template.txt
     - assets/multiqc_config.yml
     - assets/methods_description_template.yml
     - CODE_OF_CONDUCT.md
@@ -20,7 +17,6 @@ lint:
     - CODE_OF_CONDUCT.md
     - assets/nf-core-metagenomeassembly_logo_light.png
     - assets/multiqc_config.yml
-    - assets/sendmail_template.txt
     - docs/images/nf-core-metagenomeassembly_logo_light.png
     - docs/images/nf-core-metagenomeassembly_logo_dark.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
