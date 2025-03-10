@@ -63,4 +63,5 @@ template:
     - adaptivecard
     - seqera_platform
     - multiqc
+    - rocrate
   version: 1.0.0dev
