@@ -11,12 +11,22 @@ process GZIP_GET_DECOMPRESSED_SIZE {
     tuple val(meta), path(file)
 
     output:
-    tuple val(meta), path(file), env('uncompressed_size'), emit: fasta_with_size
-    path("versions.yml")                                 , emit: versions
+    tuple val(meta), path(file), env('size'), emit: fasta_with_size
+    path("versions.yml")                    , emit: versions
 
     script:
     """
-    uncompressed_size=\$(gzip -l --quiet ${file} | awk '{print \$2}')
+    if [ gzip -t ${file} ]; then
+        uncompressed_size=\$(gzip -l --quiet ${file} | awk '{print \$2}')
+    else
+        uncompressed_size=0
+    fi
+
+    if [ "\${uncompressed_size}" -ne "0" ]; then
+        size="\$uncompressed_size"
+    else
+        size=\$(wc -c < "${file}")
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
