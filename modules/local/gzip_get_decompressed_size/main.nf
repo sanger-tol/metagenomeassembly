@@ -16,7 +16,7 @@ process GZIP_GET_DECOMPRESSED_SIZE {
 
     script:
     """
-    if [ gzip -t ${file} ]; then
+    if gzip -t ${file}; then
         uncompressed_size=\$(gzip -l --quiet ${file} | awk '{print \$2}')
     else
         uncompressed_size=0
