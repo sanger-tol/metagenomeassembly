@@ -36,14 +36,15 @@ workflow METAGENOMEASSEMBLY {
 
     main:
     ch_versions = Channel.empty()
-    ch_assemblies = Channel.empty()
+    ch_assemblies_raw = Channel.empty()
+        | mix(assembly)
 
     if(params.enable_assembly) {
         // Only provide reads to ASSEMBLY subwf if ch_assemblies is
         // empty - cross reads with assembly channel, which gets
         // false if empty, and filter to just keep false entries
         ch_assembly_input = pacbio_fasta
-            | combine(assembly.ifEmpty([[:], false]))
+            | combine(ch_assemblies_raw.ifEmpty([[:], false]))
             | filter { it[3] == false }
             | map { meta_reads, reads, _meta_assembly, _assembly ->
                 [ meta_reads, reads ]
@@ -51,19 +52,20 @@ workflow METAGENOMEASSEMBLY {
         //
         // SUBWORKFLOW: Assemble PacBio hifi reads
         //
-        ASSEMBLY(ch_assembly_input, assembly)
+        ASSEMBLY(ch_assembly_input)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
-        ch_assemblies = ch_assemblies.mix(ASSEMBLY.out.assemblies)
+        ch_assemblies = ch_assemblies_raw.mix(ASSEMBLY.out.assemblies)
     }
 
     //
     // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
     // check contig circularity
     //
-    ASSEMBLY_QC(ch_assemblies, rfam_rrna_cm)
+    ASSEMBLY_QC(ch_assemblies_raw, rfam_rrna_cm)
     ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
+    ch_assemblies = ASSEMBLY_QC.out.assemblies
 
     //
     // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C

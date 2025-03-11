@@ -1,15 +1,12 @@
 include { METAMDBG_ASM               } from '../../../modules/nf-core/metamdbg/asm/main'
-include { GZIP_GET_DECOMPRESSED_SIZE } from '../../../modules/local/gzip_get_decompressed_size/main'
 
 workflow ASSEMBLY {
     take:
     hifi_reads
-    assembly
 
     main:
     ch_versions   = Channel.empty()
     ch_assemblies = Channel.empty()
-        | mix(assembly)
 
     if(params.enable_metamdbg) {
         //
@@ -26,19 +23,7 @@ workflow ASSEMBLY {
         ch_assemblies = ch_assemblies.mix(ch_metamdbg_assemblies)
     }
 
-    //
-    // MODULE: To aid in setting resource requirements, get the decompressed
-    // size of the assembly using gzip -l, and add it to the meta map as
-    // meta.decompressed size
-    //
-    GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
-    ch_assemblies_extrameta = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
-        | map { meta, fasta, size ->
-            [ meta + [size: size.toLong()], fasta ]
-        }
-    ch_versions = ch_versions.mix(GZIP_GET_DECOMPRESSED_SIZE.out.versions)
-
     emit:
-    assemblies = ch_assemblies_extrameta
+    assemblies = ch_assemblies
     versions   = ch_versions
 }

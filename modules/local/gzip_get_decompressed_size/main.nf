@@ -11,8 +11,8 @@ process GZIP_GET_DECOMPRESSED_SIZE {
     tuple val(meta), path(file)
 
     output:
-    tuple val(meta), path(file), env('size'), emit: fasta_with_size
-    path("versions.yml")                    , emit: versions
+    tuple val(meta), env('size'), emit: fasta_with_size
+    path("versions.yml")        , emit: versions
 
     script:
     """
