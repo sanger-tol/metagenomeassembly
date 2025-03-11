@@ -36,7 +36,7 @@ process GZIP_GET_DECOMPRESSED_SIZE {
 
     stub:
     """
-    uncompressed_size=10000
+    size=10000
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
