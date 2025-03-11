@@ -54,7 +54,7 @@ workflow METAGENOMEASSEMBLY {
         //
         ASSEMBLY(ch_assembly_input)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
-        
+
         ch_assemblies_raw = ch_assemblies_raw.mix(ASSEMBLY.out.assemblies)
     }
 
