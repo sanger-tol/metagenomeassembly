@@ -60,14 +60,9 @@ workflow ASSEMBLY_QC {
             [ meta, row.sum_len, row.N50 ]
         }
 
-    ch_size = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
-        | map { meta, fasta, size ->
-            [ meta + [size: size.toLong()], fasta ]
-        }
-
     ch_assemblies = assemblies
         | combine(ch_stats, by: 0)
-        | combine(ch_size, by: 0)
+        | combine(GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size, by: 0)
         | map { meta, assembly, len, n50, size ->
             def meta_new = meta + [ length: len.toLong(), n50: n50.toLong(), size: size.toLong() ]
             [ meta_new, assembly ]
