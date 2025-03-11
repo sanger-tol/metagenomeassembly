@@ -34,7 +34,7 @@ workflow ASSEMBLY {
     GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
     ch_assemblies_extrameta = GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size
         | map { meta, fasta, size ->
-            [ meta + [size: size], fasta ]
+            [ meta + [size: size.toLong()], fasta ]
         }
     ch_versions = ch_versions.mix(GZIP_GET_DECOMPRESSED_SIZE.out.versions)
 
