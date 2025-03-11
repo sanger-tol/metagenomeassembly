@@ -36,25 +36,26 @@ workflow METAGENOMEASSEMBLY {
 
     main:
     ch_versions = Channel.empty()
-    ch_assemblies_raw = Channel.empty()
-        | mix(assembly)
+    ch_assemblies_raw = assemblies
 
     if(params.enable_assembly) {
         // Only provide reads to ASSEMBLY subwf if ch_assemblies is
         // empty - cross reads with assembly channel, which gets
         // false if empty, and filter to just keep false entries
         ch_assembly_input = pacbio_fasta
-            | combine(ch_assemblies_raw.ifEmpty([[:], false]))
+            | combine(assemblies.ifEmpty([[:], false]))
             | filter { it[3] == false }
             | map { meta_reads, reads, _meta_assembly, _assembly ->
                 [ meta_reads, reads ]
             }
+
         //
         // SUBWORKFLOW: Assemble PacBio hifi reads
         //
         ASSEMBLY(ch_assembly_input)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
-        ch_assemblies = ch_assemblies_raw.mix(ASSEMBLY.out.assemblies)
+        
+        ch_assemblies_raw = ch_assemblies_raw.mix(ASSEMBLY.out.assemblies)
     }
 
     //
