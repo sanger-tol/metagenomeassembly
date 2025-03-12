@@ -18,7 +18,7 @@ workflow BIN_QC {
 
     ch_genome_stats_input = bin_sets
         | map {meta, bins ->
-            def meta_join = meta - meta.subMap("binner")
+            def meta_join = meta.subMap(["id", "assembler"])
             [ meta_join, meta, bins ]
         }
         | combine(circular_list, by: 0)
@@ -93,7 +93,7 @@ workflow BIN_QC {
     if(params.enable_rrna_prediction) {
         ch_bin_rrna_input = contig2bin
             | map { meta, c2b ->
-                def meta_join = meta - meta.subMap("binner")
+                def meta_join = meta.subMap(["id", "assembler"])
                 [ meta_join, meta, c2b ]
             }
             | combine(assembly_rrna_tbl, by: 0)
