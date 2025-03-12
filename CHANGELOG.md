@@ -9,6 +9,8 @@ Initial release of sanger-tol/metagenomeassembly, created with the [nf-core](htt
 
 ### `Added`
 
+All added by @prototaxites, reviewed by @DLBPointon, @weaglesBio, @ksenia-krasheninnikova:
+
 - Raw assembly of PacBio reads with metaMDBG.
 - Mapping of PacBio reads to assembly with minimap2
 - Estimation of contig mean coverages with coverm

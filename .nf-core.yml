@@ -11,6 +11,7 @@ lint:
     - docs/images/nf-core-metagenomeassembly_logo_dark.png
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
+    - ro-crate-metadata.json
   files_unchanged:
     - .github/CONTRIBUTING.md
     - .prettierignore
@@ -23,7 +24,8 @@ lint:
     - .github/workflows/branch.yml
     - .github/workflows/linting_comment.yml
     - .github/workflows/linting.yml
-  multiqc_config: False
+    - ro-crate-metadata.json
+  multiqc_config: false
   nextflow_config:
     - process.cpus
     - process.memory
@@ -61,4 +63,4 @@ template:
     - seqera_platform
     - multiqc
     - rocrate
-  version: 1.0.0dev
+  version: 1.0.0
