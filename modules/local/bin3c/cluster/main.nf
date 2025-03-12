@@ -45,4 +45,24 @@ process BIN3C_CLUSTER {
         bgzip: \$( bgzip --version | grep bgzip | sed 's/bgzip (htslib) //' )
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.infomap.log
+    touch ${prefix}.cluster_plot.png
+    touch ${prefix}.cluster_report.csv
+    touch ${prefix}.clustering.mcl
+    echo "" | gzip > ${prefix}.clustering.p.gz
+    touch ${prefix}.cm_graph.edges
+    touch ${prefix}.cm_graph.tree
+    echo "" | gzip > ${prefix}.CL01.fa.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        bin3c: \$( bin3C --version | grep bin3C | sed 's/bin3C //' )
+        gzip: \$( gzip --version | grep gzip | sed 's/gzip //' )
+        bgzip: \$( bgzip --version | grep bgzip | sed 's/bgzip (htslib) //' )
+    END_VERSIONS
+    """
 }

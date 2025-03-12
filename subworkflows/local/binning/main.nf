@@ -1,5 +1,5 @@
-include { BIN3C_MKMAP                    } from '../../../modules/local/bin3c/mkmap/main.nf'
-include { BIN3C_CLUSTER                  } from '../../../modules/local/bin3c/cluster/main.nf'
+include { BIN3C_MKMAP                    } from '../../../modules/local/bin3c/mkmap/main'
+include { BIN3C_CLUSTER                  } from '../../../modules/local/bin3c/cluster/main'
 include { MAXBIN2                        } from '../../../modules/nf-core/maxbin2/main'
 include { GAWK as GAWK_FASTATOCONTIG2BIN } from '../../../modules/nf-core/gawk/main'
 include { GAWK as GAWK_MAXBIN2_DEPTHS    } from '../../../modules/nf-core/gawk/main'

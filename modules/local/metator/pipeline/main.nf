@@ -63,7 +63,7 @@ process METATOR_PIPELINE {
     touch bin_summary.txt
     touch binning.txt
     mkdir bins
-    touch bins/${prefix}_metator_1.fa
+    echo "" | gzip > bins/${prefix}_metator_1.fa.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
