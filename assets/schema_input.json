@@ -1,0 +1,71 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/test/test/master/assets/schema_input.json",
+    "title": "Test schema for samplesheets",
+    "description": "Schema for the file provided with params.input",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "pacbio": {
+            "type": "object",
+            "properties": {
+                "fasta": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "file-path",
+                        "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                        "exists": true
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["fasta"]
+        },
+        "hic": {
+            "type": "object",
+            "properties": {
+                "cram": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "file-path",
+                        "pattern": "^.*\\.cram$",
+                        "exists": true
+                    },
+                    "uniqueItems": true
+                },
+                "enzymes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "dependentRequired": {
+                "cram": ["enzymes"]
+            }
+        },
+        "assembly": {
+            "type": "object",
+            "properties": {
+                "fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                    "exists": true
+                },
+                "assembler": {
+                    "type": "string"
+                }
+            },
+            "dependentRequired": {
+                "fasta": ["assembler"]
+            }
+        }
+    },
+    "required": ["id", "pacbio"]
+}

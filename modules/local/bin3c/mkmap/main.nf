@@ -41,7 +41,7 @@ process BIN3C_MKMAP {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.contact_map.p.gz
+    echo "" | gzip > ${prefix}.contact_map.p.gz
     touch ${prefix}.bin3C.log
 
     cat <<-END_VERSIONS > versions.yml

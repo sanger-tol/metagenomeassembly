@@ -1,11 +1,11 @@
-include { BIN3C_MKMAP                 } from '../../../modules/local/bin3c/mkmap/main.nf'
-include { BIN3C_CLUSTER               } from '../../../modules/local/bin3c/cluster/main.nf'
-include { FASTATOCONTIG2BIN           } from '../../../modules/local/fastatocontig2bin/main.nf'
-include { MAXBIN2                     } from '../../../modules/nf-core/maxbin2/main'
-include { GAWK as GAWK_MAXBIN2_DEPTHS } from '../../../modules/nf-core/gawk/main'
-include { METABAT2_METABAT2           } from '../../../modules/nf-core/metabat2/metabat2/main'
-include { METATOR_PIPELINE            } from '../../../modules/local/metator/pipeline/main'
-include { METATOR_PROCESS_INPUT_BAM   } from '../../../modules/local/metator/process_input_bam/main'
+include { BIN3C_MKMAP                    } from '../../../modules/local/bin3c/mkmap/main'
+include { BIN3C_CLUSTER                  } from '../../../modules/local/bin3c/cluster/main'
+include { MAXBIN2                        } from '../../../modules/nf-core/maxbin2/main'
+include { GAWK as GAWK_FASTATOCONTIG2BIN } from '../../../modules/nf-core/gawk/main'
+include { GAWK as GAWK_MAXBIN2_DEPTHS    } from '../../../modules/nf-core/gawk/main'
+include { METABAT2_METABAT2              } from '../../../modules/nf-core/metabat2/metabat2/main'
+include { METATOR_PIPELINE               } from '../../../modules/local/metator/pipeline/main'
+include { METATOR_PROCESS_INPUT_BAM      } from '../../../modules/local/metator/process_input_bam/main'
 
 workflow BINNING {
     take:
@@ -38,7 +38,7 @@ workflow BINNING {
         //
         // MODULE: Convert depth to correct format for MaxBin2
         //
-        GAWK_MAXBIN2_DEPTHS(pacbio_depths, [])
+        GAWK_MAXBIN2_DEPTHS(pacbio_depths, "${projectDir}/bin/convert_depths_maxbin2.awk", true)
         ch_versions = ch_versions.mix(GAWK_MAXBIN2_DEPTHS.out.versions)
 
         ch_maxbin2_input = assemblies
@@ -116,9 +116,9 @@ workflow BINNING {
     //
     // MODULE: Create contig2bin maps for all output bins
     //
-    FASTATOCONTIG2BIN(ch_bins, 'fa')
-    ch_contig2bin = ch_contig2bin.mix(FASTATOCONTIG2BIN.out.contig2bin)
-    ch_versions = ch_versions.mix(FASTATOCONTIG2BIN.out.versions)
+    GAWK_FASTATOCONTIG2BIN(ch_bins, file("${projectDir}/bin/fastatocontig2bin.awk"), false)
+    ch_contig2bin = ch_contig2bin.mix(GAWK_FASTATOCONTIG2BIN.out.output)
+    ch_versions = ch_versions.mix(GAWK_FASTATOCONTIG2BIN.out.versions)
 
     emit:
     bins       = ch_bins

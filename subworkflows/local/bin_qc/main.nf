@@ -18,7 +18,7 @@ workflow BIN_QC {
 
     ch_genome_stats_input = bin_sets
         | map {meta, bins ->
-            def meta_join = meta - meta.subMap("binner")
+            def meta_join = meta.subMap(["id", "assembler"])
             [ meta_join, meta, bins ]
         }
         | combine(circular_list, by: 0)
@@ -34,7 +34,7 @@ workflow BIN_QC {
         // Collate all bins together so CheckM2 operates in a single process.
         ch_bins_for_checkm = bin_sets
             | map { meta, bins ->
-                [ meta - meta.subMap(["assembler", "binner"]), bins]
+                [ meta.subMap("id"), bins]
             }
             | transpose
             | groupTuple(by: 0)
@@ -76,13 +76,13 @@ workflow BIN_QC {
         ch_versions = ch_versions.mix(TRNASCAN_SE.out.versions)
 
         ch_trna_tsvs = TRNASCAN_SE.out.tsv
-            | map { meta, tsv -> [ meta.subMap(["id", "assembler", "binner"]), tsv ] }
+            | map { meta, tsv -> [ meta - meta.subMap("binid"), tsv ] }
             | groupTuple(by: 0)
 
         //
         // MODULE: Summarise tRNA results for each bin
         //
-        GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${baseDir}/bin/trnascan_summary.awk"))
+        GAWK_TRNASCAN_SUMMARY(ch_trna_tsvs, file("${projectDir}/bin/trnascan_summary.awk"), false)
         ch_versions = ch_versions.mix(GAWK_TRNASCAN_SUMMARY.out.versions)
 
         ch_trnascan_summary = GAWK_TRNASCAN_SUMMARY.out.output
@@ -93,7 +93,7 @@ workflow BIN_QC {
     if(params.enable_rrna_prediction) {
         ch_bin_rrna_input = contig2bin
             | map { meta, c2b ->
-                def meta_join = meta - meta.subMap("binner")
+                def meta_join = meta.subMap(["id", "assembler"])
                 [ meta_join, meta, c2b ]
             }
             | combine(assembly_rrna_tbl, by: 0)

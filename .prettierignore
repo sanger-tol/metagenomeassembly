@@ -1,3 +1,4 @@
+email_template.html
 adaptivecard.json
 slackreport.json
 .nextflow*
@@ -9,4 +10,3 @@ testing/
 testing*
 *.pyc
 bin/
-ro-crate-metadata.json

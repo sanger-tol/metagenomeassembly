@@ -33,7 +33,7 @@
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "caab1314ca62679b629da4c79afa9a4cab2bb8ee",
+                        "git_sha": "102e86c93832f5239990b2fa0f59db3b85c83ed3",
                         "installed_by": ["modules"]
                     },
                     "gtdbtk/classifywf": {

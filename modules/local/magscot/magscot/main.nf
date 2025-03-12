@@ -39,4 +39,16 @@ process MAGSCOT_MAGSCOT {
         magscot: 1.1
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${prefix}.MAGScoT.scores.out
+    touch ${prefix}.MAGScoT.refined.out
+    touch ${prefix}.MAGScoT.refined.contig_to_bin.out
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        magscot: 1.1
+    END_VERSIONS
+    """
 }

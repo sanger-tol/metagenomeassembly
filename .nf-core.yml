@@ -3,10 +3,8 @@ lint:
     - .github/ISSUE_TEMPLATE/config.yml
     - conf/igenomes_ignored.config
     - conf/igenomes.config
-    - assets/email_template.html
-    - assets/sendmail_template.txt
-    - assets/email_template.txt
     - assets/multiqc_config.yml
+    - assets/methods_description_template.yml
     - CODE_OF_CONDUCT.md
     - assets/nf-core-metagenomeassembly_logo_light.png
     - docs/images/nf-core-metagenomeassembly_logo_light.png
@@ -57,12 +55,10 @@ template:
   outdir: .
   skip_features:
     - igenomes
-    - github_badges
     - codespaces
     - fastqc
-    - email
     - adaptivecard
-    - slackreport
     - seqera_platform
     - multiqc
+    - rocrate
   version: 1.0.0dev

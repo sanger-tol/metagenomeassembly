@@ -1,4 +1,4 @@
-include { METAMDBG_ASM } from '../../../modules/nf-core/metamdbg/asm/main'
+include { METAMDBG_ASM               } from '../../../modules/nf-core/metamdbg/asm/main'
 
 workflow ASSEMBLY {
     take:

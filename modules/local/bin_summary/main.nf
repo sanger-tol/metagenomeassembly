@@ -40,7 +40,7 @@ process BIN_SUMMARY {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         R: \$(Rscript -e 'cat(paste0(R.Version()[c("major","minor")], collapse = "."))')
-        tidyverse: \$(Rscript -e 'cat(packageVersion("tidyverse"))')
+        tidyverse: \$(Rscript -e 'cat(as.character(packageVersion("tidyverse")))')
     END_VERSIONS
     """
 
@@ -48,11 +48,12 @@ process BIN_SUMMARY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.bin_summary.tsv
+    touch ${prefix}.group_summary.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         R: \$(Rscript -e 'cat(paste0(R.Version()[c("major","minor")], collapse = "."))')
-        tidyverse: \$(Rscript -e 'cat(packageVersion("tidyverse"))')
+        tidyverse: \$(Rscript -e 'cat(as.character(packageVersion("tidyverse")))')
     END_VERSIONS
     """
 }
