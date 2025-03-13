@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: sanger-tol/metagenomeassembly
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jim
+    family-names: Downie
+    affiliation: Wellcome Sanger Institute
+    orcid: "https://orcid.org/0000-0002-7175-0533"
+  - given-names: Will
+    family-names: Eagles
+    affiliation: Wellcome Sanger Institute
+    orcid: "https://orcid.org/0009-0006-9956-0404"
+  - given-names: Noah
+    family-names: Gettle
+    affiliation: Wellcome Sanger Institute
+    orcid: "https://orcid.org/0000-0003-3407-4086"
+identifiers:
+  - type: doi
+    value: TODO
+repository-code: "https://github.com/sanger-tol/metagenomeassembly"
+license: MIT
+version: 1.0.0
+date-released: TODO
