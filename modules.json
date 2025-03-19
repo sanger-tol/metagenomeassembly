@@ -12,14 +12,13 @@
                     },
                     "checkm2/databasedownload": {
                         "branch": "master",
-                        "git_sha": "ad43b5d5d464698d11b599b004adc1c00615ef1b",
+                        "git_sha": "6b8947dd401a58b08ca19f1952dc1182d66e4d89",
                         "installed_by": ["modules"]
                     },
                     "checkm2/predict": {
                         "branch": "master",
-                        "git_sha": "09681763f3d9c772b26599d75b669957a04b1d33",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/checkm2/predict/checkm2-predict.diff"
+                        "git_sha": "6b8947dd401a58b08ca19f1952dc1182d66e4d89",
+                        "installed_by": ["modules"]
                     },
                     "coverm/contig": {
                         "branch": "master",

@@ -17,7 +17,16 @@ NR > 1 {
     n_elem = split($3, names, /;?[[:alpha:]]__/)
     for(i = n_elem; i > 1; i--) {
         if(names[i] != "") {
-            print $1, $2, $3, names[i]
+            if(i == 7)  {
+                name_addendum = ""
+            } else if(i == 6) {
+                name_addendum = " sp."
+            }
+            else {
+                name_addendum = " bacterium"
+            }
+
+            print $1, $2, $3, names[i] name_addendum
             break
         }
     }
