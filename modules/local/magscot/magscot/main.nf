@@ -41,6 +41,7 @@ process MAGSCOT_MAGSCOT {
     """
 
     stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.MAGScoT.scores.out
     touch ${prefix}.MAGScoT.refined.out
