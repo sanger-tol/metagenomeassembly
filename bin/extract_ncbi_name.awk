@@ -2,6 +2,12 @@
 ## gtdb_to_ncbi_majority_vote.py script and save it to
 ## a new column to parse with taxonkit.
 ##
+## If there is not a species-level classification, then
+## appends the appropriate ending to the name:
+## "sp." if there is a genus-level classification, or
+## "archaeon", "bacterium", or "cyanobacterium" for
+## these types of species respectively.
+##
 ## Author: Jim Downie, December 2024
 
 BEGIN {
@@ -15,6 +21,18 @@ NR > 1 {
         next
     }
     n_elem = split($3, names, /;?[[:alpha:]]__/)
+
+    species_type = ""
+    if(names[1] == "Bacteria") {
+        if(names[2] ~ /^Cyano/){
+            species_type = " cyanobacterium"
+        } else {
+            species_type = " bacterium"
+        }
+    } else if(names[1] == "Archaea") {
+        species_type = " archaeon"
+    }
+
     for(i = n_elem; i > 1; i--) {
         if(names[i] != "") {
             if(i == 7)  {
@@ -23,7 +41,7 @@ NR > 1 {
                 name_addendum = " sp."
             }
             else {
-                name_addendum = " bacterium"
+                name_addendum = species_type
             }
 
             print $1, $2, $3, names[i] name_addendum
