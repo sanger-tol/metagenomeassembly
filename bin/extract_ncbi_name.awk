@@ -23,21 +23,21 @@ NR > 1 {
     n_elem = split($3, names, /;?[[:alpha:]]__/)
 
     species_type = ""
-    if(names[1] == "Bacteria") {
-        if(names[2] ~ /^Cyano/){
+    if(names[2] == "Bacteria") {
+        if(names[3] ~ /^Cyano/){
             species_type = " cyanobacterium"
         } else {
             species_type = " bacterium"
         }
-    } else if(names[1] == "Archaea") {
+    } else if(names[2] == "Archaea") {
         species_type = " archaeon"
     }
 
     for(i = n_elem; i > 1; i--) {
         if(names[i] != "") {
-            if(i == 7)  {
+            if(i == 8)  {
                 name_addendum = ""
-            } else if(i == 6) {
+            } else if(i == 7) {
                 name_addendum = " sp."
             }
             else {
