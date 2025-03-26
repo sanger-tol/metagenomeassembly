@@ -1,107 +1,66 @@
-bump_version: null
 lint:
   files_exist:
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  - .github/ISSUE_TEMPLATE/feature_request.yml
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - .github/CONTRIBUTING.md
-  - .github/.dockstore.yml
-  - conf/igenomes.config
-  - conf/igenomes_ignored.config
-  - conf/igenomes.config
-  - assets/email_template.html
-  - assets/sendmail_template.txt
-  - assets/email_template.txt
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  - .github/ISSUE_TEMPLATE/feature_request.yml
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - .github/CONTRIBUTING.md
-  - .github/.dockstore.yml
-  - conf/igenomes.config
-  - conf/igenomes_ignored.config
-  - assets/email_template.html
-  - assets/sendmail_template.txt
-  - assets/email_template.txt
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-longreadmag_logo_light.png
-  - docs/images/nf-core-longreadmag_logo_light.png
-  - docs/images/nf-core-longreadmag_logo_dark.png
-  - .github/ISSUE_TEMPLATE/config.yml
-  - .github/workflows/awstest.yml
-  - .github/workflows/awsfulltest.yml
+    - .github/ISSUE_TEMPLATE/config.yml
+    - conf/igenomes_ignored.config
+    - conf/igenomes.config
+    - assets/multiqc_config.yml
+    - assets/methods_description_template.yml
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
+    - .github/workflows/awstest.yml
+    - .github/workflows/awsfulltest.yml
+    - ro-crate-metadata.json
   files_unchanged:
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  - .github/ISSUE_TEMPLATE/config.yml
-  - .github/ISSUE_TEMPLATE/feature_request.yml
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - .github/workflows/branch.yml
-  - .github/workflows/linting_comment.yml
-  - .github/workflows/linting.yml
-  - .github/CONTRIBUTING.md
-  - .github/.dockstore.yml
-  - .github/CONTRIBUTING.md
-  - .prettierignore
-  - .prettierignore
-  - .prettierignore
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  - .github/ISSUE_TEMPLATE/config.yml
-  - .github/ISSUE_TEMPLATE/feature_request.yml
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - .github/workflows/branch.yml
-  - .github/workflows/linting_comment.yml
-  - .github/workflows/linting.yml
-  - .github/CONTRIBUTING.md
-  - .github/.dockstore.yml
-  - .github/CONTRIBUTING.md
-  - .prettierignore
-  - .prettierignore
-  - .prettierignore
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-longreadmag_logo_light.png
-  - docs/images/nf-core-longreadmag_logo_light.png
-  - docs/images/nf-core-longreadmag_logo_dark.png
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  included_configs: false
-  multiqc_config:
-  - report_comment
+    - .github/CONTRIBUTING.md
+    - .prettierignore
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-metagenomeassembly_logo_light.png
+    - assets/multiqc_config.yml
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - ro-crate-metadata.json
+  multiqc_config: false
   nextflow_config:
-  - process.cpus
-  - process.memory
-  - process.time
-  - custom_config
-  - params.custom_config_version
-  - params.custom_config_base
-  - manifest.name
-  - manifest.homePage
-  - validation.help.beforeText
-  - validation.help.afterText
-  - validation.summary.beforeText
-  - validation.summary.afterText
+    - process.cpus
+    - process.memory
+    - process.time
+    - custom_config
+    - params.custom_config_version
+    - params.custom_config_base
+    - manifest.name
+    - manifest.homePage
+    - validation.help.beforeText
+    - validation.help.afterText
+    - validation.summary.beforeText
+    - validation.summary.afterText
+    - config_defaults:
+        - params.hmm_gtdb_pfam
+        - params.hmm_gtdb_tigrfam
+        - params.rfam_rrna_cm
   readme:
-  - nextflow_badge
-  - nextflow_badge
-  - nextflow_badge
-nf_core_version: 3.0.2
-org_path: null
+    - nextflow_badge
+nf_core_version: 3.2.0
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
   description: Construct MAGs from long reads.
-  force: true
+  force: false
   is_nfcore: false
-  name: longreadmag
+  name: metagenomeassembly
   org: sanger-tol
   outdir: .
   skip_features:
-  - github
-  - igenomes
-  - github_badges
-  - nf_core_configs
-  - codespaces
-  - fastqc
-  - email
-  - adaptivecard
-  - slackreport
-  - seqera_platform
-  version: 1.0.0dev
-update: null
+    - igenomes
+    - codespaces
+    - fastqc
+    - adaptivecard
+    - seqera_platform
+    - multiqc
+    - rocrate
+  version: 1.0.0

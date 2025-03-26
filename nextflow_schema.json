@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/longreadmag/master/nextflow_schema.json",
-    "title": "sanger-tol/longreadmag pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/sanger-tol/metagenomeassembly/master/nextflow_schema.json",
+    "title": "sanger-tol/metagenomeassembly pipeline parameters",
     "description": "Construct MAGs from long reads.",
     "type": "object",
     "$defs": {
@@ -16,12 +16,12 @@
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "mimetype": "application/x-yaml",
+                    "pattern": "^\\S+\\.(yaml|yml)$",
+                    "description": "Path to YAML file describing the input data.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
-                    "fa_icon": "fas fa-file-csv"
+                    "fa_icon": "fas fa-file-csv",
+                    "schema": "assets/schema_input.json"
                 },
                 "outdir": {
                     "type": "string",
@@ -29,10 +29,315 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
-                "multiqc_title": {
+                "email": {
                     "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\\\-\\\\.]+)@([a-zA-Z0-9_\\\\-\\\\.]+)\\\\.([a-zA-Z]{2,5})$"
+                }
+            }
+        },
+        "assembly_options": {
+            "title": "Assembly options",
+            "type": "object",
+            "description": "Options relating to metagenomic de-novo assembly.",
+            "default": "",
+            "properties": {
+                "enable_assembly": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable de-novo assembly of HiFi reads."
+                },
+                "enable_metamdbg": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable assembly with metaMDBG."
+                }
+            }
+        },
+        "assembly_qc_options": {
+            "title": "Assembly QC options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "enable_rrna_prediction": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                },
+                "rfam_rrna_cm": {
+                    "type": "string",
+                    "description": "Covariance model for rRNA preditiction from RFAM.",
+                    "default": "${projectDir}/assets/rRNA.cm",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.cm$"
+                }
+            }
+        },
+        "read_mapping_options": {
+            "title": "Read mapping options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "hic_mapping_cram_bin_size": {
+                    "type": "integer",
+                    "default": 10000,
+                    "description": "When mapping Hi-C, map each CRAM file in slices of this size."
+                },
+                "hic_mapping_minq": {
+                    "type": "integer",
+                    "default": 60,
+                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Bin3C or Metator.",
+                    "minimum": 0
+                },
+                "hic_mapping_merge_mode": {
+                    "type": "string",
+                    "default": "merge",
+                    "enum": ["merge", "cat"],
+                    "description": "Which method to use to merge the chunked Hi-C bam files back together. One of \"merge\" (samtools merge) or \"cat\" (samtools cat).",
+                    "help_text": "\"merge\" is safer and uses samtools merge, which will ensure that the name sorting is retained among all reads in the final output bam. However, in cases where there is a lot of Hi-C data, the merge operation can be very slow. In this case, \"cat\" is presented as an alternative, using heuristics to concatenate the bam files together using samtools cat. This requires that the initial input CRAM files are sorted by read name so that the chunks represent sets of consecutively named reads, and may fall down when there are multiple Hi-C CRAM libraries, especially if there are multiple read groups in a single library."
+                }
+            }
+        },
+        "binning_options": {
+            "title": "Binning options",
+            "type": "object",
+            "description": "Options relating to binning of de-novo metagenome assemblies.",
+            "default": "",
+            "properties": {
+                "enable_binning": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning of metagenomes into genome bins."
+                },
+                "enable_metabat2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Metabat2."
+                },
+                "enable_maxbin2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with MaxBin2."
+                },
+                "enable_bin3c": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Bin3C."
+                },
+                "enable_metator": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with MetaTor."
+                },
+                "minimum_contig_size": {
+                    "type": "integer",
+                    "default": 3000,
+                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
+                },
+                "minimum_hifi_perc_identity": {
+                    "type": "integer",
+                    "default": 97,
+                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
+                },
+                "minimum_bin_size": {
+                    "type": "integer",
+                    "default": 150000,
+                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 and Bin3C, but not Metator or MaxBin2."
+                }
+            }
+        },
+        "bin_refinement_options": {
+            "title": "Bin refinement options",
+            "type": "object",
+            "description": "Options relating to the refinement of genome bins.",
+            "default": "",
+            "properties": {
+                "enable_bin_refinement": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable refinement of genome bins."
+                },
+                "enable_dastool": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable bin refinement using DAS_Tool."
+                },
+                "enable_magscot": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable bin refinement using MagScoT."
+                },
+                "hmm_gtdb_pfam": {
+                    "type": "string",
+                    "description": "Path to the GTDB r207 Pfam HMM database.",
+                    "default": "${projectDir}/assets/gtdbtk_rel207_Pfam-A.hmm",
+                    "pattern": "^\\S+\\.hmm$",
+                    "format": "file-path"
+                },
+                "hmm_gtdb_tigrfam": {
+                    "type": "string",
+                    "description": "Path to the GTDB r207 TigrFam HMM database.",
+                    "default": "${projectDir}/assets/gtdbtk_rel207_tigrfam.hmm",
+                    "pattern": "^\\S+\\.hmm$",
+                    "format": "file-path"
+                }
+            }
+        },
+        "bin_qc_options": {
+            "title": "Bin QC options",
+            "type": "object",
+            "description": "Options relating to the quality checking of genome bins.",
+            "default": "",
+            "properties": {
+                "enable_binqc": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable quality checks of genome bins."
+                },
+                "enable_checkm2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable QC using CheckM2."
+                },
+                "checkm2_db": {
+                    "type": "string",
+                    "description": "Path to a local diamond database file for CheckM2. If not provided, the CheckM2 database will automatically be downloaded.",
+                    "pattern": "^\\S+\\.dmnd$",
+                    "format": "file-path"
+                },
+                "enable_trnascan_se": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict tRNAs in genome bins using tRNAscan-SE."
+                }
+            }
+        },
+        "bin_taxonomy_options": {
+            "title": "Bin taxonomy options",
+            "type": "object",
+            "description": "Options relating to the taxonomic classification of genome bins.",
+            "default": "",
+            "properties": {
+                "enable_taxonomy": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable taxonomic classification of genome bins."
+                },
+                "enable_gtdbtk": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable taxonomic classification with GTDB-Tk."
+                },
+                "gtdbtk_db": {
+                    "type": "string",
+                    "description": "Path to a directory containing the GTDB-Tk database.",
+                    "format": "directory-path"
+                },
+                "gtdb_bac120_metadata": {
+                    "type": "string",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release220/220.0/bac120_metadata_r220.tsv.gz",
+                    "description": "Path to the GTDB-Tk bac120 metadata file."
+                },
+                "gtdb_ar53_metadata": {
+                    "type": "string",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release220/220.0/ar53_metadata_r220.tsv.gz",
+                    "description": "Path to the GTDB-Tk ar53 metadata file."
+                },
+                "gtdbtk_mash_db": {
+                    "type": "string",
+                    "description": "Path to a mash database built using the GTDB genomes.",
+                    "pattern": "^\\S+\\.msh$",
+                    "format": "file-path"
+                },
+                "gtdbtk_min_completeness": {
+                    "type": "integer",
+                    "default": 50,
+                    "description": "Minimum CheckM2 completeness required for a bin to be classified by GTDB-Tk."
+                },
+                "gtdbtk_max_contamination": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Maximum contamination allowed CheckM2 completeness for a bin to be classified by GTDB-Tk."
+                },
+                "ncbi_taxonomy_dir": {
+                    "type": "string",
+                    "description": "Path to directory containing the names.dmp, nodes.dmp, delnodes.dmp, and merged.dmp files from the NCBI taxdump archive (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)",
+                    "format": "directory-path"
+                }
+            }
+        },
+        "summary_options": {
+            "title": "Summary options",
+            "type": "object",
+            "description": "General options relating to pipeline operation.",
+            "default": "",
+            "properties": {
+                "enable_summary": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Produce a final summary file about each genome bin."
+                },
+                "completeness_score": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Multiplier for completeness when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
+                },
+                "contamination_score": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "Multiplier for contamination when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
+                }
+            }
+        },
+        "institutional_config_options": {
+            "title": "Institutional config options",
+            "type": "object",
+            "fa_icon": "fas fa-university",
+            "description": "Parameters used to describe centralised config profiles. These should not be edited.",
+            "help_text": "The centralised nf-core configuration profiles use a handful of pipeline parameters to describe themselves. This information is then printed to the Nextflow log when you run a pipeline. You should not need to change these values when you run a pipeline.",
+            "properties": {
+                "custom_config_version": {
+                    "type": "string",
+                    "description": "Git commit id for Institutional configs.",
+                    "default": "master",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "custom_config_base": {
+                    "type": "string",
+                    "description": "Base directory for Institutional configs.",
+                    "default": "https://raw.githubusercontent.com/nf-core/configs/master",
+                    "hidden": true,
+                    "help_text": "If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.",
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_name": {
+                    "type": "string",
+                    "description": "Institutional config name.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_description": {
+                    "type": "string",
+                    "description": "Institutional config description.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_contact": {
+                    "type": "string",
+                    "description": "Institutional config contact information.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_url": {
+                    "type": "string",
+                    "description": "Institutional config URL link.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
                 }
             }
         },
@@ -58,12 +363,18 @@
                     "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
                 },
-                "max_multiqc_email_size": {
+                "email_on_fail": {
                     "type": "string",
-                    "description": "File size limit when attaching MultiQC reports to summary emails.",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload",
+                    "description": "Email address for completion summary, only when pipeline fails.",
+                    "fa_icon": "fas fa-exclamation-triangle",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
+                    "hidden": true
+                },
+                "plaintext_email": {
+                    "type": "boolean",
+                    "description": "Send plain-text email instead of HTML.",
+                    "fa_icon": "fas fa-remove-format",
                     "hidden": true
                 },
                 "monochrome_logs": {
@@ -72,23 +383,12 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "multiqc_config": {
+                "hook_url": {
                     "type": "string",
-                    "format": "file-path",
-                    "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
+                    "description": "Incoming hook URL for messaging service",
+                    "fa_icon": "fas fa-people-group",
+                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
-                },
-                "multiqc_logo": {
-                    "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image",
-                    "hidden": true
-                },
-                "multiqc_methods_description": {
-                    "type": "string",
-                    "description": "Custom MultiQC yaml file containing HTML including a methods description.",
-                    "fa_icon": "fas fa-cog"
                 },
                 "validate_params": {
                     "type": "boolean",
@@ -103,6 +403,18 @@
                     "description": "Base URL or local path to location of pipeline test dataset files",
                     "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
                     "hidden": true
+                },
+                "mgasm_pipelines_testdata_base_path": {
+                    "type": "string",
+                    "default": "https://tolit.cog.sanger.ac.uk/test-data/",
+                    "description": "Base URL or local path to location of pipeline test dataset files",
+                    "hidden": true
+                },
+                "trace_report_suffix": {
+                    "type": "string",
+                    "fa_icon": "far calendar",
+                    "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
+                    "hidden": true
                 }
             }
         }
@@ -111,8 +423,33 @@
         {
             "$ref": "#/$defs/input_output_options"
         },
-        
-        
+        {
+            "$ref": "#/$defs/assembly_options"
+        },
+        {
+            "$ref": "#/$defs/assembly_qc_options"
+        },
+        {
+            "$ref": "#/$defs/read_mapping_options"
+        },
+        {
+            "$ref": "#/$defs/binning_options"
+        },
+        {
+            "$ref": "#/$defs/bin_refinement_options"
+        },
+        {
+            "$ref": "#/$defs/bin_qc_options"
+        },
+        {
+            "$ref": "#/$defs/bin_taxonomy_options"
+        },
+        {
+            "$ref": "#/$defs/summary_options"
+        },
+        {
+            "$ref": "#/$defs/institutional_config_options"
+        },
         {
             "$ref": "#/$defs/generic_options"
         }

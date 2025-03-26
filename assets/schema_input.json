@@ -1,33 +1,71 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/longreadmag/master/assets/schema_input.json",
-    "title": "sanger-tol/longreadmag pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/test/test/master/assets/schema_input.json",
+    "title": "Test schema for samplesheets",
     "description": "Schema for the file provided with params.input",
-    "type": "array",
-    "items": {
-        "type": "object",
-        "properties": {
-            "sample": {
-                "type": "string",
-                "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "pacbio": {
+            "type": "object",
+            "properties": {
+                "fasta": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "file-path",
+                        "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                        "exists": true
+                    },
+                    "uniqueItems": true
+                }
             },
-            "fastq_1": {
-                "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+            "required": ["fasta"]
+        },
+        "hic": {
+            "type": "object",
+            "properties": {
+                "cram": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "file-path",
+                        "pattern": "^.*\\.cram$",
+                        "exists": true
+                    },
+                    "uniqueItems": true
+                },
+                "enzymes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                }
             },
-            "fastq_2": {
-                "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+            "dependentRequired": {
+                "cram": ["enzymes"]
             }
         },
-        "required": ["sample", "fastq_1"]
-    }
+        "assembly": {
+            "type": "object",
+            "properties": {
+                "fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                    "exists": true
+                },
+                "assembler": {
+                    "type": "string"
+                }
+            },
+            "dependentRequired": {
+                "fasta": ["assembler"]
+            }
+        }
+    },
+    "required": ["id", "pacbio"]
 }
