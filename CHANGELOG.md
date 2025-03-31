@@ -21,9 +21,9 @@ Post-release fix - adds Zenodo release to pipline code.
 
 ### `Dependencies`
 
-| module                                 | tools                             | old versions | new versions        |
-| -------------------------------------- | --------------------------------- | ------------ | ------------------- |
-| metator/pipeline                       | metator                           | 1.3.2            | 1.3.7               |
+| module           | tools   | old versions | new versions |
+| ---------------- | ------- | ------------ | ------------ |
+| metator/pipeline | metator | 1.3.2        | 1.3.7        |
 
 ### `Deprecated`
 
