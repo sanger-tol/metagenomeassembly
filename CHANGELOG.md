@@ -3,7 +3,33 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.0.0 - [2025-03-26]
+## ## [[1.0.1](https://github.com/sanger-tol/metagenomeassembly/releases/tag/1.0.1)] - Scarborough Fair (patch 1) - [2025-03-31]
+
+Post-release fix - adds Zenodo release to pipline code.
+
+### `Added`
+
+- Add Zenodo DOI (10.5281/zenodo.15090769) to `README.md`, `CITATION.cff` and `nextflow.config` (by @prototaxites)
+- Add pretty sanger-tol logo to `--help` output (by @muffato)
+
+### `Fixed`
+
+- Fix `ci.yml` to correctly trigger on `main` rather than `master` (by @prototaxites)
+- Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
+- Conda fixes:
+  - Add missing environment.yml reference to cram_filter_bwamem2_align_fixmate_sort (by @prototaxites)
+  - Add explicit catch in binning subworkflow to only run Bin3C and MagScoT if conda is not enabled (by @prototaxites)
+  - Update metator to ensure conda works correctly (by @prototaxites)
+
+### `Dependencies`
+
+| module           | tools   | old versions | new versions |
+| ---------------- | ------- | ------------ | ------------ |
+| metator/pipeline | metator | 1.3.2        | 1.3.7        |
+
+### `Deprecated`
+
+## [[1.0.0](https://github.com/sanger-tol/metagenomeassembly/releases/tag/1.0.0)] - Scarborough Fair - [2025-03-26]
 
 Initial release of sanger-tol/metagenomeassembly, created with the [nf-core](https://nf-co.re/) template.
 

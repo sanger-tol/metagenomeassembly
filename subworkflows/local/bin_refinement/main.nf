@@ -46,7 +46,7 @@ workflow BIN_REFINEMENT {
         ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_dastool_c2b)
     }
 
-    if(params.enable_magscot) {
+    if(params.enable_magscot && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
         //
         // LOGIC: MagScoT needs a TSV file of gene predictions in each contig
         //        Run hmmsearch using the provided hmm files on the predicted

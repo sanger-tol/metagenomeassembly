@@ -2,6 +2,7 @@ process CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT {
     tag "$meta.id"
     label "process_high"
 
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/64/64331f1a8dcc5b05c0d857da127ca7ac64002c9c6a4daeec61f3ac39b0f7f0b4/data' :
         'community.wave.seqera.io/library/bwa-mem2_samtools_staden_io_lib:3663e5a9df52096b' }"

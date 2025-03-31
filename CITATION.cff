@@ -22,8 +22,8 @@ authors:
     orcid: "https://orcid.org/0000-0003-3407-4086"
 identifiers:
   - type: doi
-    value: TODO
+    value: 10.5281/zenodo.15090769
 repository-code: "https://github.com/sanger-tol/metagenomeassembly"
 license: MIT
-version: 1.0.0
-date-released: TODO
+version: 1.0.1
+date-released: "2025-03-31"
