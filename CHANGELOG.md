@@ -9,16 +9,21 @@ Post-release fix - adds Zenodo release to pipline code.
 
 ### `Added`
 
-- Add Zenodo DOI (10.5281/zenodo.15090769) to `README.md`, `CITATION.cff` and `nextflow.config`. (by @prototaxites)
-- Add pretty sanger-tol logo to `--help` output. (by @muffato)
+- Add Zenodo DOI (10.5281/zenodo.15090769) to `README.md`, `CITATION.cff` and `nextflow.config` (by @prototaxites)
+- Add pretty sanger-tol logo to `--help` output (by @muffato)
 
 ### `Fixed`
 
-- Fix `ci.yml` to correctly trigger on `main` rather than `master`. (by @prototaxites)
+- Fix `ci.yml` to correctly trigger on `main` rather than `master` (by @prototaxites)
 - Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
-- Add explicit catch in binning subworkflow to only run Bin3C and Metator if conda is not enabled. (by @prototaxites)
+- Add explicit catch in binning subworkflow to only run Bin3C and MagScoT if conda is not enabled (by @prototaxites)
+- Update metator to ensure conda works correctly (by @prototaxites)
 
 ### `Dependencies`
+
+| module                                 | tools                             | old versions | new versions        |
+| -------------------------------------- | --------------------------------- | ------------ | ------------------- |
+| metator/pipeline                       | metator                           | 1.3.2            | 1.3.7               |
 
 ### `Deprecated`
 

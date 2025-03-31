@@ -82,7 +82,7 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_bin3c_bins)
     }
 
-    if(params.enable_metator && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
+    if(params.enable_metator) {
         ch_directions = Channel.of("fwd", "rev")
         ch_hic_bam_to_process = hic_bam
             | combine(ch_directions)

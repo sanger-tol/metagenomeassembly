@@ -3,7 +3,9 @@ process METATOR_PIPELINE {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "sanger-tol/metator:1.3.2-c1"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/metator:1.3.7--py39h2de1943_0' :
+        'biocontainers/metator:1.3.7--py39h2de1943_0' }"
 
     input:
     tuple val(meta), path(contigs), path(hic_input), path(depths)
