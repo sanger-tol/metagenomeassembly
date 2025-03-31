@@ -16,8 +16,10 @@ Post-release fix - adds Zenodo release to pipline code.
 
 - Fix `ci.yml` to correctly trigger on `main` rather than `master` (by @prototaxites)
 - Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
-- Add explicit catch in binning subworkflow to only run Bin3C and MagScoT if conda is not enabled (by @prototaxites)
-- Update metator to ensure conda works correctly (by @prototaxites)
+- Conda fixes:
+  - Add missing environment.yml reference to cram_filter_bwamem2_align_fixmate_sort (by @prototaxites)
+  - Add explicit catch in binning subworkflow to only run Bin3C and MagScoT if conda is not enabled (by @prototaxites)
+  - Update metator to ensure conda works correctly (by @prototaxites)
 
 ### `Dependencies`
 
