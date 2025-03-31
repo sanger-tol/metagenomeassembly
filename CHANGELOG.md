@@ -16,6 +16,7 @@ Post-release fix - adds Zenodo release to pipline code.
 
 - Fix `ci.yml` to correctly trigger on `main` rather than `master`. (by @prototaxites)
 - Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
+- Add explicit catch in binning subworkflow to only run Bin3C and Metator if conda is not enabled. (by @prototaxites)
 
 ### `Dependencies`
 
