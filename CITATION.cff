@@ -25,5 +25,5 @@ identifiers:
     value: 10.5281/zenodo.15090769
 repository-code: "https://github.com/sanger-tol/metagenomeassembly"
 license: MIT
-version: 1.0.1
+version: 1.1.0dev
 date-released: "2025-03-31"
