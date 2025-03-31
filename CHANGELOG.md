@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.0.1 - [2025-03-31]
+
+Post-release fix - adds Zenodo release to pipline code.
+
+### `Added`
+
+- Add Zenodo DOI (10.5281/zenodo.15090769) to `README.md`, `CITATION.cff` and `nextflow.config`. (by @prototaxites)
+
+### `Fixed`
+
+### `Dependencies`
+
+### `Deprecated`
+
 ## v1.0.0 - [2025-03-26]
 
 Initial release of sanger-tol/metagenomeassembly, created with the [nf-core](https://nf-co.re/) template.
