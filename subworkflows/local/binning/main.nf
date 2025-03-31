@@ -58,7 +58,7 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_maxbin2_bins)
     }
 
-    if(params.enable_bin3c) {
+    if(params.enable_bin3c && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
         ch_bin3c_mkmap_input = assemblies
             | combine(hic_bam, by: 0)
 
@@ -82,7 +82,7 @@ workflow BINNING {
         ch_bins = ch_bins.mix(ch_bin3c_bins)
     }
 
-    if(params.enable_metator) {
+    if(params.enable_metator && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
         ch_directions = Channel.of("fwd", "rev")
         ch_hic_bam_to_process = hic_bam
             | combine(ch_directions)
