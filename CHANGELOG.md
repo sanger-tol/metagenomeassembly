@@ -11,10 +11,11 @@ Post-release fix - adds Zenodo release to pipline code.
 
 - Add Zenodo DOI (10.5281/zenodo.15090769) to `README.md`, `CITATION.cff` and `nextflow.config`. (by @prototaxites)
 - Add pretty sanger-tol logo to `--help` output. (by @muffato)
-- Fix `ci.yml` to correctly trigger on `main` rather than `master`. (by @prototaxites)
-- Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
 
 ### `Fixed`
+
+- Fix `ci.yml` to correctly trigger on `main` rather than `master`. (by @prototaxites)
+- Fix schema `$id` path in `assets/schema_input.json` (by @prototaxites)
 
 ### `Dependencies`
 
