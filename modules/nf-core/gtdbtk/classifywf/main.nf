@@ -36,7 +36,7 @@ process GTDBTK_CLASSIFYWF {
     def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
     def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
     def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
-    def ncbi_command = run_ncbi ? """
+    ncbi_command = run_ncbi ? """
         gtdb_to_ncbi_majority_vote.py \\
         --gtdbtk_output_dir . \\
         ${bac_md} ${ar_md} \\
