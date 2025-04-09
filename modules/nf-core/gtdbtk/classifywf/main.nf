@@ -2,7 +2,7 @@ process GTDBTK_CLASSIFYWF {
     tag "${prefix}"
     label 'process_medium'
     conda "${moduleDir}/environment.yml"
-    container "sanger-tol/gtdbtk:2.4.0-c1"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ? 'https://depot.galaxyproject.org/singularity/gtdbtk:2.4.0--pyhdfd78af_1' : 'biocontainers/gtdbtk:2.4.0--pyhdfd78af_1'}"
 
     input:
     tuple val(meta)   , path("bins/*")
@@ -36,12 +36,6 @@ process GTDBTK_CLASSIFYWF {
     def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
     def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
     def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
-    ncbi_command = run_ncbi ? """
-        gtdb_to_ncbi_majority_vote.py \\
-        --gtdbtk_output_dir . \\
-        ${bac_md} ${ar_md} \\
-        --gtdbtk_prefix gtdbtk.${prefix} \\
-        --output_file gtdbtk.${prefix}_ncbi.tsv""" : ""
     """
     export GTDBTK_DATA_PATH="\${PWD}/database"
     if [ ${pplacer_scratch} != "" ] ; then
@@ -57,7 +51,14 @@ process GTDBTK_CLASSIFYWF {
         ${mash_mode} \\
         ${pplacer_scratch}
 
-    ${ncbi_command}
+    if [ "${run_ncbi}" == "true" ]; then
+        gtdb_to_ncbi_majority_vote.py \\
+            --gtdbtk_output_dir . \\
+            ${bac_md} \\
+            ${ar_md} \\
+            --gtdbtk_prefix gtdbtk.${prefix} \\
+            --output_file gtdbtk.${prefix}_ncbi.tsv
+    fi
 
     ## If mash db given, classify/ and identify/ directories won't be created
     if [[ -d classify/ && \$(ls -A classify/) ]]; then
