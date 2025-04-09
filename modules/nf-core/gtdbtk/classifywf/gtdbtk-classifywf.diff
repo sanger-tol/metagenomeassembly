@@ -56,6 +56,24 @@ Changes in 'gtdbtk/classifywf/main.nf':
  
      ## If mash db given, classify/ and identify/ directories won't be created
      if [[ -d classify/ && \$(ls -A classify/) ]]; then
+@@ -68,7 +82,7 @@
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+-        gtdbtk: \$(echo \$(gtdbtk --version -v 2>&1) | sed "s/gtdbtk: version //; s/ Copyright.*//")
++        gtdbtk: \$(echo \$(gtdbtk --version 2>/dev/null) | sed "s/gtdbtk: version //; s/ Copyright.*//")
+     END_VERSIONS
+     """
+ 
+@@ -87,7 +101,7 @@
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+-        gtdbtk: \$(echo \$(gtdbtk --version -v 2>&1) | sed "s/gtdbtk: version //; s/ Copyright.*//")
++        gtdbtk: \$(echo \$(gtdbtk --version 2>/dev/null) | sed "s/gtdbtk: version //; s/ Copyright.*//")
+     END_VERSIONS
+     """
+ }
 
 'modules/nf-core/gtdbtk/classifywf/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/gtdbtk/classifywf/tests/tags.yml' is unchanged
