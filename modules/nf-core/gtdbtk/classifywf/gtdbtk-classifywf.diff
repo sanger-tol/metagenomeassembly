@@ -4,7 +4,15 @@ Changes in component 'nf-core/gtdbtk/classifywf'
 Changes in 'gtdbtk/classifywf/main.nf':
 --- modules/nf-core/gtdbtk/classifywf/main.nf
 +++ modules/nf-core/gtdbtk/classifywf/main.nf
-@@ -9,6 +9,8 @@
+@@ -2,13 +2,15 @@
+     tag "${prefix}"
+     label 'process_medium'
+     conda "${moduleDir}/environment.yml"
+-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ? 'https://depot.galaxyproject.org/singularity/gtdbtk:2.4.0--pyhdfd78af_1' : 'biocontainers/gtdbtk:2.4.0--pyhdfd78af_1'}"
++    container "sanger-tol/gtdbtk:2.4.0-c1"
+ 
+     input:
+     tuple val(meta)   , path("bins/*")
      tuple val(db_name), path("database/*")
      val use_pplacer_scratch_dir
      path mash_db
