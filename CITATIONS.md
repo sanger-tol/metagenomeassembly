@@ -34,6 +34,9 @@
 
   > Sieber, C.M.K., Probst, A.J., Sharrar, A., Thomas, B.C., Hess, M., Tringe, S.G., Banfield, J.F., 2018. Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy. Nat Microbiol 3, 836–843. https://doi.org/10.1038/s41564-018-0171-1
 
+- [Genomad](https://github.com/apcamargo/genomad/)
+> Camargo, A.P., Roux, S., Schulz, F., Babinski, M., Xu, Y., Hu, B., Chain, P.S.G., Nayfach, S., Kyrpides, N.C., 2024. Identification of mobile genetic elements with geNomad. Nat Biotechnol 42, 1303–1312. https://doi.org/10.1038/s41587-023-01953-y
+
 - [GNU Awk](https://www.gnu.org/software/gawk/manual/gawk.html)
 
   > Robbins, A., 2003. GAWK: effective AWK programming : a user’s guide for GNU Awk, Ed. 3. ed. Free Software Foundation, Boston, MA.
