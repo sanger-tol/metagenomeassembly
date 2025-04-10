@@ -2,27 +2,24 @@ process GTDBTK_CLASSIFYWF {
     tag "${prefix}"
     label 'process_medium'
     conda "${moduleDir}/environment.yml"
-    container "sanger-tol/gtdbtk:2.4.0-c1"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ? 'https://depot.galaxyproject.org/singularity/gtdbtk:2.4.0--pyhdfd78af_2' : 'biocontainers/gtdbtk:2.4.0--pyhdfd78af_2'}"
 
     input:
     tuple val(meta), path("bins/*")
     tuple val(db_name), path(db)
     val use_pplacer_scratch_dir
     path mash_db
-    path bacteria_md
-    path archaea_md
 
     output:
-    tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv")        , emit: summary
-    tuple val(meta), path("gtdbtk.${prefix}.*.classify.tree.gz")   , emit: tree    , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.markers_summary.tsv"), emit: markers , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.msa.fasta.gz")       , emit: msa     , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.user_msa.fasta.gz")  , emit: user_msa, optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.filtered.tsv")       , emit: filtered, optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv")   , emit: failed  , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.log")                  , emit: log
-    tuple val(meta), path("gtdbtk.${prefix}.warnings.log")         , emit: warnings
-    tuple val(meta), path("gtdbtk.${prefix}_ncbi.tsv")             , emit: ncbi    , optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv"), emit: summary
+    tuple val(meta), path("gtdbtk.${prefix}.*.classify.tree.gz"), emit: tree, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.markers_summary.tsv"), emit: markers, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.msa.fasta.gz"), emit: msa, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.user_msa.fasta.gz"), emit: user_msa, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.filtered.tsv"), emit: filtered, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv"), emit: failed, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.log"), emit: log
+    tuple val(meta), path("gtdbtk.${prefix}.warnings.log"), emit: warnings
     path ("versions.yml"), emit: versions
 
     when:
@@ -33,11 +30,9 @@ process GTDBTK_CLASSIFYWF {
     def pplacer_scratch = use_pplacer_scratch_dir ? "--scratch_dir pplacer_tmp" : ""
     def mash_mode = mash_db ? "--mash_db ${mash_db}" : "--skip_ani_screen"
     prefix = task.ext.prefix ?: "${meta.id}"
-    def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
-    def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
-    def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
+
     """
-    export GTDBTK_DATA_PATH="\$(find -L ${db} -name 'metadata' -type d -exec dirname {} \\;)"#
+    export GTDBTK_DATA_PATH="\$(find -L ${db} -name 'metadata' -type d -exec dirname {} \\;)"
 
     if [ "${pplacer_scratch}" != "" ] ; then
         mkdir pplacer_tmp
@@ -51,15 +46,6 @@ process GTDBTK_CLASSIFYWF {
         --cpus ${task.cpus} \\
         ${mash_mode} \\
         ${pplacer_scratch}
-
-    if [ "${run_ncbi}" == "true" ]; then
-        gtdb_to_ncbi_majority_vote.py \\
-            --gtdbtk_output_dir . \\
-            ${bac_md} \\
-            ${ar_md} \\
-            --gtdbtk_prefix gtdbtk.${prefix} \\
-            --output_file gtdbtk.${prefix}_ncbi.tsv
-    fi
 
     ## If mash db given, classify/ and identify/ directories won't be created
     if [[ -d classify/ && \$(ls -A classify/) ]]; then
