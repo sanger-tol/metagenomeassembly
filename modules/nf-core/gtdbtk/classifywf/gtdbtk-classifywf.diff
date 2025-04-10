@@ -1,38 +1,38 @@
-Changes in module 'nf-core/gtdbtk/classifywf'
+Changes in component 'nf-core/gtdbtk/classifywf'
 'modules/nf-core/gtdbtk/classifywf/environment.yml' is unchanged
 'modules/nf-core/gtdbtk/classifywf/meta.yml' is unchanged
 Changes in 'gtdbtk/classifywf/main.nf':
 --- modules/nf-core/gtdbtk/classifywf/main.nf
 +++ modules/nf-core/gtdbtk/classifywf/main.nf
-@@ -9,6 +9,8 @@
-     tuple val(db_name), path("database/*")
+@@ -2,13 +2,15 @@
+     tag "${prefix}"
+     label 'process_medium'
+     conda "${moduleDir}/environment.yml"
+-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ? 'https://depot.galaxyproject.org/singularity/gtdbtk:2.4.0--pyhdfd78af_2' : 'biocontainers/gtdbtk:2.4.0--pyhdfd78af_2'}"
++    container "sanger-tol/gtdbtk:2.4.0-c1"
+ 
+     input:
+     tuple val(meta), path("bins/*")
+     tuple val(db_name), path(db)
      val use_pplacer_scratch_dir
      path mash_db
 +    path bacteria_md
 +    path archaea_md
  
      output:
-     tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv")        , emit: summary
-@@ -20,6 +22,7 @@
-     tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv")   , emit: failed  , optional: true
-     tuple val(meta), path("gtdbtk.${prefix}.log")                  , emit: log
-     tuple val(meta), path("gtdbtk.${prefix}.warnings.log")         , emit: warnings
-+    tuple val(meta), path("gtdbtk.${prefix}_ncbi.tsv")             , emit: ncbi    , optional: true
-     path ("versions.yml"), emit: versions
- 
-     when:
-@@ -30,7 +33,9 @@
+     tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv"), emit: summary
+@@ -30,7 +32,9 @@
      def pplacer_scratch = use_pplacer_scratch_dir ? "--scratch_dir pplacer_tmp" : ""
-     def mash_mode       = mash_db                 ? "--mash_db ${mash_db}"      : "--skip_ani_screen"
+     def mash_mode = mash_db ? "--mash_db ${mash_db}" : "--skip_ani_screen"
      prefix = task.ext.prefix ?: "${meta.id}"
 -
-+    def run_ncbi = (bacteria_md || archaea_md) ? true : false
++    def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
 +    def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
 +    def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
      """
-     export GTDBTK_DATA_PATH="\${PWD}/database"
-     if [ ${pplacer_scratch} != "" ] ; then
-@@ -45,6 +50,15 @@
+     export GTDBTK_DATA_PATH="\$(find -L ${db} -name 'metadata' -type d -exec dirname {} \\;)"
+ 
+@@ -46,6 +50,15 @@
          --cpus ${task.cpus} \\
          ${mash_mode} \\
          ${pplacer_scratch}
@@ -42,7 +42,7 @@ Changes in 'gtdbtk/classifywf/main.nf':
 +            --gtdbtk_output_dir . \\
 +            ${bac_md} \\
 +            ${ar_md} \\
-+            --gtdbtk_prefix ${prefix} \\
++            --gtdbtk_prefix gtdbtk.${prefix} \\
 +            --output_file gtdbtk.${prefix}_ncbi.tsv
 +    fi
  
@@ -50,6 +50,5 @@ Changes in 'gtdbtk/classifywf/main.nf':
      if [[ -d classify/ && \$(ls -A classify/) ]]; then
 
 'modules/nf-core/gtdbtk/classifywf/tests/main.nf.test.snap' is unchanged
-'modules/nf-core/gtdbtk/classifywf/tests/tags.yml' is unchanged
 'modules/nf-core/gtdbtk/classifywf/tests/main.nf.test' is unchanged
 ************************************************************

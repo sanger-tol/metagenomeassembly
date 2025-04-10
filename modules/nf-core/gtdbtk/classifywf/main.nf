@@ -2,27 +2,26 @@ process GTDBTK_CLASSIFYWF {
     tag "${prefix}"
     label 'process_medium'
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ? 'https://depot.galaxyproject.org/singularity/gtdbtk:2.4.0--pyhdfd78af_1' : 'biocontainers/gtdbtk:2.4.0--pyhdfd78af_1'}"
+    container "sanger-tol/gtdbtk:2.4.0-c1"
 
     input:
-    tuple val(meta)   , path("bins/*")
-    tuple val(db_name), path("database/*")
+    tuple val(meta), path("bins/*")
+    tuple val(db_name), path(db)
     val use_pplacer_scratch_dir
     path mash_db
     path bacteria_md
     path archaea_md
 
     output:
-    tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv")        , emit: summary
-    tuple val(meta), path("gtdbtk.${prefix}.*.classify.tree.gz")   , emit: tree    , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.markers_summary.tsv"), emit: markers , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.msa.fasta.gz")       , emit: msa     , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.user_msa.fasta.gz")  , emit: user_msa, optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.*.filtered.tsv")       , emit: filtered, optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv")   , emit: failed  , optional: true
-    tuple val(meta), path("gtdbtk.${prefix}.log")                  , emit: log
-    tuple val(meta), path("gtdbtk.${prefix}.warnings.log")         , emit: warnings
-    tuple val(meta), path("gtdbtk.${prefix}_ncbi.tsv")             , emit: ncbi    , optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.summary.tsv"), emit: summary
+    tuple val(meta), path("gtdbtk.${prefix}.*.classify.tree.gz"), emit: tree, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.markers_summary.tsv"), emit: markers, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.msa.fasta.gz"), emit: msa, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.user_msa.fasta.gz"), emit: user_msa, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.*.filtered.tsv"), emit: filtered, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.failed_genomes.tsv"), emit: failed, optional: true
+    tuple val(meta), path("gtdbtk.${prefix}.log"), emit: log
+    tuple val(meta), path("gtdbtk.${prefix}.warnings.log"), emit: warnings
     path ("versions.yml"), emit: versions
 
     when:
@@ -31,14 +30,15 @@ process GTDBTK_CLASSIFYWF {
     script:
     def args = task.ext.args ?: ''
     def pplacer_scratch = use_pplacer_scratch_dir ? "--scratch_dir pplacer_tmp" : ""
-    def mash_mode       = mash_db                 ? "--mash_db ${mash_db}"      : "--skip_ani_screen"
+    def mash_mode = mash_db ? "--mash_db ${mash_db}" : "--skip_ani_screen"
     prefix = task.ext.prefix ?: "${meta.id}"
-    def run_ncbi = (bacteria_md || archaea_md) ? true : false
+    def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
     def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
     def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
     """
-    export GTDBTK_DATA_PATH="\${PWD}/database"
-    if [ ${pplacer_scratch} != "" ] ; then
+    export GTDBTK_DATA_PATH="\$(find -L ${db} -name 'metadata' -type d -exec dirname {} \\;)"
+
+    if [ "${pplacer_scratch}" != "" ] ; then
         mkdir pplacer_tmp
     fi
 
@@ -82,7 +82,7 @@ process GTDBTK_CLASSIFYWF {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        gtdbtk: \$(echo \$(gtdbtk --version -v 2>&1) | sed "s/gtdbtk: version //; s/ Copyright.*//")
+        gtdbtk: \$(echo \$(gtdbtk --version 2>/dev/null) | sed "s/gtdbtk: version //; s/ Copyright.*//")
     END_VERSIONS
     """
 
@@ -101,7 +101,7 @@ process GTDBTK_CLASSIFYWF {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        gtdbtk: \$(echo \$(gtdbtk --version -v 2>&1) | sed "s/gtdbtk: version //; s/ Copyright.*//")
+        gtdbtk: \$(echo \$(gtdbtk --version 2>/dev/null) | sed "s/gtdbtk: version //; s/ Copyright.*//")
     END_VERSIONS
     """
 }
