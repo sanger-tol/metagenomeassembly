@@ -117,9 +117,8 @@ workflow PIPELINE_INITIALISATION {
 
     // GTDB-Tk database
     if(params.gtdbtk_db) {
-        ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true).listFiles())
-            | collect
-            | map { [[id: "gtdb"], it] }
+        ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true))
+            | map { db -> [[id: "gtdb"], db] }
     } else {
         ch_gtdbtk_db = Channel.empty()
     }
@@ -259,4 +258,3 @@ def methodsDescriptionText(mqc_methods_yaml) {
 
     return description_html.toString()
 }
-
