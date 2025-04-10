@@ -83,6 +83,15 @@ workflow PIPELINE_INITIALISATION {
         | filter { !it.isEmpty() }
         | collect
 
+    // Genomad database
+    if(params.genomad_db) {
+        ch_genomad_db = Channel.of(
+            file(params.genomad_db, checkIfExists: true)
+        )
+    } else {
+        ch_genomad_db = Channel.empty()
+    }
+
     // Create channels for input database files
     // rRNA covariance models
     if(params.rfam_rrna_cm) {
@@ -137,6 +146,7 @@ workflow PIPELINE_INITIALISATION {
     assembly            = ch_assembly
     hic_cram            = ch_hic_cram
     hic_enzymes         = ch_hic_enzymes
+    genomad_db          = ch_genomad_db
     rfam_rrna_cm        = ch_rfam_rrna_cm
     magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
     checkm2_db          = ch_checkm2_db

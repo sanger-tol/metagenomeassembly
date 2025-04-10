@@ -28,6 +28,7 @@ workflow METAGENOMEASSEMBLY {
     assembly            // channel: pre-built metagenome assembly, optional
     hic_cram            // channel: hic cram files from yaml, optional
     hic_enzymes         // channel: hic enzyme list from yaml, optional
+    genomad_db          // channel: genomad db from params
     rfam_rrna_cm        // channel: rRNA cm file from params
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
