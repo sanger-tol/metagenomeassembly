@@ -5,8 +5,8 @@ process GTDBTK_CLASSIFYWF {
     container "sanger-tol/gtdbtk:2.4.0-c1"
 
     input:
-    tuple val(meta)   , path("bins/*")
-    tuple val(db_name), path("database/*")
+    tuple val(meta), path("bins/*")
+    tuple val(db_name), path(db)
     val use_pplacer_scratch_dir
     path mash_db
     path bacteria_md
@@ -31,14 +31,15 @@ process GTDBTK_CLASSIFYWF {
     script:
     def args = task.ext.args ?: ''
     def pplacer_scratch = use_pplacer_scratch_dir ? "--scratch_dir pplacer_tmp" : ""
-    def mash_mode       = mash_db                 ? "--mash_db ${mash_db}"      : "--skip_ani_screen"
+    def mash_mode = mash_db ? "--mash_db ${mash_db}" : "--skip_ani_screen"
     prefix = task.ext.prefix ?: "${meta.id}"
     def run_ncbi = ((bacteria_md || archaea_md) && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) ? true : false
     def bac_md = bacteria_md ? "--bac120_metadata_file ${bacteria_md}" : ""
     def ar_md  = archaea_md ? "--ar53_metadata_file ${archaea_md}" : ""
     """
-    export GTDBTK_DATA_PATH="\${PWD}/database"
-    if [ ${pplacer_scratch} != "" ] ; then
+    export GTDBTK_DATA_PATH="\$(find -L ${db} -name 'metadata' -type d -exec dirname {} \\;)"#
+
+    if [ "${pplacer_scratch}" != "" ] ; then
         mkdir pplacer_tmp
     fi
 
