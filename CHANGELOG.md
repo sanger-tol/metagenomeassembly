@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## ## [[1.0.3](https://github.com/sanger-tol/metagenomeassembly/releases/tag/1.0.3)] - Scarborough Fair (patch 3) - [2025-04-08]
 
 - Relicensed this repository as MIT
+- Updated the GTDB-Tk container to a sanger-tol container that has both GTDB-Tk and the `gtdb_to_ncbi_majority_vote.py` script (by @prototaxites)
+- Minor change to GTDB database channel preparation to reflect new changes to the nf-core module (by @prototaxites)
 
 ## ## [[1.0.2](https://github.com/sanger-tol/metagenomeassembly/releases/tag/1.0.2)] - Scarborough Fair (patch 2) - [2025-04-08]
 
