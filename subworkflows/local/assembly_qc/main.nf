@@ -26,11 +26,10 @@ workflow ASSEMBLY_QC {
     //
     // MODULE: Classify circular contigs using genomad
     //
-
     if(params.enable_genomad) {
         if(!params.genomad_db){
             GENOMAD_DOWNLOAD()
-            ch_versions = ch_versions.mix(GENOMAD_DOWNLOAD.versions)
+            ch_versions = ch_versions.mix(GENOMAD_DOWNLOAD.out.versions)
 
             ch_genomad_db = GENOMAD_DOWNLOAD.out.genomad_db
         } else {
@@ -41,7 +40,7 @@ workflow ASSEMBLY_QC {
             FIND_CIRCLES.out.circles_fasta,
             ch_genomad_db
         )
-        ch_versions = ch_versions.mix(GENOMAD_ENDTOEND.versions)
+        ch_versions = ch_versions.mix(GENOMAD_ENDTOEND.out.versions)
     }
 
     //
@@ -95,7 +94,7 @@ workflow ASSEMBLY_QC {
     emit:
     assemblies   = ch_assemblies
     stats        = GENOME_STATS_ASSEMBLIES.out.stats
-    circle_list  = FIND_CIRCLES.out.circles
+    circle_list  = FIND_CIRCLES.out.circles_list
     rrna         = ch_rrna_preds
     versions     = ch_versions
 }

@@ -73,6 +73,16 @@
                     "default": "${projectDir}/assets/rRNA.cm",
                     "format": "file-path",
                     "pattern": "^\\S+\\.cm$"
+                },
+                "enable_genomad": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable Genomad for classification of circular contigs for determination of plasmid status."
+                },
+                "genomad_db": {
+                    "type": "string",
+                    "description": "Path to a directory containing a Genomad database. If not provided, the database will be downloaded automatically.",
+                    "format": "directory-path"
                 }
             }
         },

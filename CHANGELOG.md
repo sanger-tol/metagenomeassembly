@@ -3,13 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0dev] - unnamed - [2025-03-31]
+## [1.1.0dev] - The Elfin Knight - [2025-03-31]
 
 ### `Added`
 
+- Adds genomad for classification of circular contigs to determine whether they are plasmids (by @prototaxites)
+
 ### `Fixed`
 
+- Fixed missing output channel in gtdbtk/classifywf (by @prototaxites)
+
 ### `Dependencies`
+
+| module                                 | tools                             | old versions | new versions          |
+| -------------------------------------- | --------------------------------- | ------------ | ----------------------|
+| find_circles                           | seqkit,samtools,gawk              | 2.9.0, -, -  | 2.10.0, 1.21.0, 5.3.0 |
+| genomad/download                       | genomad                           | -            | 1.7.4                 |
+| genomad/endtoend                       | genomad                           | -            | 1.7.4                 |
+
 
 ### `Deprecated`
 

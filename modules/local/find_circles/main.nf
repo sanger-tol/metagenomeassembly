@@ -4,8 +4,8 @@ process FIND_CIRCLES {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/seqkit:2.9.0--h9ee0642_0':
-        'biocontainers/seqkit:2.9.0--h9ee0642_0' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/8c/8c107a3a3017f6606e46111881ba8555185d1be20713f50b7f7f4ea0128f1a05/data':
+        'community.wave.seqera.io/library/samtools_seqkit_gawk:5f1679612f236815' }"
 
     input:
     tuple val(meta), path(fasta)
@@ -20,8 +20,8 @@ process FIND_CIRCLES {
 
     script:
     def prefix      = task.ext.prefix ?: "${meta.id}"
-    def clean_input = input.toString() - ~/\.gz$/
-    def unzip       = input.getExtension() == "gz" ? "zcat ${fasta} | \\" : "cat ${fasta} | \\"
+    def clean_input = fasta.toString() - ~/\.gz$/
+    def unzip       = fasta.getExtension() == "gz" ? "zcat ${fasta} | \\" : "cat ${fasta} | \\"
     def regex       = "&& /\$-/" // This regex will never match anything
     if(meta.assembler == "metamdbg") {
         regex = "&& /circular=yes/"
