@@ -63,10 +63,15 @@ workflow METAGENOMEASSEMBLY {
 
     //
     // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
-    // check contig circularity
+    // check contig circularity and classify circular contigs
     //
-    ASSEMBLY_QC(ch_assemblies_raw, rfam_rrna_cm)
+    ASSEMBLY_QC(
+        ch_assemblies_raw,
+        rfam_rrna_cm,
+        genomad_db
+    )
     ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
+
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
     ch_assemblies = ASSEMBLY_QC.out.assemblies
