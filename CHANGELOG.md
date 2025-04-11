@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fixed missing output channel in gtdbtk/classifywf (by @prototaxites)
+- Add in some previously-excluded parts of the template (by @prototaxites)
 
 ### `Dependencies`
 
