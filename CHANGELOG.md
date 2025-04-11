@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Adds genomad for classification of circular contigs to determine whether they are plasmids (by @prototaxites)
+  - adds `--enable_genomad` to turn on and off this step (enabled by default)
+  - adds `--genomad_splits` to control memory usage - increasing this value from the default 1 increases
+    chunking of the genomad database, reducing memory usage at the cost of increased runtime
 
 ### `Fixed`
 
