@@ -57,10 +57,6 @@ template:
   outdir: .
   skip_features:
     - igenomes
-    - codespaces
     - fastqc
-    - adaptivecard
-    - seqera_platform
     - multiqc
-    - rocrate
   version: 1.1.0dev
