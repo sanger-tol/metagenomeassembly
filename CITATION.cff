@@ -1,24 +1,24 @@
 authors:
-- affiliation: Wellcome Sanger Institute
-  email: jd42@sanger.ac.uk
-  family-names: Downie
-  given-names: Jim
-  orcid: https://orcid.org/0000-0002-7175-0533
-  website: https://github.com/prototaxites
-- affiliation: Wellcome Sanger Institute
-  email: 84074349+weaglesBio@users.noreply.github.com
-  family-names: Eagles
-  given-names: Will
-  orcid: https://orcid.org/0009-0006-9956-0404
-  website: https://github.com/weaglesBio
-- affiliation: Wellcome Sanger Institute
-  family-names: Gettle
-  given-names: Noah
-  orcid: https://orcid.org/0000-0003-3407-4086
-  website: https://github.com/gettl008
+  - affiliation: Wellcome Sanger Institute
+    email: jd42@sanger.ac.uk
+    family-names: Downie
+    given-names: Jim
+    orcid: https://orcid.org/0000-0002-7175-0533
+    website: https://github.com/prototaxites
+  - affiliation: Wellcome Sanger Institute
+    email: 84074349+weaglesBio@users.noreply.github.com
+    family-names: Eagles
+    given-names: Will
+    orcid: https://orcid.org/0009-0006-9956-0404
+    website: https://github.com/weaglesBio
+  - affiliation: Wellcome Sanger Institute
+    family-names: Gettle
+    given-names: Noah
+    orcid: https://orcid.org/0000-0003-3407-4086
+    website: https://github.com/gettl008
 cff-version: 1.2.0
 commit: 03874666ebe537c1cf5b1b8d5afaa13b6639b152
-date-released: '2025-04-11'
+date-released: "2025-04-11"
 doi: 10.5281/zenodo.15090769
 license: MIT
 message: If you use this software, please cite it using the metadata from this file

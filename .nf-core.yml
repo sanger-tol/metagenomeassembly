@@ -1,50 +1,50 @@
 lint:
   files_exist:
-  - .github/ISSUE_TEMPLATE/config.yml
-  - conf/igenomes_ignored.config
-  - conf/igenomes.config
-  - assets/multiqc_config.yml
-  - assets/methods_description_template.yml
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-metagenomeassembly_logo_light.png
-  - docs/images/nf-core-metagenomeassembly_logo_light.png
-  - docs/images/nf-core-metagenomeassembly_logo_dark.png
-  - .github/workflows/awstest.yml
-  - .github/workflows/awsfulltest.yml
-  - ro-crate-metadata.json
+    - .github/ISSUE_TEMPLATE/config.yml
+    - conf/igenomes_ignored.config
+    - conf/igenomes.config
+    - assets/multiqc_config.yml
+    - assets/methods_description_template.yml
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
+    - .github/workflows/awstest.yml
+    - .github/workflows/awsfulltest.yml
+    - ro-crate-metadata.json
   files_unchanged:
-  - .github/CONTRIBUTING.md
-  - .prettierignore
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-metagenomeassembly_logo_light.png
-  - assets/multiqc_config.yml
-  - docs/images/nf-core-metagenomeassembly_logo_light.png
-  - docs/images/nf-core-metagenomeassembly_logo_dark.png
-  - .github/ISSUE_TEMPLATE/bug_report.yml
-  - .github/workflows/branch.yml
-  - .github/workflows/linting_comment.yml
-  - .github/workflows/linting.yml
-  - ro-crate-metadata.json
+    - .github/CONTRIBUTING.md
+    - .prettierignore
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-metagenomeassembly_logo_light.png
+    - assets/multiqc_config.yml
+    - docs/images/nf-core-metagenomeassembly_logo_light.png
+    - docs/images/nf-core-metagenomeassembly_logo_dark.png
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - ro-crate-metadata.json
   multiqc_config: false
   nextflow_config:
-  - process.cpus
-  - process.memory
-  - process.time
-  - custom_config
-  - params.custom_config_version
-  - params.custom_config_base
-  - manifest.name
-  - manifest.homePage
-  - validation.help.beforeText
-  - validation.help.afterText
-  - validation.summary.beforeText
-  - validation.summary.afterText
-  - config_defaults:
-    - params.hmm_gtdb_pfam
-    - params.hmm_gtdb_tigrfam
-    - params.rfam_rrna_cm
+    - process.cpus
+    - process.memory
+    - process.time
+    - custom_config
+    - params.custom_config_version
+    - params.custom_config_base
+    - manifest.name
+    - manifest.homePage
+    - validation.help.beforeText
+    - validation.help.afterText
+    - validation.summary.beforeText
+    - validation.summary.afterText
+    - config_defaults:
+        - params.hmm_gtdb_pfam
+        - params.hmm_gtdb_tigrfam
+        - params.rfam_rrna_cm
   readme:
-  - nextflow_badge
+    - nextflow_badge
 nf_core_version: 3.2.0
 repository_type: pipeline
 template:
@@ -56,7 +56,7 @@ template:
   org: sanger-tol
   outdir: .
   skip_features:
-  - igenomes
-  - fastqc
-  - multiqc
+    - igenomes
+    - fastqc
+    - multiqc
   version: 1.1.0
