@@ -47,6 +47,8 @@ Genome assembly statistics (contig counts, length, N50, etc.) tallied using [Seq
 - `assembly/qc/`
   - `[sampleid]_[assembler].stats.tsv`: TSV of assembly statistics.
   - `[sampleid]_[assembler].rrna.tbl`: TSV of rRNA annotations per contig.
+  - `[sampleid]_[assembler].circles_plasmid_summary.tsv`: TSV summarising contig-level classifications as plasmids from Genomad.
+  - `[sampleid]_[assembler].circles_virus_summary.tsv`: TSV summarising virus-level classifications as plasmids from Genomad.
 
 </details>
 

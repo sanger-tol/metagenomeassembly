@@ -28,6 +28,7 @@ workflow METAGENOMEASSEMBLY {
     assembly            // channel: pre-built metagenome assembly, optional
     hic_cram            // channel: hic cram files from yaml, optional
     hic_enzymes         // channel: hic enzyme list from yaml, optional
+    genomad_db          // channel: genomad db from params
     rfam_rrna_cm        // channel: rRNA cm file from params
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
@@ -62,10 +63,15 @@ workflow METAGENOMEASSEMBLY {
 
     //
     // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
-    // check contig circularity
+    // check contig circularity and classify circular contigs
     //
-    ASSEMBLY_QC(ch_assemblies_raw, rfam_rrna_cm)
+    ASSEMBLY_QC(
+        ch_assemblies_raw,
+        rfam_rrna_cm,
+        genomad_db
+    )
     ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
+
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
     ch_assemblies = ASSEMBLY_QC.out.assemblies
