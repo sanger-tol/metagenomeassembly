@@ -32,6 +32,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     assembly     // channel: pre-existing assembly read in from --input
     hic_cram     // channel: hic cram read in from --input
     hic_enzymes  // channel: hic enzymes read in from --input
+    genomad_db   // channel: genomad db from params.genomad_db
     rfam_rrna_cm // channel: rrna cm file from params.rfam_rrna_cm
     magscot_gtdb_hmm_db // channel: hmms for magscot
     checkm2_db   // channel: checkm2 db from --params.checkm2_db
@@ -48,6 +49,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         assembly,
         hic_cram,
         hic_enzymes,
+        genomad_db,
         rfam_rrna_cm,
         magscot_gtdb_hmm_db,
         checkm2_db,
@@ -86,6 +88,7 @@ workflow {
         PIPELINE_INITIALISATION.out.assembly,
         PIPELINE_INITIALISATION.out.hic_cram,
         PIPELINE_INITIALISATION.out.hic_enzymes,
+        PIPELINE_INITIALISATION.out.genomad_db,
         PIPELINE_INITIALISATION.out.rfam_rrna_cm,
         PIPELINE_INITIALISATION.out.magscot_gtdb_hmm_db,
         PIPELINE_INITIALISATION.out.checkm2_db,

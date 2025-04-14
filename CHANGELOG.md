@@ -3,6 +3,30 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - The Elfin Knight - [2025-04-14]
+
+### `Added`
+
+- Adds genomad for classification of circular contigs to determine whether they are plasmids (by @prototaxites)
+  - adds `--enable_genomad` to turn on and off this step (enabled by default)
+  - adds `--genomad_splits` to control memory usage - increasing this value from the default 1 increases
+    chunking of the genomad database, reducing memory usage at the cost of increased runtime
+
+### `Fixed`
+
+- Fixed missing output channel in gtdbtk/classifywf (by @prototaxites)
+- Add in some previously-excluded parts of the template (by @prototaxites)
+
+### `Dependencies`
+
+| module           | tools                | old versions | new versions          |
+| ---------------- | -------------------- | ------------ | --------------------- |
+| find_circles     | seqkit,samtools,gawk | 2.9.0, -, -  | 2.10.0, 1.21.0, 5.3.0 |
+| genomad/download | genomad              | -            | 1.11.0                |
+| genomad/endtoend | genomad              | -            | 1.11.0                |
+
+### `Deprecated`
+
 ## ## [[1.0.3](https://github.com/sanger-tol/metagenomeassembly/releases/tag/1.0.3)] - Scarborough Fair (patch 3) - [2025-04-08]
 
 - Relicensed this repository as MIT
