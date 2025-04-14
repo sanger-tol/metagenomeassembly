@@ -37,12 +37,12 @@
                     },
                     "genomad/download": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "5c9c6d55abdc05dbe3dc81b1cf4997d605c13795",
                         "installed_by": ["modules"]
                     },
                     "genomad/endtoend": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "5c9c6d55abdc05dbe3dc81b1cf4997d605c13795",
                         "installed_by": ["modules"]
                     },
                     "gtdbtk/classifywf": {
