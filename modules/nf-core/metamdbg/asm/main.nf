@@ -8,7 +8,7 @@ process METAMDBG_ASM {
         'biocontainers/metamdbg:1.1--h077b44d_1' }"
 
     input:
-    tuple val(meta), path(reads)
+    tuple val(meta), path(reads, arity: '1..*')
     val(input_type)
 
     output:
