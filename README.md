@@ -12,6 +12,9 @@
 
 ## Introduction
 
+> [!WARNING]
+> Due to incompatibilities between the current version of nf-schema used by this pipeline and upcoming versions of Nextflow, this pipeline is currently only compatible with Nextflow releases >= 24.04.2 and < 25.0.0.
+
 **sanger-tol/metagenomeassembly** is a bioinformatics pipeline for the assembly and binning of metagenomes
 using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
