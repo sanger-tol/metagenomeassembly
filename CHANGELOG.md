@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - The Elfin Knight (patch 1) - [2025-04-14]
+
+### `Fixed`
+- Fixed bug where single-file inputs to metaMDBG caused a file-not-found error (by @prototaxites)
+
 ## [1.1.0] - The Elfin Knight - [2025-04-14]
 
 ### `Added`
