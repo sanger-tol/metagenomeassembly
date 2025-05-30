@@ -12,10 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-| module           | tools                | old versions | new versions          |
-| ---------------- | -------------------- | ------------ | --------------------- |
-| metator/pipeline | metator              | 1.3.7        | 1.3.10                |
-| nextflow         | nextflow             | 24.04.02     | 25.04.02              |
+| module           | tools    | old versions | new versions |
+| ---------------- | -------- | ------------ | ------------ |
+| metator/pipeline | metator  | 1.3.7        | 1.3.10       |
+| nextflow         | nextflow | 24.04.02     | 25.04.02     |
 
 ## [1.1.0] - The Elfin Knight - [2025-04-14]
 
