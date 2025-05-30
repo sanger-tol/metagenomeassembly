@@ -3,11 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - The Elfin Knight (patch 1) - [2025-05-19]
+## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 
 ### `Fixed`
 
 - Fixed bug where single-file inputs to metaMDBG caused a file-not-found error (by @prototaxites)
+- Upgrade Metator to avoid bug in Conda
+
+### `Dependencies`
+
+| module           | tools                | old versions | new versions          |
+| ---------------- | -------------------- | ------------ | --------------------- |
+| metator/pipeline | metator              | 1.3.7        | 1.3.10                |
+| nextflow         | nextflow             | 24.04.02     | 25.04.02              |
 
 ## [1.1.0] - The Elfin Knight - [2025-04-14]
 
