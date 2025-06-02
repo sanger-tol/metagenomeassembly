@@ -70,7 +70,8 @@
                     "metamdbg/asm": {
                         "branch": "master",
                         "git_sha": "c912aa8b29a17d6dbec3fdda71185fbe3e77ba59",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/metamdbg/asm/metamdbg-asm.diff"
                     },
                     "minimap2/align": {
                         "branch": "master",
