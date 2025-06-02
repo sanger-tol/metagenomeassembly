@@ -25,6 +25,7 @@ lint:
     - .github/workflows/linting_comment.yml
     - .github/workflows/linting.yml
     - ro-crate-metadata.json
+    - LICENSE
   multiqc_config: false
   nextflow_config:
     - process.cpus
@@ -45,7 +46,7 @@ lint:
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge
-nf_core_version: 3.2.0
+nf_core_version: 3.2.1
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -59,4 +60,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.1.0dev
+  version: 1.1.0
