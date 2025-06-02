@@ -1,0 +1,15 @@
+id: xyTesTing1
+pacbio:
+  fasta:
+    - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/pacbio/fasta/subsampled.pacbio.part_001.fa.gz
+    - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/pacbio/fasta/subsampled.pacbio.part_002.fa.gz
+hic:
+  cram:
+    - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/hic_sim3c/hic1.cram
+    - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/hic_sim3c/hic2.cram
+  enzymes:
+    - DpnII
+    - HinfI
+assembly:
+  fasta: https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/assembly/xyTesTing1_metamdbg.contigs.fasta.gz
+  assembler: metamdbg

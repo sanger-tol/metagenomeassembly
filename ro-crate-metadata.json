@@ -32,10 +32,25 @@
                     "@id": "assets/"
                 },
                 {
+                    "@id": "bin/"
+                },
+                {
                     "@id": "conf/"
                 },
                 {
                     "@id": "docs/"
+                },
+                {
+                    "@id": "docs/images/"
+                },
+                {
+                    "@id": "modules/"
+                },
+                {
+                    "@id": "modules/local/"
+                },
+                {
+                    "@id": "modules/nf-core/"
                 },
                 {
                     "@id": "workflows/"
@@ -117,6 +132,7 @@
             ],
             "dateCreated": "",
             "dateModified": "2025-06-02T12:23:12Z",
+
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": ["nf-core", "nextflow"],
             "license": ["MIT"],
@@ -134,9 +150,9 @@
             },
             "url": [
                 "https://github.com/sanger-tol/metagenomeassembly",
-                "https://nf-co.re/sanger-tol/metagenomeassembly/1.1.0/"
+                "https://nf-co.re/sanger-tol/metagenomeassembly/1.1.1/"
             ],
-            "version": ["1.1.0"]
+            "version": ["1.1.1"]
         },
         {
             "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
@@ -148,7 +164,7 @@
             "url": {
                 "@id": "https://www.nextflow.io/"
             },
-            "version": "!>=24.04.2"
+            "version": "!>=24.04.2, <25.0.0"
         },
         {
             "@id": "#bdb7399f-65c8-4843-8097-9e623afe6f9c",
@@ -165,6 +181,7 @@
         },
         {
             "@id": "#a733eab9-4430-4e9b-84d2-3a2a537cf5fd",
+
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing sanger-tol/metagenomeassembly",
             "resource": "repos/sanger-tol/metagenomeassembly/actions/workflows/ci.yml",
@@ -187,6 +204,11 @@
             "description": "Additional files"
         },
         {
+            "@id": "bin/",
+            "@type": "Dataset",
+            "description": "Scripts that must be callable from a pipeline process"
+        },
+        {
             "@id": "conf/",
             "@type": "Dataset",
             "description": "Configuration files"
@@ -195,6 +217,26 @@
             "@id": "docs/",
             "@type": "Dataset",
             "description": "Markdown files for documenting the pipeline"
+        },
+        {
+            "@id": "docs/images/",
+            "@type": "Dataset",
+            "description": "Images for the documentation files"
+        },
+        {
+            "@id": "modules/",
+            "@type": "Dataset",
+            "description": "Modules used by the pipeline"
+        },
+        {
+            "@id": "modules/local/",
+            "@type": "Dataset",
+            "description": "Pipeline-specific modules"
+        },
+        {
+            "@id": "modules/nf-core/",
+            "@type": "Dataset",
+            "description": "nf-core modules"
         },
         {
             "@id": "workflows/",

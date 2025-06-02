@@ -1,0 +1,27 @@
+Changes in component 'nf-core/samtools/index'
+'modules/nf-core/samtools/index/environment.yml' is unchanged
+'modules/nf-core/samtools/index/meta.yml' is unchanged
+Changes in 'samtools/index/main.nf':
+--- modules/nf-core/samtools/index/main.nf
++++ modules/nf-core/samtools/index/main.nf
+@@ -11,10 +11,10 @@
+     tuple val(meta), path(input)
+ 
+     output:
+-    tuple val(meta), path("*.bai") , optional:true, emit: bai
+-    tuple val(meta), path("*.csi") , optional:true, emit: csi
+-    tuple val(meta), path("*.crai"), optional:true, emit: crai
+-    path  "versions.yml"           , emit: versions
++    tuple val(meta), path(input), path("*.bai") , optional:true, emit: bai
++    tuple val(meta), path(input), path("*.csi") , optional:true, emit: csi
++    tuple val(meta), path(input), path("*.crai"), optional:true, emit: crai
++    path  "versions.yml"                        , emit: versions
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/samtools/index/tests/tags.yml' is unchanged
+'modules/nf-core/samtools/index/tests/main.nf.test' is unchanged
+'modules/nf-core/samtools/index/tests/csi.nextflow.config' is unchanged
+'modules/nf-core/samtools/index/tests/main.nf.test.snap' is unchanged
+************************************************************
