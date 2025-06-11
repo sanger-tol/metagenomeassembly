@@ -43,7 +43,7 @@ nextflow_pipeline {
                     // Check tRNAScan-SE ran for all bins
                     trnascan_stats.size() == bin_fasta.size(),
                     // Check bin_summary.tsv file has expected number of rows
-                    path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size()
+                    path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size(),
                     // Check group_summary.tsv file has expected number of rows
                     path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6
                 ).match() }
