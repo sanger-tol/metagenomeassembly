@@ -21,7 +21,7 @@ nextflow_pipeline {
             // def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/taxonomy/", relative: true)
 
             // Unstable and uncountable files
-            def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true)
+            def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["*.{fasta,fa,fna}.gz"])
             def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: ["*.stats"])
 
             assertAll(
