@@ -13,21 +13,39 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
-                { assert workflow.success},
+                // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
+                // Stable files
+                def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
+                def bin_qc_files   = getAllFilesFromDir("${params.outdir}/bins/qc/", relative: true, include: [*.tsv], exclude: [*/*.tsv])
+                def bin_log_files  = getAllFilesFromDir("${params.outdir}/bins/log/", relative: true, include: [*.tsv], exclude: [*/*.tsv])
+                def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/qc/taxonomy/", relative: true)
+
+                // Unstable files
+                def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true)
+                def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: [*.stats])
+
+                { assert workflow.success },
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_metagenomeassembly_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
+                    // Check stable files
+                    assembly_files,
+                    bin_qc_files,
+                    bin_log_files,
+                    gtdbtk_files,
+
+                    // Unstable file checks
+                    // Check number of CheckM2 bins processed matches number of bins
+                    path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size(),
+                    // Check tRNAScan-SE ran for all bins
+                    trnascan_stats.size() == bin_fasta.size(),
+                    // Check bin_summary.tsv file has expected number of rows
+                    path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size()
+                    // Check group_summary.tsv file has expected number of rows
+                    path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6
                 ).match() }
             )
         }
