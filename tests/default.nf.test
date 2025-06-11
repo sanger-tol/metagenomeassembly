@@ -18,7 +18,7 @@ nextflow_pipeline {
             def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
             def bin_qc_files   = getAllFilesFromDir("${params.outdir}/bins/qc/", relative: true, include: ["*.tsv"], exclude: ["*/*.tsv"])
             def bin_log_files  = getAllFilesFromDir("${params.outdir}/bins/log/", relative: true)
-            def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/taxonomy/", relative: true)
+            // def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/taxonomy/", relative: true)
 
             // Unstable and uncountable files
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true)
@@ -33,7 +33,7 @@ nextflow_pipeline {
                     assembly_files,
                     bin_qc_files,
                     bin_log_files,
-                    gtdbtk_files,
+                    // gtdbtk_files,
 
                     // Unstable file checks
                     // Check number of CheckM2 bins processed matches number of bins
