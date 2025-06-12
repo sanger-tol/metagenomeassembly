@@ -1,5 +1,5 @@
 include { GTDBTK_CLASSIFYWF               } from '../../../modules/nf-core/gtdbtk/classifywf/main'
-include { GTDBTK_GTDBTONCBIMAJORITYVOTE   } from '../../../modules/nf-core/gtdbtk/classifywf/main'
+include { GTDBTK_GTDBTONCBIMAJORITYVOTE   } from '../../../modules/nf-core/gtdbtk/gtdbtoncbimajorityvote/main'
 include { GAWK as GAWK_EXTRACT_NCBI_NAMES } from '../../../modules/nf-core/gawk/main'
 include { TAXONKIT_NAME2TAXID             } from '../../../modules/nf-core/taxonkit/name2taxid/main'
 
