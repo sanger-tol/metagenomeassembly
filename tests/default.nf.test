@@ -5,26 +5,26 @@ nextflow_pipeline {
     tag "pipeline"
     profile "test"
 
-    setup {
-        def gtdbtk_command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
-        def gtdbtk_proc = gtdbtk_command.execute()
-        gtdbtk_proc.waitFor()
-
-        if (gtdbtk_proc.exitValue() != 0) {
-            throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
-        }
-
-        new File("${launchDir}/ncbi_taxdump").mkdirs()
-        def ncbi_command = ['bash', '-c', "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz | tar xzf - -C ${launchDir}/ncbi_taxdump"]
-        def ncbi_proc = ncbi_command.execute()
-        ncbi_proc.waitFor()
-
-        if (ncbi_proc.exitValue() != 0) {
-            throw new RuntimeException("Error - failed to download NCBI taxdump: ${ncbi_proc.err.text}")
-        }
-    }
-
     test("-profile test") {
+
+        setup {
+            def gtdbtk_command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
+            def gtdbtk_proc = gtdbtk_command.execute()
+            gtdbtk_proc.waitFor()
+
+            if (gtdbtk_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
+            }
+
+            new File("${launchDir}/ncbi_taxdump").mkdirs()
+            def ncbi_command = ['bash', '-c', "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz | tar xzf - -C ${launchDir}/ncbi_taxdump"]
+            def ncbi_proc = ncbi_command.execute()
+            ncbi_proc.waitFor()
+
+            if (ncbi_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download NCBI taxdump: ${ncbi_proc.err.text}")
+            }
+        }
 
         when {
             params {
@@ -56,6 +56,25 @@ nextflow_pipeline {
     }
 
     test("-profile test_withassembly") {
+
+        setup {
+            def gtdbtk_command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
+            def gtdbtk_proc = gtdbtk_command.execute()
+            gtdbtk_proc.waitFor()
+
+            if (gtdbtk_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
+            }
+
+            new File("${launchDir}/ncbi_taxdump").mkdirs()
+            def ncbi_command = ['bash', '-c', "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz | tar xzf - -C ${launchDir}/ncbi_taxdump"]
+            def ncbi_proc = ncbi_command.execute()
+            ncbi_proc.waitFor()
+
+            if (ncbi_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download NCBI taxdump: ${ncbi_proc.err.text}")
+            }
+        }
 
         when {
             params {
