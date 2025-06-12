@@ -32,9 +32,10 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir = "$outputDir"
-                gtdbtk_db = "${launchDir}/r226_mockup"
-                ncbi_taxonomy_dir = "${launchDir}/taxdump"
+                outdir               = "$outputDir"
+                gtdbtk_db            = "${launchDir}/r226_mockup"
+                ncbi_taxonomy_dir    = "${launchDir}/taxdump"
+                gtdbtk_use_full_tree = true
             }
         }
 
