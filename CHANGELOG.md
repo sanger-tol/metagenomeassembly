@@ -10,10 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pipeline-level nf-test implemented (by @prototaxites)
 - Added `gtdbtk_use_full_tree` parameter. This is enabled in the test profiles to allow use of the mock DB, but if enabled using the full GTDB-Tk
 db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
+- Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
 
 ### Fixed
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
+
+### `Dependencies`
+
+| module                        | tools    | old versions | new versions |
+| ----------------------------- | -------- | ------------ | ------------ |
+| gtdbtk_classifywf             | gtdbtk   | 2.4.0        | 2.4.1        |
+| gtdbtk_gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 
