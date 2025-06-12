@@ -252,6 +252,10 @@
                     "description": "Path to a directory containing the GTDB-Tk database.",
                     "format": "directory-path"
                 },
+                "gtdbtk_use_full_tree": {
+                    "type": "boolean",
+                    "description": "Use the full bacterial phylogenetic tree when classifying bacterial genomes. This is enabled by default in the test profiles as it is required to use the mock database for testing. Enabling this with the full GTDB database requires a minimum of 320GB of memory for the GTDB-TK classify process, but will place all bins into a single tree."
+                },
                 "gtdb_bac120_metadata": {
                     "type": "string",
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release220/220.0/bac120_metadata_r220.tsv.gz",
