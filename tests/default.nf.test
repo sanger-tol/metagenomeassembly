@@ -8,7 +8,8 @@ nextflow_pipeline {
     test("-profile test") {
 
         setup {
-            def gtdbtk_command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
+            def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
+            def gtdbtk_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
             def gtdbtk_proc = gtdbtk_command.execute()
             gtdbtk_proc.waitFor()
 
@@ -16,8 +17,9 @@ nextflow_pipeline {
                 throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
             }
 
+            def ncbi_taxdump_url = "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip"
             def ncbi_command = ['bash', '-c', [
-                "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip --output ${launchDir}/taxdump.zip",
+                "curl -L ${ncbi_taxdump_url} --output ${launchDir}/taxdump.zip",
                 "unzip ${launchDir}/taxdump.zip -d ${launchDir}/taxdump",
                 "rm ${launchDir}/taxdump.zip"
             ].join(' && ')]
@@ -61,7 +63,8 @@ nextflow_pipeline {
     test("-profile test_withassembly") {
 
         setup {
-            def gtdbtk_command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
+            def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
+            def gtdbtk_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
             def gtdbtk_proc = gtdbtk_command.execute()
             gtdbtk_proc.waitFor()
 
@@ -69,8 +72,9 @@ nextflow_pipeline {
                 throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
             }
 
+            def ncbi_taxdump_url = "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip"
             def ncbi_command = ['bash', '-c', [
-                "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip --output ${launchDir}/taxdump.zip",
+                "curl -L ${ncbi_taxdump_url} --output ${launchDir}/taxdump.zip",
                 "unzip ${launchDir}/taxdump.zip -d ${launchDir}/taxdump",
                 "rm ${launchDir}/taxdump.zip"
             ].join(' && ')]
