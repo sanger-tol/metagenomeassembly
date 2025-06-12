@@ -40,23 +40,55 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
+            // Stable file names
+            def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
+            def bin_qc_files   = getAllFilesFromDir("${params.outdir}/bins/qc/", relative: true, include: ["*.tsv"])
+            def bin_log_files  = getAllFilesFromDir("${params.outdir}/bins/log/", relative: true)
+            def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/taxonomy/", relative: true)
+            def summary_files  = getAllFilesFromDir("${params.outdir}/bins/", relative: true, include: ["*.tsv"])
+
+            // Unstable and uncountable files
+            def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
+            def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: ["*.stats"])
+
+            // Count number of GTDB-Tk-appropriate bins
+            def n_gtdbtk_bins = with(path("${params.outdir}/bins/taxonomy/gtdbtk.xyTesTing1.bac120.summary.tsv")
+                .csv(sep: "\t"))
+                .rows.findAll { it -> it.Completeness >= 50 && it.Contamination <= 10}.size()
+
             assertAll(
-                { assert workflow.success},
+                { assert workflow.success },
+                // Unstable file checks
+                // Check number of CheckM2 bins processed matches number of bins
+                { assert path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+                // Check tRNAScan-SE ran for all bins
+                { assert trnascan_stats.size() == bin_fasta.size() },
+                // Check bin_summary.tsv file has expected number of rows
+                { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+                // Check GTDB-Tk output has expected number of rows
+                { assert path("${params.outdir}/bins/taxonomy/gtdbtk.xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
+                // Check group_summary.tsv file has expected number of rows
+                // (17 if GTDB-Tk not run - 6 otherwise)
+                { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6 },
+                // Check files with stable names
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_metagenomeassembly_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
+                    removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
+                    assembly_files,
+                    bin_qc_files,
+                    bin_log_files,
+                    gtdbtk_files,
+                    summary_files
                 ).match() }
             )
         }
+
+        cleanup {
+            new File("${launchDir}/taxdump").deleteDir()
+            new File("${launchDir}/r226_mockup").deleteDir()
+            new File("${launchDir}/output").deleteDir()
+        }
+
     }
 }
