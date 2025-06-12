@@ -4,6 +4,12 @@ nextflow_pipeline {
     script "../main.nf"
     tag "pipeline"
 
+    setup {
+        def command = ['bash', '-c', "curl https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz | tar xzf - -C ${launchDir}"]
+        def proc = command.execute()
+        proc.waitFor()
+    }
+
     test("-profile test") {
 
         when {
