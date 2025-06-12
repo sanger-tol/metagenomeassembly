@@ -54,7 +54,7 @@ nextflow_pipeline {
             // Count number of GRDB-Tk-appropriate bins
             def n_gtdbtk_bins = with(path("${params.outdir}/bins/taxonomy/gtdbtk.xyTesTing1.bac120.summary.tsv")
                 .csv(sep: "\t"))
-                .rows.findAll { it -> it.Completeness >= 50 && it.Contamination <= 10}.size()
+                .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
 
             assertAll(
                 { assert workflow.success },
