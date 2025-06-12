@@ -34,7 +34,7 @@ nextflow_pipeline {
             params {
                 outdir = "$outputDir"
                 gtdbtk_db = "${launchDir}/r226_mockup"
-                ncbi_taxonomy_dir = "${launchDir}/ncbi_taxdump"
+                ncbi_taxonomy_dir = "${launchDir}/taxdump"
             }
         }
 
@@ -88,7 +88,7 @@ nextflow_pipeline {
             params {
                 outdir = "$outputDir"
                 gtdbtk_db = "${launchDir}/r226_mockup"
-                ncbi_taxonomy_dir = "${launchDir}/ncbi_taxdump"
+                ncbi_taxonomy_dir = "${launchDir}/taxdump"
             }
         }
 
