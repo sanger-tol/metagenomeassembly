@@ -16,6 +16,7 @@ nextflow_pipeline {
             }
 
             new File("${launchDir}/ncbi_taxdump").mkdirs()
+            def ncbi_command = ['bash', '-c', [
                 "curl -L https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip --output ${launchDir}/taxdump.zip",
                 "unzip ${launchDir}/taxdump.zip -d ${launchDir}/taxdump",
                 "rm ${launchDir}/taxdump.zip"
