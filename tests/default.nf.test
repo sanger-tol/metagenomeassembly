@@ -86,7 +86,7 @@ nextflow_pipeline {
         cleanup {
             new File("${launchDir}/taxdump").deleteDir()
             new File("${launchDir}/r226_mockup").deleteDir()
-            new File("${launchDir}/output").deleteDir()
+            new File("${workDir}").deleteDir()
         }
 
     }
