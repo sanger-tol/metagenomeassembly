@@ -79,6 +79,8 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
+                gtdbtk_db = "${launchDir}/r226_mockup"
+                ncbi_taxonomy_dir = "${launchDir}/ncbi_taxdump"
             }
         }
 
