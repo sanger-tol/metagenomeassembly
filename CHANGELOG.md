@@ -8,10 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Pipeline-level nf-test implemented (by @prototaxites)
-- Added `gtdbtk_use_full_tree` parameter. This is enabled in the test profiles to allow use of the mock DB, but if enabled using the full GTDB-Tk
-db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
+- Added `gtdbtk_use_full_tree` parameter. This is enabled in the nf-test tests to allow use of the mock DB, but if enabled using the full GTDB-Tk
+  db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
 - Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
+- Updated all out-of-date nf-core modules (by @prototaxites)
 
 ### `Fixed`
 
@@ -20,7 +21,7 @@ db, all bacterial bins will be placed into the full bacterial tree. This require
 ### `Deprecated`
 
 - Removed the code that automatically downloads the CheckM2 and Genomad databases if they are not provided, as these can now
-be specified for download in the nf-test setup block and are thus not required (by @prototaxites)
+  be specified for download in the nf-test setup block and are thus not required (by @prototaxites)
 
 ### `Dependencies`
 
@@ -28,6 +29,8 @@ be specified for download in the nf-test setup block and are thus not required (
 | ----------------------------- | -------- | ------------ | ------------ |
 | gtdbtk/classifywf             | gtdbtk   | 2.4.0        | 2.4.1        |
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
+| minimap2/align                | minimap2 | 2.28         | 2.29         |
+| minimap2/align                | samtools | 1.20         | 1.21         |
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 

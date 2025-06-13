@@ -5,8 +5,8 @@ process MINIMAP2_ALIGN {
     // Note: the versions here need to match the versions used in the mulled container below and minimap2/index
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a1/a1907ccbba9ff7b3da04b1f134aeaa0ccd327f562969b129c73933ab21cb2ece/data' :
-        'community.wave.seqera.io/library/minimap2_samtools:03e1e7cf6ec6695d' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/66/66dc96eff11ab80dfd5c044e9b3425f52d818847b9c074794cf0c02bfa781661/data' :
+        'community.wave.seqera.io/library/minimap2_samtools:33bb43c18d22e29c' }"
 
     input:
     tuple val(meta), path(reads)
@@ -20,7 +20,7 @@ process MINIMAP2_ALIGN {
     tuple val(meta2), path("*.paf")                       , optional: true, emit: paf
     tuple val(meta2), path("*.bam")                       , optional: true, emit: bam
     tuple val(meta2), path("*.bam.${bam_index_extension}"), optional: true, emit: index
-    path "versions.yml"                                  , emit: versions
+    path "versions.yml"                                   , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

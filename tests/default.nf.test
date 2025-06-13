@@ -116,6 +116,8 @@ nextflow_pipeline {
         cleanup {
             new File("${launchDir}/taxdump").deleteDir()
             new File("${launchDir}/r226_mockup").deleteDir()
+            new File("${launchDir}/CheckM2_database").deleteDir()
+            new File("${launchDir}/genomad_db").deleteDir()
             new File("${workDir}").deleteDir()
         }
 
