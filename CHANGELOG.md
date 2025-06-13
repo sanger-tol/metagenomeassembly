@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `gtdbtk_use_full_tree` parameter. This is enabled in the test profiles to allow use of the mock DB, but if enabled using the full GTDB-Tk
 db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
 - Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
+- Return free-disk-space to nf-test CI runners (by @prototaxites)
 
 ### `Fixed`
 
