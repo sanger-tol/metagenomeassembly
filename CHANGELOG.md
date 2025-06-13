@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
 - Updated all out-of-date nf-core modules (by @prototaxites)
 - Emit all contig2bin files in the output directory (by @prototaxites)
-- Include filename in bin_summary.tsv results file
+- Include filename in bin_summary.tsv results file (by @prototaxites)
 
 ### `Fixed`
 
