@@ -67,10 +67,7 @@ nextflow_pipeline {
             // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
             // Stable file names
             def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
-            def bin_qc_files   = getAllFilesFromDir("${params.outdir}/bins/qc/", relative: true, include: ["*.tsv"])
-            def bin_log_files  = getAllFilesFromDir("${params.outdir}/bins/log/", relative: true)
-            def gtdbtk_files   = getAllFilesFromDir("${params.outdir}/bins/taxonomy/", relative: true)
-            def summary_files  = getAllFilesFromDir("${params.outdir}/bins/", relative: true, include: ["*.tsv"])
+            def bin_files      = getAllFilesFromDir("${params.outdir}/bins/", relative: true, exclude: ["fasta/**", "qc/trnascan_se/**])
 
             // Unstable and uncountable files
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
@@ -105,10 +102,7 @@ nextflow_pipeline {
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
                     assembly_files,
-                    bin_qc_files,
-                    bin_log_files,
-                    gtdbtk_files,
-                    summary_files
+                    bin_files
                 ).match() }
             )
         }
