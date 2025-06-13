@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
 - Updated all out-of-date nf-core modules (by @prototaxites)
+- Emit all contig2bin files in the output directory (by @prototaxites)
+- Include filename in bin_summary.tsv results file
 
 ### `Fixed`
 

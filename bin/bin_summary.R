@@ -98,11 +98,12 @@ input <- parse_args(parser)
 read_stats <- function(file) {
     df <- read_tsv(file) |>
         mutate(
-            file = str_extract(file, "(.*)\\.fa", group = 1),
+            filename = file,
+            bin = str_extract(file, "(.*)\\.fa", group = 1),
             assembler = str_split(file, "[\\.|_]", simplify = TRUE)[,2],
             binner = str_split(file, "[\\.|_]", simplify = TRUE)[,3]
         ) |>
-        select(bin = file, assembler, binner, num_seqs, n_circ, sum_len, min_len, max_len, N50, L50 = N50_num, GC = `GC(%)`)
+        select(filename, bin, assembler, binner, num_seqs, n_circ, sum_len, min_len, max_len, N50, L50 = N50_num, GC = `GC(%)`)
 
     return(df)
 }
