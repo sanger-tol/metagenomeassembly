@@ -1,5 +1,4 @@
 include { BIN_RRNAS                         } from '../../../modules/local/bin_rrnas/main'
-include { CHECKM2_DATABASEDOWNLOAD          } from '../../../modules/nf-core/checkm2/databasedownload/main'
 include { CHECKM2_PREDICT                   } from '../../../modules/nf-core/checkm2/predict/main'
 include { GENOME_STATS as GENOME_STATS_BINS } from '../../../modules/local/genome_stats/main'
 include { TRNASCAN_SE                       } from '../../../modules/local/trnascan_se/main'
@@ -39,21 +38,10 @@ workflow BIN_QC {
             | transpose
             | groupTuple(by: 0)
 
-        if(!params.checkm2_db) {
-            //
-            // MODULE: Download the CheckM2 database
-            //
-            CHECKM2_DATABASEDOWNLOAD("5571251")
-            ch_versions   = ch_versions.mix(CHECKM2_DATABASEDOWNLOAD.out.versions)
-            ch_checkm2_db = CHECKM2_DATABASEDOWNLOAD.out.database
-        } else {
-            ch_checkm2_db = checkm2_db
-        }
-
         //
         // MODULE: Estimate bin completeness/contamination using CheckM2
         //
-        CHECKM2_PREDICT(ch_bins_for_checkm, ch_checkm2_db)
+        CHECKM2_PREDICT(ch_bins_for_checkm, checkm2_db)
         ch_versions = ch_versions.mix(CHECKM2_PREDICT.out.versions)
         ch_checkm2_tsv = CHECKM2_PREDICT.out.checkm2_tsv
     } else {

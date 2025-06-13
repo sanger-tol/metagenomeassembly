@@ -7,6 +7,7 @@ nextflow_pipeline {
     test("-profile test") {
 
         setup {
+            println "Downloading GTDB-Tk database..."
             def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
             def gtdbtk_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
             def gtdbtk_proc = gtdbtk_command.execute()
@@ -16,6 +17,27 @@ nextflow_pipeline {
                 throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
             }
 
+            println "Downloading CheckM2 database..."
+            def checkm2_db_url  = "https://zenodo.org/api/records/5571251/files/checkm2_database.tar.gz/content"
+            def checkm2_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def checkm2_proc = checkm2_command.execute()
+            checkm2_proc.waitFor()
+
+            if (checkm2_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download CheckM2 db: ${checkm2_proc.err.text}")
+            }
+
+            println "Downloading geNomad database..."
+            def genomad_db_url  = "https://zenodo.org/api/records/14886553/files/genomad_db_v1.9.tar.gz/content"
+            def genomad_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def genomad_proc = genomad_command.execute()
+            genomad_proc.waitFor()
+
+            if (genomad_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download Genomad db: ${genomad_proc.err.text}")
+            }
+
+            println "Downloading NCBI taxdump..."
             def ncbi_taxdump_url = "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip"
             def ncbi_command = ['bash', '-c', [
                 "curl -L ${ncbi_taxdump_url} --output ${launchDir}/taxdump.zip",
@@ -35,6 +57,8 @@ nextflow_pipeline {
                 outdir               = "$outputDir"
                 gtdbtk_db            = "${launchDir}/r226_mockup"
                 ncbi_taxonomy_dir    = "${launchDir}/taxdump"
+                checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
+                genomad_db           = "${launchDir}/genomad_db"
                 gtdbtk_use_full_tree = true
             }
         }
