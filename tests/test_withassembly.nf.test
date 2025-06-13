@@ -68,7 +68,7 @@ nextflow_pipeline {
             // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
             // Stable file names
             def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
-            def bin_files      = getAllFilesFromDir("${params.outdir}/bins/", relative: true, exclude: ["fasta/**", "qc/trnascan_se/**])
+            def bin_files      = getAllFilesFromDir("${params.outdir}/bins/", relative: true, exclude: ["fasta/**", "qc/trnascan_se/**"])
 
             // Unstable and uncountable files
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
