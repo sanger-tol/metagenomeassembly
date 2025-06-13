@@ -20,7 +20,7 @@ nextflow_pipeline {
 
             println "Downloading CheckM2 database..."
             def checkm2_db_url  = "https://zenodo.org/api/records/5571251/files/checkm2_database.tar.gz/content"
-            def checkm2_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def checkm2_command = ['bash', '-c', "curl ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
             def checkm2_proc = checkm2_command.execute()
             checkm2_proc.waitFor()
 
@@ -30,7 +30,7 @@ nextflow_pipeline {
 
             println "Downloading geNomad database..."
             def genomad_db_url  = "https://zenodo.org/api/records/14886553/files/genomad_db_v1.9.tar.gz/content"
-            def genomad_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def genomad_command = ['bash', '-c', "curl ${genomad_db_url} | tar xzf - -C ${launchDir}"]
             def genomad_proc = genomad_command.execute()
             genomad_proc.waitFor()
 
