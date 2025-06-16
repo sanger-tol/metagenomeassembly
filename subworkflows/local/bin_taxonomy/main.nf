@@ -40,7 +40,12 @@ workflow BIN_TAXONOMY {
             }
 
         ch_filtered_bins = ch_bins
-            | map { meta, bin -> [bin.getSimpleName(), bin, meta]}
+            | map { meta, bin ->
+                // Need to explicitly remove fasta extension as getSimpleName() drops parts
+                // of bin names where they contain .s
+                bin_name = bin.getName() - ~/\.fn?a(sta)?\.gz$/
+                [bin_name, bin, meta]
+            }
             | join(ch_bin_scores, failOnDuplicate: true)
             | filter { // it[3] = completeness, it[4] = contamination
                 it[3] >= params.gtdbtk_min_completeness && it[4] <= params.gtdbtk_max_contamination
@@ -96,7 +101,7 @@ workflow BIN_TAXONOMY {
 
             ch_gtdb_ncbi = ch_gtdb_ncbi.mix(TAXONKIT_NAME2TAXID.out.tsv)
         } else {
-            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_CLASSIFYWF.out.ncbi)
+            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv)
         }
     }
 

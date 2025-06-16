@@ -1,496 +1,119 @@
-{
-    "-profile test": {
-        "content": [
-            {
-                "BIN3C_CLUSTER": {
-                    "bin3c": "0.3.3",
-                    "gzip": 1.9,
-                    "bgzip": 1.9
-                },
-                "BIN3C_MKMAP": {
-                    "bin3c": "0.3.3"
-                },
-                "BIN_RRNAS": {
-                    "gawk": "5.3.0"
-                },
-                "BIN_SUMMARY": {
-                    "R": "4.4.2",
-                    "tidyverse": "2.0.0"
-                },
-                "BWAMEM2_INDEX": {
-                    "bwamem2": "2.2.1"
-                },
-                "CHECKM2_PREDICT": {
-                    "checkm2": "1.1.0"
-                },
-                "CONTIG2BINTOFASTA": {
-                    "seqkit": "2.9.0"
-                },
-                "COVERM_CONTIG": {
-                    "coverm": "0.7.0"
-                },
-                "CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT": {
-                    "staden_io_lib": "1.15.0",
-                    "samtools": 1.21,
-                    "bwamem2": "2.2.1"
-                },
-                "DASTOOL_DASTOOL": {
-                    "dastool": "1.1.7"
-                },
-                "FIND_CIRCLES": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_EXTRACT_NCBI_NAMES": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_FASTATOCONTIG2BIN": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_MAGSCOT_PROCESS_CONTIG2BIN": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_MAXBIN2_DEPTHS": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_PROCESS_HMM_TBLOUT": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_RENAME_BINS": {
-                    "gawk": "5.3.0"
-                },
-                "GAWK_TRNASCAN_SUMMARY": {
-                    "gawk": "5.3.0"
-                },
-                "GENOMAD_ENDTOEND": {
-                    "genomad": "1.11.0"
-                },
-                "GENOME_STATS_ASSEMBLIES": {
-                    "seqkit": "2.9.0"
-                },
-                "GENOME_STATS_BINS": {
-                    "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdbtk": "2.4.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
-                },
-                "GZIP_GET_DECOMPRESSED_SIZE": {
-                    "gunzip": 1.13
-                },
-                "HMMER_HMMSEARCH": {
-                    "hmmer": 3.4
-                },
-                "INFERNAL_CMSEARCH": {
-                    "infernal": null
-                },
-                "MAGSCOT_MAGSCOT": {
-                    "magscot": 1.1
-                },
-                "MAXBIN2": {
-                    "maxbin2": "2.2.7"
-                },
-                "METABAT2_METABAT2": {
-                    "metabat2": 2.17
-                },
-                "METAMDBG_ASM": {
-                    "metamdbg": 1.1
-                },
-                "METATOR_PIPELINE": {
-                    "metator": "1.3.10"
-                },
-                "METATOR_PROCESS_INPUT_BAM": {
-                    "samtools": 1.21,
-                    "bioawk": 1.0
-                },
-                "MINIMAP2_ALIGN": {
-                    "minimap2": "2.29-r1283",
-                    "samtools": 1.21
-                },
-                "PYRODIGAL": {
-                    "pyrodigal": "3.6.3"
-                },
-                "SAMTOOLS_INDEX_HIC_CRAM": {
-                    "samtools": 1.21
-                },
-                "SAMTOOLS_MERGE_HIC_BAM": {
-                    "samtools": 1.21
-                },
-                "TAXONKIT_NAME2TAXID": {
-                    "taxonkit": "0.15.1"
-                },
-                "TRNASCAN_SE": {
-                    "tRNAscan-SE": "2.0.12"
-                },
-                "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v1.2.0dev"
-                }
-            },
-            [
-                "",
-                "annotation",
-                "annotation/xyTesTing1_metamdbg.faa.gz",
-                "annotation/xyTesTing1_metamdbg.fna.gz",
-                "annotation/xyTesTing1_metamdbg.gff.gz",
-                "annotation/xyTesTing1_metamdbg.score.gz",
-                "fasta",
-                "fasta/xyTesTing1_metamdbg.contigs.fasta.gz",
-                "log",
-                "log/xyTesTing1_metamdbg.metaMDBG.log",
-                "mapping",
-                "mapping/xyTesTing1_metamdbg.bwa-mem2.hic.bam",
-                "mapping/xyTesTing1_metamdbg.minimap2.hifi.bam",
-                "qc",
-                "qc/xyTesTing1_metamdbg.circles_plasmid_summary.tsv",
-                "qc/xyTesTing1_metamdbg.circles_virus_summary.tsv",
-                "qc/xyTesTing1_metamdbg.circular.list",
-                "qc/xyTesTing1_metamdbg.stats.tsv"
-            ],
-            [
-                "contig2bin/xyTesTing1_metamdbg_bin3c_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.out",
-                "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL01.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL02.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL03.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL04.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL05.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL06.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL07.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL08.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL09.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL10.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL11.fa.gz",
-                "fasta/bin3c/xyTesTing1_metamdbg_bin3c.CL12.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_1.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_2.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_3.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_4.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_5.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_6.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_7.fa.gz",
-                "fasta/dastool/xyTesTing1_metamdbg_dastool_8.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_1.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_2.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_3.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_4.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_5.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_6.fa.gz",
-                "fasta/magscot/xyTesTing1_metamdbg_magscot_7.fa.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.001.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.002.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.003.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.004.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.005.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.006.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.007.fasta.gz",
-                "fasta/maxbin2/xyTesTing1_metamdbg_maxbin2.008.fasta.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.1.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.10.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.11.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.12.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.13.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.14.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.15.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.16.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.17.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.2.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.3.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.4.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.5.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.6.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.7.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.8.fa.gz",
-                "fasta/metabat2/xyTesTing1_metamdbg_metabat2.9.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00001_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00002_00001.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00002_00002.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00002_00003.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00002_00004.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00002_00005.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00003_00001.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00003_00002.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00004_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00005_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00007_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00008_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00009_00000.fa.gz",
-                "fasta/metator/xyTesTing1_metamdbg_metator_00011_00001.fa.gz",
-                "log/bin3c/xyTesTing1_metamdbg.contigs.fasta.bgz",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.bin3C.log",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.cluster_plot.png",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.cluster_report.csv",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.clustering.mcl",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.clustering.p.gz",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.cm_graph.edges",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.cm_graph.tree",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.contact_map.p.gz",
-                "log/bin3c/xyTesTing1_metamdbg_bin3c.infomap.log",
-                "log/dastool/xyTesTing1_metamdbg.faa.all.b6",
-                "log/dastool/xyTesTing1_metamdbg.faa.archaea.scg",
-                "log/dastool/xyTesTing1_metamdbg.faa.bacteria.scg",
-                "log/dastool/xyTesTing1_metamdbg.faa.findSCG.b6",
-                "log/dastool/xyTesTing1_metamdbg.faa.scg.candidates.faa",
-                "log/dastool/xyTesTing1_metamdbg_dastool.seqlength",
-                "log/dastool/xyTesTing1_metamdbg_dastool_DASTool.log",
-                "log/dastool/xyTesTing1_metamdbg_dastool_DASTool_contig2bin.tsv",
-                "log/dastool/xyTesTing1_metamdbg_dastool_DASTool_summary.tsv",
-                "log/dastool/xyTesTing1_metamdbg_dastool_allBins.eval",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.contig_to_bin.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.scores.out",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.log.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker_of_each_bin.tar.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.noclass.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.summary",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.tooshort.gz",
-                "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
-                "log/metator/bin_summary.txt",
-                "log/metator/binning.txt",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL01.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL01.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL01.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL02.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL02.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL02.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL03.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL03.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL03.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL04.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL04.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL04.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL05.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL05.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL05.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL06.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL06.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL06.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL07.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL07.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL07.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL08.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL08.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL08.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL09.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL09.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL09.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL10.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL10.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL10.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL11.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL11.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL11.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL12.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL12.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_bin3c.CL12.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_1.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_1.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_1.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_2.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_2.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_2.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_3.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_3.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_3.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_4.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_4.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_4.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_5.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_5.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_5.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_6.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_6.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_6.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_7.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_7.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_7.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_8.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_8.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_dastool_8.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_1.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_1.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_1.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_2.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_2.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_2.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_3.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_3.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_3.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_4.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_4.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_4.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_5.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_5.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_5.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_6.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_6.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_6.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_7.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_7.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_magscot_7.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.001.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.001.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.001.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.002.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.002.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.002.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.003.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.003.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.003.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.004.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.004.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.004.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.005.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.005.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.005.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.006.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.006.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.006.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.007.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.007.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.007.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.008.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.008.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_maxbin2.008.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.1.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.1.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.1.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.10.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.10.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.10.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.11.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.11.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.11.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.12.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.12.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.12.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.13.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.13.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.13.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.14.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.14.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.14.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.15.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.15.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.15.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.16.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.16.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.16.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.17.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.17.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.17.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.2.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.2.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.2.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.3.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.3.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.3.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.4.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.4.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.4.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.5.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.5.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.5.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.6.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.6.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.6.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.7.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.7.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.7.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.8.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.8.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.8.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.9.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.9.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metabat2.9.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00001_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00001_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00001_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00001.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00001.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00001.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00002.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00002.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00002.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00003.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00003.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00003.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00004.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00004.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00004.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00005.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00005.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00002_00005.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00001.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00001.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00001.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00002.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00002.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00003_00002.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00004_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00004_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00004_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00005_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00005_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00005_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00007_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00007_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00007_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00008_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00008_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00008_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00009_00000.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00009_00000.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00009_00000.tsv",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00011_00001.log",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00011_00001.stats",
-                "qc/trnascan_se/xyTesTing1_metamdbg_metator_00011_00001.tsv",
-                "qc/xyTesTing1_checkm2_report.tsv",
-                "qc/xyTesTing1_metamdbg_bin3c.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_bin3c.stats.tsv",
-                "qc/xyTesTing1_metamdbg_bin3c.trnascan_summary.tsv",
-                "qc/xyTesTing1_metamdbg_dastool.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_dastool.stats.tsv",
-                "qc/xyTesTing1_metamdbg_dastool.trnascan_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.trnascan_summary.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.stats.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.trnascan_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
-                "qc/xyTesTing1_metamdbg_metabat2.trnascan_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metator.stats.tsv",
-                "qc/xyTesTing1_metamdbg_metator.trnascan_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_to_ncbi.tsv",
-                "xyTesTing1.bin_summary.tsv",
-                "xyTesTing1.group_summary.tsv"
-            ]
-        ],
-        "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
-        },
-        "timestamp": "2025-06-13T16:52:34.715523593"
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("-profile test_withassembly") {
+
+        setup {
+            println "Downloading GTDB-Tk database..."
+            def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
+            def gtdbtk_command = ['bash', '-c', "curl ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def gtdbtk_proc = gtdbtk_command.execute()
+            gtdbtk_proc.waitFor()
+
+            if (gtdbtk_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
+            }
+
+            println "Downloading CheckM2 database..."
+            def checkm2_db_url  = "https://zenodo.org/api/records/5571251/files/checkm2_database.tar.gz/content"
+            def checkm2_command = ['bash', '-c', "curl ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
+            def checkm2_proc = checkm2_command.execute()
+            checkm2_proc.waitFor()
+
+            if (checkm2_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download CheckM2 db: ${checkm2_proc.err.text}")
+            }
+
+            println "Downloading geNomad database..."
+            def genomad_db_url  = "https://zenodo.org/api/records/14886553/files/genomad_db_v1.9.tar.gz/content"
+            def genomad_command = ['bash', '-c', "curl ${genomad_db_url} | tar xzf - -C ${launchDir}"]
+            def genomad_proc = genomad_command.execute()
+            genomad_proc.waitFor()
+
+            if (genomad_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download Genomad db: ${genomad_proc.err.text}")
+            }
+
+            println "Downloading NCBI taxdump..."
+            def ncbi_taxdump_url = "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip"
+            def ncbi_command = ['bash', '-c', [
+                "curl -L ${ncbi_taxdump_url} --output ${launchDir}/taxdump.zip",
+                "unzip ${launchDir}/taxdump.zip -d ${launchDir}/taxdump",
+                "rm ${launchDir}/taxdump.zip"
+            ].join(' && ')]
+            def ncbi_proc = ncbi_command.execute()
+            ncbi_proc.waitFor()
+
+            if (ncbi_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download NCBI taxdump: ${ncbi_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                outdir               = "$outputDir"
+                gtdbtk_db            = "${launchDir}/r226_mockup"
+                ncbi_taxonomy_dir    = "${launchDir}/taxdump"
+                checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
+                genomad_db           = "${launchDir}/genomad_db"
+                gtdbtk_use_full_tree = true
+            }
+        }
+
+        then {
+            // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
+            // Stable file names
+            def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
+            def bin_files      = getAllFilesFromDir("${params.outdir}/bins/", relative: true, ignore: ["fasta/**/*", "qc/trnascan_se/**"])
+
+            // Unstable and uncountable files
+            def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
+            def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: ["*.stats"])
+
+            // Count number of GTDB-Tk-appropriate bins
+            def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
+                .csv(sep: "\t")
+                .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
+
+            assertAll(
+                { assert workflow.success },
+                // Unstable file checks
+                // Check number of CheckM2 bins processed matches number of bins
+                { assert path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+
+                // Check tRNAScan-SE ran for all bins
+                { assert trnascan_stats.size() == bin_fasta.size() },
+
+                // Check bin_summary.tsv file has expected number of rows
+                { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+
+                // Check GTDB-Tk output has expected number of rows
+                { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
+
+                // Check group_summary.tsv file has expected number of rows
+                // (17 if GTDB-Tk not run - 6 otherwise)
+                { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6 },
+
+                // Check files with stable names
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
+                    assembly_files,
+                    bin_files
+                ).match() }
+            )
+        }
+
+        cleanup {
+            new File("${launchDir}/taxdump").deleteDir()
+            new File("${launchDir}/r226_mockup").deleteDir()
+            new File("${launchDir}/CheckM2_database").deleteDir()
+            new File("${launchDir}/genomad_db").deleteDir()
+            new File("${workDir}").deleteDir()
+        }
+
     }
 }
