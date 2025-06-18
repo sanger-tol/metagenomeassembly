@@ -14,7 +14,7 @@ process METATOR_PIPELINE {
     output:
     tuple val(meta), path("bin_summary.txt") , emit: bin_summary
     tuple val(meta), path("binning.txt")     , emit: contig2bin
-    tuple val(meta), path("bins/*.fa.gz")    , emit: bins
+    tuple val(meta), path("*.fa.gz")         , emit: bins
     path "versions.yml"                      , emit: versions
 
     when:
@@ -42,13 +42,12 @@ process METATOR_PIPELINE {
 
     # metator includes the contig descriptions in the bins
     # these need to go
-    mkdir bins
     for bin in final_bin_unscaffold/*.fa; do
         binname=`basename \$bin`
-        awk -F" " '{if(\$1~">"){ print \$1 } else { print \$0 } }' \$bin > bins/\${binname}
+        awk -F" " '{if(\$1~">"){ print \$1 } else { print \$0 } }' \$bin > \${binname}
     done
 
-    gzip bins/*.fa
+    gzip *.fa
 
     rm -r final_bin_unscaffold
 

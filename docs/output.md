@@ -114,16 +114,16 @@ Taxonomic classification of bins with [GTDB-TK](https://github.com/Ecogenomics/G
 <summary>Output files</summary>
 
 - `bins/`
-  - `taxonomy/gtdbtk.[sampleid].summary.tsv`: GTDB-Tk summary TSV with classifications for each bin.
-  - `taxonomy/gtdbtk.[sampleid]_ncbi.tsv`: TSV file containing the GTDB-Tk to NCBI classification translation.
-  - `taxonomy/[sampleid].gtdb_to_ncbi.tsv`: TSV file containing the GTDB-Tk to NCBI classification translation, with associated NCBI taxids.
-  - `taxonomy/gtdbtk.[sampleid].classify.tree.gz`: Reference tree in Newick format containing query genomes placed with pplacer.
-  - `taxonomy/gtdbtk.[sampleid].markers_summary.tsv`: A summary of unique, duplicated, and missing markers within the 120 bacterial marker set, or the 53 archaeal marker set for each submitted genome.
-  - `taxonomy/gtdbtk.[sampleid].*msa.fasta.gz`: FASTA files containing MSA of submitted and reference genomes.
-  - `taxonomy/gtdbtk.[sampleid].filtered.tsv`: A list of genomes with an insufficient number of amino acids in MSA.
-  - `taxonomy/gtdbtk.[sampleid].failed_genomes.tsv`: TSV of genomes which failed classification by GTDB-TK.
-  - `taxonomy/gtdbtk.[sampleid].log`: The console output of GTDB-Tk saved to disk.
-  - `taxonomy/gtdbtk.[sampleid].warnings.log`: The verbose output of any GTDB-Tk warnings which were encountered.
+  - `taxonomy/gtdbtk/[sampleid].summary.tsv`: GTDB-Tk summary TSV with classifications for each bin.
+  - `taxonomy/gtdbtk/[sampleid]_ncbi.tsv`: TSV file containing the GTDB-Tk to NCBI classification translation.
+  - `taxonomy/gtdbtk/[sampleid].classify.tree.gz`: Reference tree in Newick format containing query genomes placed with pplacer.
+  - `taxonomy/gtdbtk/[sampleid].markers_summary.tsv`: A summary of unique, duplicated, and missing markers within the 120 bacterial marker set, or the 53 archaeal marker set for each submitted genome.
+  - `taxonomy/gtdbtk/[sampleid].*msa.fasta.gz`: FASTA files containing MSA of submitted and reference genomes.
+  - `taxonomy/gtdbtk/[sampleid].filtered.tsv`: A list of genomes with an insufficient number of amino acids in MSA.
+  - `taxonomy/gtdbtk/[sampleid].failed_genomes.tsv`: TSV of genomes which failed classification by GTDB-TK.
+  - `taxonomy/gtdbtk/[sampleid].log`: The console output of GTDB-Tk saved to disk.
+  - `taxonomy/gtdbtk/[sampleid].warnings.log`: The verbose output of any GTDB-Tk warnings which were encountered.
+  - `taxonomy/[sampleid].ncbi.tsv`: TSV file containing the GTDB-Tk to NCBI classification translation, with associated NCBI taxids.
 
 </details>
 

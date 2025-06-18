@@ -1,5 +1,4 @@
 include { FIND_CIRCLES                            } from '../../../modules/local/find_circles/main'
-include { GENOMAD_DOWNLOAD                        } from '../../../modules/nf-core/genomad/download'
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
 include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
 include { GZIP_GET_DECOMPRESSED_SIZE              } from '../../../modules/local/gzip_get_decompressed_size/main'
@@ -27,18 +26,9 @@ workflow ASSEMBLY_QC {
     // MODULE: Classify circular contigs using genomad
     //
     if(params.enable_genomad) {
-        if(!params.genomad_db){
-            GENOMAD_DOWNLOAD()
-            ch_versions = ch_versions.mix(GENOMAD_DOWNLOAD.out.versions)
-
-            ch_genomad_db = GENOMAD_DOWNLOAD.out.genomad_db
-        } else {
-            ch_genomad_db = genomad_db
-        }
-
         GENOMAD_ENDTOEND(
             FIND_CIRCLES.out.circles_fasta,
-            ch_genomad_db
+            genomad_db
         )
         ch_versions = ch_versions.mix(GENOMAD_ENDTOEND.out.versions)
     }

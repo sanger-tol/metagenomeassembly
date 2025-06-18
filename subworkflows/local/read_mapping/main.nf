@@ -103,7 +103,11 @@ workflow READ_MAPPING {
             //
             // MODULE: Merge bams by name using samtools merge
             //
-            SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge, [[],[]], [[], []])
+            SAMTOOLS_MERGE_HIC_BAM(ch_bam_to_merge.merge,
+                [[],[]], // fasta
+                [[],[]], // fai
+                [[],[]]  // gzi
+            )
             ch_versions = ch_versions.mix(SAMTOOLS_MERGE_HIC_BAM.out.versions)
 
             ch_merged_bam = SAMTOOLS_MERGE_HIC_BAM.out.bam

@@ -7,37 +7,27 @@
                 "nf-core": {
                     "bwamem2/index": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
-                    },
-                    "checkm2/databasedownload": {
-                        "branch": "master",
-                        "git_sha": "6b8947dd401a58b08ca19f1952dc1182d66e4d89",
+                        "git_sha": "a29f18660f5e3748d44d6f716241e70c942c065d",
                         "installed_by": ["modules"]
                     },
                     "checkm2/predict": {
                         "branch": "master",
-                        "git_sha": "6b8947dd401a58b08ca19f1952dc1182d66e4d89",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "coverm/contig": {
                         "branch": "master",
-                        "git_sha": "b4c2b037719d63aa5a1b82706b3d9ad12b98c15f",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
                     },
                     "dastool/dastool": {
                         "branch": "master",
-                        "git_sha": "98482ba29059481f492eba168290b5b7e75ec90a",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "102e86c93832f5239990b2fa0f59db3b85c83ed3",
-                        "installed_by": ["modules"]
-                    },
-                    "genomad/download": {
-                        "branch": "master",
-                        "git_sha": "5c9c6d55abdc05dbe3dc81b1cf4997d605c13795",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "genomad/endtoend": {
@@ -47,13 +37,18 @@
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "ed189847152de823c0cf9836cd394ad25ecb6835",
+                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/gtdbtk/classifywf/gtdbtk-classifywf.diff"
                     },
+                    "gtdbtk/gtdbtoncbimajorityvote": {
+                        "branch": "master",
+                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
+                        "installed_by": ["modules"]
+                    },
                     "hmmer/hmmsearch": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
                     },
@@ -64,7 +59,7 @@
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
-                        "git_sha": "cc217b9d56fe9d8aee2e152f6fc31ba8e5cba952",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
                     },
                     "metamdbg/asm": {
@@ -75,30 +70,29 @@
                     },
                     "minimap2/align": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "a532706a19b3d83f14b1d48a6a815ed33eb48b0c",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/minimap2/align/minimap2-align.diff"
                     },
                     "pyrodigal": {
                         "branch": "master",
-                        "git_sha": "938e803109104e30773f76a7142442722498fef1",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/pyrodigal/pyrodigal.diff"
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "installed_by": ["modules"]
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "git_sha": "d090922b1a4b80ba283186459ababf8e308abcbb",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/samtools/index/samtools-index.diff"
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "git_sha": "d090922b1a4b80ba283186459ababf8e308abcbb",
                         "installed_by": ["modules"]
                     },
                     "taxonkit/name2taxid": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     }
                 }

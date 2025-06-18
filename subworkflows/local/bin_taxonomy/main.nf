@@ -1,4 +1,5 @@
 include { GTDBTK_CLASSIFYWF               } from '../../../modules/nf-core/gtdbtk/classifywf/main'
+include { GTDBTK_GTDBTONCBIMAJORITYVOTE   } from '../../../modules/nf-core/gtdbtk/gtdbtoncbimajorityvote/main'
 include { GAWK as GAWK_EXTRACT_NCBI_NAMES } from '../../../modules/nf-core/gawk/main'
 include { TAXONKIT_NAME2TAXID             } from '../../../modules/nf-core/taxonkit/name2taxid/main'
 
@@ -39,7 +40,12 @@ workflow BIN_TAXONOMY {
             }
 
         ch_filtered_bins = ch_bins
-            | map { meta, bin -> [bin.getSimpleName(), bin, meta]}
+            | map { meta, bin ->
+                // Need to explicitly remove fasta extension as getSimpleName() drops parts
+                // of bin names where they contain .s
+                bin_name = bin.getName() - ~/\.fn?a(sta)?\.gz$/
+                [bin_name, bin, meta]
+            }
             | join(ch_bin_scores, failOnDuplicate: true)
             | filter { // it[3] = completeness, it[4] = contamination
                 it[3] >= params.gtdbtk_min_completeness && it[4] <= params.gtdbtk_max_contamination
@@ -59,18 +65,26 @@ workflow BIN_TAXONOMY {
             ch_filtered_bins,
             gtdbtk_db,
             false,
-            gtdbtk_mash_db,
-            file(params.gtdb_bac120_metadata),
-            file(params.gtdb_ar53_metadata)
+            gtdbtk_mash_db
         )
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
+
+        ch_gtdb_majorityvote_input   = GTDBTK_CLASSIFYWF.out.gtdb_outdir
+            | map { meta, outdir -> [meta, outdir, meta.id] }
+
+        GTDBTK_GTDBTONCBIMAJORITYVOTE(
+            ch_gtdb_majorityvote_input,
+            [[id: "ar53"], file(params.gtdb_ar53_metadata)],
+            [[id: "bac120"], file(params.gtdb_bac120_metadata)],
+        )
+        ch_versions = ch_versions.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.versions)
 
         if(params.ncbi_taxonomy_dir){
             //
             // MODULE: Extract the NCBI names from the GTDB-Tk summary file
             //
-            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_CLASSIFYWF.out.ncbi, file("${projectDir}/bin/extract_ncbi_name.awk"), false)
+            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv, file("${projectDir}/bin/extract_ncbi_name.awk"), false)
             ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
             ch_gtdb_ncbi_for_taxonkit = GAWK_EXTRACT_NCBI_NAMES.out.output
@@ -87,7 +101,7 @@ workflow BIN_TAXONOMY {
 
             ch_gtdb_ncbi = ch_gtdb_ncbi.mix(TAXONKIT_NAME2TAXID.out.tsv)
         } else {
-            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_CLASSIFYWF.out.ncbi)
+            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv)
         }
     }
 

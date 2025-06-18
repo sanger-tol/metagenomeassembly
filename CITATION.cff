@@ -27,4 +27,4 @@ repository-code: https://github.com/sanger-tol/metagenomeassembly
 title: sanger-tol/metagenomeassembly v1.1.0 - The Elfin Knight
 type: software
 url: https://pipelines.tol.sanger.ac.uk/metagenomeassembly
-version: 1.1.1
+version: 1.2.0dev
