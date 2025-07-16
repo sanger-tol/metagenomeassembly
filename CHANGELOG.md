@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated all out-of-date nf-core modules (by @prototaxites)
 - Emit all contig2bin files in the output directory (by @prototaxites)
 - Include filename in bin_summary.tsv results file (by @prototaxites)
+- Include name and taxid of "submittable" taxon in ENA in bin_summary.tsv file (by @prototaxites)
 
 ### `Fixed`
 
