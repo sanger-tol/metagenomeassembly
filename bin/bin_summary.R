@@ -131,7 +131,8 @@ read_taxonomy <- function(file) {
             bin = `Genome ID`,
             gtdb_classification = `GTDB classification`,
             ncbi_classification = `Majority vote NCBI classification`,
-            taxid)
+            submit_tax_name = name,
+            submit_taxid = taxid)
     }
     # gtdb doesn't drop the extension
     df <- df |>
