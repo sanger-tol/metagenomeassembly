@@ -8,7 +8,7 @@ process TAXONKIT_CSVTK_NAME2TAXID {
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fe/fe96e23a2b9e7b1e6f451b3202fbe224ceb33501fbf7d45812f2e580d7e0ec85/data' }"
 
     input:
-    tuple val(meta), val(name), path(names_txt)
+    tuple val(meta), path(names_txt)
     path taxdb
     val header
 
@@ -22,16 +22,14 @@ process TAXONKIT_CSVTK_NAME2TAXID {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    assert (!name && names_txt) || (name && !names_txt)
     """
     taxonkit \\
         name2taxid \\
         $args \\
         --data-dir $taxdb \\
         --threads $task.cpus \\
-        --out-file ${prefix}.tsv \\
-        ${name? "<<< '$name'": names_txt} |\\
-        csvtk -t add-header -n ${header}
+        ${names_txt} |\\
+        csvtk -t add-header -n "${header}" > ${prefix}.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

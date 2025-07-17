@@ -125,13 +125,13 @@ read_taxonomy <- function(file) {
         df <- select(df,
             bin = user_genome,
             gtdb_classification = classification,
-            gtdb_classification_method = classification_method
+            gtdb_classification_method = classification_method,
             ncbi_classification = `Majority vote NCBI classification`)
     } else {
         df <- select(df,
             bin = user_genome,
             gtdb_classification = classification,
-            gtdb_classification_method = classification_method
+            gtdb_classification_method = classification_method,
             ncbi_classification = `Majority vote NCBI classification`,
             submit_tax_name,
             submit_taxid)

@@ -90,19 +90,16 @@ workflow BIN_TAXONOMY {
             GAWK_EXTRACT_NCBI_NAMES(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv, file("${projectDir}/bin/extract_ncbi_name.awk"), false)
             ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
 
-            ch_gtdb_ncbi_for_taxonkit = GAWK_EXTRACT_NCBI_NAMES.out.output
-                | map { meta, tsv -> [ meta, [], tsv ] }
-
             //
             // MODULE: Get taxids for these names
             //
             TAXONKIT_CSVTK_NAME2TAXID(
-                ch_gtdb_ncbi_for_taxonkit,
+                GAWK_EXTRACT_NCBI_NAMES.out.output,
                 file(params.ncbi_taxonomy_dir),
                 "Genome ID,GTDB Classification,Majority vote NCBI classification,submit_tax_name,submit_taxid"
             )
-            ch_versions = ch_versions.mix(TAXONKIT_NAME2TAXID.out.versions)
-            ch_gtdb_ncbi = TAXONKIT_NAME2TAXID.out.tsv
+            ch_versions = ch_versions.mix(TAXONKIT_CSVTK_NAME2TAXID.out.versions)
+            ch_gtdb_ncbi = TAXONKIT_CSVTK_NAME2TAXID.out.tsv
         }
 
         //
@@ -117,6 +114,7 @@ workflow BIN_TAXONOMY {
         //
         ch_csvtk_join_input = CSVTK_CONCAT.out.csv
             | join(ch_gtdb_ncbi)
+			| map { meta, gtdb, ncbi -> [ meta, [gtdb, ncbi] ] }
 
         CSVTK_JOIN(ch_csvtk_join_input)
         ch_versions = ch_versions.mix(CSVTK_JOIN.out.versions)
