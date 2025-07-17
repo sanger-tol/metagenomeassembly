@@ -14,7 +14,7 @@ BEGIN {
     FS = "\t"
     OFS = FS
 }
-NR == 1 { print $1, $2, $3, "name", "taxid" }
+##NR == 1 { print $1, $2, $3, "ncbi_submittable_taxname", "ncbi_submittable_taxid" }
 NR > 1 {
     if($0 ~ /Unclassified/) {
         print $1, $2, $3, $3

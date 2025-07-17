@@ -121,18 +121,20 @@ read_checkm2 <- function(file) {
 
 read_taxonomy <- function(file) {
     df <- read_tsv(file)
-    if(ncol(df) == 3) {
+    if(ncol(df) == 18) {
         df <- select(df,
-            bin = `Genome ID`,
-            gtdb_classification = `GTDB classification`,
+            bin = user_genome,
+            gtdb_classification = classification,
+            gtdb_classification_method = classification_method
             ncbi_classification = `Majority vote NCBI classification`)
     } else {
         df <- select(df,
-            bin = `Genome ID`,
-            gtdb_classification = `GTDB classification`,
+            bin = user_genome,
+            gtdb_classification = classification,
+            gtdb_classification_method = classification_method
             ncbi_classification = `Majority vote NCBI classification`,
-            submit_tax_name = name,
-            submit_taxid = taxid)
+            submit_tax_name,
+            submit_taxid)
     }
     # gtdb doesn't drop the extension
     df <- df |>

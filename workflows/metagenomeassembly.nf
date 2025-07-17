@@ -129,6 +129,7 @@ workflow METAGENOMEASSEMBLY {
             )
             ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
+            ch_taxonomy_tsv = Channel.empty()
             if(params.enable_taxonomy) {
                 //
                 // SUBWORKFLOW: Taxonomic classification of bins using
@@ -141,10 +142,7 @@ workflow METAGENOMEASSEMBLY {
                     gtdbtk_mash_db
                 )
                 ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
-
-                ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_ncbi
-            } else {
-                ch_taxonomy_tsv = Channel.empty()
+                ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_summary
             }
 
             if(params.enable_summary) {

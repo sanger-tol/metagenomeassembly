@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Emit all contig2bin files in the output directory (by @prototaxites)
 - Include filename in bin_summary.tsv results file (by @prototaxites)
 - Include name and taxid of "submittable" taxon in ENA in bin_summary.tsv file (by @prototaxites)
+- Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
+- GTDB classification method included in bin summary (by @prototaxites)
 
 ### `Fixed`
 

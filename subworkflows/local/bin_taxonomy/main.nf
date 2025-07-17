@@ -1,7 +1,9 @@
+include { CSVTK_CONCAT                    } from '../../../modules/nf-core/csvtk/concat/main'
+include { CSVTK_JOIN                      } from '../../../modules/nf-core/csvtk/join/main'
 include { GTDBTK_CLASSIFYWF               } from '../../../modules/nf-core/gtdbtk/classifywf/main'
 include { GTDBTK_GTDBTONCBIMAJORITYVOTE   } from '../../../modules/nf-core/gtdbtk/gtdbtoncbimajorityvote/main'
 include { GAWK as GAWK_EXTRACT_NCBI_NAMES } from '../../../modules/nf-core/gawk/main'
-include { TAXONKIT_NAME2TAXID             } from '../../../modules/nf-core/taxonkit/name2taxid/main'
+include { TAXONKIT_CSVTK_NAME2TAXID       } from '../../../modules/local/name2taxid/main'
 
 workflow BIN_TAXONOMY {
     take:
@@ -11,9 +13,9 @@ workflow BIN_TAXONOMY {
     gtdbtk_mash_db
 
     main:
-    ch_versions     = Channel.empty()
-    ch_gtdb_summary = Channel.empty()
-    ch_gtdb_ncbi    = Channel.empty()
+    ch_versions            = Channel.empty()
+    ch_gtdb_merged_summary = Channel.empty()
+    ch_gtdb_ncbi           = Channel.empty()
 
     // GTDB-Tk is memory-intensive and loads a large database.
     // Collate all bins together so it operates in a single process.
@@ -68,7 +70,7 @@ workflow BIN_TAXONOMY {
             gtdbtk_mash_db
         )
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
-        ch_gtdb_summary  = ch_gtdb_summary.mix(GTDBTK_CLASSIFYWF.out.summary)
+        ch_gtdb_summary  = GTDBTK_CLASSIFYWF.out.summary
 
         ch_gtdb_majorityvote_input   = GTDBTK_CLASSIFYWF.out.gtdb_outdir
             | map { meta, outdir -> [meta, outdir, meta.id] }
@@ -79,6 +81,7 @@ workflow BIN_TAXONOMY {
             [[id: "bac120"], file(params.gtdb_bac120_metadata)],
         )
         ch_versions = ch_versions.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.versions)
+        ch_gtdb_ncbi = GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
 
         if(params.ncbi_taxonomy_dir){
             //
@@ -93,20 +96,34 @@ workflow BIN_TAXONOMY {
             //
             // MODULE: Get taxids for these names
             //
-            TAXONKIT_NAME2TAXID(
+            TAXONKIT_CSVTK_NAME2TAXID(
                 ch_gtdb_ncbi_for_taxonkit,
-                file(params.ncbi_taxonomy_dir)
+                file(params.ncbi_taxonomy_dir),
+                "Genome ID,GTDB Classification,Majority vote NCBI classification,submit_tax_name,submit_taxid"
             )
             ch_versions = ch_versions.mix(TAXONKIT_NAME2TAXID.out.versions)
-
-            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(TAXONKIT_NAME2TAXID.out.tsv)
-        } else {
-            ch_gtdb_ncbi = ch_gtdb_ncbi.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv)
+            ch_gtdb_ncbi = TAXONKIT_NAME2TAXID.out.tsv
         }
+
+        //
+        // MODULE: GTDB-Tk outputs separate summary files for archaea and bacteria - we need
+        //         to concatenate them
+        //
+        CSVTK_CONCAT(ch_gtdb_summary, "tsv", "tsv")
+        ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
+
+        //
+        // MODULE: Join NCBI taxonomy tsv to GTDB-Tk taxonomy TSV
+        //
+        ch_csvtk_join_input = CSVTK_CONCAT.out.csv
+            | join(ch_gtdb_ncbi)
+
+        CSVTK_JOIN(ch_csvtk_join_input)
+        ch_versions = ch_versions.mix(CSVTK_JOIN.out.versions)
+        ch_gtdb_merged_summary = CSVTK_JOIN.out.csv
     }
 
     emit:
-    gtdb_summary = ch_gtdb_summary
-    gtdb_ncbi    = ch_gtdb_ncbi
+    gtdb_summary = ch_gtdb_merged_summary
     versions     = ch_versions
 }
