@@ -12,18 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
 - Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
-- Updated all out-of-date nf-core modules (by @prototaxites)
 - Emit all contig2bin files in the output directory (by @prototaxites)
 - Include filename in bin_summary.tsv results file (by @prototaxites)
 - Include name and taxid of "submittable" taxon in ENA in bin_summary.tsv file (by @prototaxites)
 - Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
 - GTDB classification method included in bin summary (by @prototaxites)
-- Ensure contig2bins are always tab-separated (by @prototaxites)
+- Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
 
 ### `Fixed`
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
+- Ensure contig2bins are always tab-separated and have tsv ending (by @prototaxites)
+- Updated all out-of-date nf-core modules (by @prototaxites)
 
 ### `Deprecated`
 

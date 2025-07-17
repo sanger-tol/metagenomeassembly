@@ -11,6 +11,7 @@ process FIND_CIRCLES {
     tuple val(meta), path(fasta)
 
     output:
+    tuple val(meta), path("*.circular.tsv")    , emit: circles_tsv
     tuple val(meta), path("*.circular.list")   , emit: circles_list
     tuple val(meta), path("*.circles.fasta.gz"), emit: circles_fasta
     path "versions.yml"                        , emit: versions
@@ -20,21 +21,28 @@ process FIND_CIRCLES {
 
     script:
     def prefix      = task.ext.prefix ?: "${meta.id}"
-    def clean_input = fasta.toString() - ~/\.gz$/
-    def unzip       = fasta.getExtension() == "gz" ? "zcat ${fasta} | \\" : "cat ${fasta} | \\"
-    def regex       = "&& /\$-/" // This regex will never match anything
+    def regex       = "/\$-/" // This regex will never match anything
     if(meta.assembler == "metamdbg") {
-        regex = "&& /circular=yes/"
+        regex = "/circular=yes/"
     }
     """
-    ${unzip}
+    seqkit fx2tab --length --gc --name ${fasta} |\\
     awk \\
-        '/^>/ ${regex} {
-            sub(/>/, "", \$1)
-            print \$1
-        }' - > ${prefix}.circular.list
+        'BEGIN {
+            FS = OFS = "\\t"
+        }
+        {
+            circular = "False"
+            if(\$1 ~ ${regex}) {
+                circular = "True"
+            }
+            split($1, x, /\s+/)
+            print x[1], circular
+        }' - > ${prefix}.circular.tsv
 
-    seqkit grep -f ${prefix}.circular.list ${fasta} |\
+    awk '{print \$1}' ${prefix}.circular.tsv > ${prefix}.circular.list
+
+    seqkit grep -f ${prefix}.circular.list ${fasta} |\\
         bgzip -@${task.cpus} > ${prefix}.circles.fasta.gz
 
     cat <<-END_VERSIONS > versions.yml
