@@ -36,11 +36,11 @@ process FIND_CIRCLES {
             if(\$1 ~ ${regex}) {
                 circular = "True"
             }
-            split($1, x, /\s+/)
-            print x[1], circular
+            split(\$1, x, /\s+/)
+            print x[1], \$2, \$3, circular
         }' - > ${prefix}.circular.tsv
 
-    awk '{print \$1}' ${prefix}.circular.tsv > ${prefix}.circular.list
+    awk '\$4 == "True" {print \$1}' ${prefix}.circular.tsv > ${prefix}.circular.list
 
     seqkit grep -f ${prefix}.circular.list ${fasta} |\\
         bgzip -@${task.cpus} > ${prefix}.circles.fasta.gz
