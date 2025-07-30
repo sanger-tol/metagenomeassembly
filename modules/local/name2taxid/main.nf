@@ -4,8 +4,8 @@ process TAXONKIT_CSVTK_NAME2TAXID {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'community.wave.seqera.io/library/csvtk_taxonkit:9b28c254a08052b5':
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fe/fe96e23a2b9e7b1e6f451b3202fbe224ceb33501fbf7d45812f2e580d7e0ec85/data' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fe/fe96e23a2b9e7b1e6f451b3202fbe224ceb33501fbf7d45812f2e580d7e0ec85/data':
+        'community.wave.seqera.io/library/csvtk_taxonkit:9b28c254a08052b5' }"
 
     input:
     tuple val(meta), path(names_txt)
