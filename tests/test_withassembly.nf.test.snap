@@ -34,6 +34,12 @@
                     "samtools": 1.21,
                     "bwamem2": "2.2.1"
                 },
+                "CSVTK_CONCAT": {
+                    "csvtk": "0.31.0"
+                },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
@@ -71,7 +77,8 @@
                     "seqkit": "2.9.0"
                 },
                 "GTDBTK_CLASSIFYWF": {
-                    "gtdbtk": "2.4.1"
+                    "gtdbtk": "2.4.1",
+                    "gtdb_db": "r226"
                 },
                 "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
                     "gtdb_to_ncbi_majority_vote.py": "0.2.1"
@@ -114,8 +121,9 @@
                 "SAMTOOLS_MERGE_HIC_BAM": {
                     "samtools": 1.21
                 },
-                "TAXONKIT_NAME2TAXID": {
-                    "taxonkit": "0.15.1"
+                "TAXONKIT_CSVTK_NAME2TAXID": {
+                    "taxonkit": "0.20.0",
+                    "csvtk": "0.31.0"
                 },
                 "TRNASCAN_SE": {
                     "tRNAscan-SE": "2.0.12"
@@ -138,12 +146,13 @@
                 "qc/xyTesTing1_metamdbg.circles_plasmid_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circles_virus_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circular.list",
+                "qc/xyTesTing1_metamdbg.circular.tsv",
                 "qc/xyTesTing1_metamdbg.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_bin3c_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.out",
+                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
@@ -211,7 +220,7 @@
                 "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
                 "taxonomy/gtdbtk/xyTesTing1.log",
                 "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_to_ncbi.tsv",
+                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
@@ -220,6 +229,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-16T16:18:32.826726274"
+        "timestamp": "2025-08-07T12:20:57.874100917"
     }
 }
