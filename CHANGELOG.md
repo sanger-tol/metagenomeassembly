@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
+- Relax Nextflow version dependency after bugfix
 
 ### `Deprecated`
 
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
 | minimap2/align                | minimap2 | 2.28         | 2.29         |
 | minimap2/align                | samtools | 1.20         | 1.21         |
+| nextflow                      | nextflow | 25.04.02     | 24.04.02     |
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 
