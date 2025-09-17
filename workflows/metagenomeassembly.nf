@@ -76,18 +76,18 @@ workflow METAGENOMEASSEMBLY {
     ch_circles = ASSEMBLY_QC.out.circle_list
     ch_assemblies = ASSEMBLY_QC.out.assemblies
 
-    //
-    // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
-    // reads to the assembly and estimate per-contig coverages
-    //
-    READ_MAPPING(
-        ch_assemblies,
-        pacbio_fasta,
-        hic_cram
-    )
-    ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
-
     if(params.enable_binning) {
+        //
+        // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
+        // reads to the assembly and estimate per-contig coverages
+        //
+        READ_MAPPING(
+            ch_assemblies,
+            pacbio_fasta,
+            hic_cram
+        )
+        ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
+
         //
         // SUBWORKFLOW: Bin the assembly using binning tools
         //
@@ -124,6 +124,7 @@ workflow METAGENOMEASSEMBLY {
                 ch_bins,
                 ch_contig2bin,
                 ch_circles,
+                READ_MAPPING.out.pacbio_bam,
                 ch_assembly_rrna,
                 checkm2_db
             )
