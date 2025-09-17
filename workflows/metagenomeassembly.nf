@@ -182,6 +182,7 @@ workflow METAGENOMEASSEMBLY {
             //
             BIN_SUMMARY(
                 ch_stats_collated,
+                ch_coverage_collated,
                 ch_checkm2_collated,
                 ch_taxonomy_collated,
                 ch_trnascan_collated,
