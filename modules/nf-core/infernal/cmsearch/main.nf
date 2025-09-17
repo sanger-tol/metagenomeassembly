@@ -8,13 +8,15 @@ process INFERNAL_CMSEARCH {
         'biocontainers/infernal:1.1.5--pl5321h7b50bb2_4' }"
 
     input:
-    tuple val(meta), path(cmfile), path(seqdb), val(write_align), val(write_target)
+    tuple val(meta), path(cmfile), path(seqdb)
+    val(write_align)
+    val(write_target)
 
     output:
-    tuple val(meta), path('*.txt.gz')   , emit: output
-    tuple val(meta), path('*.sto.gz')   , emit: alignments    , optional: true
-    tuple val(meta), path('*.tbl.gz')   , emit: target_summary, optional: true
-    path "versions.yml"                 , emit: versions
+    tuple val(meta), path('*.txt.gz'), emit: output
+    tuple val(meta), path('*.sto.gz'), emit: alignments    , optional: true
+    tuple val(meta), path('*.tbl.gz'), emit: target_summary, optional: true
+    path "versions.yml"              , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -48,24 +50,20 @@ process INFERNAL_CMSEARCH {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        infernal: \$(hmmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
+        infernal: \$(cmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
     END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch "${prefix}.txt"
-    ${write_align ? "touch ${prefix}.sto" : ''} \\
-    ${write_target ? "touch ${prefix}.tbl" : ''}
-
-    gzip --no-name *.txt \\
-        ${write_align ? '*.sto' : ''} \\
-        ${write_target ? '*.tbl' : ''}
+    echo "" | gzip > ${prefix}.txt.gz
+    ${write_align  ? "echo '' | gzip > ${prefix}.sto.gz" : ''}
+    ${write_target ? "echo '' | gzip > ${prefix}.tbl.gz" : ''}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        infernal: \$(hmmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
+        infernal: \$(cmsearch -h | grep -o '^# INFERNAL [0-9.]*' | sed 's/^# INFERNAL *//')
     END_VERSIONS
     """
 }

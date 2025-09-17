@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
 - GTDB classification method included in bin summary (by @prototaxites)
 - Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
+- Use nf-core infernal/cmsearch module (by @prototaxites)
+- Estimate bin coverage with coverm/genome (by @prototaxites)
 
 ### `Fixed`
 

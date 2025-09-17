@@ -2,7 +2,7 @@ include { FIND_CIRCLES                            } from '../../../modules/local
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
 include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
 include { GZIP_GET_DECOMPRESSED_SIZE              } from '../../../modules/local/gzip_get_decompressed_size/main'
-include { INFERNAL_CMSEARCH                       } from '../../../modules/local/infernal/cmsearch/main'
+include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch/main'
 
 workflow ASSEMBLY_QC {
     take:
@@ -42,15 +42,17 @@ workflow ASSEMBLY_QC {
     if(params.enable_rrna_prediction) {
         ch_infernal_input = assemblies
             | combine(rfam_rrna_cm)
-            | map { meta, contigs, cmfile ->
-                [ meta, cmfile, contigs, false, true ]
-            }
 
         //
         // MODULE: Identify rRNA genes in the assembly using Infernal
         //
-        INFERNAL_CMSEARCH(ch_infernal_input)
+        INFERNAL_CMSEARCH(
+            ch_infernal_input,
+            false, // write align
+            true   // write target
+        )
         ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
+
         ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary
     } else {
         ch_rrna_preds = Channel.empty()
