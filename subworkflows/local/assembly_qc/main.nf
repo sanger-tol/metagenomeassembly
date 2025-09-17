@@ -42,6 +42,7 @@ workflow ASSEMBLY_QC {
     if(params.enable_rrna_prediction) {
         ch_infernal_input = assemblies
             | combine(rfam_rrna_cm)
+            | map { meta, assembly, cmfile -> [ meta, cmfile, assembly ] }
 
         //
         // MODULE: Identify rRNA genes in the assembly using Infernal
