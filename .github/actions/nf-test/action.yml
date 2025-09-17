@@ -53,6 +53,8 @@ runs:
         auto-update-conda: true
         conda-solver: libmamba
         conda-remove-defaults: true
+        conda-channels: bioconda,conda-forge
+        channel-priority: strict
 
     - name: Run nf-test
       shell: bash
