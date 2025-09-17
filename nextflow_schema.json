@@ -281,11 +281,6 @@
                     "type": "integer",
                     "default": 10,
                     "description": "Maximum contamination allowed CheckM2 completeness for a bin to be classified by GTDB-Tk."
-                },
-                "ncbi_taxonomy_dir": {
-                    "type": "string",
-                    "description": "Path to directory containing the names.dmp, nodes.dmp, delnodes.dmp, and merged.dmp files from the NCBI taxdump archive (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)",
-                    "format": "directory-path"
                 }
             }
         },

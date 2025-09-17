@@ -2,8 +2,6 @@ include { CSVTK_CONCAT                    } from '../../../modules/nf-core/csvtk
 include { CSVTK_JOIN                      } from '../../../modules/nf-core/csvtk/join/main'
 include { GTDBTK_CLASSIFYWF               } from '../../../modules/nf-core/gtdbtk/classifywf/main'
 include { GTDBTK_GTDBTONCBIMAJORITYVOTE   } from '../../../modules/nf-core/gtdbtk/gtdbtoncbimajorityvote/main'
-include { GAWK as GAWK_EXTRACT_NCBI_NAMES } from '../../../modules/nf-core/gawk/main'
-include { TAXONKIT_CSVTK_NAME2TAXID       } from '../../../modules/local/name2taxid/main'
 
 workflow BIN_TAXONOMY {
     take:
@@ -81,31 +79,10 @@ workflow BIN_TAXONOMY {
             [[id: "bac120"], file(params.gtdb_bac120_metadata)],
         )
         ch_versions = ch_versions.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.versions)
-        ch_gtdb_ncbi = GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
-
-        if(params.ncbi_taxonomy_dir){
-            //
-            // MODULE: Extract the NCBI names from the GTDB-Tk summary file
-            //
-            GAWK_EXTRACT_NCBI_NAMES(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv, file("${projectDir}/bin/extract_ncbi_name.awk"), false)
-            ch_versions = ch_versions.mix(GAWK_EXTRACT_NCBI_NAMES.out.versions)
-
-            //
-            // MODULE: Get taxids for these names
-            //
-            TAXONKIT_CSVTK_NAME2TAXID(
-                GAWK_EXTRACT_NCBI_NAMES.out.output,
-                file(params.ncbi_taxonomy_dir),
-                "Genome ID,GTDB Classification,Majority vote NCBI classification,submit_tax_name,submit_taxid"
-            )
-            ch_versions = ch_versions.mix(TAXONKIT_CSVTK_NAME2TAXID.out.versions)
-            ch_gtdb_ncbi = TAXONKIT_CSVTK_NAME2TAXID.out.tsv
-        }
 
         //
         // MODULE: GTDB-Tk outputs separate summary files for archaea and bacteria - we need
         //         to concatenate them
-        //
         CSVTK_CONCAT(ch_gtdb_summary, "tsv", "tsv")
         ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
 
@@ -113,11 +90,12 @@ workflow BIN_TAXONOMY {
         // MODULE: Join NCBI taxonomy tsv to GTDB-Tk taxonomy TSV
         //
         ch_csvtk_join_input = CSVTK_CONCAT.out.csv
-            | join(ch_gtdb_ncbi)
+            | join(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv)
 			| map { meta, gtdb, ncbi -> [ meta, [gtdb, ncbi] ] }
 
         CSVTK_JOIN(ch_csvtk_join_input)
         ch_versions = ch_versions.mix(CSVTK_JOIN.out.versions)
+
         ch_gtdb_merged_summary = CSVTK_JOIN.out.csv
     }
 

@@ -15,7 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
 - Emit all contig2bin files in the output directory (by @prototaxites)
 - Include filename in bin_summary.tsv results file (by @prototaxites)
-- Include name and taxid of "submittable" taxon in ENA in bin_summary.tsv file (by @prototaxites)
 - Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
 - GTDB classification method included in bin summary (by @prototaxites)
 - Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
@@ -31,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed the code that automatically downloads the CheckM2 and Genomad databases if they are not provided, as these can now
   be specified for download in the nf-test setup block and are thus not required (by @prototaxites)
+- Removed TaxonKit - the code for generating submittable taxnames/taxids did not work well (by @prototaxites)
 
 ### `Dependencies`
 
@@ -40,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
 | minimap2/align                | minimap2 | 2.28         | 2.29         |
 | minimap2/align                | samtools | 1.20         | 1.21         |
+| taxonkit/name2taxid           | taxonkit | 0.15.1       | -            |
+
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 
