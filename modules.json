@@ -83,7 +83,7 @@
                     },
                     "metamdbg/asm": {
                         "branch": "master",
-                        "git_sha": "c912aa8b29a17d6dbec3fdda71185fbe3e77ba59",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/metamdbg/asm/metamdbg-asm.diff"
                     },

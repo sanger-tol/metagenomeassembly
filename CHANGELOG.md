@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | module                        | tools    | old versions | new versions |
 | ----------------------------- | -------- | ------------ | ------------ |
+| metamdbg/asm                  | metamdbg | 1.1          | 1.2          |
 | gtdbtk/classifywf             | gtdbtk   | 2.4.0        | 2.4.1        |
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
 | minimap2/align                | minimap2 | 2.28         | 2.29         |
