@@ -120,11 +120,10 @@ read_stats <- function(file) {
 
 read_coverage <- function(file) {
     df <- read_tsv(file) |>
-        mutate(
+        select(
             bin = 1,
             mean_depth = 2
-        ) |>
-        select(bin, mean_depth)
+        )
 
     return(df)
 }
@@ -142,7 +141,7 @@ read_checkm2 <- function(file) {
 
 read_taxonomy <- function(file) {
     df <- read_tsv(file) |>
-      select(df,
+      select(
         bin = user_genome,
         gtdb_classification = classification,
         gtdb_classification_method = classification_method,
