@@ -37,13 +37,13 @@
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
+                        "git_sha": "ad2ab9d50712551d7743fdc7f87cb663e3836a46",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/gtdbtk/classifywf/gtdbtk-classifywf.diff"
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
-                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
+                        "git_sha": "ad2ab9d50712551d7743fdc7f87cb663e3836a46",
                         "installed_by": ["modules"]
                     },
                     "hmmer/hmmsearch": {

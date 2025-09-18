@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
 - Relax Nextflow version dependency after bugfix (by @prototaxites)
-- Fix numpy version to 2.2.4 in gtdbtk/classifywf conda env (by @prototaxites)
+- Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
 
 ### `Deprecated`
 
@@ -30,13 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-| module                        | tools    | old versions | new versions |
-| ----------------------------- | -------- | ------------ | ------------ |
-| gtdbtk/classifywf             | gtdbtk   | 2.4.0        | 2.4.1        |
-| gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
-| minimap2/align                | minimap2 | 2.28         | 2.29         |
-| minimap2/align                | samtools | 1.20         | 1.21         |
-| nextflow                      | nextflow | 25.04.02     | 24.04.02     |
+| module                        | tools                          | old versions | new versions |
+| ----------------------------- | ------------------------------ | ------------ | ------------ |
+| gtdbtk/classifywf             | gtdbtk                         | 2.4.0        | 2.5.2        |
+| gtdbtk/gtdbtoncbimajorityvote | gtdbtk_to_ncbi_majority_vote   |              | 0.2.1        |
+| minimap2/align                | minimap2                       | 2.28         | 2.29         |
+| minimap2/align                | samtools                       | 1.20         | 1.21         |
+| nextflow                      | nextflow                       | 25.04.02     | 24.04.02     |
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 
