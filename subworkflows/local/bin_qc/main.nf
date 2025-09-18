@@ -34,12 +34,15 @@ workflow BIN_QC {
     //
     // MODULE: Calculate the coverage of bins using coverm genome
     //
+    ch_bam_to_join = ch_mapped_bam
+        | map { meta, bam -> [ meta.subMap(["id", "assembler"]), bam ] }
+
     ch_coverm_genome_input = ch_bin_sets
         | map { meta, bins ->
             def meta_join = meta.subMap(["id", "assembler"])
             [ meta_join, meta, bins ]
         }
-        | join(ch_mapped_bam, by: 0)
+        | combine(ch_bam_to_join, by: 0)
         | multiMap { meta_join, meta, bins, bam ->
             bam: [ meta, bam ]
             bins: [ meta, bins ]

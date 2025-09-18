@@ -142,7 +142,7 @@ read_checkm2 <- function(file) {
 
 read_taxonomy <- function(file) {
     df <- read_tsv(file)
-    if(ncol(df) == 18) {
+    if(ncol(df) == 16) {
         df <- select(df,
             bin = user_genome,
             gtdb_classification = classification,
