@@ -141,25 +141,15 @@ read_checkm2 <- function(file) {
 }
 
 read_taxonomy <- function(file) {
-    df <- read_tsv(file)
-    if(ncol(df) == 16) {
-        df <- select(df,
-            bin = user_genome,
-            gtdb_classification = classification,
-            gtdb_classification_method = classification_method,
-            ncbi_classification = `Majority vote NCBI classification`)
-    } else {
-        df <- select(df,
-            bin = user_genome,
-            gtdb_classification = classification,
-            gtdb_classification_method = classification_method,
-            ncbi_classification = `Majority vote NCBI classification`,
-            submit_tax_name,
-            submit_taxid)
-    }
-    # gtdb doesn't drop the extension
-    df <- df |>
-        mutate(bin = str_extract(bin, "(.*)\\.[^\\.]+$", group = 1))
+    df <- read_tsv(file) |>
+      select(df,
+        bin = user_genome,
+        gtdb_classification = classification,
+        gtdb_classification_method = classification_method,
+        ncbi_classification = `Majority vote NCBI classification`
+      ) |>
+      # gtdb doesn't drop the extension
+      mutate(bin = str_extract(bin, "(.*)\\.[^\\.]+$", group = 1))
 
     return(df)
 }
