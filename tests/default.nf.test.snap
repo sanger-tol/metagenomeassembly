@@ -141,6 +141,7 @@
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.bwa-mem2.hic.bam",
                 "mapping/xyTesTing1_metamdbg.minimap2.hifi.bam",
+                "mapping/xyTesTing1_metamdbg.minimap2.hifi.depth.txt",
                 "qc",
                 "qc/xyTesTing1_metamdbg.circles_plasmid_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circles_virus_summary.tsv",
