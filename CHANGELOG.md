@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
+- Fixed bug where coverm contig depths were not being published (by @prototaxites)
 - Relax Nextflow version dependency after bugfix (by @prototaxites)
 - Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
 

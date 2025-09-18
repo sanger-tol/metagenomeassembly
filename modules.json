@@ -37,9 +37,8 @@
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "ad2ab9d50712551d7743fdc7f87cb663e3836a46",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/gtdbtk/classifywf/gtdbtk-classifywf.diff"
+                        "git_sha": "b4f7bfa77f68359438fa2fd27eaba5794fdd6ce4",
+                        "installed_by": ["modules"]
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
