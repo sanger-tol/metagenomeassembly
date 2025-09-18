@@ -5,3 +5,4 @@ channels:
   - bioconda
 dependencies:
   - bioconda::gtdbtk=2.4.1
+  - conda-forge::numpy=2.2.4

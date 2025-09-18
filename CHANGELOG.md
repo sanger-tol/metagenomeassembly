@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.2] - The Elfin Knight (patch 2) - [2025-09-16]
+## [1.1.2] - The Elfin Knight (patch 2) - [2025-09-19]
 
 ### `Added`
 
@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
-- Relax Nextflow version dependency after bugfix
+- Relax Nextflow version dependency after bugfix (by @prototaxites)
+- Fix numpy version to 2.2.4 in gtdbtk/classifywf conda env (by @prototaxites)
 
 ### `Deprecated`
 
