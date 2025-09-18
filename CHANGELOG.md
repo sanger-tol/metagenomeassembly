@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.2] - The Elfin Knight (patch 2) - [2025-09-22]
+## [1.2.0] - Fair Margaret and Sweet William - [2025-09-22]
 
 ### `Added`
 
@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
 - Use nf-core infernal/cmsearch module (by @prototaxites)
 - Estimate bin coverage with coverm/genome (by @prototaxites)
+- Fixed bug where coverm contig depths were not being published (by @prototaxites)
+- Relax Nextflow version dependency after bugfix (by @prototaxites)
+- Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
 
 ### `Fixed`
 
@@ -37,15 +40,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-| module                        | tools    | old versions | new versions |
-| ----------------------------- | -------- | ------------ | ------------ |
-| metamdbg/asm                  | metamdbg | 1.1          | 1.2          |
-| gtdbtk/classifywf             | gtdbtk   | 2.4.0        | 2.4.1        |
-| gtdbtk/gtdbtoncbimajorityvote | gtdbtk   |              | 0.2.1        |
-| minimap2/align                | minimap2 | 2.28         | 2.29         |
-| minimap2/align                | samtools | 1.20         | 1.21         |
-| taxonkit/name2taxid           | taxonkit | 0.15.1       | -            |
-| nextflow                      | nextflow | 25.04.02     | 24.04.02     |
+| module                        | tools                        | old versions | new versions |
+| ----------------------------- | ---------------------------- | ------------ | ------------ |
+| metamdbg/asm                  | metamdbg                     | 1.1          | 1.2          |
+| gtdbtk/classifywf             | gtdbtk                       | 2.4.0        | 2.5.2        |
+| gtdbtk/gtdbtoncbimajorityvote | gtdbtk_to_ncbi_majority_vote | -            | 0.2.1        |
+| minimap2/align                | minimap2                     | 2.28         | 2.29         |
+| minimap2/align                | samtools                     | 1.20         | 1.21         |
+| taxonkit/name2taxid           | taxonkit                     | 0.15.1       | -            |
+| nextflow                      | nextflow                     | 25.04.02     | 24.04.02     |
 
 ## [1.1.1] - The Elfin Knight (patch 1) - [2025-06-02]
 

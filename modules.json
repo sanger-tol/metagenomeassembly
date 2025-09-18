@@ -52,12 +52,12 @@
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "4c882420bb76b0b0343292d240eedf0a0eae3813",
+                        "git_sha": "b4f7bfa77f68359438fa2fd27eaba5794fdd6ce4",
                         "installed_by": ["modules"]
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
-                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
+                        "git_sha": "ad2ab9d50712551d7743fdc7f87cb663e3836a46",
                         "installed_by": ["modules"]
                     },
                     "hmmer/hmmsearch": {
