@@ -290,11 +290,6 @@
             "description": "General options relating to pipeline operation.",
             "default": "",
             "properties": {
-                "enable_summary": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Produce a final summary file about each genome bin."
-                },
                 "completeness_score": {
                     "type": "integer",
                     "default": 1,
