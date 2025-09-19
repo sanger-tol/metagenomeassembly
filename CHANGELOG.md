@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use nf-core infernal/cmsearch module (by @prototaxites)
 - Estimate bin coverage with coverm/genome (by @prototaxites)
 - Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
+- (Sanger internal use) - add a Tree of Life Assembly profile to configure access to databases (by @prototaxites)
 
 ### `Fixed`
 
