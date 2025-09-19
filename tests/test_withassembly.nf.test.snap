@@ -116,10 +116,10 @@
                     "pyrodigal": "3.6.3"
                 },
                 "SAMTOOLS_INDEX_HIC_CRAM": {
-                    "samtools": 1.22.1
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_MERGE_HIC_BAM": {
-                    "samtools": 1.22.1
+                    "samtools": "1.22.1"
                 },
                 "TRNASCAN_SE": {
                     "tRNAscan-SE": "2.0.12"

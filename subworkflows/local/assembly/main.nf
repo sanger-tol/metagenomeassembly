@@ -2,7 +2,7 @@ include { METAMDBG_ASM               } from '../../../modules/nf-core/metamdbg/a
 
 workflow ASSEMBLY {
     take:
-    hifi_reads
+    ch_hifi_reads
 
     main:
     ch_versions   = Channel.empty()
@@ -12,7 +12,7 @@ workflow ASSEMBLY {
         //
         // MODULE: Assemble PacBio reads using metaMDBG
         //
-        METAMDBG_ASM(hifi_reads, 'hifi')
+        METAMDBG_ASM(ch_hifi_reads, 'hifi')
         ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 
         ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
