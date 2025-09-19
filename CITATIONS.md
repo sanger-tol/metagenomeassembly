@@ -102,10 +102,6 @@
 
   > Bonfield, J., 2024. jkbonfield/io_lib (https://github.com/jkbonfield/io_lib)
 
-- [TaxonKit](https://bioinf.shenwei.me/taxonkit/)
-
-  > Shen, W., Ren, H., 2021. TaxonKit: A practical and efficient NCBI taxonomy toolkit. Journal of Genetics and Genomics, Special issue on Microbiome 48, 844–850. https://doi.org/10.1016/j.jgg.2021.03.006
-
 - [tidyverse](https://www.tidyverse.org/)
 
   > Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L.D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T.L., Miller, E., Bache, S.M., Müller, K., Ooms, J., Robinson, D., Seidel, D.P., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the tidyverse. Journal of Open Source Software 4, 1686. https://doi.org/10.21105/joss.01686
