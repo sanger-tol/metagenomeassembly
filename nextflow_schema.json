@@ -266,12 +266,6 @@
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release226/226.0/ar53_metadata_r226.tsv.gz",
                     "description": "Path to the GTDB-Tk ar53 metadata file."
                 },
-                "gtdbtk_mash_db": {
-                    "type": "string",
-                    "description": "Path to a mash database built using the GTDB genomes.",
-                    "pattern": "^\\S+\\.msh$",
-                    "format": "file-path"
-                },
                 "gtdbtk_min_completeness": {
                     "type": "integer",
                     "default": 50,

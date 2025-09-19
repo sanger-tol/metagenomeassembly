@@ -33,7 +33,6 @@ workflow METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
     gtdbtk_db           // channel: gtdbtk db from params
-    gtdbtk_mash_db      // channel: gtdbtk mash db from params
 
     main:
     ch_versions = Channel.empty()
@@ -141,7 +140,6 @@ workflow METAGENOMEASSEMBLY {
                     ch_bins,
                     BIN_QC.out.checkm2_tsv,
                     gtdbtk_db,
-                    gtdbtk_mash_db
                 )
                 ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
                 ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_summary

@@ -37,7 +37,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: hmms for magscot
     checkm2_db   // channel: checkm2 db from --params.checkm2_db
     gtdbtk_db    // channel: gtdbtk db from --params.gtdbtk_db
-    gtdbtk_mash_db  // channel: gtdbtk mash db from --params.gtdbtk_mash_db
 
     main:
 
@@ -54,7 +53,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         magscot_gtdb_hmm_db,
         checkm2_db,
         gtdbtk_db,
-        gtdbtk_mash_db
     )
     // emit:
     // multiqc_report = METAGENOMEASSEMBLY.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -93,7 +91,6 @@ workflow {
         PIPELINE_INITIALISATION.out.magscot_gtdb_hmm_db,
         PIPELINE_INITIALISATION.out.checkm2_db,
         PIPELINE_INITIALISATION.out.gtdbtk_db,
-        PIPELINE_INITIALISATION.out.gtdbtk_mash_db
     )
     //
     // SUBWORKFLOW: Run completion tasks

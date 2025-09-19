@@ -8,7 +8,6 @@ workflow BIN_TAXONOMY {
     bin_sets
     checkm2_summary
     gtdbtk_db
-    gtdbtk_mash_db
 
     main:
     ch_versions            = Channel.empty()
@@ -65,7 +64,6 @@ workflow BIN_TAXONOMY {
             ch_filtered_bins,
             gtdbtk_db,
             false,
-            gtdbtk_mash_db
         )
         ch_versions      = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary  = GTDBTK_CLASSIFYWF.out.summary
