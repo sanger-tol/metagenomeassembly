@@ -29,6 +29,9 @@
                 "COVERM_CONTIG": {
                     "coverm": "0.7.0"
                 },
+                "COVERM_GENOME": {
+                    "coverm": "0.7.0"
+                },
                 "CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT": {
                     "staden_io_lib": "1.15.0",
                     "samtools": 1.21,
@@ -45,9 +48,6 @@
                 },
                 "FIND_CIRCLES": {
                     "gawk": "5.3.1"
-                },
-                "GAWK_EXTRACT_NCBI_NAMES": {
-                    "gawk": "5.3.0"
                 },
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.0"
@@ -77,7 +77,7 @@
                     "seqkit": "2.9.0"
                 },
                 "GTDBTK_CLASSIFYWF": {
-                    "gtdbtk": "2.4.1",
+                    "gtdbtk": "2.5.2",
                     "gtdb_db": "r226"
                 },
                 "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
@@ -90,7 +90,7 @@
                     "hmmer": 3.4
                 },
                 "INFERNAL_CMSEARCH": {
-                    "infernal": null
+                    "infernal": "1.1.5"
                 },
                 "MAGSCOT_MAGSCOT": {
                     "magscot": 1.1
@@ -121,10 +121,6 @@
                 "SAMTOOLS_MERGE_HIC_BAM": {
                     "samtools": 1.21
                 },
-                "TAXONKIT_CSVTK_NAME2TAXID": {
-                    "taxonkit": "0.20.0",
-                    "csvtk": "0.31.0"
-                },
                 "TRNASCAN_SE": {
                     "tRNAscan-SE": "2.0.12"
                 },
@@ -142,6 +138,7 @@
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.bwa-mem2.hic.bam",
                 "mapping/xyTesTing1_metamdbg.minimap2.hifi.bam",
+                "mapping/xyTesTing1_metamdbg.minimap2.hifi.depth.txt",
                 "qc",
                 "qc/xyTesTing1_metamdbg.circles_plasmid_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circles_virus_summary.tsv",
@@ -189,23 +186,24 @@
                 "log/metator/bin_summary.txt",
                 "log/metator/binning.txt",
                 "qc/xyTesTing1_checkm2_report.tsv",
+                "qc/xyTesTing1_metamdbg.bin3c.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.dastool.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.maxbin2.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_bin3c.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_dastool.stats.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metator.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metator.trnascan_summary.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
@@ -229,6 +227,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-07T12:20:57.874100917"
+        "timestamp": "2025-09-18T21:58:59.507817759"
     }
 }
