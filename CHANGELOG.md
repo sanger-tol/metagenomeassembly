@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   be specified for download in the nf-test setup block and are thus not required (by @prototaxites)
 - Removed TaxonKit - the code for generating submittable taxnames/taxids did not work well (by @prototaxites)
 - Removed `enable_summary` parameter (by @prototaxites)
+- Removed `ncbi_taxonomy_dir` parameter (by @prototaxites)
 
 ### `Dependencies`
 
