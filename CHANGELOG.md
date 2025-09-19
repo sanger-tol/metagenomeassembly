@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - Fair Margaret and Sweet William - [2025-09-22]
+## [1.2.0dev] - Fair Margaret and Sweet William - [tbd]
 
 ### `Added`
 
@@ -20,23 +20,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
 - Use nf-core infernal/cmsearch module (by @prototaxites)
 - Estimate bin coverage with coverm/genome (by @prototaxites)
-- Fixed bug where coverm contig depths were not being published (by @prototaxites)
-- Relax Nextflow version dependency after bugfix (by @prototaxites)
 - Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
 
 ### `Fixed`
 
 - Fixed bug where Metator bin FASTA files were not being published (by @prototaxites)
 - Fixed bug where bin3C bins were not being passed to GTDB-Tk due to a silently failing join (by @prototaxites)
+- Fixed bug where coverm contig depths were not being published (by @prototaxites)
 - Ensure contig2bins are always tab-separated and have tsv ending (by @prototaxites)
 - Updated all out-of-date nf-core modules (by @prototaxites)
-- Relax Nextflow version dependency after bugfix
+- Relax Nextflow version dependency after bugfix (by @prototaxites)
+- Fixed bug where the BIN_SUMMARY process would run if binning was disabled (by @prototaxites)
 
 ### `Deprecated`
 
 - Removed the code that automatically downloads the CheckM2 and Genomad databases if they are not provided, as these can now
   be specified for download in the nf-test setup block and are thus not required (by @prototaxites)
 - Removed TaxonKit - the code for generating submittable taxnames/taxids did not work well (by @prototaxites)
+- Removed `enable_summary` parameter (by @prototaxites)
 
 ### `Dependencies`
 

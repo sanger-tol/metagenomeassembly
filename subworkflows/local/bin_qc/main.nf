@@ -22,7 +22,7 @@ workflow BIN_QC {
             def meta_join = meta.subMap(["id", "assembler"])
             [ meta_join, meta, bins ]
         }
-        | join(ch_circular_list, by: 0)
+        | combine(ch_circular_list, by: 0)
         | map { _meta_join, meta, bins, circles -> [ meta, bins, circles ] }
 
     //
