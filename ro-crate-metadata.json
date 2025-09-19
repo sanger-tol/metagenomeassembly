@@ -83,6 +83,14 @@
             "mainEntity": {
                 "@id": "main.nf"
             },
+<<<<<<< HEAD
+=======
+            "mentions": [
+                {
+                    "@id": "#7cd4555c-84c7-4ad7-ae1c-3d1921cbea2e"
+                }
+            ],
+>>>>>>> TEMPLATE
             "name": "sanger-tol/metagenomeassembly"
         },
         {
@@ -108,6 +116,7 @@
                 "ComputationalWorkflow"
             ],
             "author": [
+
                 {
                     "@id": "https://orcid.org/0000-0002-7175-0533"
                 },
@@ -160,7 +169,38 @@
             "url": {
                 "@id": "https://www.nextflow.io/"
             },
-            "version": "!>=25.04.2"
+            "version": "!>=24.10.5"
+        },
+        {
+            "@id": "#7cd4555c-84c7-4ad7-ae1c-3d1921cbea2e",
+            "@type": "TestSuite",
+            "instance": [
+                {
+                    "@id": "#b668c8c3-fcba-4eba-b35e-3d09f9db0a28"
+                }
+            ],
+            "mainEntity": {
+                "@id": "main.nf"
+            },
+            "name": "Test suite for sanger-tol/metagenomeassembly"
+        },
+        {
+            "@id": "#b668c8c3-fcba-4eba-b35e-3d09f9db0a28",
+            "@type": "TestInstance",
+            "name": "GitHub Actions workflow for testing sanger-tol/metagenomeassembly",
+            "resource": "repos/sanger-tol/metagenomeassembly/actions/workflows/nf-test.yml",
+            "runsOn": {
+                "@id": "https://w3id.org/ro/terms/test#GithubService"
+            },
+            "url": "https://api.github.com"
+        },
+        {
+            "@id": "https://w3id.org/ro/terms/test#GithubService",
+            "@type": "TestService",
+            "name": "Github Actions",
+            "url": {
+                "@id": "https://github.com"
+            }
         },
         {
             "@id": "assets/",
