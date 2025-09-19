@@ -200,17 +200,22 @@
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.tsv",
                 "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_bin3c.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_dastool.stats.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_maxbin2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.trnascan_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_metator.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metator.trnascan_summary.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
@@ -234,6 +239,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-18T21:15:17.393870187"
+        "timestamp": "2025-09-19T09:11:14.853342845"
     }
 }
