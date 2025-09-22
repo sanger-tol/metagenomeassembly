@@ -47,7 +47,7 @@ lint:
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge
-nf_core_version: 3.3.1
+nf_core_version: 3.3.2
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -61,4 +61,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.1.1
+  version: 1.2.0dev

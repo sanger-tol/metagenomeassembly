@@ -21,6 +21,16 @@ parser <- add_option(
 
 parser <- add_option(
     object = parser,
+    opt_str = c("-d", "--coverage"),
+    type = "character",
+    action = "store",
+    default = NULL,
+    help = "Comma-separated list of TSV files output by checkm genome",
+    metavar="filename"
+)
+
+parser <- add_option(
+    object = parser,
     opt_str = c("-c", "--checkm2"),
     type = "character",
     action = "store",
@@ -108,6 +118,16 @@ read_stats <- function(file) {
     return(df)
 }
 
+read_coverage <- function(file) {
+    df <- read_tsv(file) |>
+        select(
+            bin = 1,
+            mean_depth = 2
+        )
+
+    return(df)
+}
+
 read_checkm2 <- function(file) {
     df <- read_tsv(file) |>
         select(bin = Name,
@@ -120,22 +140,15 @@ read_checkm2 <- function(file) {
 }
 
 read_taxonomy <- function(file) {
-    df <- read_tsv(file)
-    if(ncol(df) == 3) {
-        df <- select(df,
-            bin = `Genome ID`,
-            gtdb_classification = `GTDB classification`,
-            ncbi_classification = `Majority vote NCBI classification`)
-    } else {
-        df <- select(df,
-            bin = `Genome ID`,
-            gtdb_classification = `GTDB classification`,
-            ncbi_classification = `Majority vote NCBI classification`,
-            taxid)
-    }
-    # gtdb doesn't drop the extension
-    df <- df |>
-        mutate(bin = str_extract(bin, "(.*)\\.[^\\.]+$", group = 1))
+    df <- read_tsv(file) |>
+      select(
+        bin = user_genome,
+        gtdb_classification = classification,
+        gtdb_classification_method = classification_method,
+        ncbi_classification = `Majority vote NCBI classification`
+      ) |>
+      # gtdb doesn't drop the extension
+      mutate(bin = str_extract(bin, "(.*)\\.[^\\.]+$", group = 1))
 
     return(df)
 }
@@ -180,7 +193,7 @@ score_bins <- function(summary_df, comp_score, cont_score) {
 
 ## Map across all input types, read them, discard any that weren't provided
 ## and then bind them all together by bin
-input_types <- c("stats", "checkm2", "taxonomy", "trnas", "rrnas")
+input_types <- c("stats", "coverage", "checkm2", "taxonomy", "trnas", "rrnas")
 bin_summary <- map(input_types, \(x) split_and_read(input, x)) |>
     discard(is.null) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))

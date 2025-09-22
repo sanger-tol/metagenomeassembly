@@ -9,7 +9,7 @@ nextflow_pipeline {
         setup {
             println "Downloading GTDB-Tk database..."
             def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
-            def gtdbtk_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def gtdbtk_command = ['bash', '-c', "curl -L --retry 5 ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
             def gtdbtk_proc = gtdbtk_command.execute()
             gtdbtk_proc.waitFor()
 
@@ -18,8 +18,8 @@ nextflow_pipeline {
             }
 
             println "Downloading CheckM2 database..."
-            def checkm2_db_url  = "https://zenodo.org/api/records/5571251/files/checkm2_database.tar.gz/content"
-            def checkm2_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
+            def checkm2_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz"
+            def checkm2_command = ['bash', '-c', "curl -L --retry 5 ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
             def checkm2_proc = checkm2_command.execute()
             checkm2_proc.waitFor()
 
@@ -28,38 +28,24 @@ nextflow_pipeline {
             }
 
             println "Downloading geNomad database..."
-            def genomad_db_url  = "https://zenodo.org/api/records/14886553/files/genomad_db_v1.9.tar.gz/content"
-            def genomad_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${genomad_db_url} | tar xzf - -C ${launchDir}"]
+            def genomad_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/genomad_db_v1.9.tar.gz"
+            def genomad_command = ['bash', '-c', "curl -L --retry 5 ${genomad_db_url} | tar xzf - -C ${launchDir}"]
             def genomad_proc = genomad_command.execute()
             genomad_proc.waitFor()
 
             if (genomad_proc.exitValue() != 0) {
                 throw new RuntimeException("Error - failed to download Genomad db: ${genomad_proc.err.text}")
             }
-
-            println "Downloading NCBI taxdump..."
-            def ncbi_taxdump_url = "https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2025-06-01.zip"
-            def ncbi_command = ['bash', '-c', [
-                "curl -L --retry 5 --retry-delay 10 ${ncbi_taxdump_url} --output ${launchDir}/taxdump.zip",
-                "unzip ${launchDir}/taxdump.zip -d ${launchDir}/taxdump",
-                "rm ${launchDir}/taxdump.zip"
-            ].join(' && ')]
-            def ncbi_proc = ncbi_command.execute()
-            ncbi_proc.waitFor()
-
-            if (ncbi_proc.exitValue() != 0) {
-                throw new RuntimeException("Error - failed to download NCBI taxdump: ${ncbi_proc.err.text}")
-            }
         }
 
         when {
             params {
-                outdir               = "$outputDir"
-                gtdbtk_db            = "${launchDir}/r226_mockup"
-                ncbi_taxonomy_dir    = "${launchDir}/taxdump"
-                checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
-                genomad_db           = "${launchDir}/genomad_db"
-                gtdbtk_use_full_tree = true
+                outdir                 = "$outputDir"
+                gtdbtk_db              = "${launchDir}/r226_mockup"
+                checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
+                genomad_db             = "${launchDir}/genomad_db"
+                gtdbtk_use_full_tree   = true
+                gtdbtk_skip_ani_screen = true
             }
         }
 

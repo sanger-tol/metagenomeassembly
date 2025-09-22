@@ -29,19 +29,25 @@
                 "COVERM_CONTIG": {
                     "coverm": "0.7.0"
                 },
+                "COVERM_GENOME": {
+                    "coverm": "0.7.0"
+                },
                 "CRAM_FILTER_ALIGN_BWAMEM2_FIXMATE_SORT": {
                     "staden_io_lib": "1.15.0",
                     "samtools": 1.21,
                     "bwamem2": "2.2.1"
+                },
+                "CSVTK_CONCAT": {
+                    "csvtk": "0.31.0"
+                },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
                 },
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
                 "FIND_CIRCLES": {
                     "gawk": "5.3.1"
-                },
-                "GAWK_EXTRACT_NCBI_NAMES": {
-                    "gawk": "5.3.0"
                 },
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.0"
@@ -71,7 +77,8 @@
                     "seqkit": "2.9.0"
                 },
                 "GTDBTK_CLASSIFYWF": {
-                    "gtdbtk": "2.4.1"
+                    "gtdbtk": "2.5.2",
+                    "gtdb_db": "r226"
                 },
                 "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
                     "gtdb_to_ncbi_majority_vote.py": "0.2.1"
@@ -83,7 +90,7 @@
                     "hmmer": 3.4
                 },
                 "INFERNAL_CMSEARCH": {
-                    "infernal": null
+                    "infernal": "1.1.5"
                 },
                 "MAGSCOT_MAGSCOT": {
                     "magscot": 1.1
@@ -109,19 +116,16 @@
                     "pyrodigal": "3.6.3"
                 },
                 "SAMTOOLS_INDEX_HIC_CRAM": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_MERGE_HIC_BAM": {
-                    "samtools": 1.21
-                },
-                "TAXONKIT_NAME2TAXID": {
-                    "taxonkit": "0.15.1"
+                    "samtools": "1.22.1"
                 },
                 "TRNASCAN_SE": {
                     "tRNAscan-SE": "2.0.12"
                 },
                 "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v1.1.2"
+                    "sanger-tol/metagenomeassembly": "v1.2.0dev"
                 }
             },
             [
@@ -134,16 +138,18 @@
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.bwa-mem2.hic.bam",
                 "mapping/xyTesTing1_metamdbg.minimap2.hifi.bam",
+                "mapping/xyTesTing1_metamdbg.minimap2.hifi.depth.txt",
                 "qc",
                 "qc/xyTesTing1_metamdbg.circles_plasmid_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circles_virus_summary.tsv",
                 "qc/xyTesTing1_metamdbg.circular.list",
+                "qc/xyTesTing1_metamdbg.circular.tsv",
                 "qc/xyTesTing1_metamdbg.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_bin3c_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.out",
+                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
@@ -180,6 +186,12 @@
                 "log/metator/bin_summary.txt",
                 "log/metator/binning.txt",
                 "qc/xyTesTing1_checkm2_report.tsv",
+                "qc/xyTesTing1_metamdbg.bin3c.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.dastool.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.maxbin2.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.tsv",
+                "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.stats.tsv",
                 "qc/xyTesTing1_metamdbg_bin3c.trnascan_summary.tsv",
@@ -211,7 +223,7 @@
                 "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
                 "taxonomy/gtdbtk/xyTesTing1.log",
                 "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_to_ncbi.tsv",
+                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
@@ -220,6 +232,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-16T16:18:32.826726274"
+        "timestamp": "2025-09-19T09:49:40.342181801"
     }
 }

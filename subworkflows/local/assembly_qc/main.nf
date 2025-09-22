@@ -2,13 +2,13 @@ include { FIND_CIRCLES                            } from '../../../modules/local
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
 include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
 include { GZIP_GET_DECOMPRESSED_SIZE              } from '../../../modules/local/gzip_get_decompressed_size/main'
-include { INFERNAL_CMSEARCH                       } from '../../../modules/local/infernal/cmsearch/main'
+include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch/main'
 
 workflow ASSEMBLY_QC {
     take:
-    assemblies // [meta, assembly.fa.gz]
-    rfam_rrna_cm
-    genomad_db
+    ch_assemblies // [meta, assembly.fa.gz]
+    val_rfam_rrna_cm
+    val_genomad_db
 
     main:
     ch_versions = Channel.empty()
@@ -16,10 +16,10 @@ workflow ASSEMBLY_QC {
     //
     // MODULE: Identify which contigs are circular
     //
-    FIND_CIRCLES(assemblies)
+    FIND_CIRCLES(ch_assemblies)
     ch_versions = ch_versions.mix(FIND_CIRCLES.out.versions)
 
-    ch_genome_stats_input = assemblies
+    ch_genome_stats_input = ch_assemblies
         | combine(FIND_CIRCLES.out.circles_list, by: 0)
 
     //
@@ -28,7 +28,7 @@ workflow ASSEMBLY_QC {
     if(params.enable_genomad) {
         GENOMAD_ENDTOEND(
             FIND_CIRCLES.out.circles_fasta,
-            genomad_db
+            val_genomad_db
         )
         ch_versions = ch_versions.mix(GENOMAD_ENDTOEND.out.versions)
     }
@@ -40,17 +40,20 @@ workflow ASSEMBLY_QC {
     ch_versions = ch_versions.mix(GENOME_STATS_ASSEMBLIES.out.versions)
 
     if(params.enable_rrna_prediction) {
-        ch_infernal_input = assemblies
-            | combine(rfam_rrna_cm)
-            | map { meta, contigs, cmfile ->
-                [ meta, cmfile, contigs, false, true ]
-            }
+        ch_infernal_input = ch_assemblies
+            | combine(val_rfam_rrna_cm)
+            | map { meta, assembly, cmfile -> [ meta, cmfile, assembly ] }
 
         //
         // MODULE: Identify rRNA genes in the assembly using Infernal
         //
-        INFERNAL_CMSEARCH(ch_infernal_input)
+        INFERNAL_CMSEARCH(
+            ch_infernal_input,
+            false, // write align
+            true   // write target
+        )
         ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
+
         ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary
     } else {
         ch_rrna_preds = Channel.empty()
@@ -61,7 +64,7 @@ workflow ASSEMBLY_QC {
     // size of the assembly using gzip -l, and add it to the meta map as
     // meta.decompressed size
     //
-    GZIP_GET_DECOMPRESSED_SIZE(assemblies)
+    GZIP_GET_DECOMPRESSED_SIZE(ch_assemblies)
     ch_versions = ch_versions.mix(GZIP_GET_DECOMPRESSED_SIZE.out.versions)
 
     //
@@ -73,7 +76,7 @@ workflow ASSEMBLY_QC {
             [ meta, row.sum_len, row.N50 ]
         }
 
-    ch_assemblies = assemblies
+    ch_assemblies_out = ch_assemblies
         | combine(ch_stats, by: 0)
         | combine(GZIP_GET_DECOMPRESSED_SIZE.out.fasta_with_size, by: 0)
         | map { meta, assembly, len, n50, size ->
@@ -82,7 +85,7 @@ workflow ASSEMBLY_QC {
         }
 
     emit:
-    assemblies   = ch_assemblies
+    assemblies   = ch_assemblies_out
     stats        = GENOME_STATS_ASSEMBLIES.out.stats
     circle_list  = FIND_CIRCLES.out.circles_list
     rrna         = ch_rrna_preds

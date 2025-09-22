@@ -252,6 +252,10 @@
                     "description": "Path to a directory containing the GTDB-Tk database.",
                     "format": "directory-path"
                 },
+                "gtdbtk_skip_ani_screen": {
+                    "type": "boolean",
+                    "description": "Skip the ANI screen check with skani when classifying genomes with GTDB-Tk."
+                },
                 "gtdbtk_use_full_tree": {
                     "type": "boolean",
                     "description": "Use the full bacterial phylogenetic tree when classifying bacterial genomes. This is enabled by default in the test profiles as it is required to use the mock database for testing. Enabling this with the full GTDB database requires a minimum of 320GB of memory for the GTDB-TK classify process, but will place all bins into a single tree."
@@ -266,12 +270,6 @@
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release226/226.0/ar53_metadata_r226.tsv.gz",
                     "description": "Path to the GTDB-Tk ar53 metadata file."
                 },
-                "gtdbtk_mash_db": {
-                    "type": "string",
-                    "description": "Path to a mash database built using the GTDB genomes.",
-                    "pattern": "^\\S+\\.msh$",
-                    "format": "file-path"
-                },
                 "gtdbtk_min_completeness": {
                     "type": "integer",
                     "default": 50,
@@ -281,11 +279,6 @@
                     "type": "integer",
                     "default": 10,
                     "description": "Maximum contamination allowed CheckM2 completeness for a bin to be classified by GTDB-Tk."
-                },
-                "ncbi_taxonomy_dir": {
-                    "type": "string",
-                    "description": "Path to directory containing the names.dmp, nodes.dmp, delnodes.dmp, and merged.dmp files from the NCBI taxdump archive (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)",
-                    "format": "directory-path"
                 }
             }
         },
@@ -295,11 +288,6 @@
             "description": "General options relating to pipeline operation.",
             "default": "",
             "properties": {
-                "enable_summary": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Produce a final summary file about each genome bin."
-                },
                 "completeness_score": {
                     "type": "integer",
                     "default": 1,

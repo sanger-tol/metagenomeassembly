@@ -33,7 +33,6 @@ workflow METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
     gtdbtk_db           // channel: gtdbtk db from params
-    gtdbtk_mash_db      // channel: gtdbtk mash db from params
 
     main:
     ch_versions = Channel.empty()
@@ -76,18 +75,18 @@ workflow METAGENOMEASSEMBLY {
     ch_circles = ASSEMBLY_QC.out.circle_list
     ch_assemblies = ASSEMBLY_QC.out.assemblies
 
-    //
-    // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
-    // reads to the assembly and estimate per-contig coverages
-    //
-    READ_MAPPING(
-        ch_assemblies,
-        pacbio_fasta,
-        hic_cram
-    )
-    ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
-
     if(params.enable_binning) {
+        //
+        // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
+        // reads to the assembly and estimate per-contig coverages
+        //
+        READ_MAPPING(
+            ch_assemblies,
+            pacbio_fasta,
+            hic_cram
+        )
+        ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
+
         //
         // SUBWORKFLOW: Bin the assembly using binning tools
         //
@@ -124,10 +123,13 @@ workflow METAGENOMEASSEMBLY {
                 ch_bins,
                 ch_contig2bin,
                 ch_circles,
+                READ_MAPPING.out.pacbio_bam,
                 ch_assembly_rrna,
                 checkm2_db
             )
             ch_versions = ch_versions.mix(BIN_QC.out.versions)
+
+            ch_taxonomy_tsv = Channel.empty()
 
             if(params.enable_taxonomy) {
                 //
@@ -138,54 +140,53 @@ workflow METAGENOMEASSEMBLY {
                     ch_bins,
                     BIN_QC.out.checkm2_tsv,
                     gtdbtk_db,
-                    gtdbtk_mash_db
                 )
                 ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
-
-                ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_ncbi
-            } else {
-                ch_taxonomy_tsv = Channel.empty()
+                ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_summary
             }
 
-            if(params.enable_summary) {
-                ch_stats_collated = BIN_QC.out.stats
-                    | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
-                    | groupTuple(by: 0)
-                    | ifEmpty([[],[]])
+            ch_stats_collated = BIN_QC.out.stats
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
 
-                ch_checkm2_collated = BIN_QC.out.checkm2_tsv
-                    | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
-                    | groupTuple(by: 0)
-                    | ifEmpty([[],[]])
+            ch_coverage_collated = BIN_QC.out.coverage
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
+                | ifEmpty([[],[]])
 
-                ch_taxonomy_collated = ch_taxonomy_tsv
-                    | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
-                    | groupTuple(by: 0)
-                    | ifEmpty([[],[]])
+            ch_checkm2_collated = BIN_QC.out.checkm2_tsv
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
+                | ifEmpty([[],[]])
 
-                ch_trnascan_collated = BIN_QC.out.trnascan_summary
-                    | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
-                    | groupTuple(by: 0)
-                    | ifEmpty([[],[]])
+            ch_taxonomy_collated = ch_taxonomy_tsv
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
+                | ifEmpty([[],[]])
 
-                ch_rrna_collated = BIN_QC.out.rrna_summary
-                    | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
-                    | groupTuple(by: 0)
-                    | ifEmpty([[],[]])
+            ch_trnascan_collated = BIN_QC.out.trnascan_summary
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
+                | ifEmpty([[],[]])
 
-                //
-                // SUBWORKFLOW: Collate all bin information into tabular
-                // output, and summarise across binners
-                //
-                BIN_SUMMARY(
-                    ch_stats_collated,
-                    ch_checkm2_collated,
-                    ch_taxonomy_collated,
-                    ch_trnascan_collated,
-                    ch_rrna_collated
-                )
-                ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
-            }
+            ch_rrna_collated = BIN_QC.out.rrna_summary
+                | map { meta, tsv -> [ meta.subMap('id'), tsv ] }
+                | groupTuple(by: 0)
+                | ifEmpty([[],[]])
+
+            //
+            // SUBWORKFLOW: Collate all bin information into tabular
+            // output, and summarise across binners
+            //
+            BIN_SUMMARY(
+                ch_stats_collated,
+                ch_coverage_collated,
+                ch_checkm2_collated,
+                ch_taxonomy_collated,
+                ch_trnascan_collated,
+                ch_rrna_collated
+            )
+            ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
         }
     }
     //

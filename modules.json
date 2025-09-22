@@ -7,12 +7,12 @@
                 "nf-core": {
                     "bwamem2/index": {
                         "branch": "master",
-                        "git_sha": "a29f18660f5e3748d44d6f716241e70c942c065d",
+                        "git_sha": "b2902040b9cb9b7b32b62400f1c024a709bd4812",
                         "installed_by": ["modules"]
                     },
                     "checkm2/predict": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "coverm/contig": {
@@ -20,79 +20,93 @@
                         "git_sha": "27e31681fdbf1e511257355a236037a8cd9c2b2e",
                         "installed_by": ["modules"]
                     },
+                    "coverm/genome": {
+                        "branch": "master",
+                        "git_sha": "7cc7dd58e299fcb2b26c3ef9a538d940e61bd5ea",
+                        "installed_by": ["modules"]
+                    },
+                    "csvtk/concat": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
+                    "csvtk/join": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
                     "dastool/dastool": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "genomad/endtoend": {
                         "branch": "master",
-                        "git_sha": "5c9c6d55abdc05dbe3dc81b1cf4997d605c13795",
+                        "git_sha": "ddb0d667cf6cdee3bab9497241de4bbf6b88d8cc",
                         "installed_by": ["modules"]
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/gtdbtk/classifywf/gtdbtk-classifywf.diff"
+                        "git_sha": "5b08bd1efd531f6bc1727d059648a4f1fbafdce0",
+                        "installed_by": ["modules"]
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
-                        "git_sha": "49c305148d0e5d5a4b4b99b09f4be50f5c8786e4",
+                        "git_sha": "5b08bd1efd531f6bc1727d059648a4f1fbafdce0",
                         "installed_by": ["modules"]
                     },
                     "hmmer/hmmsearch": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
                     },
+                    "infernal/cmsearch": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
                     "maxbin2": {
                         "branch": "master",
-                        "git_sha": "376c622c91dc6a06af19f4de7f0c103bc0573b3f",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "metamdbg/asm": {
                         "branch": "master",
-                        "git_sha": "c912aa8b29a17d6dbec3fdda71185fbe3e77ba59",
+                        "git_sha": "ecfdcb572340123aa4eac9d5e87d50b6965fdf83",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/metamdbg/asm/metamdbg-asm.diff"
                     },
                     "minimap2/align": {
                         "branch": "master",
-                        "git_sha": "a532706a19b3d83f14b1d48a6a815ed33eb48b0c",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/minimap2/align/minimap2-align.diff"
                     },
                     "pyrodigal": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "ddb0d667cf6cdee3bab9497241de4bbf6b88d8cc",
                         "installed_by": ["modules"]
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "d090922b1a4b80ba283186459ababf8e308abcbb",
+                        "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/samtools/index/samtools-index.diff"
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "d090922b1a4b80ba283186459ababf8e308abcbb",
-                        "installed_by": ["modules"]
-                    },
-                    "taxonkit/name2taxid": {
-                        "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",
                         "installed_by": ["modules"]
                     }
                 }

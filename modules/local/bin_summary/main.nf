@@ -9,10 +9,11 @@ process BIN_SUMMARY {
 
     input:
     tuple val(meta) , path(stats)
-    tuple val(meta2), path(checkm2)
-    tuple val(meta3), path(taxonomy)
-    tuple val(meta4), path(trnascan)
-    tuple val(meta5), path(rrna)
+    tuple val(meta2), path(coverage)
+    tuple val(meta3), path(checkm2)
+    tuple val(meta4), path(taxonomy)
+    tuple val(meta5), path(trnascan)
+    tuple val(meta6), path(rrna)
 
     output:
     path("*.bin_summary.tsv")  , emit: bin_summary
@@ -20,17 +21,19 @@ process BIN_SUMMARY {
     path("versions.yml")       , emit: versions
 
     script:
-    def args         = task.ext.args   ?: ''
-    def prefix       = task.ext.prefix ?: "${meta.id}"
-    def stats_input  = stats    ? "--stats ${stats.join(",")}"       : ""
-    def checkm_input = checkm2  ? "--checkm ${checkm2.join(",")}"    : ""
-    def tax_input    = taxonomy ? "--taxonomy ${taxonomy.join(",")}" : ""
-    def trna_input   = trnascan ? "--trnas ${trnascan.join(",")}"    : ""
-    def rrna_input   = rrna     ? "--rrnas ${rrna.join(",")}"        : ""
+    def args           = task.ext.args   ?: ''
+    def prefix         = task.ext.prefix ?: "${meta.id}"
+    def stats_input    = stats    ? "--stats ${stats.join(",")}"       : ""
+    def coverage_input = stats    ? "--coverage ${coverage.join(",")}" : ""
+    def checkm_input   = checkm2  ? "--checkm ${checkm2.join(",")}"    : ""
+    def tax_input      = taxonomy ? "--taxonomy ${taxonomy.join(",")}" : ""
+    def trna_input     = trnascan ? "--trnas ${trnascan.join(",")}"    : ""
+    def rrna_input     = rrna     ? "--rrnas ${rrna.join(",")}"        : ""
     """
     bin_summary.R \\
         -o ${prefix} \\
         ${stats_input} \\
+        ${coverage_input} \\
         ${checkm_input} \\
         ${tax_input} \\
         ${trna_input} \\
