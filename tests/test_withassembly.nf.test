@@ -41,11 +41,12 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir               = "$outputDir"
-                gtdbtk_db            = "${launchDir}/r226_mockup"
-                checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
-                genomad_db           = "${launchDir}/genomad_db"
-                gtdbtk_use_full_tree = true
+                outdir                 = "$outputDir"
+                gtdbtk_db              = "${launchDir}/r226_mockup"
+                checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
+                genomad_db             = "${launchDir}/genomad_db"
+                gtdbtk_use_full_tree   = true
+                gtdbtk_skip_ani_screen = true
             }
         }
 

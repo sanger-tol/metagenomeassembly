@@ -252,6 +252,10 @@
                     "description": "Path to a directory containing the GTDB-Tk database.",
                     "format": "directory-path"
                 },
+                "gtdbtk_skip_ani_screen": {
+                    "type": "boolean",
+                    "description": "Skip the ANI screen check with skani when classifying genomes with GTDB-Tk."
+                },
                 "gtdbtk_use_full_tree": {
                     "type": "boolean",
                     "description": "Use the full bacterial phylogenetic tree when classifying bacterial genomes. This is enabled by default in the test profiles as it is required to use the mock database for testing. Enabling this with the full GTDB database requires a minimum of 320GB of memory for the GTDB-TK classify process, but will place all bins into a single tree."

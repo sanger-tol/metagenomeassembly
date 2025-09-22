@@ -8,19 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Pipeline-level nf-test implemented - update to template 3.3.2 (by @prototaxites)
-- Added `gtdbtk_use_full_tree` parameter. This is enabled in the nf-test tests to allow use of the mock DB, but if enabled using the full GTDB-Tk
-  db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory. (by @prototaxites)
-- Use default gtdbtk classifywf module and switch to the new gtdbtk majorityvote module to convert to NCBI taxonomy (by @prototaxites)
-  - this adds GTDB DB version output to versions.yml
+- GTDB-Tk updates:
+  - Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
+  - Remove patch from gtdbtk/classifywf module and switch to the new gtdbtk/gtdbtoncbimajorityvote module to convert to NCBI taxonomy (by @prototaxites)
+  - Added `gtdbtk_use_full_tree` parameter. This is enabled in the nf-test tests to allow use of the mock DB, but if enabled using the full GTDB-Tk
+  db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory (by @prototaxites)
+  - Added `gtdbtk_skip_ani_screen` parameter. This is also enabled in the nf-test tests to allow use of the mock DB. Skips running the ANI pre-screen step using skani for classification without using marker genes (by @prototaxites)
+  - Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
+  - GTDB classification method included in bin summary (by @prototaxites)
 - Return free-disk-space to nf-test CI runners (by @prototaxites)
 - Emit all contig2bin files in the output directory (by @prototaxites)
 - Include filename in bin_summary.tsv results file (by @prototaxites)
-- Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
-- GTDB classification method included in bin summary (by @prototaxites)
 - Add extra output TSV file with per-contig information (length, GC, circularity) (by @prototaxites)
 - Use nf-core infernal/cmsearch module (by @prototaxites)
 - Estimate bin coverage with coverm/genome (by @prototaxites)
-- Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
 - (Sanger internal use) - add a Tree of Life Assembly profile to configure access to databases (by @prototaxites)
 
 ### `Fixed`
