@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Update GTDB-Tk to 2.5.2 to fix conda env issues (by @prototaxites)
   - Remove patch from gtdbtk/classifywf module and switch to the new gtdbtk/gtdbtoncbimajorityvote module to convert to NCBI taxonomy (by @prototaxites)
   - Added `gtdbtk_use_full_tree` parameter. This is enabled in the nf-test tests to allow use of the mock DB, but if enabled using the full GTDB-Tk
-  db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory (by @prototaxites)
+    db, all bacterial bins will be placed into the full bacterial tree. This requires >=320 GB of memory (by @prototaxites)
   - Added `gtdbtk_skip_ani_screen` parameter. This is also enabled in the nf-test tests to allow use of the mock DB. Skips running the ANI pre-screen step using skani for classification without using marker genes (by @prototaxites)
   - Join NCBI classifications to GTDB-Tk summary and output this file instead (by @prototaxites)
   - GTDB classification method included in bin summary (by @prototaxites)
