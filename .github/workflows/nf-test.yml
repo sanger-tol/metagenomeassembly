@@ -66,7 +66,9 @@ jobs:
       fail-fast: false
       matrix:
         shard: ${{ fromJson(needs.nf-test-changes.outputs.shard) }}
-        profile: [conda, docker, singularity]
+        ## As some modules are not available in Conda, the snapshots do not match
+        ## Disable conda tests until we are able to check for conda inside nf-test
+        profile: [docker, singularity]
         isMain:
           - ${{ github.base_ref == 'master' || github.base_ref == 'main' }}
         # Exclude conda and singularity on dev
