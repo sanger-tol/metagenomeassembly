@@ -132,15 +132,6 @@ workflow PIPELINE_INITIALISATION {
         ch_gtdbtk_db = Channel.empty()
     }
 
-    // GTDB-Tk mash database
-    if(params.gtdbtk_mash_db) {
-        ch_gtdbtk_mash_db = Channel.of(
-            [ file(params.gtdbtk_mash_db, checkIfExists: true) ]
-        )
-    } else {
-        ch_gtdbtk_mash_db = []
-    }
-
     emit:
     pacbio_fasta        = ch_pacbio_fasta
     assembly            = ch_assembly
@@ -151,7 +142,6 @@ workflow PIPELINE_INITIALISATION {
     magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
     checkm2_db          = ch_checkm2_db
     gtdbtk_db           = ch_gtdbtk_db
-    gtdbtk_mash_db      = ch_gtdbtk_mash_db
     versions            = ch_versions
 }
 

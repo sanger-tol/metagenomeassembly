@@ -116,7 +116,11 @@ workflow BIN_REFINEMENT {
         //
         // MODULE: Rename bins inside contig2bin files
         //
-        GAWK_RENAME_BINS(ch_refined_contig2bin_raw, [], false)
+        GAWK_RENAME_BINS(
+            ch_refined_contig2bin_raw,
+            file("${projectDir}/bin/rename_bins.awk"),
+            false
+        )
         ch_versions = ch_versions.mix(GAWK_RENAME_BINS.out.versions)
         ch_refined_contig2bin = GAWK_RENAME_BINS.out.output
 

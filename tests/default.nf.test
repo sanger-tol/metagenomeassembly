@@ -1,0 +1,105 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("-profile test") {
+
+        setup {
+            println "Downloading GTDB-Tk database..."
+            def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
+            def gtdbtk_command = ['bash', '-c', "curl -L --retry 5 ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
+            def gtdbtk_proc = gtdbtk_command.execute()
+            gtdbtk_proc.waitFor()
+
+            if (gtdbtk_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
+            }
+
+            println "Downloading CheckM2 database..."
+            def checkm2_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz"
+            def checkm2_command = ['bash', '-c', "curl -L --retry 5 ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
+            def checkm2_proc = checkm2_command.execute()
+            checkm2_proc.waitFor()
+
+            if (checkm2_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download CheckM2 db: ${checkm2_proc.err.text}")
+            }
+
+            println "Downloading geNomad database..."
+            def genomad_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/genomad_db_v1.9.tar.gz"
+            def genomad_command = ['bash', '-c', "curl -L --retry 5 ${genomad_db_url} | tar xzf - -C ${launchDir}"]
+            def genomad_proc = genomad_command.execute()
+            genomad_proc.waitFor()
+
+            if (genomad_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download Genomad db: ${genomad_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                outdir                 = "$outputDir"
+                gtdbtk_db              = "${launchDir}/r226_mockup"
+                checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
+                genomad_db             = "${launchDir}/genomad_db"
+                gtdbtk_use_full_tree   = true
+                gtdbtk_skip_ani_screen = true
+            }
+        }
+
+        then {
+            // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
+            // Stable file names
+            def assembly_files = getAllFilesFromDir("${params.outdir}/assembly/", relative: true, includeDir: true)
+            def bin_files      = getAllFilesFromDir("${params.outdir}/bins/", relative: true, ignore: ["fasta/**/*", "qc/trnascan_se/**"])
+
+            // Unstable and uncountable files
+            def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
+            def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: ["*.stats"])
+
+            // Count number of GTDB-Tk-appropriate bins
+            def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
+                .csv(sep: "\t")
+                .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
+
+            assertAll(
+                { assert workflow.success },
+                // Unstable file checks
+                // Check number of CheckM2 bins processed matches number of bins
+                { assert path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+
+                // Check tRNAScan-SE ran for all bins
+                { assert trnascan_stats.size() == bin_fasta.size() },
+
+                // Check bin_summary.tsv file has expected number of rows
+                { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
+
+                // Check GTDB-Tk output has expected number of rows
+                { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
+
+                // Check group_summary.tsv file has expected number of rows
+                // (17 if GTDB-Tk not run - 6 otherwise)
+                { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6 },
+
+                // Check files with stable names
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
+                    assembly_files,
+                    bin_files
+                ).match() }
+            )
+        }
+
+        cleanup {
+            new File("${launchDir}/taxdump").deleteDir()
+            new File("${launchDir}/r226_mockup").deleteDir()
+            new File("${launchDir}/CheckM2_database").deleteDir()
+            new File("${launchDir}/genomad_db").deleteDir()
+            new File("${workDir}").deleteDir()
+        }
+
+    }
+}

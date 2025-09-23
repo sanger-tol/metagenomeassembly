@@ -1,7 +1,7 @@
-## Create a contig2bin file from a set of input
-## FASTA files
+## Create a contig2bin file from a set of input
+## FASTA files
 ##
-## Author: Jim Downie
+## Author: Jim Downie
 
 BEGIN { OFS = "\t" }
 BEGINFILE {

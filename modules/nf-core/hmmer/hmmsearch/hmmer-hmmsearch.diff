@@ -1,4 +1,4 @@
-Changes in module 'nf-core/hmmer/hmmsearch'
+Changes in component 'nf-core/hmmer/hmmsearch'
 'modules/nf-core/hmmer/hmmsearch/environment.yml' is unchanged
 'modules/nf-core/hmmer/hmmsearch/meta.yml' is unchanged
 Changes in 'hmmer/hmmsearch/main.nf':
@@ -46,7 +46,6 @@ Changes in 'hmmer/hmmsearch/main.nf':
      cat <<-END_VERSIONS > versions.yml
      "${task.process}":
 
-'modules/nf-core/hmmer/hmmsearch/tests/tags.yml' is unchanged
-'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test' is unchanged
 'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test' is unchanged
 ************************************************************
