@@ -26,4 +26,4 @@ repository-code: https://github.com/sanger-tol/metagenomeassembly
 title: sanger-tol/metagenomeassembly v1.2.0
 type: software
 url: https://pipelines.tol.sanger.ac.uk/metagenomeassembly
-version: 1.2.0
+version: 1.2.1
