@@ -20,5 +20,5 @@ BEGINFILE {
 ENDFILE {
     for (i in trna_arr) { unique_trnas++ }
     delete trna_arr
-    print bin, NR, unique_trnas
+    print bin, FNR, unique_trnas
 }
