@@ -13,7 +13,7 @@ process FIND_CIRCLES {
     output:
     tuple val(meta), path("*.circular.tsv")    , emit: circles_tsv
     tuple val(meta), path("*.circular.list")   , emit: circles_list
-    tuple val(meta), path("*.circles.fasta.gz"), emit: circles_fasta
+    tuple val(meta), path("*.circles.fasta.gz"), emit: circles_fasta, optional: true
     path "versions.yml"                        , emit: versions
 
     when:
@@ -42,8 +42,10 @@ process FIND_CIRCLES {
 
     awk '\$4 == "True" {print \$1}' ${prefix}.circular.tsv > ${prefix}.circular.list
 
-    seqkit grep -f ${prefix}.circular.list ${fasta} |\\
-        bgzip -@${task.cpus} > ${prefix}.circles.fasta.gz
+    if [ -s ${prefix}.circular.list ]; then
+        seqkit grep -f ${prefix}.circular.list ${fasta} | \
+            bgzip -@${task.cpus} > ${prefix}.circles.fasta.gz
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
