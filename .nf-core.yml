@@ -28,7 +28,6 @@ lint:
     - LICENSE
     - .github/PULL_REQUEST_TEMPLATE.md
   multiqc_config: false
-  included_configs: false
   nextflow_config:
     - process.cpus
     - process.memory
@@ -48,7 +47,7 @@ lint:
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge
-nf_core_version: 3.3.2
+nf_core_version: 3.4.1
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -62,4 +61,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.2.1
+  version: 1.2.2dev
