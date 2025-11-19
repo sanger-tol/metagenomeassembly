@@ -1,0 +1,207 @@
+{
+    "meles meles - bwamem2": {
+        "content": [
+            [
+                {
+                    "maxReadLength": 151,
+                    "minReadLength": 151,
+                    "meanReadLength": 151,
+                    "maxQuality": 60,
+                    "minQuality": 0,
+                    "meanQuality": 7,
+                    "readCount": 3802,
+                    "duplicateReadCount": 54,
+                    "sorted": true
+                }
+            ],
+            [
+                "test.bam.csi"
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.metrics:md5,51755ba7077cd444be19d1fd07569cb6"
+                ]
+            ],
+            [
+                "versions.yml:md5,21cd01daa785b5d5aecbd5a75b752c41",
+                "versions.yml:md5,6506bd5d600b4c2b5c9d51ab1e559772",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-14T10:48:27.428806"
+    },
+    "meles meles - minimap2": {
+        "content": [
+            [
+                {
+                    "maxReadLength": 151,
+                    "minReadLength": 25,
+                    "meanReadLength": 147,
+                    "maxQuality": 60,
+                    "minQuality": 0,
+                    "meanQuality": 9,
+                    "readCount": 1856,
+                    "duplicateReadCount": 33,
+                    "sorted": true
+                }
+            ],
+            [
+                "test.bam.csi"
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.metrics:md5,bc737c10e07175ea468040b952538e50"
+                ]
+            ],
+            [
+                "versions.yml:md5,21cd01daa785b5d5aecbd5a75b752c41",
+                "versions.yml:md5,57921e27b2a928b57e3419eb0e2cdfae",
+                "versions.yml:md5,95e0f5692187ae002f2dc5c27f09b239",
+                "versions.yml:md5,95e0f5692187ae002f2dc5c27f09b239",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-14T10:52:19.15697"
+    },
+    "meles meles - zymo - bwamem2 - multiple samples - double files": {
+        "content": [
+            [
+                {
+                    "maxReadLength": 151,
+                    "minReadLength": 151,
+                    "meanReadLength": 151,
+                    "maxQuality": 60,
+                    "minQuality": 0,
+                    "meanQuality": 7,
+                    "readCount": 3802,
+                    "duplicateReadCount": 53,
+                    "sorted": true
+                },
+                {
+                    "maxReadLength": 150,
+                    "minReadLength": 150,
+                    "meanReadLength": 150,
+                    "maxQuality": 60,
+                    "minQuality": 0,
+                    "meanQuality": 54,
+                    "readCount": 543925,
+                    "duplicateReadCount": 533,
+                    "sorted": false
+                }
+            ],
+            [
+                "test2.bam.csi",
+                "test.bam.csi"
+            ],
+            [
+                [
+                    {
+                        "id": "test2"
+                    },
+                    "test2.metrics:md5,9576c2cd924a502933e631d457d034b6"
+                ],
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.metrics:md5,75db11ef6694d30a041ce3ef5325dd19"
+                ]
+            ],
+            [
+                "versions.yml:md5,21cd01daa785b5d5aecbd5a75b752c41",
+                "versions.yml:md5,21cd01daa785b5d5aecbd5a75b752c41",
+                "versions.yml:md5,6506bd5d600b4c2b5c9d51ab1e559772",
+                "versions.yml:md5,6506bd5d600b4c2b5c9d51ab1e559772",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,823323453cd1252e06e2d115039f5eed",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-14T10:50:52.713388"
+    },
+    "meles meles - bwamem2 - multiple samples - meta mismatch": {
+        "content": [
+            [
+                {
+                    "maxReadLength": 151,
+                    "minReadLength": 151,
+                    "meanReadLength": 151,
+                    "maxQuality": 60,
+                    "minQuality": 0,
+                    "meanQuality": 7,
+                    "readCount": 3802,
+                    "duplicateReadCount": 54,
+                    "sorted": true
+                }
+            ],
+            [
+                "test.bam.csi"
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.metrics:md5,51755ba7077cd444be19d1fd07569cb6"
+                ]
+            ],
+            [
+                "versions.yml:md5,21cd01daa785b5d5aecbd5a75b752c41",
+                "versions.yml:md5,6506bd5d600b4c2b5c9d51ab1e559772",
+                "versions.yml:md5,6506bd5d600b4c2b5c9d51ab1e559772",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,6a676d249165bcef19b33bdd3be83e78",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,be4d3d855b43aa0e9e99f54298de977f",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54",
+                "versions.yml:md5,d36134f61f1cf5af8f9aef2454a94e54"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-14T10:51:42.773355"
+    }
+}

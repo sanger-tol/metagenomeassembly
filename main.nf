@@ -37,6 +37,10 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: hmms for magscot
     checkm2_db   // channel: checkm2 db from --params.checkm2_db
     gtdbtk_db    // channel: gtdbtk db from --params.gtdbtk_db
+    val_hic_binning           // boolean: hi-c binning enabled
+    val_hic_aligner           // string: which aligner to use for Hi-C mapping
+    val_cram_chunk_size       // integer: how many hic cram slices to map in a single chunk
+    val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
 
     main:
 
@@ -53,6 +57,10 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         magscot_gtdb_hmm_db,
         checkm2_db,
         gtdbtk_db,
+        val_hic_binning,
+        val_hic_aligner,
+        val_cram_chunk_size,
+        val_reads_per_fasta_chunk
     )
     // emit:
     // multiqc_report = METAGENOMEASSEMBLY.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -94,6 +102,10 @@ workflow {
         PIPELINE_INITIALISATION.out.magscot_gtdb_hmm_db,
         PIPELINE_INITIALISATION.out.checkm2_db,
         PIPELINE_INITIALISATION.out.gtdbtk_db,
+        (params.enable_bin3c || params.enable_metator),
+        params.hic_aligner,
+        params.hic_mapping_cram_bin_size,
+        params.long_read_mapping_reads_per_chunk
     )
     //
     // SUBWORKFLOW: Run completion tasks

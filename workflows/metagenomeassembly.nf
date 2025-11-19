@@ -33,6 +33,10 @@ workflow METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
     gtdbtk_db           // channel: gtdbtk db from params
+    val_hic_binning           // boolean: hic binnning enabled
+    val_hic_aligner           // string: which aligner to use for Hi-C mapping
+    val_cram_chunk_size       // integer: how many hic cram slices to map in a single chunk
+    val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
 
     main:
     ch_versions = Channel.empty()
@@ -83,7 +87,11 @@ workflow METAGENOMEASSEMBLY {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            hic_cram
+            hic_cram,
+            val_hic_binning,
+            val_hic_aligner,
+            val_cram_chunk_size,
+            val_reads_per_fasta_chunk
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
