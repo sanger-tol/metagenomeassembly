@@ -21,7 +21,7 @@ workflow ASSEMBLY {
                 def meta_new = meta + [assembler: "metamdbg"]
                 [ meta_new, contigs ]
             }
-        ch_assemblies_raw = ch_assemblies.mix(ch_metamdbg_assemblies)
+        ch_assemblies_raw = ch_assemblies_raw.mix(ch_metamdbg_assemblies)
     }
 
     ch_assemblies_split = ch_assemblies_raw
