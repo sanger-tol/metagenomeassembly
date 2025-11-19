@@ -7,7 +7,6 @@ process READ_YAML {
 
     input:
     val(yaml)
-    val(enable_assembly)
 
     output:
     tuple val(meta)    , val(pacbio)  , emit: pacbio_fasta

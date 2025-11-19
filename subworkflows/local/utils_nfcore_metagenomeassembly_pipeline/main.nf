@@ -100,7 +100,7 @@ workflow PIPELINE_INITIALISATION {
     //
     // MODULE: Create channels from input file provided through params.input
     //
-    READ_YAML(file(input), params.enable_assembly)
+    READ_YAML(file(input))
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
 
