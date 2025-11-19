@@ -16,8 +16,8 @@ workflow ASSEMBLY {
         // MODULE: Assemble PacBio reads using metaMDBG
         //
         ch_metamdbg_input = ch_hifi_reads
-            | combine(ch_assemblies_raw.ifEmpty([[],[]]))
-            | filter { _meta, _reads, _meta_asm, _asm -> !_meta_asm.isEmpty() }
+            | combine(ch_assemblies_raw.ifEmpty([[:],[]]))
+            | filter { _meta, _reads, _meta_asm, asm -> !asm }
             | map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
 
         METAMDBG_ASM(ch_metamdbg_input, 'hifi')
