@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Operate on decompressed assemblies downstream to avoid lack of bgzipping. (by @prototaxites)
 - Removed the parameter `params.hic_mapping_merge_mode`, as we now use the new Hi-C mapping subworkflow. (by @prototaxites)
+- Removed the parameter `params.enable_assembly` - assembly now always runs by default unless an assembly is provided. (by @prototaxites)
 
 ### `Dependencies`
 

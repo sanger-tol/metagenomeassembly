@@ -44,11 +44,6 @@
             "description": "Options relating to metagenomic de-novo assembly.",
             "default": "",
             "properties": {
-                "enable_assembly": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable de-novo assembly of HiFi reads."
-                },
                 "enable_metamdbg": {
                     "type": "boolean",
                     "default": true,
