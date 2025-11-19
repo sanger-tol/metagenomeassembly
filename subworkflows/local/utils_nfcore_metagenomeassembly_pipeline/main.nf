@@ -109,7 +109,8 @@ workflow PIPELINE_INITIALISATION {
         | filter { !it[1].isEmpty() }
 
     ch_assembly = READ_YAML.out.assembly
-        | filter { !it[1].isEmpty() }
+        | filter {  _meta, asm -> asm }
+        | map { meta, asm -> [ meta, file(asm, checkIfExists: true) ] }
 
     // collect as have to ensure this is a value channel
     ch_hic_enzymes = READ_YAML.out.hic_enzymes
