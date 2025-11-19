@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Switch the read mapping and Hi-C mapping to use the new sanger-tol subworkflows (by @prototaxites)
+- Switch the read mapping and Hi-C mapping to use the new sanger-tol subworkflows. (by @prototaxites)
+- gunzip all assemblies and operate on assemblies in decompressed space internally. (by @prototaxites)
 
 ### `Fixed`
 
