@@ -35,7 +35,9 @@ workflow ASSEMBLY {
 
     ch_assemblies_unzipped = ch_assemblies_raw.ungzipped
         | mix(GUNZIP.out.gunzip)
-        | map { meta, asm -> [ meta + [size: asm.size(), asm] ] }
+        | map { meta, asm ->
+            [ meta + [size: asm.size()], asm ]
+        }
 
     emit:
     assemblies = ch_assemblies_unzipped
