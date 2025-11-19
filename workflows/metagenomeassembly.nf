@@ -69,7 +69,7 @@ workflow METAGENOMEASSEMBLY {
     // check contig circularity and classify circular contigs
     //
     ASSEMBLY_QC(
-        ch_assemblies_raw,
+        ch_assemblies,
         rfam_rrna_cm,
         genomad_db
     )
