@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | module                     | tools    | old versions | new versions |
 | -------------------------- | -------- | ------------ | ------------ |
+| gunzip                     | gzip     | -            | 1.13         |
 | gzip_get_decompressed_size | gzip     | 1.13         | -            |
 | fastxalign/pyfastxindex    | pyfastx  | -            | 2.2.0        |
 | fastxalign/minimap2align   | pyfastx  | -            | 2.2.0        |
