@@ -59,9 +59,9 @@ workflow METAGENOMEASSEMBLY {
         ASSEMBLY(ch_assembly_input)
         ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
 
-        ch_assemblies_raw = ch_assemblies_input.mix(ASSEMBLY.out.assemblies)
+        ch_assemblies = ch_assemblies_input.mix(ASSEMBLY.out.assemblies)
     } else {
-        ch_assemblies_raw = ch_assemblies_input
+        ch_assemblies = ch_assemblies_input
     }
 
     //
@@ -77,7 +77,6 @@ workflow METAGENOMEASSEMBLY {
 
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
-    ch_assemblies = ASSEMBLY_QC.out.assemblies
 
     if(params.enable_binning) {
         //

@@ -16,7 +16,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Deprecated`
 
+- Operate on decompressed assemblies downstream to avoid lack of bgzipping. (by @prototaxites)
+- Removed the parameter `params.hic_mapping_merge_mode`, as we now use the new Hi-C mapping subworkflow. (by @prototaxites)
+
 ### `Dependencies`
+
+| module                        | tools                        | old versions | new versions |
+| ----------------------------- | ---------------------------- | ------------ | ------------ |
+| gzip_get_decompressed_size    | gzip                         | 1.13         | -            |
+| fastxalign/pyfastxindex       | pyfastx                      | -            | 2.2.0        |
+| fastxalign/minimap2align      | pyfastx                      | -            | 2.2.0        |
+| fastxalign/minimap2align      | minimap2                     | -            | 2.30         |
+| fastxalign/minimap2align      | samtools                     | -            | 1.22.1       |
+| cramalign/gencramchunks       | -                            | -            | 1.1.0        |
+| cramalign/bwamem2align        | bwa-mem2                     | -            | 1.22.1       |
+| cramalign/bwamem2align        | samtools                     | -            | 1.22.1       |
+| cramalign/minimap2align       | minimap2                     | -            | 2.30         |
+| cramalign/minimap2align       | samtools                     | -            | 1.22.1       |
+| minimap2/align                | minimap2                     | 2.2.9        | -            |
+| minimap2/align                | samtools                     | 1.21         | -            |
+| samtools/sort                 | samtools                     | -            | 1.22.1       |
+| samtools/mergedup             | samtools                     | -            | 1.22.1       |
+| samtools/faidx                | samtools                     | -            | 1.22.1       |
 
 ## [1.2.1] - Fair Margaret and Sweet William (patch 1) - [2025-10-24]
 
