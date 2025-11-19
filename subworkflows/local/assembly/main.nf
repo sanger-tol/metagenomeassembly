@@ -17,7 +17,7 @@ workflow ASSEMBLY {
         //
         ch_metamdbg_input = ch_hifi_reads
             | combine(ch_assemblies_raw.ifEmpty([[],[]]))
-            | filter { _meta, _reads, _meta_asm, _asm -> !meta_asm.isEmpty() }
+            | filter { _meta, _reads, _meta_asm, _asm -> !_meta_asm.isEmpty() }
             | map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
 
         METAMDBG_ASM(ch_metamdbg_input, 'hifi')
