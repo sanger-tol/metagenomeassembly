@@ -33,7 +33,7 @@ workflow ASSEMBLY {
     GUNZIP(ch_assemblies_split.gzipped)
     ch_versions = ch_versions.mix(GUNZIP.out.versions)
 
-    ch_assemblies_unzipped = ch_assemblies_raw.ungzipped
+    ch_assemblies_unzipped = ch_assemblies_split.ungzipped
         | mix(GUNZIP.out.gunzip)
         | map { meta, asm ->
             [ meta + [size: asm.size()], asm ]
