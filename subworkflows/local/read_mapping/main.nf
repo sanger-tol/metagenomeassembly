@@ -24,8 +24,9 @@ workflow READ_MAPPING {
         | filter { val_hic_binning }
         | combine(ch_hic_cram)
         | multiMap { meta, asm, _meta_hic, cram ->
-            assemblies: [ meta, asm ]
-            cram: [ meta, cram ]
+            def meta_new =  meta + [size: asm.size()]
+            assemblies: [ meta_new, asm ]
+            cram: [ meta_new, cram ]
         }
 
     CRAM_MAP_ILLUMINA_HIC(
@@ -37,10 +38,18 @@ workflow READ_MAPPING {
     ch_versions = ch_versions.mix(CRAM_MAP_ILLUMINA_HIC.out.versions)
 
     //
+    // Logic: remove size information we added from meta
+    //
+    ch_hic_bam = CRAM_MAP_ILLUMINA_HIC.out.bam
+        | map { meta, bam ->
+            [ meta - meta.subMap("size"), bam ]
+        }
+
+    //
     // Module: sort output BAM file by name
     //
     SAMTOOLS_SORT(
-        CRAM_MAP_ILLUMINA_HIC.out.bam,
+        ch_hic_bam,
         [[],[]],
         "csi"
     )
@@ -52,8 +61,9 @@ workflow READ_MAPPING {
     ch_pacbio_mapping_inputs = ch_assemblies
         | combine(ch_pacbio)
         | multiMap { meta, asm, _meta_pb, reads ->
-            assemblies: [ meta, asm ]
-            reads: [ meta, reads ]
+            def meta_new =  meta + [size: asm.size()]
+            assemblies: [ meta_new, asm ]
+            reads: [ meta_new, reads ]
         }
 
     FASTX_MAP_LONG_READS(
@@ -64,10 +74,18 @@ workflow READ_MAPPING {
     )
 
     //
+    // Logic: remove size information we added from meta
+    //
+    ch_pacbio_bam = FASTX_MAP_LONG_READS.out.bam
+        | map { meta, bam ->
+            [ meta - meta.subMap("size"), bam ]
+        }
+
+    //
     // Module: Calculate per-contig coverage using coverm
     //
     COVERM_CONTIG(
-        FASTX_MAP_LONG_READS.out.bam,
+        ch_pacbio_bam,
         [[],[]], // reference
         true,    // bam_input
         false    // interleaved
@@ -75,8 +93,8 @@ workflow READ_MAPPING {
     ch_versions = ch_versions.mix(COVERM_CONTIG.out.versions)
 
     emit:
-    pacbio_bam = FASTX_MAP_LONG_READS.out.bam
-    hic_bam    = SAMTOOLS_SORT.out.bam
+    pacbio_bam = ch_pacbio_bam
+    hic_bam    = ch_hic_bam
     depths     = COVERM_CONTIG.out.coverage
     versions   = ch_versions
 }
