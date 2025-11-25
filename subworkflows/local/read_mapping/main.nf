@@ -94,7 +94,7 @@ workflow READ_MAPPING {
 
     emit:
     pacbio_bam = ch_pacbio_bam
-    hic_bam    = ch_hic_bam
+    hic_bam    = SAMTOOLS_SORT.out.bam
     depths     = COVERM_CONTIG.out.coverage
     versions   = ch_versions
 }
