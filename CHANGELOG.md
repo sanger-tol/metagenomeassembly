@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sometimes MAGScoT fails, for unknown reasons. The pipeline will no longer exit if this happens. (by @prototaxites)
 - If no circular contigs are found, a FASTA file will no longer be written and GeNomad will no longer run (and fail). (by @prototaxites)
+- Change the minimum percent identity during read mapping to 99% to reflect accuracy of PacBio reads. (by @prototaxites)
 
 ### `Deprecated`
 

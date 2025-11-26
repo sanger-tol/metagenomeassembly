@@ -155,7 +155,7 @@
                 },
                 "minimum_hifi_perc_identity": {
                     "type": "integer",
-                    "default": 97,
+                    "default": 99,
                     "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
                 },
                 "minimum_bin_size": {
