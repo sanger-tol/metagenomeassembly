@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Switch the read mapping and Hi-C mapping to use the new sanger-tol subworkflows. (by @prototaxites)
 - gunzip all assemblies and operate on assemblies in decompressed space internally. (by @prototaxites)
+- Operate on decompressed assemblies downstream to avoid lack of bgzipping. (by @prototaxites)
 
 ### `Fixed`
 
@@ -17,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Deprecated`
 
-- Operate on decompressed assemblies downstream to avoid lack of bgzipping. (by @prototaxites)
 - Removed the parameter `params.hic_mapping_merge_mode`, as we now use the new Hi-C mapping subworkflow. (by @prototaxites)
 - Removed the parameter `params.enable_assembly` - assembly now always runs by default unless an assembly is provided. (by @prototaxites)
 
