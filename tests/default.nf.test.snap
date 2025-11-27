@@ -135,7 +135,7 @@
                     "tRNAscan-SE": "2.0.12"
                 },
                 "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v1.3.0dev"
+                    "sanger-tol/metagenomeassembly": "v1.3.0"
                 }
             },
             [
