@@ -33,39 +33,31 @@ workflow METAGENOMEASSEMBLY {
     magscot_gtdb_hmm_db // channel: magscot hmm files from params
     checkm2_db          // channel: checkm2 db from params
     gtdbtk_db           // channel: gtdbtk db from params
+    val_hic_binning           // boolean: hic binnning enabled
+    val_hic_aligner           // string: which aligner to use for Hi-C mapping
+    val_cram_chunk_size       // integer: how many hic cram slices to map in a single chunk
+    val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
 
     main:
     ch_versions = Channel.empty()
-    ch_assemblies_input = assembly
 
-    if(params.enable_assembly) {
-        // Only provide reads to ASSEMBLY subwf if ch_assemblies is
-        // empty - cross reads with assembly channel, which gets
-        // false if empty, and filter to just keep false entries
-        ch_assembly_input = pacbio_fasta
-            | combine(ch_assemblies_input.ifEmpty([[:], false]))
-            | filter { it[3] == false }
-            | map { meta_reads, reads, _meta_assembly, _assembly ->
-                [ meta_reads, reads ]
-            }
+    //
+    // SUBWORKFLOW: Assemble PacBio hifi reads
+    //
+    ASSEMBLY(
+        pacbio_fasta,
+        assembly
+    )
+    ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
 
-        //
-        // SUBWORKFLOW: Assemble PacBio hifi reads
-        //
-        ASSEMBLY(ch_assembly_input)
-        ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
-
-        ch_assemblies_raw = ch_assemblies_input.mix(ASSEMBLY.out.assemblies)
-    } else {
-        ch_assemblies_raw = ch_assemblies_input
-    }
+    ch_assemblies = ASSEMBLY.out.assemblies
 
     //
     // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
     // check contig circularity and classify circular contigs
     //
     ASSEMBLY_QC(
-        ch_assemblies_raw,
+        ch_assemblies,
         rfam_rrna_cm,
         genomad_db
     )
@@ -73,7 +65,6 @@ workflow METAGENOMEASSEMBLY {
 
     ch_assembly_rrna = ASSEMBLY_QC.out.rrna
     ch_circles = ASSEMBLY_QC.out.circle_list
-    ch_assemblies = ASSEMBLY_QC.out.assemblies
 
     if(params.enable_binning) {
         //
@@ -83,7 +74,11 @@ workflow METAGENOMEASSEMBLY {
         READ_MAPPING(
             ch_assemblies,
             pacbio_fasta,
-            hic_cram
+            hic_cram,
+            val_hic_binning,
+            val_hic_aligner,
+            val_cram_chunk_size,
+            val_reads_per_fasta_chunk
         )
         ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 

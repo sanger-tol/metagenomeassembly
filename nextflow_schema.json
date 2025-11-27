@@ -44,11 +44,6 @@
             "description": "Options relating to metagenomic de-novo assembly.",
             "default": "",
             "properties": {
-                "enable_assembly": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable de-novo assembly of HiFi reads."
-                },
                 "enable_metamdbg": {
                     "type": "boolean",
                     "default": true,
@@ -97,6 +92,17 @@
             "description": "",
             "default": "",
             "properties": {
+                "long_read_mapping_reads_per_chunk": {
+                    "type": "integer",
+                    "default": 1000000,
+                    "description": "When mapping long reads, how many long reads to map to the assembly in a single chunk."
+                },
+                "hic_aligner": {
+                    "type": "string",
+                    "default": "bwamem2",
+                    "description": "Which Hi-C aligner to use - either bwa-mem2 or minimap2.",
+                    "enum": ["bwamem2", "minimap2"]
+                },
                 "hic_mapping_cram_bin_size": {
                     "type": "integer",
                     "default": 10000,
@@ -104,18 +110,12 @@
                 },
                 "hic_mapping_minq": {
                     "type": "integer",
-                    "default": 60,
+                    "default": 10,
                     "description": "Minimum map quality for a Hi-C read to be passed on for binning by Bin3C or Metator.",
                     "minimum": 0
-                },
-                "hic_mapping_merge_mode": {
-                    "type": "string",
-                    "default": "merge",
-                    "enum": ["merge", "cat"],
-                    "description": "Which method to use to merge the chunked Hi-C bam files back together. One of \"merge\" (samtools merge) or \"cat\" (samtools cat).",
-                    "help_text": "\"merge\" is safer and uses samtools merge, which will ensure that the name sorting is retained among all reads in the final output bam. However, in cases where there is a lot of Hi-C data, the merge operation can be very slow. In this case, \"cat\" is presented as an alternative, using heuristics to concatenate the bam files together using samtools cat. This requires that the initial input CRAM files are sorted by read name so that the chunks represent sets of consecutively named reads, and may fall down when there are multiple Hi-C CRAM libraries, especially if there are multiple read groups in a single library."
                 }
-            }
+            },
+            "required": ["long_read_mapping_reads_per_chunk", "hic_mapping_cram_bin_size", "hic_mapping_minq"]
         },
         "binning_options": {
             "title": "Binning options",
@@ -155,7 +155,7 @@
                 },
                 "minimum_hifi_perc_identity": {
                     "type": "integer",
-                    "default": 97,
+                    "default": 99,
                     "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
                 },
                 "minimum_bin_size": {

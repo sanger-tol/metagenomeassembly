@@ -3,18 +3,45 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.2dev] - Fair Margaret and Sweet William (patch 2) - [2025-10-24]
+## [1.3.0dev] - Glasgow Peggie - [2025-10-24]
 
 ### `Added`
+
+- Switch the read mapping and Hi-C mapping to use the new sanger-tol subworkflows. (by @prototaxites)
+- gunzip all assemblies and operate on assemblies in decompressed space internally. (by @prototaxites)
+- Operate on decompressed assemblies downstream to avoid lack of bgzipping. (by @prototaxites)
 
 ### `Fixed`
 
 - Sometimes MAGScoT fails, for unknown reasons. The pipeline will no longer exit if this happens. (by @prototaxites)
 - If no circular contigs are found, a FASTA file will no longer be written and GeNomad will no longer run (and fail). (by @prototaxites)
+- Change the minimum percent identity during read mapping to 99% to reflect accuracy of PacBio reads. (by @prototaxites)
 
 ### `Deprecated`
 
+- Removed the parameter `params.hic_mapping_merge_mode`, as we now use the new Hi-C mapping subworkflow. (by @prototaxites)
+- Removed the parameter `params.enable_assembly` - assembly now always runs by default unless an assembly is provided. (by @prototaxites)
+
 ### `Dependencies`
+
+| module                     | tools    | old versions | new versions |
+| -------------------------- | -------- | ------------ | ------------ |
+| gunzip                     | gzip     | -            | 1.13         |
+| gzip_get_decompressed_size | gzip     | 1.13         | -            |
+| fastxalign/pyfastxindex    | pyfastx  | -            | 2.2.0        |
+| fastxalign/minimap2align   | pyfastx  | -            | 2.2.0        |
+| fastxalign/minimap2align   | minimap2 | -            | 2.30         |
+| fastxalign/minimap2align   | samtools | -            | 1.22.1       |
+| cramalign/gencramchunks    | -        | -            | 1.1.0        |
+| cramalign/bwamem2align     | bwa-mem2 | -            | 1.22.1       |
+| cramalign/bwamem2align     | samtools | -            | 1.22.1       |
+| cramalign/minimap2align    | minimap2 | -            | 2.30         |
+| cramalign/minimap2align    | samtools | -            | 1.22.1       |
+| minimap2/align             | minimap2 | 2.2.9        | -            |
+| minimap2/align             | samtools | 1.21         | -            |
+| samtools/sort              | samtools | -            | 1.22.1       |
+| samtools/mergedup          | samtools | -            | 1.22.1       |
+| samtools/faidx             | samtools | -            | 1.22.1       |
 
 ## [1.2.1] - Fair Margaret and Sweet William (patch 1) - [2025-10-24]
 
