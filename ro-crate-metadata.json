@@ -131,7 +131,7 @@
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2025-11-19T14:44:03Z",
+            "dateModified": "2025-11-27T11:56:30Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": ["nf-core", "nextflow"],
             "license": ["MIT"],
