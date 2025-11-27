@@ -1,22 +1,5 @@
 {
-    "@context": [
-        "https://w3id.org/ro/crate/1.1/context",
-        {
-            "GithubService": "https://w3id.org/ro/terms/test#GithubService",
-            "JenkinsService": "https://w3id.org/ro/terms/test#JenkinsService",
-            "PlanemoEngine": "https://w3id.org/ro/terms/test#PlanemoEngine",
-            "TestDefinition": "https://w3id.org/ro/terms/test#TestDefinition",
-            "TestInstance": "https://w3id.org/ro/terms/test#TestInstance",
-            "TestService": "https://w3id.org/ro/terms/test#TestService",
-            "TestSuite": "https://w3id.org/ro/terms/test#TestSuite",
-            "TravisService": "https://w3id.org/ro/terms/test#TravisService",
-            "definition": "https://w3id.org/ro/terms/test#definition",
-            "engineVersion": "https://w3id.org/ro/terms/test#engineVersion",
-            "instance": "https://w3id.org/ro/terms/test#instance",
-            "resource": "https://w3id.org/ro/terms/test#resource",
-            "runsOn": "https://w3id.org/ro/terms/test#runsOn"
-        }
-    ],
+    "@context": "https://w3id.org/ro/crate/1.1/context",
     "@graph": [
         {
             "@id": "./",
@@ -124,47 +107,40 @@
         },
         {
             "@id": "main.nf",
-            "@type": [
-                "File",
-                "SoftwareSourceCode",
-                "ComputationalWorkflow"
-            ],
+            "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
             "creator": [
                 {
                     "@id": "https://orcid.org/0000-0002-7175-0533"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0006-9956-0404"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0003-3407-4086"
                 }
             ],
             "dateCreated": "",
             "dateModified": "2025-11-27T11:49:51Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
-            "keywords": [
-                "nf-core",
-                "nextflow"
-            ],
-            "license": [
-                "MIT"
-            ],
+            "keywords": ["nf-core", "nextflow"],
+            "license": ["MIT"],
             "maintainer": [
                 {
                     "@id": "https://orcid.org/0000-0002-7175-0533"
                 }
             ],
-            "name": [
-                "sanger-tol/metagenomeassembly"
-            ],
+            "name": ["sanger-tol/metagenomeassembly"],
             "programmingLanguage": {
                 "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
             },
             "sdPublisher": {
-                "@id": "https://nf-co.re/"
+                "@id": "https://pipelines.tol.sanger.ac.uk/"
             },
             "url": [
                 "https://github.com/sanger-tol/metagenomeassembly",
                 "https://nf-co.re/sanger-tol/metagenomeassembly/1.3.0/"
             ],
-            "version": [
-                "1.3.0"
-            ]
+            "version": ["1.3.0"]
         },
         {
             "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
@@ -320,16 +296,32 @@
             "description": "Ignore file for prettier"
         },
         {
-            "@id": "https://nf-co.re/",
-            "@type": "Organization",
-            "name": "nf-core",
-            "url": "https://nf-co.re/"
-        },
-        {
             "@id": "https://orcid.org/0000-0002-7175-0533",
             "@type": "Person",
-            "email": "19718667+prototaxites@users.noreply.github.com",
-            "name": "Jim Downie"
+            "email": "jd42@sanger.ac.uk",
+            "name": "Jim Downie",
+            "url": "https://github.com/prototaxites"
+        },
+        {
+            "@id": "https://orcid.org/0009-0006-9956-0404",
+            "@type": "Person",
+            "affiliation": "Wellcome Sanger Institute",
+            "email": "84074349+weaglesBio@users.noreply.github.com",
+            "name": "Will Eagles",
+            "url": "https://github.com/weaglesBio"
+        },
+        {
+            "@id": "https://orcid.org/0000-0003-3407-4086",
+            "@type": "Person",
+            "affiliation": "Wellcome Sanger Institute",
+            "name": "Noah Gettle",
+            "url": "https://github.com/gettl008"
+        },
+        {
+            "@id": "https://pipelines.tol.sanger.ac.uk/",
+            "@type": "Organization",
+            "name": "Sanger Tree of Life programme",
+            "url": "https://pipelines.tol.sanger.ac.uk/"
         }
     ]
 }
