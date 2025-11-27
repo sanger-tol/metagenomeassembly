@@ -128,6 +128,9 @@
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
                 },
+                "SAMTOOLS_SPLITHEADER": {
+                    "samtools": "1.22.1"
+                },
                 "TRNASCAN_SE": {
                     "tRNAscan-SE": "2.0.12"
                 },
