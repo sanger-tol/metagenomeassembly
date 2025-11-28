@@ -28,7 +28,7 @@ lint:
     - LICENSE
     - .github/PULL_REQUEST_TEMPLATE.md
   multiqc_config: false
-  included_configs: False
+  included_configs: false
   nextflow_config:
     - process.cpus
     - process.memory
@@ -62,4 +62,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.3.0
+  version: 1.3.1dev
