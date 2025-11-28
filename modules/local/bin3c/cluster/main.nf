@@ -19,13 +19,10 @@ process BIN3C_CLUSTER {
     }
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def contigs_basename = contigs.getBaseName()
     """
-    zcat ${contigs} | bgzip -c > ${contigs_basename}.bgz
-
     bin3C cluster \\
         ${args} \\
-        --fasta ${contigs_basename}.bgz \\
+        --fasta ${contigs} \\
         ${map} \\
         bin3c/
 
