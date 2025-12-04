@@ -48,6 +48,14 @@
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
+                "FASTXALIGN_MINIMAP2ALIGN": {
+                    "minimap2": "2.30-r1287",
+                    "samtools": "1.22.1",
+                    "slice_fasta.py": "1.0.0"
+                },
+                "FASTXALIGN_PYFASTXINDEX": {
+                    "slice_fasta.py": "1.0.0"
+                },
                 "FIND_CIRCLES": {
                     "gawk": "5.3.1"
                 },
@@ -110,6 +118,9 @@
                     "bioawk": 1.0,
                     "samtools": 1.21
                 },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.29-r1283"
+                },
                 "PYRODIGAL": {
                     "pyrodigal": "3.6.3"
                 },
@@ -117,6 +128,9 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_MERGE": {
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_MERGEDUP": {
@@ -132,7 +146,7 @@
                     "tRNAscan-SE": "2.0.12"
                 },
                 "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v1.3.1dev"
+                    "sanger-tol/metagenomeassembly": "v1.4.0dev"
                 }
             },
             [
@@ -238,6 +252,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-25T13:43:50.621250111"
+        "timestamp": "2025-12-01T14:02:07.917494491"
     }
 }

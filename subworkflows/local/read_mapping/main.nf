@@ -72,6 +72,7 @@ workflow READ_MAPPING {
         val_reads_per_fasta_chunk,
         true
     )
+    ch_versions = ch_versions.mix(FASTX_MAP_LONG_READS.out.versions)
 
     //
     // Logic: remove size information we added from meta
