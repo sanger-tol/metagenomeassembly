@@ -20,7 +20,6 @@ workflow ASSEMBLY {
             .map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
 
         METAMDBG_ASM(ch_metamdbg_input, 'hifi')
-        ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 
         ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
             .map { meta, contigs ->
@@ -40,7 +39,6 @@ workflow ASSEMBLY {
         }
 
     GUNZIP(ch_assemblies_split.gzipped)
-    ch_versions = ch_versions.mix(GUNZIP.out.versions)
 
     ch_assemblies_unzipped = ch_assemblies_split.ungzipped.mix(GUNZIP.out.gunzip)
 

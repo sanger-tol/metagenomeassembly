@@ -26,7 +26,6 @@ workflow BINNING {
         // MODULE: Bin assembly using Metabat2
         //
         METABAT2_METABAT2(ch_metabat_input)
-        ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
 
         ch_metabat2_bins =  METABAT2_METABAT2.out.fasta
             .map { meta, fasta -> [meta + [binner: "metabat2"], fasta] }

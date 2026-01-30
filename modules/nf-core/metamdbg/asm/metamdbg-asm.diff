@@ -13,6 +13,14 @@ Changes in 'metamdbg/asm/main.nf':
      val(input_type)
  
      output:
+@@ -39,7 +39,6 @@
+     """
+ 
+     stub:
+-    def args = task.ext.args ?: ''
+     def prefix = task.ext.prefix ?: "${meta.id}"
+     """
+     touch ${prefix}.metaMDBG.log
 
 'modules/nf-core/metamdbg/asm/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/metamdbg/asm/tests/main.nf.test' is unchanged

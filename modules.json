@@ -8,123 +8,174 @@
                     "bwamem2/index": {
                         "branch": "master",
                         "git_sha": "d86336f3e7ae0d5f76c67b0859409769cfeb2af2",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     },
                     "checkm2/predict": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "coverm/contig": {
                         "branch": "master",
                         "git_sha": "27e31681fdbf1e511257355a236037a8cd9c2b2e",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "coverm/genome": {
                         "branch": "master",
                         "git_sha": "7cc7dd58e299fcb2b26c3ef9a538d940e61bd5ea",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "csvtk/concat": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "csvtk/join": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "dastool/dastool": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "gawk": {
                         "branch": "master",
                         "git_sha": "5ee4d69ed992c3ce81cfbbdd0bef932fcb81c75a",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "genomad/endtoend": {
                         "branch": "master",
-                        "git_sha": "ddb0d667cf6cdee3bab9497241de4bbf6b88d8cc",
-                        "installed_by": ["modules"]
+                        "git_sha": "775256e10789e0f61ba57068b7256b23417f9772",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
                         "git_sha": "5b08bd1efd531f6bc1727d059648a4f1fbafdce0",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
                         "git_sha": "5b08bd1efd531f6bc1727d059648a4f1fbafdce0",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "git_sha": "96c57dfd98a0641886a67bd449fe33ee2ec0e374",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "hmmer/hmmsearch": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"],
+                        "installed_by": [
+                            "modules"
+                        ],
                         "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
                     },
                     "infernal/cmsearch": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "maxbin2": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "metabat2/metabat2": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "git_sha": "cfac0558db800cf39ebeb5513c7c889b0369cebe",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "metamdbg/asm": {
                         "branch": "master",
-                        "git_sha": "ecfdcb572340123aa4eac9d5e87d50b6965fdf83",
-                        "installed_by": ["modules"]
+                        "git_sha": "f20c4c453be3000d1404667efc9c5eacd816d9c1",
+                        "installed_by": [
+                            "modules"
+                        ],
+                        "patch": "modules/nf-core/metamdbg/asm/metamdbg-asm.diff"
                     },
                     "minimap2/index": {
                         "branch": "master",
                         "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
-                        "installed_by": ["cram_map_illumina_hic", "fastx_map_long_reads"]
+                        "installed_by": [
+                            "cram_map_illumina_hic",
+                            "fastx_map_long_reads"
+                        ]
                     },
                     "pyrodigal": {
                         "branch": "master",
-                        "git_sha": "ddb0d667cf6cdee3bab9497241de4bbf6b88d8cc",
-                        "installed_by": ["modules"]
+                        "git_sha": "4dd9d8439a429c7ee566e0e2347f76ddeef27e66",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
-                        "installed_by": ["bam_samtools_merge_markdup"]
+                        "installed_by": [
+                            "bam_samtools_merge_markdup"
+                        ]
                     },
                     "samtools/index": {
                         "branch": "master",
                         "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     },
                     "samtools/merge": {
                         "branch": "master",
                         "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
-                        "installed_by": ["bam_samtools_merge_markdup", "modules"]
+                        "installed_by": [
+                            "bam_samtools_merge_markdup",
+                            "modules"
+                        ]
                     },
                     "samtools/sort": {
                         "branch": "master",
                         "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "samtools/splitheader": {
                         "branch": "master",
                         "git_sha": "96b96cd281550ea39f787c331dac5fac97d2c0c5",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     }
                 }
             },
@@ -133,17 +184,23 @@
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfcore_pipeline": {
                         "branch": "master",
                         "git_sha": "65f5e638d901a51534c68fd5c1c19e8112fb4df1",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfschema_plugin": {
                         "branch": "master",
                         "git_sha": "fdc08b8b1ae74f56686ce21f7ea11ad11990ce57",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     }
                 }
             }
@@ -154,32 +211,44 @@
                     "cramalign/bwamem2alignhic": {
                         "branch": "main",
                         "git_sha": "04c2eb9baf8b1a29aa345cceb47134163ded9616",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     },
                     "cramalign/gencramchunks": {
                         "branch": "main",
                         "git_sha": "8dde1442313b4f0a0902621eccbdfae6a2fdaae0",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     },
                     "cramalign/minimap2alignhic": {
                         "branch": "main",
                         "git_sha": "04c2eb9baf8b1a29aa345cceb47134163ded9616",
-                        "installed_by": ["cram_map_illumina_hic"]
+                        "installed_by": [
+                            "cram_map_illumina_hic"
+                        ]
                     },
                     "fastxalign/minimap2align": {
                         "branch": "main",
                         "git_sha": "8dde1442313b4f0a0902621eccbdfae6a2fdaae0",
-                        "installed_by": ["fastx_map_long_reads"]
+                        "installed_by": [
+                            "fastx_map_long_reads"
+                        ]
                     },
                     "fastxalign/pyfastxindex": {
                         "branch": "main",
                         "git_sha": "f919028603ca42cb01a59e45475c19106840372d",
-                        "installed_by": ["fastx_map_long_reads"]
+                        "installed_by": [
+                            "fastx_map_long_reads"
+                        ]
                     },
                     "samtools/mergedup": {
                         "branch": "main",
                         "git_sha": "fe57b32a304a149835e0fa829d4ca454b3b252e6",
-                        "installed_by": ["bam_samtools_merge_markdup"]
+                        "installed_by": [
+                            "bam_samtools_merge_markdup"
+                        ]
                     }
                 }
             },
@@ -188,17 +257,24 @@
                     "bam_samtools_merge_markdup": {
                         "branch": "main",
                         "git_sha": "fe57b32a304a149835e0fa829d4ca454b3b252e6",
-                        "installed_by": ["cram_map_illumina_hic", "fastx_map_long_reads"]
+                        "installed_by": [
+                            "cram_map_illumina_hic",
+                            "fastx_map_long_reads"
+                        ]
                     },
                     "cram_map_illumina_hic": {
                         "branch": "main",
                         "git_sha": "04c2eb9baf8b1a29aa345cceb47134163ded9616",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "fastx_map_long_reads": {
                         "branch": "main",
                         "git_sha": "ab1432043769f7dd1b36cd2a505c0c29ed6771d6",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     }
                 }
             }
