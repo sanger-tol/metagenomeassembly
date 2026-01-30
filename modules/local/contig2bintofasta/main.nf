@@ -15,8 +15,6 @@ process CONTIG2BINTOFASTA {
     path("versions.yml")            , emit: versions
 
     script:
-    def args        = task.ext.args   ?: ''
-    def prefix      = task.ext.prefix ?: "${meta.id}"
     """
     awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
@@ -31,7 +29,7 @@ process CONTIG2BINTOFASTA {
     """
 
     stub:
-    def prefix      = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     echo "" | gzip > ${prefix}.bin1.fa.gz
 

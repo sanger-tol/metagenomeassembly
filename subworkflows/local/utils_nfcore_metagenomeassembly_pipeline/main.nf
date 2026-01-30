@@ -30,7 +30,7 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs
+    _monochrome_logs  // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
     input             //  string: Path to input samplesheet
@@ -69,7 +69,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  ${workflow.manifest.name} ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
         """
-    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { "    https://doi.org/${it.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 
@@ -106,64 +106,59 @@ workflow PIPELINE_INITIALISATION {
 
     // filter out results with empty lists to remove non-provided inputs
     ch_hic_cram = READ_YAML.out.hic_cram
-        | filter { !it[1].isEmpty() }
+        .filter { _meta, cram -> !cram.isEmpty() }
 
     ch_assembly = READ_YAML.out.assembly
-        | filter {  _meta, asm -> asm }
-        | map { meta, asm -> [ meta, file(asm, checkIfExists: true) ] }
+        .filter {  _meta, asm -> asm }
+        .map { meta, asm -> [meta, file(asm, checkIfExists: true)] }
 
     // collect as have to ensure this is a value channel
     ch_hic_enzymes = READ_YAML.out.hic_enzymes
-        | filter { !it.isEmpty() }
-        | collect
+        .filter { enzymes -> !enzymes.isEmpty() }
+        .collect()
 
     // Genomad database
+    ch_genomad_db = channel.empty()
     if(params.genomad_db) {
-        ch_genomad_db = Channel.of(
+        ch_genomad_db = channel.of(
             file(params.genomad_db, checkIfExists: true)
         )
-    } else {
-        ch_genomad_db = Channel.empty()
     }
 
     // Create channels for input database files
     // rRNA covariance models
+    ch_rfam_rrna_cm = channel.empty()
     if(params.rfam_rrna_cm) {
-        ch_rfam_rrna_cm = Channel.of(
+        ch_rfam_rrna_cm = channel.of(
             file(params.rfam_rrna_cm, checkIfExists: true)
         )
-    } else {
-        ch_rfam_rrna_cm = Channel.empty()
     }
 
     // MagScoT hmm models
+    ch_magscot_gtdb_hmm_db = channel.empty()
     if(params.enable_magscot && params.hmm_gtdb_pfam && params.hmm_gtdb_tigrfam) {
-        ch_magscot_gtdb_hmm_db = Channel.of(
+        ch_magscot_gtdb_hmm_db = channel.of(
             file(params.hmm_gtdb_pfam   , checkIfExists: true),
             file(params.hmm_gtdb_tigrfam, checkIfExists: true)
         )
-    } else {
-        ch_magscot_gtdb_hmm_db = Channel.empty()
     }
 
     // CheckM2 database
+    ch_checkm2_db = channel.empty()
     if(params.checkm2_db) {
-        ch_checkm2_db = Channel.of(
-            [
-                [id: "checkm2"],
-                file(params.checkm2_db, checkIfExists: true)
-            ]
-        )
-    } else {
-        ch_checkm2_db = Channel.empty()
+        ch_checkm2_db = channel.of([
+            [id: "checkm2"],
+            file(params.checkm2_db, checkIfExists: true)
+        ])
     }
 
     // GTDB-Tk database
+    ch_gtdbtk_db = channel.empty()
     if(params.gtdbtk_db) {
-        ch_gtdbtk_db = Channel.of(file(params.gtdbtk_db, checkIfExists: true))
-            | map { db -> [[id: "gtdb"], db] }
-    } else {
-        ch_gtdbtk_db = Channel.empty()
+        ch_gtdbtk_db = channel.of([
+            [id: "gtdb"],
+            file(params.gtdbtk_db, checkIfExists: true)
+        ])
     }
 
     emit:

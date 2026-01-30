@@ -14,9 +14,9 @@ workflow BIN_REFINEMENT {
     magscot_gtdb_hmm_db
 
     main:
-    ch_versions               = Channel.empty()
-    ch_refined_bins           = Channel.empty()
-    ch_refined_contig2bin_raw = Channel.empty()
+    ch_versions               = channel.empty()
+    ch_refined_bins           = channel.empty()
+    ch_refined_contig2bin_raw = channel.empty()
 
     //
     // MODULE: Identify ORFs in assembly using Pyrodigal
@@ -27,12 +27,12 @@ workflow BIN_REFINEMENT {
 
     if(params.enable_dastool) {
         ch_contig2bins_to_merge = contig2bin
-            | map {meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
-            | groupTuple(by: 0)
+            .map {meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
+            .groupTuple(by: 0)
 
         ch_dastool_input = assembly
-            | combine(ch_contig2bins_to_merge, by: 0)
-            | combine(ch_proteins, by: 0)
+            .combine(ch_contig2bins_to_merge, by: 0)
+            .combine(ch_proteins, by: 0)
 
         //
         // MODULE: Refine bins using DAS_Tool + ORFs
@@ -41,7 +41,7 @@ workflow BIN_REFINEMENT {
         ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
 
         ch_dastool_c2b = DASTOOL_DASTOOL.out.contig2bin
-            | map { meta, c2b -> [ meta + [binner: "dastool"], c2b ]}
+            .map { meta, c2b -> [ meta + [binner: "dastool"], c2b ]}
 
         ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_dastool_c2b)
     }
@@ -54,8 +54,8 @@ workflow BIN_REFINEMENT {
         //
 
         ch_hmmsearch_gtdb_input = ch_proteins
-            | combine(magscot_gtdb_hmm_db)
-            | map { meta, faa, hmmfile ->
+            .combine(magscot_gtdb_hmm_db)
+            .map { meta, faa, hmmfile ->
                 [ meta, hmmfile, faa, false, true, false ]
             }
 
@@ -65,8 +65,7 @@ workflow BIN_REFINEMENT {
         HMMER_HMMSEARCH(ch_hmmsearch_gtdb_input)
         ch_versions = ch_versions.mix(HMMER_HMMSEARCH.out.versions)
 
-        ch_hmm_output = HMMER_HMMSEARCH.out.target_summary
-            | groupTuple(by: 0)
+        ch_hmm_output = HMMER_HMMSEARCH.out.target_summary.groupTuple(by: 0)
 
         //
         // MODULE: Process HMM output to summarise per-contig
@@ -102,7 +101,7 @@ workflow BIN_REFINEMENT {
         ch_versions = ch_versions.mix(MAGSCOT_MAGSCOT.out.versions)
 
         ch_magscot_c2b = MAGSCOT_MAGSCOT.out.contig2bin
-            | map { meta, c2b -> [ meta + [binner: "magscot"], c2b ]}
+            .map { meta, c2b -> [ meta + [binner: "magscot"], c2b ]}
 
         ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_magscot_c2b)
     }
@@ -125,11 +124,11 @@ workflow BIN_REFINEMENT {
         ch_refined_contig2bin = GAWK_RENAME_BINS.out.output
 
         ch_c2b_to_combine = GAWK_RENAME_BINS.out.output
-            | map { meta, c2b -> [ meta - meta.subMap("binner"), meta, c2b ]}
+            .map { meta, c2b -> [ meta - meta.subMap("binner"), meta, c2b ]}
 
         ch_contig2bintofasta_input = assembly
-            | combine(ch_c2b_to_combine, by: 0)
-            | map { _meta, contigs, meta_c2b, c2b -> [ meta_c2b, contigs, c2b ]}
+            .combine(ch_c2b_to_combine, by: 0)
+            .map { _meta, contigs, meta_c2b, c2b -> [ meta_c2b, contigs, c2b ]}
 
         //
         // MODULE: Create binned fasta files using contig2bin files

@@ -15,7 +15,6 @@ process METATOR_PROCESS_INPUT_BAM {
     path "versions.yml"           , emit: versions
 
     script:
-    def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     if(direction == "fwd") {
         flag = "0x40"
@@ -43,7 +42,6 @@ process METATOR_PROCESS_INPUT_BAM {
     """
 
     stub:
-    def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     if(direction == "fwd") {
         flag = "0x40"

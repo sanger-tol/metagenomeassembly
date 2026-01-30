@@ -7,24 +7,23 @@ workflow ASSEMBLY {
     ch_assemblies
 
     main:
-    ch_versions       = Channel.empty()
-    ch_assemblies_raw = Channel.empty()
-        | mix(ch_assemblies)
+    ch_versions       = channel.empty()
+    ch_assemblies_raw = channel.empty().mix(ch_assemblies)
 
     if(params.enable_metamdbg) {
         //
         // MODULE: Assemble PacBio reads using metaMDBG
         //
         ch_metamdbg_input = ch_hifi_reads
-            | combine(ch_assemblies_raw.ifEmpty([[:],[]]))
-            | filter { _meta, _reads, _meta_asm, asm -> !asm }
-            | map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
+            .combine(ch_assemblies_raw.ifEmpty([[:],[]]))
+            .filter { _meta, _reads, _meta_asm, asm -> !asm }
+            .map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
 
         METAMDBG_ASM(ch_metamdbg_input, 'hifi')
         ch_versions = ch_versions.mix(METAMDBG_ASM.out.versions)
 
         ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
-            | map { meta, contigs ->
+            .map { meta, contigs ->
                 def meta_new = meta + [assembler: "metamdbg"]
                 [ meta_new, contigs ]
             }
@@ -35,7 +34,7 @@ workflow ASSEMBLY {
     // Module: ungzip gzipped assemblies
     //
     ch_assemblies_split = ch_assemblies_raw
-        | branch { meta, asm ->
+        .branch { _meta, asm ->
             gzipped: asm.getExtension() == "gz"
             ungzipped: true
         }
@@ -43,8 +42,7 @@ workflow ASSEMBLY {
     GUNZIP(ch_assemblies_split.gzipped)
     ch_versions = ch_versions.mix(GUNZIP.out.versions)
 
-    ch_assemblies_unzipped = ch_assemblies_split.ungzipped
-        | mix(GUNZIP.out.gunzip)
+    ch_assemblies_unzipped = ch_assemblies_split.ungzipped.mix(GUNZIP.out.gunzip)
 
     emit:
     assemblies = ch_assemblies_unzipped

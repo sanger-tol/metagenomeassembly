@@ -58,7 +58,6 @@ process METATOR_PIPELINE {
     """
 
     stub:
-    def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch bin_summary.txt

@@ -10,7 +10,7 @@ workflow ASSEMBLY_QC {
     val_genomad_db
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // MODULE: Identify which contigs are circular
@@ -19,7 +19,7 @@ workflow ASSEMBLY_QC {
     ch_versions = ch_versions.mix(FIND_CIRCLES.out.versions)
 
     ch_genome_stats_input = ch_assemblies
-        | combine(FIND_CIRCLES.out.circles_list, by: 0)
+        .combine(FIND_CIRCLES.out.circles_list, by: 0)
 
     //
     // MODULE: Classify circular contigs using genomad
@@ -38,10 +38,11 @@ workflow ASSEMBLY_QC {
     GENOME_STATS_ASSEMBLIES(ch_genome_stats_input)
     ch_versions = ch_versions.mix(GENOME_STATS_ASSEMBLIES.out.versions)
 
+    ch_rrna_preds = channel.empty()
     if(params.enable_rrna_prediction) {
         ch_infernal_input = ch_assemblies
-            | combine(val_rfam_rrna_cm)
-            | map { meta, assembly, cmfile -> [ meta, cmfile, assembly ] }
+            .combine(val_rfam_rrna_cm)
+            .map { meta, assembly, cmfile -> [meta, cmfile, assembly] }
 
         //
         // MODULE: Identify rRNA genes in the assembly using Infernal
@@ -54,8 +55,6 @@ workflow ASSEMBLY_QC {
         ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
 
         ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary
-    } else {
-        ch_rrna_preds = Channel.empty()
     }
 
     emit:

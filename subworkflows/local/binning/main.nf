@@ -15,13 +15,12 @@ workflow BINNING {
     hic_enzymes     // channel: [enz1, enz2], value
 
     main:
-    ch_versions   = Channel.empty()
-    ch_bins       = Channel.empty()
-    ch_contig2bin = Channel.empty()
+    ch_versions   = channel.empty()
+    ch_bins       = channel.empty()
+    ch_contig2bin = channel.empty()
 
     if(params.enable_metabat2) {
-        ch_metabat_input = assemblies
-            | combine(pacbio_depths, by: 0)
+        ch_metabat_input = assemblies.combine(pacbio_depths, by: 0)
 
         //
         // MODULE: Bin assembly using Metabat2
@@ -30,7 +29,8 @@ workflow BINNING {
         ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
 
         ch_metabat2_bins =  METABAT2_METABAT2.out.fasta
-            | map { meta, fasta -> [meta + [binner: "metabat2"], fasta] }
+            .map { meta, fasta -> [meta + [binner: "metabat2"], fasta] }
+
         ch_bins = ch_bins.mix(ch_metabat2_bins)
     }
 
@@ -42,8 +42,8 @@ workflow BINNING {
         ch_versions = ch_versions.mix(GAWK_MAXBIN2_DEPTHS.out.versions)
 
         ch_maxbin2_input = assemblies
-            | combine(GAWK_MAXBIN2_DEPTHS.out.output, by: 0)
-            | map { meta, contigs, depths ->
+            .combine(GAWK_MAXBIN2_DEPTHS.out.output, by: 0)
+            .map { meta, contigs, depths ->
                 [meta, contigs, [], depths]
             }
 
@@ -54,13 +54,13 @@ workflow BINNING {
         ch_versions = ch_versions.mix(MAXBIN2.out.versions)
 
         ch_maxbin2_bins =  MAXBIN2.out.binned_fastas
-            | map { meta, fasta -> [meta + [binner: "maxbin2"], fasta] }
+            .map { meta, fasta -> [meta + [binner: "maxbin2"], fasta] }
+
         ch_bins = ch_bins.mix(ch_maxbin2_bins)
     }
 
     if(params.enable_bin3c && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
-        ch_bin3c_mkmap_input = assemblies
-            | combine(hic_bam, by: 0)
+        ch_bin3c_mkmap_input = assemblies.combine(hic_bam, by: 0)
 
         //
         // MODULE: Create Hi-C contact map for Bin3C
@@ -68,8 +68,7 @@ workflow BINNING {
         BIN3C_MKMAP(ch_bin3c_mkmap_input, hic_enzymes)
         ch_versions = ch_versions.mix(BIN3C_MKMAP.out.versions)
 
-        ch_bin3c_cluster_input = assemblies
-            | combine(BIN3C_MKMAP.out.map, by: 0)
+        ch_bin3c_cluster_input = assemblies.combine(BIN3C_MKMAP.out.map, by: 0)
 
         //
         // MODULE: Cluster Bin3C contact map and write bins
@@ -78,14 +77,14 @@ workflow BINNING {
         ch_versions = ch_versions.mix(BIN3C_CLUSTER.out.versions)
 
         ch_bin3c_bins =  BIN3C_CLUSTER.out.fasta
-            | map { meta, fasta -> [meta + [binner: "bin3c"], fasta] }
+            .map { meta, fasta -> [meta + [binner: "bin3c"], fasta] }
+
         ch_bins = ch_bins.mix(ch_bin3c_bins)
     }
 
     if(params.enable_metator) {
-        ch_directions = Channel.of("fwd", "rev")
-        ch_hic_bam_to_process = hic_bam
-            | combine(ch_directions)
+        ch_directions = channel.of("fwd", "rev")
+        ch_hic_bam_to_process = hic_bam.combine(ch_directions)
 
         //
         // MODULE: Metator expects us to have aligned forward and reverse reads
@@ -97,9 +96,9 @@ workflow BINNING {
         ch_versions = ch_versions.mix(METATOR_PROCESS_INPUT_BAM.out.versions)
 
         ch_metator_input = METATOR_PROCESS_INPUT_BAM.out.filtered_bam
-            | groupTuple(by: 0, size: 2)
-            | combine(assemblies, by: 0)
-            | map { meta, bams, contigs ->
+            .groupTuple(by: 0, size: 2)
+            .combine(assemblies, by: 0)
+            .map { meta, bams, contigs ->
                 [ meta, contigs, bams.sort(), [] ]
             }
         //
@@ -109,7 +108,8 @@ workflow BINNING {
         ch_versions = ch_versions.mix(METATOR_PIPELINE.out.versions)
 
         ch_metator_bins =  METATOR_PIPELINE.out.bins
-            | map { meta, fasta -> [meta + [binner: "metator"], fasta] }
+            .map { meta, fasta -> [meta + [binner: "metator"], fasta] }
+
         ch_bins = ch_bins.mix(ch_metator_bins)
     }
 
