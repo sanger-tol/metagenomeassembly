@@ -39,8 +39,10 @@ process METAMDBG_ASM {
     """
 
     stub:
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    echo ${args}
     touch ${prefix}.metaMDBG.log
     touch ${prefix}.contigs.fasta.gz
     """

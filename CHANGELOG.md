@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
+| module           | tools   | old versions | new versions |
+| ---------------- | ------- | ------------ | ------------ |
+| genomad/endtoend | genomad | 1.11.0       | 1.11.2       |
+
 ## [1.3.1] - Glasgow Peggie (patch 1) - [2025-11-29]
 
 ### `Fixed`
