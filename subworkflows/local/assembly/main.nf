@@ -1,5 +1,5 @@
-include { GUNZIP        } from '../../../modules/nf-core/gunzip/main'
-include { METAMDBG_ASM  } from '../../../modules/nf-core/metamdbg/asm/main'
+include { GUNZIP       } from '../../../modules/nf-core/gunzip/main'
+include { METAMDBG_ASM } from '../../../modules/nf-core/metamdbg/asm/main'
 
 workflow ASSEMBLY {
     take:
@@ -7,36 +7,34 @@ workflow ASSEMBLY {
     ch_assemblies
 
     main:
-    ch_versions       = channel.empty()
+    ch_versions = channel.empty()
     ch_assemblies_raw = channel.empty().mix(ch_assemblies)
 
-    if(params.enable_metamdbg) {
+    if (params.enable_metamdbg) {
         //
         // MODULE: Assemble PacBio reads using metaMDBG
         //
         ch_metamdbg_input = ch_hifi_reads
-            .combine(ch_assemblies_raw.ifEmpty([[:],[]]))
+            .combine(ch_assemblies_raw.ifEmpty([[:], []]))
             .filter { _meta, _reads, _meta_asm, asm -> !asm }
-            .map { meta, reads, _meta_asm, _asm -> [ meta, reads ] }
+            .map { meta, reads, _meta_asm, _asm -> [meta, reads] }
 
         METAMDBG_ASM(ch_metamdbg_input, 'hifi')
 
-        ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs
-            .map { meta, contigs ->
-                def meta_new = meta + [assembler: "metamdbg"]
-                [ meta_new, contigs ]
-            }
+        ch_metamdbg_assemblies = METAMDBG_ASM.out.contigs.map { meta, contigs ->
+            def meta_new = meta + [assembler: "metamdbg"]
+            [meta_new, contigs]
+        }
         ch_assemblies_raw = ch_assemblies_raw.mix(ch_metamdbg_assemblies)
     }
 
     //
     // Module: ungzip gzipped assemblies
     //
-    ch_assemblies_split = ch_assemblies_raw
-        .branch { _meta, asm ->
-            gzipped: asm.getExtension() == "gz"
-            ungzipped: true
-        }
+    ch_assemblies_split = ch_assemblies_raw.branch { _meta, asm ->
+        gzipped: asm.getExtension() == "gz"
+        ungzipped: true
+    }
 
     GUNZIP(ch_assemblies_split.gzipped)
 

@@ -20,10 +20,10 @@ workflow BIN_QC {
     ch_genome_stats_input = ch_bin_sets
         .map { meta, bins ->
             def meta_join = meta.subMap(["id", "assembler"])
-            [ meta_join, meta, bins ]
+            [meta_join, meta, bins]
         }
         .combine(ch_circular_list, by: 0)
-        .map { _meta_join, meta, bins, circles -> [ meta, bins, circles ] }
+        .map { _meta_join, meta, bins, circles -> [meta, bins, circles] }
 
     //
     // MODULE: Calculate bin statistics, including counts of circles
@@ -34,35 +34,34 @@ workflow BIN_QC {
     //
     // MODULE: Calculate the coverage of bins using coverm genome
     //
-    ch_bam_to_join = ch_mapped_bam
-        .map { meta, bam -> [ meta.subMap(["id", "assembler"]), bam ] }
+    ch_bam_to_join = ch_mapped_bam.map { meta, bam -> [meta.subMap(["id", "assembler"]), bam] }
 
     ch_coverm_genome_input = ch_bin_sets
         .map { meta, bins ->
             def meta_join = meta.subMap(["id", "assembler"])
-            [ meta_join, meta, bins ]
+            [meta_join, meta, bins]
         }
         .combine(ch_bam_to_join, by: 0)
         .multiMap { _meta_join, meta, bins, bam ->
-            bam: [ meta, bam ]
-            bins: [ meta, bins ]
+            bam: [meta, bam]
+            bins: [meta, bins]
         }
 
     COVERM_GENOME(
         ch_coverm_genome_input.bam,
         ch_coverm_genome_input.bins,
-        true,  // bam input
-        false, // interleaved
-        "file" // genome file input
+        true,
+        false,
+        "file",
     )
     ch_versions = ch_versions.mix(COVERM_GENOME.out.versions)
 
     ch_checkm2_tsv = channel.empty()
-    if(params.enable_checkm2) {
+    if (params.enable_checkm2) {
         // Collate all bins together so CheckM2 operates in a single process.
         ch_bins_for_checkm = ch_bin_sets
             .map { meta, bins ->
-                [ meta.subMap("id"), bins]
+                [meta.subMap("id"), bins]
             }
             .transpose()
             .groupTuple(by: 0)
@@ -76,13 +75,13 @@ workflow BIN_QC {
     }
 
     ch_trnascan_summary = channel.empty()
-    if(params.enable_trnascan_se) {
+    if (params.enable_trnascan_se) {
         ch_bins_for_trnascan = ch_bin_sets
             .transpose()
             .map { meta, bin ->
                 // Can't use getSimpleName() as some bin names are like ["a.1.fa.gz", "a.2.fa.gz"]
                 def meta_new = meta + [binid: bin.getBaseName() - ~/\.[^\.]+$/]
-                [ meta_new, bin ]
+                [meta_new, bin]
             }
 
         //
@@ -92,7 +91,7 @@ workflow BIN_QC {
         ch_versions = ch_versions.mix(TRNASCAN_SE.out.versions)
 
         ch_trna_tsvs = TRNASCAN_SE.out.tsv
-            .map { meta, tsv -> [ meta - meta.subMap("binid"), tsv ] }
+            .map { meta, tsv -> [meta - meta.subMap("binid"), tsv] }
             .groupTuple(by: 0)
 
         //
@@ -105,14 +104,14 @@ workflow BIN_QC {
     }
 
     ch_rrna_summary = channel.empty()
-    if(params.enable_rrna_prediction) {
+    if (params.enable_rrna_prediction) {
         ch_bin_rrna_input = ch_contig2bin
             .map { meta, c2b ->
                 def meta_join = meta.subMap(["id", "assembler"])
-                [ meta_join, meta, c2b ]
+                [meta_join, meta, c2b]
             }
             .combine(ch_assembly_rrna_tbl, by: 0)
-            .map { _meta_join, meta, c2b, rrna -> [ meta, c2b, rrna ] }
+            .map { _meta_join, meta, c2b, rrna -> [meta, c2b, rrna] }
 
         //
         // MODULE: Summarise identified rRNAs across bins

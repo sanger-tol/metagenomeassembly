@@ -8,16 +8,16 @@ process MAGSCOT_MAGSCOT {
     tuple val(meta), path(hmm), path(contig2bin)
 
     output:
-    tuple val(meta), path("*.scores.out")       , emit: scores
-    tuple val(meta), path("*.refined.out")      , emit: refined
+    tuple val(meta), path("*.scores.out"), emit: scores
+    tuple val(meta), path("*.refined.out"), emit: refined
     tuple val(meta), path("*.contig_to_bin.out"), emit: contig2bin
-    path("versions.yml")                        , emit: versions
+    path ("versions.yml"), emit: versions
 
     script:
-    def args   = task.ext.args   ?: ''
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        error "ERROR: MagScoT is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_magscot false"
+        error("ERROR: MagScoT is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_magscot false")
     }
     """
     cat ${contig2bin} > input.tsv

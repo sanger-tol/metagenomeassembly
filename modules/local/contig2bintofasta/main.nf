@@ -3,16 +3,16 @@ process CONTIG2BINTOFASTA {
     label "process_low"
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/seqkit:2.9.0--h9ee0642_0':
-        'biocontainers/seqkit:2.9.0--h9ee0642_0' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/seqkit:2.9.0--h9ee0642_0'
+        : 'biocontainers/seqkit:2.9.0--h9ee0642_0'}"
 
     input:
     tuple val(meta), path(contigs), path(contig2bin)
 
     output:
     tuple val(meta), path("*.fa.gz"), emit: bins
-    path("versions.yml")            , emit: versions
+    path ("versions.yml"), emit: versions
 
     script:
     """

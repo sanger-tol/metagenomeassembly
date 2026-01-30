@@ -14,8 +14,8 @@ workflow BIN_REFINEMENT {
     magscot_gtdb_hmm_db
 
     main:
-    ch_versions               = channel.empty()
-    ch_refined_bins           = channel.empty()
+    ch_versions = channel.empty()
+    ch_refined_bins = channel.empty()
     ch_refined_contig2bin_raw = channel.empty()
 
     //
@@ -25,9 +25,9 @@ workflow BIN_REFINEMENT {
     ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
     ch_proteins = PYRODIGAL.out.faa
 
-    if(params.enable_dastool) {
+    if (params.enable_dastool) {
         ch_contig2bins_to_merge = contig2bin
-            .map {meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
+            .map { meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
             .groupTuple(by: 0)
 
         ch_dastool_input = assembly
@@ -40,13 +40,12 @@ workflow BIN_REFINEMENT {
         DASTOOL_DASTOOL(ch_dastool_input, [])
         ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
 
-        ch_dastool_c2b = DASTOOL_DASTOOL.out.contig2bin
-            .map { meta, c2b -> [ meta + [binner: "dastool"], c2b ]}
+        ch_dastool_c2b = DASTOOL_DASTOOL.out.contig2bin.map { meta, c2b -> [meta + [binner: "dastool"], c2b] }
 
         ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_dastool_c2b)
     }
 
-    if(params.enable_magscot && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
+    if (params.enable_magscot && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
         //
         // LOGIC: MagScoT needs a TSV file of gene predictions in each contig
         //        Run hmmsearch using the provided hmm files on the predicted
@@ -56,7 +55,7 @@ workflow BIN_REFINEMENT {
         ch_hmmsearch_gtdb_input = ch_proteins
             .combine(magscot_gtdb_hmm_db)
             .map { meta, faa, hmmfile ->
-                [ meta, hmmfile, faa, false, true, false ]
+                [meta, hmmfile, faa, false, true, false]
             }
 
         //
@@ -80,7 +79,7 @@ workflow BIN_REFINEMENT {
         GAWK_MAGSCOT_PROCESS_CONTIG2BIN(
             contig2bin,
             [],
-            false
+            false,
         )
         ch_versions = ch_versions.mix(GAWK_MAGSCOT_PROCESS_CONTIG2BIN.out.versions)
 
@@ -88,7 +87,7 @@ workflow BIN_REFINEMENT {
         // LOGIC: Run MagScoT
         //
         ch_magscot_contig2bin = GAWK_MAGSCOT_PROCESS_CONTIG2BIN.out.output
-            | map { meta, c2b -> [ meta - meta.subMap(['binner']), c2b ] }
+            | map { meta, c2b -> [meta - meta.subMap(['binner']), c2b] }
             | groupTuple(by: 0)
 
         ch_magscot_input = GAWK_PROCESS_HMM_TBLOUT.out.output
@@ -100,8 +99,7 @@ workflow BIN_REFINEMENT {
         MAGSCOT_MAGSCOT(ch_magscot_input)
         ch_versions = ch_versions.mix(MAGSCOT_MAGSCOT.out.versions)
 
-        ch_magscot_c2b = MAGSCOT_MAGSCOT.out.contig2bin
-            .map { meta, c2b -> [ meta + [binner: "magscot"], c2b ]}
+        ch_magscot_c2b = MAGSCOT_MAGSCOT.out.contig2bin.map { meta, c2b -> [meta + [binner: "magscot"], c2b] }
 
         ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_magscot_c2b)
     }
@@ -111,24 +109,23 @@ workflow BIN_REFINEMENT {
     //        they output - this causes issues with file collisions and expected name conventions
     //        downstream. Rename the bins inside the contig2bin script and write to fasta separately
     //
-    if(params.enable_dastool || params.enable_magscot) {
+    if (params.enable_dastool || params.enable_magscot) {
         //
         // MODULE: Rename bins inside contig2bin files
         //
         GAWK_RENAME_BINS(
             ch_refined_contig2bin_raw,
             file("${projectDir}/bin/rename_bins.awk"),
-            false
+            false,
         )
         ch_versions = ch_versions.mix(GAWK_RENAME_BINS.out.versions)
         ch_refined_contig2bin = GAWK_RENAME_BINS.out.output
 
-        ch_c2b_to_combine = GAWK_RENAME_BINS.out.output
-            .map { meta, c2b -> [ meta - meta.subMap("binner"), meta, c2b ]}
+        ch_c2b_to_combine = GAWK_RENAME_BINS.out.output.map { meta, c2b -> [meta - meta.subMap("binner"), meta, c2b] }
 
         ch_contig2bintofasta_input = assembly
             .combine(ch_c2b_to_combine, by: 0)
-            .map { _meta, contigs, meta_c2b, c2b -> [ meta_c2b, contigs, c2b ]}
+            .map { _meta, contigs, meta_c2b, c2b -> [meta_c2b, contigs, c2b] }
 
         //
         // MODULE: Create binned fasta files using contig2bin files

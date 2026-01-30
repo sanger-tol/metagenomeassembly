@@ -3,34 +3,36 @@ process METATOR_PROCESS_INPUT_BAM {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/htslib_samtools_bioawk:3ff2c81f84424e4c' :
-        'community.wave.seqera.io/library/htslib_samtools_bioawk:420f5543dfc64992' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'oras://community.wave.seqera.io/library/htslib_samtools_bioawk:3ff2c81f84424e4c'
+        : 'community.wave.seqera.io/library/htslib_samtools_bioawk:420f5543dfc64992'}"
 
     input:
     tuple val(meta), path(bam), val(direction)
 
     output:
     tuple val(meta), path("*.bam"), emit: filtered_bam
-    path "versions.yml"           , emit: versions
+    path "versions.yml", emit: versions
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    if(direction == "fwd") {
+    if (direction == "fwd") {
         flag = "0x40"
-    } else if (direction == "rev") {
+    }
+    else if (direction == "rev") {
         flag = "0x80"
-    } else {
+    }
+    else {
         error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
     }
     """
-    samtools view --threads ${task.cpus-1} -f ${flag} -o temp.bam ${bam}
-    samtools view -H --threads ${task.cpus-1} temp.bam > temp_header
+    samtools view --threads ${task.cpus - 1} -f ${flag} -o temp.bam ${bam}
+    samtools view -H --threads ${task.cpus - 1} temp.bam > temp_header
 
-    samtools view --threads ${task.cpus-1} temp.bam |\\
+    samtools view --threads ${task.cpus - 1} temp.bam |\\
         bioawk -c sam '{ \$flag = and(\$flag , 3860 ) ; print \$0 }' |\\
         cat temp_header - |\\
-        samtools sort --threads ${task.cpus-1} -n -o ${prefix}.${direction}.bam
+        samtools sort --threads ${task.cpus - 1} -n -o ${prefix}.${direction}.bam
 
     rm temp.bam temp_header
 
@@ -43,11 +45,13 @@ process METATOR_PROCESS_INPUT_BAM {
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    if(direction == "fwd") {
+    if (direction == "fwd") {
         flag = "0x40"
-    } else if (direction == "rev") {
+    }
+    else if (direction == "rev") {
         flag = "0x80"
-    } else {
+    }
+    else {
         error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
     }
     """
