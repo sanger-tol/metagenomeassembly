@@ -8,16 +8,16 @@ process BIN3C_CLUSTER {
     tuple val(meta), path(contigs), path(map)
 
     output:
-    tuple val(meta), path("*.fa.gz")      , emit: fasta, optional: true
+    tuple val(meta), path("*.fa.gz"), emit: fasta, optional: true
     tuple val(meta), path("*.[!fna,log]*"), emit: clustering
-    tuple val(meta), path("*.log")        , emit: log
-    path("versions.yml")                  , emit: versions
+    tuple val(meta), path("*.log"), emit: log
+    path ("versions.yml"), emit: versions
 
     script:
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        error "ERROR: Bin3C is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_bin3c false"
+        error("ERROR: Bin3C is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_bin3c false")
     }
-    def args   = task.ext.args   ?: ''
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     bin3C cluster \\

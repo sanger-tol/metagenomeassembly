@@ -6,21 +6,21 @@ process BIN3C_MKMAP {
 
     input:
     tuple val(meta), path(contigs), path(bam)
-    val(hic_enzymes)
+    val hic_enzymes
 
     output:
     tuple val(meta), path("*.p.gz"), emit: map
-    tuple val(meta), path("*.log") , emit: log
-    path("versions.yml")           , emit: versions
+    tuple val(meta), path("*.log"), emit: log
+    path ("versions.yml"), emit: versions
 
     script:
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        error "ERROR: Bin3C is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_bin3c false"
+        error("ERROR: Bin3C is only avaliable as a Docker or Singularity container. If you need to run with conda, run with --enable_bin3c false")
     }
-    def args   = task.ext.args   ?: ''
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     // if(!hic_enzymes) error("Error: no enzymes entry found in Hi-C meta object!")
-    def enzymes =  "-e ${hic_enzymes.join(" -e ")}"
+    def enzymes = "-e ${hic_enzymes.join(" -e ")}"
     """
     bin3C mkmap \\
         ${enzymes} \\

@@ -3,21 +3,21 @@ process BIN_RRNAS {
     label "process_low"
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/gawk:5.3.0' :
-        'biocontainers/gawk:5.3.0' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/gawk:5.3.0'
+        : 'biocontainers/gawk:5.3.0'}"
 
     input:
     tuple val(meta), path(contig2bin), path(cm_tbl)
 
     output:
     tuple val(meta), path("*.tsv"), emit: tsv
-    path("versions.yml")          , emit: versions
+    path ("versions.yml"), emit: versions
 
     script:
-    def prefix  = task.ext.prefix ?: ""
-    def tbl_in  = cm_tbl.toString() - ~/\.gz$/
-    def gunzip  = cm_tbl.getExtension() == "gz" ? "gunzip -c ${cm_tbl} > ${tbl_in}" : ""
+    def prefix = task.ext.prefix ?: ""
+    def tbl_in = cm_tbl.toString() - ~/\.gz$/
+    def gunzip = cm_tbl.getExtension() == "gz" ? "gunzip -c ${cm_tbl} > ${tbl_in}" : ""
     def cleanup = cm_tbl.getExtension() == "gz" ? "rm ${tbl_in}" : ""
     """
     ${gunzip}
