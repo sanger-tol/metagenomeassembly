@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/metagenomeassembly/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/sanger-tol/metagenomeassembly/main/nextflow_schema.json",
     "title": "sanger-tol/metagenomeassembly pipeline parameters",
     "description": "Construct MAGs from long reads.",
     "type": "object",
