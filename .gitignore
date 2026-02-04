@@ -7,3 +7,7 @@ testing/
 testing*
 *.pyc
 null/
+co2footprint*
+.nf-test/
+.nf-test.log
+.vscode/

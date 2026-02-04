@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "ASSEMBLY_QC"
+description: Analysis and quality checks of primary metagenome assemblies
+keywords:
+  - qc
+  - assembly statistics
+  - rrna prediction
+  - plasmid prediction
+  - contig circularity
+components:
+  - find_circles
+  - genomad/endtoend
+  - genome_stats
+  - gzip_get_decompressed_size
+  - infernal/cmsearch
+input:
+  - ch_assemblies:
+      type: file
+      description: |
+        Metagenome assemblies in FASTA format.
+
+        Structure: [meta, [reads]]
+  - val_rfam_rrna_cm:
+      type: file
+      description: |
+        Rfam CM model containing models for rRNA genes.
+  - val_genomad_db:
+      type: file
+      description: |
+        Directory containing the Genomad database.
+output:
+  - assemblies:
+      type: file
+      description: |
+        Input long read assemblies in FASTA format, with added metadata.
+
+        Structure: [meta, assembly]
+  - stats:
+      type: file
+      description: |
+        TSV file containing the basic assembly statistics of each assembly.
+
+        Structure: [meta, tsv]
+  - circle_list:
+      type: file
+      description: |
+        List of circular contigs found in each assembly.
+
+        Structure: [meta, list]
+  - rrna:
+      type: file
+      description: |
+        rRNA gene predictions for each contig in the assembly
+
+        Structure: [meta, tsv]
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

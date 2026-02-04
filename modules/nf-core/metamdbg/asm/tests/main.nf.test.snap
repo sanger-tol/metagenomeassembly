@@ -1,0 +1,60 @@
+{
+    "metamdbg_asm - hifi": {
+        "content": [
+            "test.contigs.fasta.gz",
+            "test.metaMDBG.log",
+            {
+                "versions_metamdbg": [
+                    [
+                        "METAMDBG_ASM",
+                        "metamdbg",
+                        "1.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-09-18T12:02:15.785819305"
+    },
+    "metamdbg_asm - ont": {
+        "content": [
+            "test.contigs.fasta.gz",
+            "test.metaMDBG.log",
+            {
+                "versions_metamdbg": [
+                    [
+                        "METAMDBG_ASM",
+                        "metamdbg",
+                        "1.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-09-18T12:01:41.895158305"
+    },
+    "stub_versions": {
+        "content": [
+            {
+                "versions_metamdbg": [
+                    [
+                        "METAMDBG_ASM",
+                        "metamdbg",
+                        "1.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-09-18T12:02:34.942634273"
+    }
+}
