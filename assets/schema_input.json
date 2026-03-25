@@ -16,7 +16,7 @@
                     "items": {
                         "type": "string",
                         "format": "file-path",
-                        "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                        "pattern": "^\\S+\\.(fa|fna|fasta|fq|fastq)(\\.gz)?$",
                         "exists": true
                     },
                     "uniqueItems": true
