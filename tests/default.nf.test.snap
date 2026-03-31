@@ -78,7 +78,7 @@
                     "gawk": "5.3.0"
                 },
                 "GENOMAD_ENDTOEND": {
-                    "genomad": "1.11.0"
+                    "genomad": "1.11.2"
                 },
                 "GENOME_STATS_ASSEMBLIES": {
                     "seqkit": "2.9.0"
@@ -149,7 +149,7 @@
                     "tRNAscan-SE": "2.0.12"
                 },
                 "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v1.3.1"
+                    "sanger-tol/metagenomeassembly": "v1.3.2"
                 }
             },
             [

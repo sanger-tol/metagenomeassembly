@@ -1,34 +1,34 @@
 process METATOR_PIPELINE {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/metator:1.3.10--py39h2de1943_0' :
-        'biocontainers/metator:1.3.10--py39h2de1943_0' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/metator:1.3.10--py39h2de1943_0'
+        : 'biocontainers/metator:1.3.10--py39h2de1943_0'}"
 
     input:
     tuple val(meta), path(contigs), path(hic_input), path(depths)
     val hic_enzymes
 
     output:
-    tuple val(meta), path("bin_summary.txt") , emit: bin_summary
-    tuple val(meta), path("binning.txt")     , emit: contig2bin
-    tuple val(meta), path("*.fa.gz")         , emit: bins
-    path "versions.yml"                      , emit: versions
+    tuple val(meta), path("bin_summary.txt"), emit: bin_summary
+    tuple val(meta), path("binning.txt"), emit: contig2bin
+    tuple val(meta), path("*.fa.gz"), emit: bins
+    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args           = task.ext.args   ?: ''
-    def prefix         = task.ext.prefix ?: "${meta.id}"
-    def enzyme_input   = hic_enzymes ? "-e ${hic_enzymes.join(",")}" : ""
-    def depth_input    = depths ? "--depth ${depths}" : ""
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def enzyme_input = hic_enzymes ? "-e ${hic_enzymes.join(",")}" : ""
+    def depth_input = depths ? "--depth ${depths}" : ""
     def assembly_input = contigs =~ /\.gz$/ ? "${contigs.getBaseName()}" : contigs
-    def gunzip         = contigs =~ /\.gz$/ ? "gunzip -c ${contigs} > ${assembly_input}" : ""
+    def gunzip = contigs =~ /\.gz$/ ? "gunzip -c ${contigs} > ${assembly_input}" : ""
     """
-    $gunzip
+    ${gunzip}
 
     metator pipeline \\
         --forward ${hic_input[0]} \\
@@ -58,7 +58,6 @@ process METATOR_PIPELINE {
     """
 
     stub:
-    def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch bin_summary.txt

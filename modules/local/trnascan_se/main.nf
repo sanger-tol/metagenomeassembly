@@ -3,34 +3,34 @@ process TRNASCAN_SE {
     label "process_medium"
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/trnascan-se:2.0.12--pl5321h7b50bb2_2':
-        'biocontainers/trnascan-se:2.0.12--pl5321h7b50bb2_2' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/trnascan-se:2.0.12--pl5321h7b50bb2_2'
+        : 'biocontainers/trnascan-se:2.0.12--pl5321h7b50bb2_2'}"
 
     input:
     tuple val(meta), path(fasta)
-    val(emit_fasta)
-    val(emit_gff)
-    val(emit_bed)
+    val emit_fasta
+    val emit_gff
+    val emit_bed
 
     output:
-    tuple val(meta), path("*.tsv")   , emit: tsv
-    tuple val(meta), path("*.log")   , emit: log
-    tuple val(meta), path("*.stats") , emit: stats
-    tuple val(meta), path("*.fasta") , emit: fasta , optional: true
-    tuple val(meta), path("*.gff")   , emit: gff   , optional: true
-    tuple val(meta), path("*.bed")   , emit: bed   , optional: true
-    path("versions.yml")             , emit: versions
+    tuple val(meta), path("*.tsv"), emit: tsv
+    tuple val(meta), path("*.log"), emit: log
+    tuple val(meta), path("*.stats"), emit: stats
+    tuple val(meta), path("*.fasta"), emit: fasta, optional: true
+    tuple val(meta), path("*.gff"), emit: gff, optional: true
+    tuple val(meta), path("*.bed"), emit: bed, optional: true
+    path ("versions.yml"), emit: versions
 
     script:
-    def args      = task.ext.args   ?: ''
-    def prefix    = task.ext.prefix ?: "${meta.id}"
-    def fasta_out = emit_fasta      ? "-a ${prefix}.fasta" : ""
-    def gff       = emit_gff        ? "-j ${prefix}.gff" : ""
-    def bed       = emit_bed        ? "-a ${prefix}.bed" : ""
-    def input     = fasta.toString() - ~/\.gz$/
-    def unzip     = fasta.getExtension() == "gz" ? "gunzip -c ${fasta} > ${input}" : ""
-    def cleanup   = fasta.getExtension() == "gz" ? "rm ${input}" : ""
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def fasta_out = emit_fasta ? "-a ${prefix}.fasta" : ""
+    def gff = emit_gff ? "-j ${prefix}.gff" : ""
+    def bed = emit_bed ? "-a ${prefix}.bed" : ""
+    def input = fasta.toString() - ~/\.gz$/
+    def unzip = fasta.getExtension() == "gz" ? "gunzip -c ${fasta} > ${input}" : ""
+    def cleanup = fasta.getExtension() == "gz" ? "rm ${input}" : ""
     """
     ${unzip}
 
