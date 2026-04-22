@@ -25,6 +25,8 @@ process FIND_CIRCLES {
     // This regex will never match anything
     if (meta.assembler == "metamdbg") {
         regex = "/circular=yes/"
+    } else if (meta.assembler == "myloasm") {
+        regex = "/circular-yes|circular-possibly/"
     }
     """
     seqkit fx2tab --length --gc --name ${fasta} |\\
