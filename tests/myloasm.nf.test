@@ -5,7 +5,7 @@ nextflow_pipeline {
     tag "pipeline"
     profile "test_myloasm"
 
-    test("-profile test") {
+    test("-profile test_myloasm") {
 
         setup {
             println "Downloading GTDB-Tk database..."
