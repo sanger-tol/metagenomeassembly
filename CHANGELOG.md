@@ -3,7 +3,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0dev] - Lovely Molly - [2025-04-22]
+
+### `Added`
+
+- Added [myloasm](https://myloasm-docs.github.io/) as an alternative assembler - supply `--assembler myloasm` to select it.
+- Added a pipeline logo.
+
+### `Fixed`
+
+- Updated metaMDBG to 1.3.1, improving the quality of output assemblies.
+
+### `Dependencies`
+
 ## [1.3.2] - Glasgow Peggie (patch 2) - [2025-03-31]
+
+| module            | tools     | old versions | new versions |
+| ----------------- | --------- | ------------ | ------------ |
+| metamdbg          | metamdbg  | 1.2.0        | 1.3.1        |
+| myloasm           | myloasm   | -            | 0.5.1        |
+| gtdbtk/classifywf | gtdbtk    | 2.5.2        | 2.6.1        |
+
 
 ### `Fixed`
 
