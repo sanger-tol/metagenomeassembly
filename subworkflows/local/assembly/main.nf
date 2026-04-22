@@ -1,6 +1,6 @@
 include { GUNZIP       } from '../../../modules/nf-core/gunzip/main'
 include { METAMDBG_ASM } from '../../../modules/nf-core/metamdbg/asm/main'
-include { MYLOASM      } from '../modules/nf-core/myloasm/main'
+include { MYLOASM      } from '../../../modules/nf-core/myloasm/main'
 
 workflow ASSEMBLY {
     take:
@@ -33,7 +33,7 @@ workflow ASSEMBLY {
         //
         MYLOASM(ch_assembly_input)
 
-        ch_myloasm_assemblies = METAMDBG_ASM.out.contigs.map { meta, contigs ->
+        ch_myloasm_assemblies = MYLOASM.out.contigs.map { meta, contigs ->
             def meta_new = meta + [assembler: "myloasm"]
             [meta_new, contigs]
         }
