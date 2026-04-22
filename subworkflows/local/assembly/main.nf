@@ -34,7 +34,7 @@ workflow ASSEMBLY {
         MYLOASM(ch_assembly_input)
 
         ch_myloasm_assemblies = METAMDBG_ASM.out.contigs.map { meta, contigs ->
-            def meta_new = meta + [assembler: "metamdbg"]
+            def meta_new = meta + [assembler: "myloasm"]
             [meta_new, contigs]
         }
         ch_assemblies_raw = ch_assemblies_raw.mix(ch_myloasm_assemblies)

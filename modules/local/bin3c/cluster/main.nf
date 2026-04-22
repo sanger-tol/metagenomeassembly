@@ -33,7 +33,7 @@ process BIN3C_CLUSTER {
     done
 
     find bin3c -maxdepth 1 -type f -exec sh -c 'name=`basename {}`; mv {} ${prefix}.\$name' \\;
-    gzip *.fa
+    find . -name "*.fa" -exec gzip {} \\;
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
