@@ -47,7 +47,7 @@ process METATOR_PIPELINE {
         awk -F" " '{if(\$1~">"){ print \$1 } else { print \$0 } }' \$bin > \${binname}
     done
 
-    gzip *.fa
+    find . -name "*.fa" -exec gzip {} \\;
 
     rm -r final_bin_unscaffold
 
