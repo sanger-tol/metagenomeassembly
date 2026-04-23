@@ -82,6 +82,10 @@
 
   > Li, H., 2021. New strategies to improve minimap2 alignment accuracy. Bioinformatics 37, 4572–4574. https://doi.org/10.1093/bioinformatics/btab705
 
+- [myloasm](https://github.com/bluenote-1577/myloasm)
+
+  > Shaw, J., Marin, M.G. & Li, H. High-resolution metagenome assembly for modern long reads with myloasm. Nat Biotechnol (2026). https://doi.org/10.1038/s41587-026-03053-z
+
 - [Pyrodigal](https://pyrodigal.readthedocs.io/)
 
   > Larralde, M., 2022. Pyrodigal: Python bindings and interface to Prodigal, an efficient method for gene prediction in prokaryotes. Journal of Open Source Software 7, 4296. https://doi.org/10.21105/joss.04296
