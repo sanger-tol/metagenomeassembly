@@ -16,13 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-## [1.3.2] - Glasgow Peggie (patch 2) - [2025-03-31]
-
 | module            | tools    | old versions | new versions |
 | ----------------- | -------- | ------------ | ------------ |
 | metamdbg          | metamdbg | 1.2.0        | 1.3.1        |
 | myloasm           | myloasm  | -            | 0.5.1        |
 | gtdbtk/classifywf | gtdbtk   | 2.5.2        | 2.6.1        |
+
+## [1.3.2] - Glasgow Peggie (patch 2) - [2025-03-31]
+
 
 ### `Fixed`
 
