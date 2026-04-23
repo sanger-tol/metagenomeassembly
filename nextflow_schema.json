@@ -44,10 +44,11 @@
             "description": "Options relating to metagenomic de-novo assembly.",
             "default": "",
             "properties": {
-                "enable_metamdbg": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable assembly with metaMDBG."
+                "assembler": {
+                    "type": "string",
+                    "default": "metamdbg",
+                    "description": "Which assembler to use for metagenome assembly.",
+                    "enum": ["metamdbg", "myloasm"]
                 }
             }
         },
