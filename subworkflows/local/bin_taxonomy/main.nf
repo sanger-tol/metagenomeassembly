@@ -66,7 +66,6 @@ workflow BIN_TAXONOMY {
             gtdbtk_db,
             false,
         )
-        ch_versions = ch_versions.mix(GTDBTK_CLASSIFYWF.out.versions)
         ch_gtdb_summary = GTDBTK_CLASSIFYWF.out.summary
 
         ch_gtdb_majorityvote_input = GTDBTK_CLASSIFYWF.out.gtdb_outdir.map { meta, outdir -> [meta, outdir, meta.id] }
