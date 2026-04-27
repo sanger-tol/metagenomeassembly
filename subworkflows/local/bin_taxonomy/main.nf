@@ -76,7 +76,7 @@ workflow BIN_TAXONOMY {
         GTDBTK_GTDBTONCBIMAJORITYVOTE(
             ch_gtdb_majorityvote_input,
             [[id: "ar53"], file(val_gtdbtk_ar53_metadata)],
-            [[id: "bac120"], file(val_gtdbtk_back120_metadata)],
+            [[id: "bac120"], file(val_gtdbtk_bac120_metadata)],
         )
 
         //

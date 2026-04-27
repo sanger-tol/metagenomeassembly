@@ -33,7 +33,7 @@ process BINSUMMARIES_TRNA {
             unique_trnas = 0
         }
         {
-            trna_arr[$5] = 1
+            trna_arr[\$5] = 1
         }
         END {
             for (i in trna_arr) { unique_trnas++ }

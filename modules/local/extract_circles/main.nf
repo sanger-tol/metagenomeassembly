@@ -1,4 +1,4 @@
-process FIND_CIRCLES {
+process EXTRACT_CIRCLES {
     tag "${meta.id}"
     label 'process_single'
 

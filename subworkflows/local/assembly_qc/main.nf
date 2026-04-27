@@ -1,16 +1,17 @@
+include { EXTRACT_CIRCLES                         } from '../../../modules/local/extract_circles'
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
-include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
-include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch/main'
-include { TRNASCAN_SE                             } from '../../../modules/nf-core/trnascanse/main'
+include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats'
+include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch'
+include { TRNASCANSE                              } from '../../../modules/nf-core/trnascanse'
 
 workflow ASSEMBLY_QC {
     take:
     ch_assemblies // [meta, assembly.fa.gz]
     ch_circular_list
     val_enable_genomad
-    val_genomad_db
+    ch_genomad_db
     val_rrna_prediction
-    val_rfam_rrna_cm
+    ch_rfam_rrna_cm
     val_enable_trnascanse
 
     main:
@@ -25,14 +26,16 @@ workflow ASSEMBLY_QC {
     // Module: Classify circular contigs using genomad
     //
     GENOMAD_ENDTOEND(
-        FIND_CIRCLES.out.circles_fasta.filter { val_enable_genomad && val_genomad_db },
-        val_genomad_db,
+        ch_assemblies.filter { val_enable_genomad },
+        ch_genomad_db,
     )
 
     //
     // Module: Identify rRNA genes in the assembly using Infernal
     //
-    ch_infernal_input = ch_assemblies.map { meta, assembly -> [meta, cmfile, val_rfam_rrna_cm] }
+    ch_infernal_input = ch_assemblies
+        .combine(ch_rfam_rrna_cm)
+        .map { meta, assembly, cm -> [meta, cm, assembly] }
 
     INFERNAL_CMSEARCH(
         ch_infernal_input.filter { val_rrna_prediction },
@@ -44,15 +47,15 @@ workflow ASSEMBLY_QC {
     //
     // Module: Predict tRNAs using tRNAScan-SE
     //
-    TRNASCAN_SE(
+    TRNASCANSE(
         ch_assemblies.filter { val_enable_trnascanse },
     )
-    ch_versions = ch_versions.mix(TRNASCAN_SE.out.versions)
+    ch_versions = ch_versions.mix(TRNASCANSE.out.versions)
 
     emit:
     stats                   = GENOME_STATS_ASSEMBLIES.out.stats
     genomad_plasmid_summary = GENOMAD_ENDTOEND.out.plasmid_summary
     rrna_summary            = INFERNAL_CMSEARCH.out.target_summary
-    trna_summary            = TRNASCAN_SE.out.tsv
+    trna_summary            = TRNASCANSE.out.tsv
     versions                = ch_versions
 }

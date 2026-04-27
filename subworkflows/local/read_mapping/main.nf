@@ -1,18 +1,22 @@
-include { COVERM_CONTIG         } from '../../../modules/nf-core/coverm/contig/main'
-include { SAMTOOLS_SORT         } from '../../../modules/nf-core/samtools/sort/main'
+include { COVERM_CONTIG             } from '../../../modules/nf-core/coverm/contig'
+include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/paritools/parsesortfilter'
+include { SAMTOOLS_FAIDX            } from '../../../modules/nf-core/samtools/faidx'
+include { SAMTOOLS_SORT             } from '../../../modules/nf-core/samtools/sort'
 
-include { CRAM_MAP_ILLUMINA_HIC } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic/main'
-include { FASTX_MAP_LONG_READS  } from '../../../subworkflows/sanger-tol/fastx_map_long_reads/main'
+include { CRAM_MAP_ILLUMINA_HIC     } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic'
+include { FASTX_MAP_LONG_READS      } from '../../../subworkflows/sanger-tol/fastx_map_long_reads'
 
 workflow READ_MAPPING {
     take:
     ch_assemblies
+    ch_filter_list
     ch_long_reads
     ch_hic_cram
     val_hic_binning
     val_hic_aligner
     val_cram_chunk_size
     val_reads_per_fasta_chunk
+    val_extract_circular_contigs
 
     main:
     //
@@ -26,6 +30,14 @@ workflow READ_MAPPING {
             cram: [meta, cram]
         }
 
+    //
+    // Logic: Index input assemblies to get chromsizes
+    //
+    SAMTOOLS_FAIDX(
+        ch_assemblies.map { meta, asm -> [meta, asm, []] },
+        true
+    )
+
     CRAM_MAP_ILLUMINA_HIC(
         ch_hic_mapping_inputs.assemblies,
         ch_hic_mapping_inputs.cram,
@@ -34,13 +46,13 @@ workflow READ_MAPPING {
     )
 
     //
-    // Module: sort output BAM file by name
+    // Module: Parse BAM into pairs format
     //
-    SAMTOOLS_SORT(
-        CRAM_MAP_ILLUMINA_HIC.out.bam,
-        [[], [], []],
-        "csi",
-    )
+    ch_pairtools_parse_input = CRAM_MAP_ILLUMINA_HIC.out.bam
+        .combine(SAMTOOLS_FAIDX.out.sizes)
+        .combine(ch_filter_list)
+
+    PAIRTOOLS_PARSESORTFILTER(ch_pairtools_parse_input)
 
     //
     // Subworkflow: Chunked mapping of long reads to metagenome assembly
@@ -73,6 +85,6 @@ workflow READ_MAPPING {
     emit:
     pacbio_bam = FASTX_MAP_LONG_READS.out.bam
     hic_bam    = SAMTOOLS_SORT.out.bam
-    depths     = COVERM_CONTIG.out.coverage
-    versions   = ch_versions
+    hic_pairs  = PAIRTOOLS_PARSESORTFILTER.out.pairs
+    depths     = ch_output_depths
 }

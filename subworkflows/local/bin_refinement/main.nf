@@ -22,7 +22,7 @@ workflow BIN_REFINEMENT {
     //
     // Module: Identify ORFs in assembly using Pyrodigal
     //
-    PYRODIGAL(assembly, 'gff')
+    PYRODIGAL(ch_assemblies, 'gff')
     ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
 
     if (val_enable_dastool) {

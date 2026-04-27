@@ -63,6 +63,11 @@
                     "default": true,
                     "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
                 },
+                "enable_trnascanse": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict tRNAs in an assembly using tRNAscan-SE."
+                },
                 "rfam_rrna_cm": {
                     "type": "string",
                     "description": "Covariance model for rRNA preditiction from RFAM.",
@@ -112,7 +117,7 @@
                 "hic_mapping_minq": {
                     "type": "integer",
                     "default": 10,
-                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Bin3C or Metator.",
+                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Metator.",
                     "minimum": 0
                 }
             },
@@ -129,6 +134,11 @@
                     "default": true,
                     "description": "Enable binning of metagenomes into genome bins."
                 },
+                "extract_circular_contigs": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract circular contigs and treat them as bins."
+                },
                 "enable_metabat2": {
                     "type": "boolean",
                     "default": true,
@@ -139,15 +149,15 @@
                     "default": true,
                     "description": "Enable binning with MaxBin2."
                 },
-                "enable_bin3c": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable binning with Bin3C."
-                },
                 "enable_metator": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with MetaTor."
+                },
+                "minimum_circular_contig_length": {
+                    "type": "integer",
+                    "default": 300000,
+                    "description": "The minimum length of a circular contig required to be treated as a bin."
                 },
                 "minimum_contig_size": {
                     "type": "integer",
@@ -224,11 +234,6 @@
                     "description": "Path to a local diamond database file for CheckM2. If not provided, the CheckM2 database will automatically be downloaded.",
                     "pattern": "^\\S+\\.dmnd$",
                     "format": "file-path"
-                },
-                "enable_trnascan_se": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Predict tRNAs in genome bins using tRNAscan-SE."
                 }
             }
         },

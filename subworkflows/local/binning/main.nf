@@ -12,13 +12,12 @@ workflow BINNING {
     take:
     ch_assemblies // channel: [[meta], contigs]
     ch_circular_contigs // channel: [meta, circular_contigs]
-    ch_pacbio_depths // channel: [[meta], depths_file]
+    ch_depths // channel: [[meta], depths_file]
     ch_hic_bam // channel: [[meta], bam]
     ch_hic_enzymes // channel: [enz1, enz2], value
     val_extract_circular_contigs
     val_enable_metabat2
     val_enable_maxbin2
-    val_enable_bin3c
     val_enable_metator
 
     main:
@@ -30,7 +29,7 @@ workflow BINNING {
     // Module: Split circular contigs into separate bin files
     //
     if (val_extract_circular_contigs) {
-        SPLIT_CIRCLES(ch_circular_contigs.map { meta, contigs -> meta + [single_end: true] })
+        SPLIT_CIRCLES(ch_circular_contigs.map { meta, contigs -> [meta + [single_end: true], contigs] })
 
         ch_bins = ch_bins.mix(
             SPLIT_CIRCLES.out.reads.map { meta, fasta ->
@@ -44,7 +43,7 @@ workflow BINNING {
     //
     if (val_enable_metabat2) {
         METABAT2_METABAT2(
-            ch_assemblies.combine(ch_pacbio_depths, by: 0)
+            ch_assemblies.combine(ch_depths, by: 0)
         )
 
         ch_bins = ch_bins.mix(
@@ -56,7 +55,7 @@ workflow BINNING {
     // Logic: Bin assembly with MaxBin2
     //
     if (val_enable_maxbin2) {
-        GAWK_MAXBIN2_DEPTHS(pacbio_depths, "${projectDir}/bin/convert_depths_maxbin2.awk", true)
+        GAWK_MAXBIN2_DEPTHS(ch_depths, "${projectDir}/bin/convert_depths_maxbin2.awk", true)
 
         ch_maxbin2_input = ch_assemblies
             .combine(GAWK_MAXBIN2_DEPTHS.out.output, by: 0)
@@ -72,25 +71,6 @@ workflow BINNING {
 
         ch_bins = ch_bins.mix(
             MAXBIN2.out.binned_fastas.map { meta, fasta -> [meta + [binner: "maxbin2"], fasta] }
-        )
-    }
-
-    if (val_enable_bin3c && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
-        //
-        // Module: Create Hi-C contact map for Bin3C
-        //
-        ch_bin3c_mkmap_input = ch_assemblies.combine(ch_hic_bam, by: 0)
-        BIN3C_MKMAP(ch_bin3c_mkmap_input, ch_hic_enzymes)
-
-        //
-        // Module: Cluster Bin3C contact map and write bins
-        //
-        //
-        ch_bin3c_cluster_input = ch_assemblies.combine(BIN3C_MKMAP.out.map, by: 0)
-        BIN3C_CLUSTER(ch_bin3c_cluster_input)
-
-        ch_bins = ch_bins.mix(
-            BIN3C_CLUSTER.out.fasta.map { meta, fasta -> [meta + [binner: "bin3c"], fasta] }
         )
     }
 
@@ -116,8 +96,7 @@ workflow BINNING {
         //
         // Module: Bin assembly using Metator
         //
-        METATOR_PIPELINE(ch_metator_input, hic_enzymes)
-        ch_versions = ch_versions.mix(METATOR_PIPELINE.out.versions)
+        METATOR_PIPELINE(ch_metator_input, ch_hic_enzymes)
 
         ch_metator_bins = METATOR_PIPELINE.out.bins.map { meta, fasta -> [meta + [binner: "metator"], fasta] }
 

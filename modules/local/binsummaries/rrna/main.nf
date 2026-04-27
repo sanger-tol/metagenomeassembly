@@ -1,4 +1,4 @@
-process BISUMMARIES_RRNA {
+process BINSUMMARIES_RRNA {
     tag "${meta.id}"
     label "process_low"
 

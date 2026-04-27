@@ -83,7 +83,7 @@ workflow BIN_QC {
         .combine(ch_assembly_trnascanse_tbl, by: 0)
         .map { _meta_join, meta, c2b, trna -> [meta, c2b, trna] }
 
-    BINSUMMARIES_TRNA(ch_trna_tsvs)
+    BINSUMMARIES_TRNA(ch_trnascan_summary_input)
 
     //
     // Module: Summarise rRNA results for each bin
