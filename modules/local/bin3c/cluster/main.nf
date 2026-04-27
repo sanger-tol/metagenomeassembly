@@ -11,7 +11,7 @@ process BIN3C_CLUSTER {
     tuple val(meta), path("*.fa.gz"), emit: fasta, optional: true
     tuple val(meta), path("*.[!fna,log]*"), emit: clustering
     tuple val(meta), path("*.log"), emit: log
-    path ("versions.yml"), emit: versions
+    tuple val("${task.process}"), val('bin3c'), eval("bin3C --version | grep bin3C | sed 's/bin3C //'"), topic: versions, emit: versions_bin3c
 
     script:
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
@@ -34,13 +34,6 @@ process BIN3C_CLUSTER {
 
     find bin3c -maxdepth 1 -type f -exec sh -c 'name=`basename {}`; mv {} ${prefix}.\$name' \\;
     find . -name "*.fa" -exec gzip {} \\;
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bin3c: \$( bin3C --version | grep bin3C | sed 's/bin3C //' )
-        gzip: \$( gzip --version | grep gzip | sed 's/gzip //' )
-        bgzip: \$( bgzip --version | grep bgzip | sed 's/bgzip (htslib) //' )
-    END_VERSIONS
     """
 
     stub:
@@ -54,12 +47,5 @@ process BIN3C_CLUSTER {
     touch ${prefix}.cm_graph.edges
     touch ${prefix}.cm_graph.tree
     echo "" | gzip > ${prefix}.CL01.fa.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bin3c: \$( bin3C --version | grep bin3C | sed 's/bin3C //' )
-        gzip: \$( gzip --version | grep gzip | sed 's/gzip //' )
-        bgzip: \$( bgzip --version | grep bgzip | sed 's/bgzip (htslib) //' )
-    END_VERSIONS
     """
 }

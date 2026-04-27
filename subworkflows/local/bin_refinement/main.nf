@@ -9,121 +9,118 @@ include { PYRODIGAL                               } from '../../../modules/nf-co
 
 workflow BIN_REFINEMENT {
     take:
-    assembly
-    contig2bin
-    magscot_gtdb_hmm_db
+    ch_assemblies
+    ch_contig2bin
+    ch_magscot_gtdb_hmm_db
+    val_enable_dastool
+    val_enable_magscot
 
     main:
     ch_versions = channel.empty()
-    ch_refined_bins = channel.empty()
     ch_refined_contig2bin_raw = channel.empty()
 
     //
-    // MODULE: Identify ORFs in assembly using Pyrodigal
+    // Module: Identify ORFs in assembly using Pyrodigal
     //
     PYRODIGAL(assembly, 'gff')
     ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
-    ch_proteins = PYRODIGAL.out.faa
 
-    if (params.enable_dastool) {
-        ch_contig2bins_to_merge = contig2bin
+    if (val_enable_dastool) {
+        ch_contig2bins_to_merge = ch_contig2bin
             .map { meta, tsv -> [meta - meta.subMap(['binner']), tsv] }
             .groupTuple(by: 0)
 
-        ch_dastool_input = assembly
+        ch_dastool_input = ch_assemblies
             .combine(ch_contig2bins_to_merge, by: 0)
-            .combine(ch_proteins, by: 0)
+            .combine(PYRODIGAL.out.faa, by: 0)
 
         //
-        // MODULE: Refine bins using DAS_Tool + ORFs
+        // Module: Refine bins using DAS_Tool + ORFs
         //
         DASTOOL_DASTOOL(ch_dastool_input, [])
-        ch_versions = ch_versions.mix(DASTOOL_DASTOOL.out.versions)
 
-        ch_dastool_c2b = DASTOOL_DASTOOL.out.contig2bin.map { meta, c2b -> [meta + [binner: "dastool"], c2b] }
-
-        ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_dastool_c2b)
+        ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(
+            DASTOOL_DASTOOL.out.contig2bin.map { meta, c2b -> [meta + [binner: "dastool"], c2b] }
+        )
     }
 
-    if (params.enable_magscot && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
+    if (val_enable_magscot && workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0) {
         //
-        // LOGIC: MagScoT needs a TSV file of gene predictions in each contig
+        // Logic: MagScoT needs a TSV file of gene predictions in each contig
         //        Run hmmsearch using the provided hmm files on the predicted
         //        proteins for each assembly and process with gawk
         //
-
-        ch_hmmsearch_gtdb_input = ch_proteins
-            .combine(magscot_gtdb_hmm_db)
+        ch_hmmsearch_gtdb_input = PYRODIGAL.out.faa
+            .combine(ch_magscot_gtdb_hmm_db)
             .map { meta, faa, hmmfile ->
                 [meta, hmmfile, faa, false, true, false]
             }
 
         //
-        // MODULE: Determine which ORFs are GTDB marker genes
+        // Module: Determine which ORFs are GTDB marker genes
         //
         HMMER_HMMSEARCH(ch_hmmsearch_gtdb_input)
         ch_versions = ch_versions.mix(HMMER_HMMSEARCH.out.versions)
 
-        ch_hmm_output = HMMER_HMMSEARCH.out.target_summary.groupTuple(by: 0)
+        //
+        // Module: Process HMM output to summarise per-contig
+        //
+        GAWK_PROCESS_HMM_TBLOUT(
+            HMMER_HMMSEARCH.out.target_summary.groupTuple(by: 0),
+            [],
+            false
+        )
 
         //
-        // MODULE: Process HMM output to summarise per-contig
-        //
-        GAWK_PROCESS_HMM_TBLOUT(ch_hmm_output, [], false)
-        ch_versions = ch_versions.mix(GAWK_PROCESS_HMM_TBLOUT.out.versions)
-
-        //
-        // MODULE: reformat contig2bin files to bin\tcontig\tbinner
+        // Module: reformat contig2bin files to bin\tcontig\tbinner
         // from contig\tbin format
         //
         GAWK_MAGSCOT_PROCESS_CONTIG2BIN(
-            contig2bin,
+            ch_contig2bin,
             [],
             false,
         )
-        ch_versions = ch_versions.mix(GAWK_MAGSCOT_PROCESS_CONTIG2BIN.out.versions)
 
         //
-        // LOGIC: Run MagScoT
+        // Module: Bin refinement with MagScoT
         //
         ch_magscot_contig2bin = GAWK_MAGSCOT_PROCESS_CONTIG2BIN.out.output
-            | map { meta, c2b -> [meta - meta.subMap(['binner']), c2b] }
-            | groupTuple(by: 0)
+            .map { meta, c2b -> [meta - meta.subMap(['binner']), c2b] }
+            .groupTuple(by: 0)
 
-        ch_magscot_input = GAWK_PROCESS_HMM_TBLOUT.out.output
-            | combine(ch_magscot_contig2bin, by: 0)
+        MAGSCOT_MAGSCOT(
+            GAWK_PROCESS_HMM_TBLOUT.out.output.combine(ch_magscot_contig2bin, by: 0)
+        )
 
-        //
-        // MODULE: Bin refinement with MagScoT
-        //
-        MAGSCOT_MAGSCOT(ch_magscot_input)
-        ch_versions = ch_versions.mix(MAGSCOT_MAGSCOT.out.versions)
-
-        ch_magscot_c2b = MAGSCOT_MAGSCOT.out.contig2bin.map { meta, c2b -> [meta + [binner: "magscot"], c2b] }
-
-        ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(ch_magscot_c2b)
+        ch_refined_contig2bin_raw = ch_refined_contig2bin_raw.mix(
+            MAGSCOT_MAGSCOT.out.contig2bin.map { meta, c2b -> [meta + [binner: "magscot"], c2b] }
+        )
     }
 
     //
-    // LOGIC: DAS_Tool and MagScoT do not give control over the names of the bins
-    //        they output - this causes issues with file collisions and expected name conventions
-    //        downstream. Rename the bins inside the contig2bin script and write to fasta separately
+    // Logic: DAS_Tool and MagScoT do not give control over the names of the bins
+    // they output - this causes issues with file collisions and expected name conventions
+    // downstream. Rename the bins inside the contig2bin script and write to fasta separately
     //
-    if (params.enable_dastool || params.enable_magscot) {
+    ch_refined_contig2bin = channel.empty()
+    ch_refined_bins = channel.empty()
+    if (val_enable_dastool || val_enable_magscot) {
         //
-        // MODULE: Rename bins inside contig2bin files
+        // Module: Rename bins inside contig2bin files
         //
         GAWK_RENAME_BINS(
             ch_refined_contig2bin_raw,
             file("${projectDir}/bin/rename_bins.awk"),
             false,
         )
-        ch_versions = ch_versions.mix(GAWK_RENAME_BINS.out.versions)
-        ch_refined_contig2bin = GAWK_RENAME_BINS.out.output
+        ch_refined_contig2bin = ch_refined_contig2bin.mix(GAWK_RENAME_BINS.out.output)
 
-        ch_c2b_to_combine = GAWK_RENAME_BINS.out.output.map { meta, c2b -> [meta - meta.subMap("binner"), meta, c2b] }
+        ch_c2b_to_combine = GAWK_RENAME_BINS.out.output
+            .map { meta, c2b ->
+                [meta - meta.subMap("binner"), meta, c2b]
+            }
 
-        ch_contig2bintofasta_input = assembly
+        ch_contig2bintofasta_input = ch_assemblies
             .combine(ch_c2b_to_combine, by: 0)
             .map { _meta, contigs, meta_c2b, c2b -> [meta_c2b, contigs, c2b] }
 
@@ -131,7 +128,6 @@ workflow BIN_REFINEMENT {
         // MODULE: Create binned fasta files using contig2bin files
         //
         CONTIG2BINTOFASTA(ch_contig2bintofasta_input)
-        ch_versions = ch_versions.mix(CONTIG2BINTOFASTA.out.versions)
 
         ch_refined_bins = CONTIG2BINTOFASTA.out.bins
     }

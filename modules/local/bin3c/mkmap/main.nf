@@ -10,8 +10,8 @@ process BIN3C_MKMAP {
 
     output:
     tuple val(meta), path("*.p.gz"), emit: map
-    tuple val(meta), path("*.log"), emit: log
-    path ("versions.yml"), emit: versions
+    tuple val(meta), path("*.log") , emit: log
+    tuple val("${task.process}"), val('bin3c'), eval("bin3C --version | grep bin3C | sed 's/bin3C //'"), topic: versions, emit: versions_bin3c
 
     script:
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
@@ -31,11 +31,6 @@ process BIN3C_MKMAP {
 
     mv bin3c/contact_map.p.gz ${prefix}.contact_map.p.gz
     mv bin3c/bin3C.log ${prefix}.bin3C.log
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bin3c: \$( bin3C --version | grep bin3C | sed 's/bin3C //' )
-    END_VERSIONS
     """
 
     stub:
@@ -43,10 +38,5 @@ process BIN3C_MKMAP {
     """
     echo "" | gzip > ${prefix}.contact_map.p.gz
     touch ${prefix}.bin3C.log
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bin3c: \$( bin3C --version | grep bin3C | sed 's/bin3C //' )
-    END_VERSIONS
     """
 }

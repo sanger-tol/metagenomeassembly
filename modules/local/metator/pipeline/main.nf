@@ -12,10 +12,10 @@ process METATOR_PIPELINE {
     val hic_enzymes
 
     output:
-    tuple val(meta), path("bin_summary.txt"), emit: bin_summary
-    tuple val(meta), path("binning.txt"), emit: contig2bin
+    tuple val(meta), path("bin_summary.txt")   , emit: bin_summary
+    tuple val(meta), path("binning.txt")       , emit: contig2bin
     tuple val(meta), path("final_bins/*.fa.gz"), emit: bins
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('samtools'), eval("metator -v"), topic: versions, emit: versions_metator
 
     when:
     task.ext.when == null || task.ext.when
@@ -51,11 +51,6 @@ process METATOR_PIPELINE {
     find final_bins/ -name "*.fa" -exec gzip {} \\;
 
     rm -r final_bin_unscaffold
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        metator: \$( metator -v )
-    END_VERSIONS
     """
 
     stub:
@@ -65,10 +60,5 @@ process METATOR_PIPELINE {
     touch binning.txt
     mkdir bins
     echo "" | gzip > bins/${prefix}_metator_1.fa.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        metator: \$( metator -v )
-    END_VERSIONS
     """
 }

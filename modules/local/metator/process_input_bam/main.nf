@@ -12,7 +12,8 @@ process METATOR_PROCESS_INPUT_BAM {
 
     output:
     tuple val(meta), path("*.bam"), emit: filtered_bam
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), topic: versions, emit: versions_samtools
+    tuple val("${task.process}"), val('bioawk'), val("1.0"), emit: versions_bioawk, topic: versions
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -26,21 +27,9 @@ process METATOR_PROCESS_INPUT_BAM {
         error("ERROR: METATOR_PROCESS_INPUT_BAM direction was not 'fwd' or 'rev'!")
     }
     """
-    samtools view --threads ${task.cpus - 1} -f ${flag} -o temp.bam ${bam}
-    samtools view -H --threads ${task.cpus - 1} temp.bam > temp_header
-
-    samtools view --threads ${task.cpus - 1} temp.bam |\\
-        bioawk -c sam '{ \$flag = and(\$flag , 3860 ) ; print \$0 }' |\\
-        cat temp_header - |\\
+    samtools view -h --threads ${task.cpus - 1} -f ${flag} ${bam} |\\
+        bioawk -Hc sam '{ \$flag = and(\$flag , 3860 ) ; print \$0 }' |\\
         samtools sort --threads ${task.cpus - 1} -n -o ${prefix}.${direction}.bam
-
-    rm temp.bam temp_header
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
-        bioawk: 1.0
-    END_VERSIONS
     """
 
     stub:
@@ -56,11 +45,5 @@ process METATOR_PROCESS_INPUT_BAM {
     }
     """
     touch ${prefix}.${direction}.bam
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
-        bioawk: 1.0
-    END_VERSIONS
     """
 }
