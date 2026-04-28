@@ -3,6 +3,33 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0dev] - Polly on the Shore - [TBD]
+
+### `Added`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Circular contig extraction (by @prototaxites)
+  - Circular contigs above a given size are now treated as complete genomes. This can be disabled by setting `--extract_circular_contigs false`.
+  - The threshold for circular contig minimum size can be configured with `--minimum_circular_contig_length`
+- Hi-C BAM is now converted to a pairs file, which is fed into Metator
+
+### `Fixed`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Remove all references to `params` outside the entry subworkflow (by @prototaxites)
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) tRNAscan-SE now runs once per assembly rather than for each bin. The results are aggregated as with the rRNA results (by @prototaxites)
+
+### `Removed`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Bin3C is now deprecated. It was not maintainable, as it depended on a container provided by the developer (by @prototaxites)
+
+### `Dependencies`
+
+| module                    | tools     | old versions | new versions |
+| ------------------------- | --------- | ------------ | ------------ |
+| ripgrep                   | ripgrep   | -            | 14.1.1       |
+| pairtools/parsefiltersort | pairtools | -            | 1.1.3        |
+| bin3c/mkmap               | bin3c     | 0.3.3        | -            |
+| bin3c/cluster             | bin3c     | 0.3.3        | -            |
+
 ## [1.4.0] - Lovely Molly - [2025-04-27]
 
 ### `Added`
