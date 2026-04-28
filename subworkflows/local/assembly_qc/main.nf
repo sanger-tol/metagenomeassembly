@@ -1,4 +1,3 @@
-include { EXTRACT_CIRCLES                         } from '../../../modules/local/extract_circles'
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
 include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats'
 include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch'
