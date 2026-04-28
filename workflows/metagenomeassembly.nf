@@ -83,17 +83,21 @@ workflow METAGENOMEASSEMBLY {
         ch_rfam_rrna_cm,
         val_enable_trnascanse
     )
-    ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
 
     if (val_enable_binning) {
+        if (val_extract_circular_contigs) {
+            ch_assemblies_to_bin = ASSEMBLY.out.linear_contigs
+        } else {
+            ch_assemblies_to_bin = ASSEMBLY.out.full_assemblies
+        }
+
         //
         // Subworkflow: Map PacBio Hifi reads and Illumina Hi-C
         // reads to the assembly and estimate per-contig coverages
         //
         READ_MAPPING(
-            ASSEMBLY.out.assemblies,
-            ASSEMBLY.out.circular_contigs,
-            ASSEMBLY.out.circular_list,
+            ASSEMBLY.out.full_assemblies,
+            ASSEMBLY.out.circles_list,
             ch_long_reads,
             ch_hic_cram,
             val_enable_metator,
@@ -110,7 +114,7 @@ workflow METAGENOMEASSEMBLY {
             ch_assemblies_to_bin,
             ASSEMBLY.out.circular_contigs,
             READ_MAPPING.out.depths,
-            READ_MAPPING.out.hic_bam,
+            READ_MAPPING.out.hic_pairs,
             ch_hic_enzymes,
             val_extract_circular_contigs,
             val_enable_metabat2,
@@ -127,7 +131,7 @@ workflow METAGENOMEASSEMBLY {
             //
             BIN_REFINEMENT(
                 ch_assemblies_to_bin,
-                BINNING.out.contig2bin,
+                BINNING.out.contig2bin.filter { meta, c2b -> meta.binner != "circular" },
                 ch_magscot_gtdb_hmm_db,
                 val_enable_dastool,
                 val_enable_magscot
@@ -211,7 +215,6 @@ workflow METAGENOMEASSEMBLY {
                 ch_trnascan_collated,
                 ch_rrna_collated,
             )
-            ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
         }
     }
     //

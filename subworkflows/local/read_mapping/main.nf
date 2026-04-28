@@ -1,7 +1,7 @@
 include { COVERM_CONTIG             } from '../../../modules/nf-core/coverm/contig'
-include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/paritools/parsesortfilter'
+include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/pairtools/parsesortfilter'
+include { RIPGREP                   } from '../../../modules/nf-core/ripgrep/main'
 include { SAMTOOLS_FAIDX            } from '../../../modules/nf-core/samtools/faidx'
-include { SAMTOOLS_SORT             } from '../../../modules/nf-core/samtools/sort'
 
 include { CRAM_MAP_ILLUMINA_HIC     } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic'
 include { FASTX_MAP_LONG_READS      } from '../../../subworkflows/sanger-tol/fastx_map_long_reads'
@@ -49,8 +49,15 @@ workflow READ_MAPPING {
     // Module: Parse BAM into pairs format
     //
     ch_pairtools_parse_input = CRAM_MAP_ILLUMINA_HIC.out.bam
-        .combine(SAMTOOLS_FAIDX.out.sizes)
-        .combine(ch_filter_list)
+        .combine(SAMTOOLS_FAIDX.out.sizes, by: 0)
+
+    if (val_extract_circular_contigs) {
+        ch_pairtools_parse_input = ch_pairtools_parse_input
+            .combine(ch_filter_list, by: 0)
+    } else {
+        ch_pairtools_parse_input = ch_pairtools_parse_input
+            .map { meta, bam, sizes -> [meta, bam, sizes, []] }
+    }
 
     PAIRTOOLS_PARSESORTFILTER(ch_pairtools_parse_input)
 
@@ -82,9 +89,35 @@ workflow READ_MAPPING {
         false
     )
 
+    //
+    // Logic: if we have removed circular contigs from binning, strip them
+    // out of the coverage TSV
+    //
+    if(val_extract_circular_contigs) {
+        ch_ripgrep_input = COVERM_CONTIG.out.coverage
+            .combine(ch_filter_list, by: 0)
+            .multiMap { meta, depth, filt ->
+                depth: [meta, depth]
+                filt: filt
+            }
+
+        //
+        // Module: filter TSV with ripgrep -v
+        //
+        RIPGREP(
+            ch_ripgrep_input.depth,
+            [],
+            ch_ripgrep_input.filt,
+            false
+        )
+
+        ch_output_depths = RIPGREP.out.txt
+    } else {
+        ch_output_depths = COVERM_CONTIG.out.coverage
+    }
+
     emit:
     pacbio_bam = FASTX_MAP_LONG_READS.out.bam
-    hic_bam    = SAMTOOLS_SORT.out.bam
     hic_pairs  = PAIRTOOLS_PARSESORTFILTER.out.pairs
     depths     = ch_output_depths
 }

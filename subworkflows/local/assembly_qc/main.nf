@@ -15,8 +15,6 @@ workflow ASSEMBLY_QC {
     val_enable_trnascanse
 
     main:
-    ch_versions = channel.empty()
-
     //
     // Module: Calculate assembly statistics, including counts of circles
     //
@@ -42,7 +40,6 @@ workflow ASSEMBLY_QC {
         false,
         true,
     )
-    ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
 
     //
     // Module: Predict tRNAs using tRNAScan-SE
@@ -50,12 +47,10 @@ workflow ASSEMBLY_QC {
     TRNASCANSE(
         ch_assemblies.filter { val_enable_trnascanse },
     )
-    ch_versions = ch_versions.mix(TRNASCANSE.out.versions)
 
     emit:
     stats                   = GENOME_STATS_ASSEMBLIES.out.stats
     genomad_plasmid_summary = GENOMAD_ENDTOEND.out.plasmid_summary
     rrna_summary            = INFERNAL_CMSEARCH.out.target_summary
     trna_summary            = TRNASCANSE.out.tsv
-    versions                = ch_versions
 }

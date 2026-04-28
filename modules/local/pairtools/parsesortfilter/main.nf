@@ -1,6 +1,6 @@
 process PAIRTOOLS_PARSESORTFILTER {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
@@ -11,8 +11,7 @@ process PAIRTOOLS_PARSESORTFILTER {
     tuple val(meta), path(bam), path(chromsizes), path(filter_list)
 
     output:
-    tuple val(meta), path("*.pairsam.gz")  , emit: pairsam
-    tuple val(meta), path("*.pairsam.stat"), emit: stat
+    tuple val(meta), path("*.pairs.gz"), emit: pairs
     tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), topic: versions, emit: versions_samtools
     tuple val("${task.process}"), val('pairtools'), eval("pairtools --version | sed 's/.*pairtools.*version //'") , emit: versions_pairtools, topic: versions
 
@@ -20,17 +19,20 @@ process PAIRTOOLS_PARSESORTFILTER {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
+    def args  = task.ext.args ?: ''
+    def args2 = task.ext.args2 ?: ''
+    def args3 = task.ext.args3 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def filter_cmd = filter_list ? "grep -vf ${filter_list} |" : ""
     """
-    samtools view -h ${args} ${bam} |\\
+    samtools collate -@${task.cpus} ${args} ${bam} -O |\
     pairtools \\
         parse \\
         -c ${chromsizes} \\
         ${args2} |\\
+        pairtools select '(chrom1 != "!") and (chrom2 != "!")' |\\
         pairtools sort ${args3} |\\
-        ${filter_cmd} bgzip -@4 > ${prefix}.pairsam.gz
+        ${filter_cmd} bgzip -@4 > ${prefix}.pairs.gz
     """
 
     stub:
