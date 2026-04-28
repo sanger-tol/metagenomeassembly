@@ -172,7 +172,7 @@
                 "minimum_bin_size": {
                     "type": "integer",
                     "default": 150000,
-                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 and Bin3C, but not Metator or MaxBin2."
+                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 but not Metator or MaxBin2."
                 }
             }
         },
