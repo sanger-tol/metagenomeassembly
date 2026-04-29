@@ -39,7 +39,7 @@ process EXTRACT_CIRCLES {
         --length \\
         --gc \\
         --name \\
-        ${prefix}.circles.fa |\\
+        ${prefix}.circles.fa.gz |\\
         awk '{ print \$1 }' \\
         > ${prefix}.circles.list
 
