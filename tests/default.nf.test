@@ -57,7 +57,6 @@ nextflow_pipeline {
 
             // Unstable and uncountable files
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
-            def trnascan_stats = getAllFilesFromDir("${params.outdir}/bins/qc/trnascan_se/", relative: true, include: ["*.stats"])
 
             // Count number of GTDB-Tk-appropriate bins
             def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
@@ -69,9 +68,6 @@ nextflow_pipeline {
                 // Unstable file checks
                 // Check number of CheckM2 bins processed matches number of bins
                 { assert path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
-
-                // Check tRNAScan-SE ran for all bins
-                { assert trnascan_stats.size() == bin_fasta.size() },
 
                 // Check bin_summary.tsv file has expected number of rows
                 { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
@@ -98,7 +94,6 @@ nextflow_pipeline {
             new File("${launchDir}/r226_mockup").deleteDir()
             new File("${launchDir}/CheckM2_database").deleteDir()
             new File("${launchDir}/genomad_db").deleteDir()
-            new File("${workDir}").deleteDir()
         }
 
     }

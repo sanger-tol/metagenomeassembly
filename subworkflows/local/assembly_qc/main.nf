@@ -1,64 +1,55 @@
-include { FIND_CIRCLES                            } from '../../../modules/local/find_circles/main'
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
-include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats/main'
-include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch/main'
+include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats'
+include { INFERNAL_CMSEARCH                       } from '../../../modules/nf-core/infernal/cmsearch'
+include { TRNASCANSE                              } from '../../../modules/nf-core/trnascanse'
 
 workflow ASSEMBLY_QC {
     take:
     ch_assemblies // [meta, assembly.fa.gz]
-    val_rfam_rrna_cm
-    val_genomad_db
+    ch_circular_list
+    val_enable_genomad
+    ch_genomad_db
+    val_rrna_prediction
+    ch_rfam_rrna_cm
+    val_enable_trnascanse
 
     main:
-    ch_versions = channel.empty()
+    //
+    // Module: Calculate assembly statistics, including counts of circles
+    //
+    GENOME_STATS_ASSEMBLIES(ch_assemblies.combine(ch_circular_list, by: 0))
 
     //
-    // MODULE: Identify which contigs are circular
+    // Module: Classify circular contigs using genomad
     //
-    FIND_CIRCLES(ch_assemblies)
-    ch_versions = ch_versions.mix(FIND_CIRCLES.out.versions)
-
-    ch_genome_stats_input = ch_assemblies.combine(FIND_CIRCLES.out.circles_list, by: 0)
-
-    //
-    // MODULE: Classify circular contigs using genomad
-    //
-    if (params.enable_genomad) {
-        GENOMAD_ENDTOEND(
-            FIND_CIRCLES.out.circles_fasta,
-            val_genomad_db,
-        )
-        ch_versions = ch_versions.mix(GENOMAD_ENDTOEND.out.versions)
-    }
+    GENOMAD_ENDTOEND(
+        ch_assemblies.filter { val_enable_genomad },
+        ch_genomad_db,
+    )
 
     //
-    // MODULE: Calculate assembly statistics, including counts of circles
+    // Module: Identify rRNA genes in the assembly using Infernal
     //
-    GENOME_STATS_ASSEMBLIES(ch_genome_stats_input)
-    ch_versions = ch_versions.mix(GENOME_STATS_ASSEMBLIES.out.versions)
+    ch_infernal_input = ch_assemblies
+        .combine(ch_rfam_rrna_cm)
+        .map { meta, assembly, cm -> [meta, cm, assembly] }
 
-    ch_rrna_preds = channel.empty()
-    if (params.enable_rrna_prediction) {
-        ch_infernal_input = ch_assemblies
-            .combine(val_rfam_rrna_cm)
-            .map { meta, assembly, cmfile -> [meta, cmfile, assembly] }
+    INFERNAL_CMSEARCH(
+        ch_infernal_input.filter { val_rrna_prediction },
+        false,
+        true,
+    )
 
-        //
-        // MODULE: Identify rRNA genes in the assembly using Infernal
-        //
-        INFERNAL_CMSEARCH(
-            ch_infernal_input,
-            false,
-            true,
-        )
-        ch_versions = ch_versions.mix(INFERNAL_CMSEARCH.out.versions)
-
-        ch_rrna_preds = INFERNAL_CMSEARCH.out.target_summary
-    }
+    //
+    // Module: Predict tRNAs using tRNAScan-SE
+    //
+    TRNASCANSE(
+        ch_assemblies.filter { val_enable_trnascanse },
+    )
 
     emit:
-    stats       = GENOME_STATS_ASSEMBLIES.out.stats
-    circle_list = FIND_CIRCLES.out.circles_list
-    rrna        = ch_rrna_preds
-    versions    = ch_versions
+    stats                   = GENOME_STATS_ASSEMBLIES.out.stats
+    genomad_plasmid_summary = GENOMAD_ENDTOEND.out.plasmid_summary
+    rrna_summary            = INFERNAL_CMSEARCH.out.target_summary
+    trna_summary            = TRNASCANSE.out.tsv
 }

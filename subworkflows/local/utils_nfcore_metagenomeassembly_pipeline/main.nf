@@ -36,9 +36,14 @@ workflow PIPELINE_INITIALISATION {
     help // boolean: Display help message and exit
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
+    val_genomad_db
+    val_rfam_rrna_cm
+    val_hmm_gtdb_pfam
+    val_hmm_gtdb_tigrfam
+    val_checkm2_db
+    val_gtdbtk_db
 
     main:
-
     ch_versions = channel.empty()
 
     //
@@ -102,9 +107,12 @@ workflow PIPELINE_INITIALISATION {
     READ_YAML(file(input))
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
+        .map { meta, reads -> [meta, reads.collect { it -> file(it, checkIfExists: true) }] }
 
     // filter out results with empty lists to remove non-provided inputs
-    ch_hic_cram = READ_YAML.out.hic_cram.filter { _meta, cram -> !cram.isEmpty() }
+    ch_hic_cram = READ_YAML.out.hic_cram
+        .filter { _meta, cram -> !cram.isEmpty() }
+        .map { meta, cram -> [meta, cram.collect { it -> file(it, checkIfExists: true) }] }
 
     ch_assembly = READ_YAML.out.assembly
         .filter { _meta, asm -> asm }
@@ -117,24 +125,20 @@ workflow PIPELINE_INITIALISATION {
 
     // Genomad database
     ch_genomad_db = channel.empty()
-    if (params.genomad_db) {
-        ch_genomad_db = channel.of(
-            file(params.genomad_db, checkIfExists: true)
-        )
+    if(val_genomad_db) {
+        ch_genomad_db = channel.of(file(val_genomad_db, checkIfExists: true)).collect()
     }
 
     // Create channels for input database files
     // rRNA covariance models
     ch_rfam_rrna_cm = channel.empty()
-    if (params.rfam_rrna_cm) {
-        ch_rfam_rrna_cm = channel.of(
-            file(params.rfam_rrna_cm, checkIfExists: true)
-        )
+    if(val_rfam_rrna_cm) {
+        ch_rfam_rrna_cm = channel.of(file(val_rfam_rrna_cm, checkIfExists: true))
     }
 
     // MagScoT hmm models
     ch_magscot_gtdb_hmm_db = channel.empty()
-    if (params.enable_magscot && params.hmm_gtdb_pfam && params.hmm_gtdb_tigrfam) {
+    if (val_hmm_gtdb_pfam && val_hmm_gtdb_tigrfam) {
         ch_magscot_gtdb_hmm_db = channel.of(
             file(params.hmm_gtdb_pfam, checkIfExists: true),
             file(params.hmm_gtdb_tigrfam, checkIfExists: true),
@@ -143,24 +147,14 @@ workflow PIPELINE_INITIALISATION {
 
     // CheckM2 database
     ch_checkm2_db = channel.empty()
-    if (params.checkm2_db) {
-        ch_checkm2_db = channel.of(
-            [
-                [id: "checkm2"],
-                file(params.checkm2_db, checkIfExists: true),
-            ]
-        )
+    if(val_checkm2_db) {
+        ch_checkm2_db = channel.of([[id: "checkm2"], file(val_checkm2_db, checkIfExists: true)]).collect()
     }
 
     // GTDB-Tk database
     ch_gtdbtk_db = channel.empty()
-    if (params.gtdbtk_db) {
-        ch_gtdbtk_db = channel.of(
-            [
-                [id: "gtdb"],
-                file(params.gtdbtk_db, checkIfExists: true),
-            ]
-        )
+    if (val_gtdbtk_db) {
+        ch_gtdbtk_db = channel.of([[id: "gtdb"], file(params.gtdbtk_db, checkIfExists: true)]).collect()
     }
 
     emit:

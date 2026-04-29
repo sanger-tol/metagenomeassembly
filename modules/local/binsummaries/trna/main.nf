@@ -1,4 +1,4 @@
-process BIN_RRNAS {
+process BINSUMMARIES_TRNA {
     tag "${meta.id}"
     label "process_low"
 
@@ -12,7 +12,7 @@ process BIN_RRNAS {
 
     output:
     tuple val(meta), path("*.tsv"), emit: tsv
-    path ("versions.yml"), emit: versions
+    tuple val("${task.process}"), val('gawk'), eval("awk -Wversion | sed '1!d; s/.*Awk //; s/,.*//'"), topic: versions, emit: versions_gawk
 
     script:
     def prefix = task.ext.prefix ?: ""
@@ -22,23 +22,25 @@ process BIN_RRNAS {
     """
     ${gunzip}
 
-    echo -e "bin\tn_ssu\tn_lsu\tn_5s" > ${prefix}.rrna_summary.tsv
+    echo -e "bin\ttotal_trnas\tunique_trnas" > ${prefix}.trna_summary.tsv
     awk '{print \$2}' ${contig2bin} | sort -u | while read bin
     do
         awk -v bin=\$bin '\$2 == bin {print \$1}' ${contig2bin} > \${bin}.pattern
         ## grep returns 1 on no match so need to wrap to catch failures in pipefail mode
         { grep -wFf \${bin}.pattern ${tbl_in} || test \$? = 1; } | awk -v bin=\${bin} \\
         'BEGIN {
-            OFS = "\t"
-            n_5s  = 0
-            n_ssu = 0
-            n_lsu = 0
+            FS = OFS = "\t"
+            unique_trnas = 0
         }
-        \$3 ~ /5S/  { n_5s++  }
-        \$3 ~ /SSU/ { n_ssu++ }
-        \$3 ~ /LSU/ { n_lsu++ }
-        END { print bin, n_ssu, n_lsu, n_5s }
-        ' - >> ${prefix}.rrna_summary.tsv
+        {
+            trna_arr[\$5] = 1
+        }
+        END {
+            for (i in trna_arr) { unique_trnas++ }
+            delete trna_arr
+            print bin, FNR, unique_trnas
+        }
+        ' - >> ${prefix}.trna_summary.tsv
     done
 
     ${cleanup}

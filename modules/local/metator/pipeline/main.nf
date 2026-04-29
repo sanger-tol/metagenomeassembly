@@ -8,14 +8,14 @@ process METATOR_PIPELINE {
         : 'biocontainers/metator:1.3.10--py39h2de1943_0'}"
 
     input:
-    tuple val(meta), path(contigs), path(hic_input), path(depths)
+    tuple val(meta), path(contigs), path(hic_input, arity: '1..2'), path(depths)
     val hic_enzymes
 
     output:
-    tuple val(meta), path("bin_summary.txt"), emit: bin_summary
-    tuple val(meta), path("binning.txt"), emit: contig2bin
+    tuple val(meta), path("bin_summary.txt")   , emit: bin_summary
+    tuple val(meta), path("binning.txt")       , emit: contig2bin
     tuple val(meta), path("final_bins/*.fa.gz"), emit: bins
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('metator'), eval("metator -v"), topic: versions, emit: versions_metator
 
     when:
     task.ext.when == null || task.ext.when
@@ -27,12 +27,17 @@ process METATOR_PIPELINE {
     def depth_input = depths ? "--depth ${depths}" : ""
     def assembly_input = contigs =~ /\.gz$/ ? "${contigs.getBaseName()}" : contigs
     def gunzip = contigs =~ /\.gz$/ ? "gunzip -c ${contigs} > ${assembly_input}" : ""
+    def input = ""
+    if(hic_input.size() == 1) {
+        input = "--forward ${hic_input}"
+    } else if(hic_input.size() == 2) {
+        input = "--forward ${hic_input[0]} --reverse ${hic_input[1]}"
+    }
     """
     ${gunzip}
 
     metator pipeline \\
-        --forward ${hic_input[0]} \\
-        --reverse ${hic_input[1]} \\
+        ${input} \\
         --assembly ${assembly_input} \\
         ${enzyme_input} \\
         ${depth_input} \\
@@ -51,11 +56,6 @@ process METATOR_PIPELINE {
     find final_bins/ -name "*.fa" -exec gzip {} \\;
 
     rm -r final_bin_unscaffold
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        metator: \$( metator -v )
-    END_VERSIONS
     """
 
     stub:
@@ -65,10 +65,5 @@ process METATOR_PIPELINE {
     touch binning.txt
     mkdir bins
     echo "" | gzip > bins/${prefix}_metator_1.fa.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        metator: \$( metator -v )
-    END_VERSIONS
     """
 }

@@ -68,7 +68,7 @@ Mapping of HiFi reads to the assembly using [minimap2](https://github.com/lh3/mi
 
 ## Binning
 
-Binning of assembled contigs using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), [Bin3C](https://github.com/cerebis/bin3C) (Hi-C binning), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
+Binning of assembled contigs using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
 
 <details markdown="1">
 <summary>Output files</summary>
