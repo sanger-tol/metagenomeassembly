@@ -111,7 +111,7 @@ workflow READ_MAPPING {
             false
         )
 
-        ch_output_depths = RIPGREP.out.txt
+        ch_output_depths = FILTER_DEPTHS.out.txt
     } else {
         ch_output_depths = COVERM_CONTIG.out.coverage
     }
