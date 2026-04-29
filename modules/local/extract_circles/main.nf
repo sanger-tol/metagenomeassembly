@@ -12,7 +12,7 @@ process EXTRACT_CIRCLES {
     val(min_mag_length)
 
     output:
-    tuple val(meta), path("*.circles.fasta"), emit: circles
+    tuple val(meta), path("*.circles.fa.gz"), emit: circles
     tuple val(meta), path("*.linear.fasta") , emit: linear
     tuple val(meta), path("*.circles.list")    , emit: circles_list
     tuple val("${task.process}"), val('seqkit'), eval('seqkit version | sed "s/seqkit v//"'), emit: versions_seqkit, topic: versions
@@ -31,14 +31,15 @@ process EXTRACT_CIRCLES {
     }
     """
     seqkit grep -nrp "${regex}" ${fasta} |\\
-        seqkit seq -m ${min_mag_length} \\
-        > ${prefix}.circles.fasta
+        seqkit seq -m ${min_mag_length} |\\
+        bgzip -@4 \\
+        > ${prefix}.circles.fa.gz
 
     seqkit fx2tab \\
         --length \\
         --gc \\
         --name \\
-        ${prefix}.circles.fasta |\\
+        ${prefix}.circles.fa |\\
         awk '{ print \$1 }' \\
         > ${prefix}.circles.list
 

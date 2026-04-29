@@ -95,7 +95,6 @@ nextflow_pipeline {
             new File("${launchDir}/r226_mockup").deleteDir()
             new File("${launchDir}/CheckM2_database").deleteDir()
             new File("${launchDir}/genomad_db").deleteDir()
-            new File("${workDir}").deleteDir()
         }
 
     }
