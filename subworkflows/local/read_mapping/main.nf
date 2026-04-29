@@ -1,6 +1,6 @@
 include { COVERM_CONTIG             } from '../../../modules/nf-core/coverm/contig'
 include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/pairtools/parsesortfilter'
-include { RIPGREP                   } from '../../../modules/nf-core/ripgrep/main'
+include { RIPGREP as FILTER_DEPTHS  } from '../../../modules/nf-core/ripgrep/main'
 include { SAMTOOLS_FAIDX            } from '../../../modules/nf-core/samtools/faidx'
 
 include { CRAM_MAP_ILLUMINA_HIC     } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic'
@@ -94,7 +94,7 @@ workflow READ_MAPPING {
     // out of the coverage TSV
     //
     if(val_extract_circular_contigs) {
-        ch_ripgrep_input = COVERM_CONTIG.out.coverage
+        ch_filter_input = COVERM_CONTIG.out.coverage
             .combine(ch_filter_list, by: 0)
             .multiMap { meta, depth, filt ->
                 depth: [meta, depth]
@@ -104,10 +104,10 @@ workflow READ_MAPPING {
         //
         // Module: filter TSV with ripgrep -v
         //
-        RIPGREP(
-            ch_ripgrep_input.depth,
+        FILTER_DEPTHS(
+            ch_filter_input.depth,
             [],
-            ch_ripgrep_input.filt,
+            ch_filter_input.filt,
             false
         )
 
