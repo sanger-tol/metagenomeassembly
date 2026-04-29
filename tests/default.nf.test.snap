@@ -54,6 +54,9 @@
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
                 },
+                "FILTER_DEPTHS": {
+                    "ripgrep": "14.1.1"
+                },
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
                 },
@@ -121,9 +124,6 @@
                 },
                 "PYRODIGAL": {
                     "pyrodigal": "3.6.3"
-                },
-                "RIPGREP": {
-                    "ripgrep": "14.1.1"
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
