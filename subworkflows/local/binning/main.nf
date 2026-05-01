@@ -133,7 +133,7 @@ workflow BINNING {
         //
         ch_metator_inputs = ch_assemblies
             .combine(ch_hic_pairs, by: 0)
-            .combine(ch_hic_enzymes, by: 0, remainder: true)
+            .combine(ch_hic_enzymes, by: 0)
             .map { meta, asm, pairs, enzymes ->
                 def meta_new = meta + [enzymes: enzymes]
                 [meta_new, asm, pairs, []]
