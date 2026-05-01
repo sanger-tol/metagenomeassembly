@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Disable CheckM2 in all tests except the default test to save run time.
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) MaxBin2 is now disabled by default.
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) The `hic: cram: enzymes:` section of the samplesheet is deprecated - please supply enzymes as an optional comma-separated list of enzymes to `--hic_enzymes`.
+- [#97](https://github.com/sanger-tol/metagenomeassembly/pull/97/) Update to nf-core template version 4.0.2
+  - Note that this update removes the existing Teams and Slack notification functionality. If
+    you were using this functionality, please configure the
+    [nf-slack](https://github.com/seqeralabs/nf-slack) or [nf-teams](https://github.com/nvnieuwk/nf-teams) Nextflow plugins.
 
 ### `Removed`
 

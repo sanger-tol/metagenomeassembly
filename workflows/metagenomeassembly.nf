@@ -58,6 +58,7 @@ workflow METAGENOMEASSEMBLY {
     ch_gtdbtk_db // channel: gtdbtk db from params
     val_ar53_metadata // path: ar53 metadata file
     val_bac120_metadata // path: bac120 metadata file
+    outdir
 
     main:
     ch_versions = channel.empty()
@@ -242,16 +243,14 @@ workflow METAGENOMEASSEMBLY {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'metagenomeassembly_software_' + 'versions.yml',
+            storeDir: "${outdir}/pipeline_info",
+            name:  'metagenomeassembly_software_'  + 'versions.yml',
             sort: true,
-            newLine: true,
+            newLine: true
         )
-        .set { _ch_collated_versions }
-
     emit:
-    versions = ch_versions // channel: [ path(versions.yml) ]
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
