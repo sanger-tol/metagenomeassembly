@@ -7,6 +7,3 @@ hic:
   cram:
     - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/hic_sim3c/hic1.cram
     - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/hic_sim3c/hic2.cram
-  enzymes:
-    - DpnII
-    - HinfI

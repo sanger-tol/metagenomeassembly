@@ -17,7 +17,6 @@ workflow BINNING {
     ch_depths // channel: [[meta], depths_file]
     ch_bam // channel: [[meta], bam]
     ch_hic_pairs // channel: [[meta], bam]
-    ch_hic_enzymes // channel: [enz1, enz2], value
     val_extract_circular_contigs
     val_enable_metabat2
     val_enable_maxbin2
@@ -111,8 +110,14 @@ workflow BINNING {
     }
 
     if (val_enable_vamb) {
+        //
+        // Module: Convert depths TSV to format acceptable to VAMB
+        //
         GAWK_VAMB_DEPTHS(ch_depths, file("${projectDir}/bin/convert_depths_vamb.awk"), false)
 
+        //
+        // Module: Bin contigs with VAMB
+        //
         ch_vamb_input = ch_assemblies
             .combine(GAWK_VAMB_DEPTHS.out.output, by: 0)
             .map { meta, contigs, depths ->
@@ -133,20 +138,20 @@ workflow BINNING {
         //
         ch_metator_inputs = ch_assemblies
             .combine(ch_hic_pairs, by: 0)
-            .combine(ch_hic_enzymes, by: 0)
-            .map { meta, asm, pairs, enzymes ->
-                def meta_new = meta + [enzymes: enzymes]
-                [meta_new, asm, pairs, []]
+            .map { meta, asm, pairs ->
+                [meta, asm, pairs, []]
             }
 
         METATOR_PIPELINE(ch_metator_inputs)
 
+        //
+        // Module: Metator keeps the contig descriptions whereas all other binners drop them
+        // This causes problems downstream.
+        //
         FIX_METATOR_BINS(METATOR_PIPELINE.out.bins.transpose())
 
         ch_bins = ch_bins.mix(
-            FIX_METATOR_BINS.out.fastx.groupTuple(by: 0).map { meta, fasta ->
-                [meta  - meta.subMap("enzymes") + [binner: "metator"], fasta]
-            }
+            FIX_METATOR_BINS.out.fastx.groupTuple(by: 0).map { meta, fasta -> [meta + [binner: "metator"], fasta] }
         )
     }
 

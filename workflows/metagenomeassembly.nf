@@ -27,7 +27,6 @@ workflow METAGENOMEASSEMBLY {
     ch_long_reads // channel: pacbio read in from yaml
     ch_provided_assembly // channel: pre-built metagenome assembly, optional
     ch_hic_cram // channel: hic cram files from yaml, optional
-    ch_hic_enzymes // channel: hic enzyme list from yaml, optional
     val_assembler // string: assembler to use
     ch_genomad_db // file: genomad db from params
     val_enable_rrna_prediction // boolean: enable rrna prediction
@@ -119,7 +118,6 @@ workflow METAGENOMEASSEMBLY {
             READ_MAPPING.out.depths,
             READ_MAPPING.out.filtered_bam,
             READ_MAPPING.out.hic_pairs,
-            ch_hic_enzymes,
             val_extract_circular_contigs,
             val_enable_metabat2,
             val_enable_maxbin2,

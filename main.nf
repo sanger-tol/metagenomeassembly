@@ -30,7 +30,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     ch_pacbio_fasta // channel: pacbio fasta read in from --input
     ch_assembly // channel: pre-existing assembly read in from --input
     ch_hic_cram // channel: hic cram read in from --input
-    ch_hic_enzymes // channel: hic enzymes read in from --input
     val_assembler // string: assembler to use
     val_genomad_db // channel: genomad db from params.genomad_db
     val_enable_rrna_prediction // boolean: enable rrna prediction
@@ -72,7 +71,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         ch_pacbio_fasta,
         ch_assembly,
         ch_hic_cram,
-        ch_hic_enzymes,
         val_assembler,
         val_genomad_db,
         val_enable_rrna_prediction,
@@ -141,7 +139,6 @@ workflow {
         PIPELINE_INITIALISATION.out.pacbio_fasta,
         PIPELINE_INITIALISATION.out.assembly,
         PIPELINE_INITIALISATION.out.hic_cram,
-        PIPELINE_INITIALISATION.out.hic_enzymes,
         params.assembler,
         PIPELINE_INITIALISATION.out.genomad_db,
         params.enable_rrna_prediction,

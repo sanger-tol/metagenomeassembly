@@ -44,13 +44,13 @@ process VAMB_BIN {
         ${tax_input} \\
         ${args}
 
-    for bin in xyTesTing1_metamdbg_vamb/bins/*.fna; do
-        dir=\$(dirname "\$bin")
-        filename=\$(basename "\$bin" .fna)
-        mv "\$bin" "\$dir/xyTesTing1_metamdbg_vamb.\$filename.fa"
+    for file in ${prefix}/bins/*.fna; do
+        dir=\$(dirname "\$file")
+        base=\$(basename "\$file" .fna)
+        newname="\$dir/${prefix}.\$base.fa"
+        mv "\$file" "\$newname"
+        gzip "\$newname"
     done
-
-    find ${prefix}/bins -name "*.fa" -exec gzip {} \\;
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -66,8 +66,8 @@ process VAMB_BIN {
     """
     mkdir -p ${prefix}/bins
 
-    echo "" | gzip > ${prefix}/bins/1.fna.gz
-    echo "" | gzip > ${prefix}/bins/2.fna.gz
+    echo "" | gzip > ${prefix}/bins/1.fa.gz
+    echo "" | gzip > ${prefix}/bins/2.fa.gz
 
     touch ${prefix}/results_taxometer.tsv
     touch ${prefix}/predictor_model.pt

@@ -18,16 +18,27 @@ Changes in 'vamb/bin/main.nf':
          ${args}
  
 -    find ${prefix}/bins -name "*.fna" -exec gzip {} \\;
-+    for bin in xyTesTing1_metamdbg_vamb/bins/*.fna; do
-+        dir=\$(dirname "$bin")
-+        filename=\$(basename "$bin" .fna)
-+        mv "\$bin" "\$dir/xyTesTing1_metamdbg_vamb.\$filename.fa"
++    for file in ${prefix}/bins/*.fna; do
++        dir=\$(dirname "\$file")
++        base=\$(basename "\$file" .fna)
++        newname="\$dir/${prefix}.\$base.fa"
++        mv "\$file" "\$newname"
++        gzip "\$newname"
 +    done
-+
-+    find ${prefix}/bins -name "*.fa" -exec gzip {} \\;
  
      cat <<-END_VERSIONS > versions.yml
      "${task.process}":
+@@ -60,8 +66,8 @@
+     """
+     mkdir -p ${prefix}/bins
+ 
+-    echo "" | gzip > ${prefix}/bins/1.fna.gz
+-    echo "" | gzip > ${prefix}/bins/2.fna.gz
++    echo "" | gzip > ${prefix}/bins/1.fa.gz
++    echo "" | gzip > ${prefix}/bins/2.fa.gz
+ 
+     touch ${prefix}/results_taxometer.tsv
+     touch ${prefix}/predictor_model.pt
 
 'modules/nf-core/vamb/bin/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/vamb/bin/tests/nextflow.config' is unchanged

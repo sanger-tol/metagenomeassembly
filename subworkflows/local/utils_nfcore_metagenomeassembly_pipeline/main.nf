@@ -118,11 +118,6 @@ workflow PIPELINE_INITIALISATION {
         .filter { _meta, asm -> asm }
         .map { meta, asm -> [meta, file(asm, checkIfExists: true)] }
 
-    // collect as have to ensure this is a value channel
-    ch_hic_enzymes = READ_YAML.out.hic_enzymes
-        .filter { enzymes -> !enzymes.isEmpty() }
-        .collect()
-
     // Genomad database
     ch_genomad_db = channel.empty()
     if(val_genomad_db) {
@@ -161,7 +156,6 @@ workflow PIPELINE_INITIALISATION {
     pacbio_fasta        = ch_pacbio_fasta
     assembly            = ch_assembly
     hic_cram            = ch_hic_cram
-    hic_enzymes         = ch_hic_enzymes
     genomad_db          = ch_genomad_db
     rfam_rrna_cm        = ch_rfam_rrna_cm
     magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db

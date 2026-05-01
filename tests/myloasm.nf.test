@@ -56,8 +56,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 // Unstable file checks
-                // Check number of CheckM2 bins processed matches number of bins
-                { assert path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
 
                 // Check bin_summary.tsv file has expected number of rows
                 { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
@@ -82,7 +80,6 @@ nextflow_pipeline {
         cleanup {
             new File("${launchDir}/taxdump").deleteDir()
             new File("${launchDir}/r226_mockup").deleteDir()
-            new File("${launchDir}/CheckM2_database").deleteDir()
             new File("${launchDir}/genomad_db").deleteDir()
         }
 

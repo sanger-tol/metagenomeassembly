@@ -11,7 +11,7 @@ process SEQKIT_REPLACE {
     tuple val(meta), path(fastx)
 
     output:
-    tuple val(meta), path("*.fast*"), emit: fastx
+    tuple val(meta), path("*.fa*"), emit: fastx
     tuple val("${task.process}"), val('seqkit'), eval("seqkit version | sed 's/^.*v//'"), emit: versions_seqkit, topic: versions
 
     when:
