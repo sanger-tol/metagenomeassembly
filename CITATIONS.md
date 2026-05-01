@@ -121,6 +121,7 @@
 - [VAMB](https://github.com/RasmussenLab/vamb)
 
   > Kutuzova, S., Piera Líndez, P., Danielsen, L.S. et al. Improving metagenome binning by integrating intrinsic features and taxonomy. Nat Biotechnol (2026). https://doi.org/10.1038/s41587-026-03098-0
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
