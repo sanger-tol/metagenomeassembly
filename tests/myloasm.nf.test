@@ -49,9 +49,8 @@ nextflow_pipeline {
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
 
             // Count number of GTDB-Tk-appropriate bins
-            def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
-                .csv(sep: "\t")
-                .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
+            def n_gtdbtk_bins = path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv")
+                .csv(sep: "\t").size()
 
             assertAll(
                 { assert workflow.success },
