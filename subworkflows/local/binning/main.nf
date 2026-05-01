@@ -144,7 +144,9 @@ workflow BINNING {
         FIX_METATOR_BINS(METATOR_PIPELINE.out.bins.transpose())
 
         ch_bins = ch_bins.mix(
-            FIX_METATOR_BINS.out.fastx.groupTuple(by: 0).map { meta, fasta -> [meta + [binner: "metator"], fasta] }
+            FIX_METATOR_BINS.out.fastx.groupTuple(by: 0).map { meta, fasta ->
+                [meta  - meta.subMap("enzymes") + [binner: "metator"], fasta]
+            }
         )
     }
 
