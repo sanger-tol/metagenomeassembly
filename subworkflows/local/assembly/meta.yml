@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "ASSEMBLY"
+description: Raw assembly of metagenomic long reads
+keywords:
+  - assembly
+  - de novo
+  - long reads
+  - pacbio
+  - ont
+components:
+  - metamdbg/asm
+input:
+  - ch_hifi_reads:
+      type: file
+      description: |
+        PacBio hifi reads for assembly.
+
+        Structure: [meta, [reads]]
+output:
+  - assemblies:
+      type: file
+      description: |
+        Final long read assemblies in FASTA format.
+
+        Structure: [meta, assembly]
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

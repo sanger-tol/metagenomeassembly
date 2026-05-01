@@ -1,0 +1,77 @@
+process GENOMAD_ENDTOEND {
+    tag "${meta.id}"
+    label 'process_high'
+
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/9c/9ce142cdc455bfd9d969463e057da9ee362f7274e6c9fbeb0381c0e3234cae89/data'
+        : 'community.wave.seqera.io/library/genomad:1.12.0--17634a7f0b465d30'}"
+
+    input:
+    tuple val(meta), path(fasta)
+    path genomad_db
+
+    output:
+    tuple val(meta), path("*_aggregated_classification/*_aggregated_classification.tsv")   , emit: aggregated_classification, optional: true
+    tuple val(meta), path("*_marker_classification/*_marker_classification.tsv")           , emit: marker_classification, optional: true
+    tuple val(meta), path("*_annotate/*_taxonomy.tsv")                                     , emit: taxonomy
+    tuple val(meta), path("*_find_proviruses/*_provirus.tsv")                              , emit: provirus
+    tuple val(meta), path("*_score_calibration/*_compositions.tsv")                        , emit: compositions, optional: true
+    tuple val(meta), path("*_score_calibration/*_calibrated_aggregated_classification.tsv"), emit: calibrated_classification, optional: true
+    tuple val(meta), path("*_summary/*_plasmid.fna.gz")                                    , emit: plasmid_fasta
+    tuple val(meta), path("*_summary/*_plasmid_genes.tsv")                                 , emit: plasmid_genes
+    tuple val(meta), path("*_summary/*_plasmid_proteins.faa.gz")                           , emit: plasmid_proteins
+    tuple val(meta), path("*_summary/*_plasmid_summary.tsv")                               , emit: plasmid_summary
+    tuple val(meta), path("*_summary/*_virus.fna.gz")                                      , emit: virus_fasta
+    tuple val(meta), path("*_summary/*_virus_genes.tsv")                                   , emit: virus_genes
+    tuple val(meta), path("*_summary/*_virus_proteins.faa.gz")                             , emit: virus_proteins
+    tuple val(meta), path("*_summary/*_virus_summary.tsv")                                 , emit: virus_summary
+    tuple val("${task.process}"), val('genomad'), eval("genomad --version 2>&1 | sed 's/^.*geNomad, version //; s/ .*//'"), topic: versions, emit: versions_genomad
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    def args = task.ext.args ?: ''
+    """
+    genomad \\
+        end-to-end \\
+        ${fasta} \\
+        ./ \\
+        ${genomad_db} \\
+        --threads ${task.cpus} \\
+        ${args}
+
+    gzip ./**/*.fna
+    gzip ./**/*.faa
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def filename = "${fasta}"[0..<"${fasta}".lastIndexOf('.')]
+    """
+    echo ${args}
+
+    mkdir ${filename}_aggregated_classification
+    touch ${filename}_aggregated_classification/${filename}_aggregated_classification.tsv
+    mkdir ${filename}_annotate
+    touch ${filename}_annotate/${filename}_taxonomy.tsv
+    mkdir ${filename}_find_proviruses
+    touch ${filename}_find_proviruses/${filename}_provirus.tsv
+    mkdir ${filename}_marker_classification
+    touch ${filename}_marker_classification/${filename}_marker_classification.tsv
+    mkdir ${filename}_nn_classification
+    mkdir ${filename}_score_calibration
+    touch ${filename}_score_calibration/${filename}_calibrated_aggregated_classification.tsv
+    touch ${filename}_score_calibration/${filename}_compositions.tsv
+    mkdir ${filename}_summary
+    echo "" | gzip > ${filename}_summary/${filename}_plasmid.fna.gz
+    touch ${filename}_summary/${filename}_plasmid_genes.tsv
+    echo "" | gzip > ${filename}_summary/${filename}_plasmid_proteins.faa.gz
+    touch ${filename}_summary/${filename}_plasmid_summary.tsv
+    echo "" | gzip > ${filename}_summary/${filename}_virus.fna.gz
+    touch ${filename}_summary/${filename}_virus_genes.tsv
+    echo "" | gzip > ${filename}_summary/${filename}_virus_proteins.faa.gz
+    touch ${filename}_summary/${filename}_virus_summary.tsv
+    """
+}
