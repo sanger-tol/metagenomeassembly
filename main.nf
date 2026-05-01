@@ -59,6 +59,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     ch_gtdbtk_db // channel: gtdbtk db from --params.gtdbtk_db
     val_ar53_metadata // path: gtdbtk ar53 metadata
     val_bac120_metadata // path: gtdbtk bac120 metadata
+    outdir
 
     main:
 
@@ -98,6 +99,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         ch_gtdbtk_db,
         val_ar53_metadata,
         val_bac120_metadata,
+        outdir
     )
 }
 /*
@@ -164,6 +166,7 @@ workflow {
         PIPELINE_INITIALISATION.out.gtdbtk_db,
         params.gtdb_ar53_metadata,
         params.gtdb_bac120_metadata,
+        params.outdir
     )
 
     //
@@ -175,6 +178,5 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
     )
 }
