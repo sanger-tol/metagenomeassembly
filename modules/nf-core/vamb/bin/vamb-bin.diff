@@ -1,0 +1,35 @@
+Changes in component 'nf-core/vamb/bin'
+'modules/nf-core/vamb/bin/environment.yml' is unchanged
+'modules/nf-core/vamb/bin/meta.yml' is unchanged
+Changes in 'vamb/bin/main.nf':
+--- modules/nf-core/vamb/bin/main.nf
++++ modules/nf-core/vamb/bin/main.nf
+@@ -11,7 +11,7 @@
+     tuple val(meta), path(assembly), path(abundance_tsv), path(bams, stageAs: "bams/*"), path(taxonomy)
+ 
+     output:
+-    tuple val(meta), path("${prefix}/bins/*.fna.gz")             , emit: bins             , optional: true
++    tuple val(meta), path("${prefix}/bins/*.fa.gz")              , emit: bins             , optional: true
+     tuple val(meta), path("${prefix}/vae*_clusters_metadata.tsv"), emit: clusters_metadata
+     tuple val(meta), path("${prefix}/vae*_clusters_split.tsv")   , emit: clusters_split   , optional: true
+     tuple val(meta), path("${prefix}/vae*_clusters_unsplit.tsv") , emit: clusters_unsplit
+@@ -44,7 +44,13 @@
+         ${tax_input} \\
+         ${args}
+ 
+-    find ${prefix}/bins -name "*.fna" -exec gzip {} \\;
++    for bin in xyTesTing1_metamdbg_vamb/bins/*.fna; do
++        dir=\$(dirname "$bin")
++        filename=\$(basename "$bin" .fna)
++        mv "\$bin" "\$dir/xyTesTing1_metamdbg_vamb.\$filename.fa"
++    done
++
++    find ${prefix}/bins -name "*.fa" -exec gzip {} \\;
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+'modules/nf-core/vamb/bin/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/vamb/bin/tests/nextflow.config' is unchanged
+'modules/nf-core/vamb/bin/tests/main.nf.test' is unchanged
+************************************************************

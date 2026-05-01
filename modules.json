@@ -15,6 +15,11 @@
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
+                    "comebin/runcomebin": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "coverm/contig": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
@@ -91,6 +96,11 @@
                         "git_sha": "d98a40aa72dcab8e7aebb9a3873c5e1ada286779",
                         "installed_by": ["modules"]
                     },
+                    "metator/pipeline": {
+                        "branch": "master",
+                        "git_sha": "f8a9948c6768a730936a8c8a2abc80f705495cf2",
+                        "installed_by": ["modules"]
+                    },
                     "minimap2/index": {
                         "branch": "master",
                         "git_sha": "135d883a43b1a2324b4112cd270cf22e20835533",
@@ -104,11 +114,6 @@
                     "pyrodigal": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
-                    },
-                    "ripgrep": {
-                        "branch": "master",
-                        "git_sha": "8847756eea7f6711e6ed33c7d1dc26b16b1d9b6a",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -131,6 +136,16 @@
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["cram_map_illumina_hic"]
                     },
+                    "semibin/singleeasybin": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
+                    "seqkit/replace": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "seqkit/split2": {
                         "branch": "master",
                         "git_sha": "f03a30b46ebe59ba12b79115f05ab545d5ca2e5e",
@@ -140,6 +155,12 @@
                         "branch": "master",
                         "git_sha": "0c739827833fdece07eb80618fd085a9a8992406",
                         "installed_by": ["modules"]
+                    },
+                    "vamb/bin": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/vamb/bin/vamb-bin.diff"
                     }
                 }
             },

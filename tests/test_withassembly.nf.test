@@ -18,16 +18,6 @@ nextflow_pipeline {
                 throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
             }
 
-            println "Downloading CheckM2 database..."
-            def checkm2_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz"
-            def checkm2_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
-            def checkm2_proc = checkm2_command.execute()
-            checkm2_proc.waitFor()
-
-            if (checkm2_proc.exitValue() != 0) {
-                throw new RuntimeException("Error - failed to download CheckM2 db: ${checkm2_proc.err.text}")
-            }
-
             println "Downloading geNomad database..."
             def genomad_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/genomad_db_v1.9.tar.gz"
             def genomad_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${genomad_db_url} | tar xzf - -C ${launchDir}"]
@@ -43,7 +33,6 @@ nextflow_pipeline {
             params {
                 outdir                 = "$outputDir"
                 gtdbtk_db              = "${launchDir}/r226_mockup"
-                checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
                 genomad_db             = "${launchDir}/genomad_db"
                 gtdbtk_use_full_tree   = true
                 gtdbtk_skip_ani_screen = true

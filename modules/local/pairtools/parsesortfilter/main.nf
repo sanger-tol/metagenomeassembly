@@ -23,7 +23,7 @@ process PAIRTOOLS_PARSESORTFILTER {
     def args2 = task.ext.args2 ?: ''
     def args3 = task.ext.args3 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def filter_cmd = filter_list ? "grep -vf ${filter_list} |" : ""
+    def filter_cmd = filter_list ? "grep -vwf ${filter_list} |" : ""
     """
     samtools collate -@${task.cpus} ${args} ${bam} -O |\
     pairtools \\
