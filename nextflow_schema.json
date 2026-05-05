@@ -178,7 +178,7 @@
                     "default": true,
                     "description": "Enable binning with VAMB."
                 },
-                "enable_semibin": {
+                "enable_semibin2": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with Semibin."
