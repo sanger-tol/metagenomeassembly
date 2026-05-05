@@ -50,12 +50,6 @@
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
                 },
-                "GAWK_MAGSCOT_PROCESS_CONTIG2BIN": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_PROCESS_HMM_TBLOUT": {
-                    "gawk": "5.3.1"
-                },
                 "GAWK_RENAME_BINS": {
                     "gawk": "5.3.1"
                 },
@@ -80,15 +74,9 @@
                 "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
                     "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
-                "HMMER_HMMSEARCH": {
-                    "hmmer": 3.4
-                },
                 "INFERNAL_CMSEARCH": {
                     "gzip": 1.12,
                     "infernal": "1.1.5"
-                },
-                "MAGSCOT_MAGSCOT": {
-                    "magscot": 1.1
                 },
                 "METABAT2_METABAT2": {
                     "metabat2": 2.17
@@ -144,7 +132,6 @@
             [
                 "contig2bin/xyTesTing1_myloasm_circular_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_dastool_contig2bin.tsv",
-                "contig2bin/xyTesTing1_myloasm_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_semibin_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_vamb_contig2bin.tsv",
@@ -158,9 +145,6 @@
                 "log/dastool/xyTesTing1_myloasm_dastool_DASTool_contig2bin.tsv",
                 "log/dastool/xyTesTing1_myloasm_dastool_DASTool_summary.tsv",
                 "log/dastool/xyTesTing1_myloasm_dastool_allBins.eval",
-                "log/magscot/xyTesTing1_myloasm_magscot.MAGScoT.refined.contig_to_bin.out",
-                "log/magscot/xyTesTing1_myloasm_magscot.MAGScoT.refined.out",
-                "log/magscot/xyTesTing1_myloasm_magscot.MAGScoT.scores.out",
                 "log/metabat2/xyTesTing1_myloasm_metabat2.tsv.gz",
                 "log/semibin/xyTesTing1_myloasm_semibin/bins_info.tsv",
                 "log/semibin/xyTesTing1_myloasm_semibin/contig_bins.tsv",
@@ -176,7 +160,6 @@
                 "qc/xyTesTing1_checkm2_report.tsv",
                 "qc/xyTesTing1_myloasm.circular.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_myloasm.dastool.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_myloasm.magscot.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_myloasm.metabat2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_myloasm.semibin.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_myloasm.vamb.minimap2.hifi.cov.stats.depth.tsv",
@@ -186,9 +169,6 @@
                 "qc/xyTesTing1_myloasm_dastool.rrna_summary.tsv",
                 "qc/xyTesTing1_myloasm_dastool.stats.tsv",
                 "qc/xyTesTing1_myloasm_dastool.trna_summary.tsv",
-                "qc/xyTesTing1_myloasm_magscot.rrna_summary.tsv",
-                "qc/xyTesTing1_myloasm_magscot.stats.tsv",
-                "qc/xyTesTing1_myloasm_magscot.trna_summary.tsv",
                 "qc/xyTesTing1_myloasm_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_myloasm_metabat2.stats.tsv",
                 "qc/xyTesTing1_myloasm_metabat2.trna_summary.tsv",
