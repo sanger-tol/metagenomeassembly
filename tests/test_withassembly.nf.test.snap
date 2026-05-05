@@ -12,11 +12,11 @@
                     "R": "4.4.2",
                     "metator": "2.0.0"
                 },
-                "BWAMEM2_INDEX": {
-                    "bwamem2": "2.2.1"
-                },
                 "CHECKM2_PREDICT": {
                     "checkm2": "1.1.0"
+                },
+                "COMEBIN_RUNCOMEBIN": {
+                    "comebin": "1.0.4"
                 },
                 "CONTIG2BINTOFASTA": {
                     "seqkit": "2.9.0"
@@ -26,13 +26,6 @@
                 },
                 "COVERM_GENOME": {
                     "coverm": "0.7.0"
-                },
-                "CRAMALIGN_BWAMEM2ALIGNHIC": {
-                    "bwamem2": "2.2.1",
-                    "samtools": "1.22.1"
-                },
-                "CRAMALIGN_GENCRAMCHUNKS": {
-                    "cramchunks": "1.1.0"
                 },
                 "CSVTK_CONCAT": {
                     "csvtk": "0.31.0"
@@ -54,16 +47,10 @@
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
                 },
-                "FILTER_DEPTHS": {
-                    "ripgrep": "14.1.1"
-                },
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
                 },
                 "GAWK_MAGSCOT_PROCESS_CONTIG2BIN": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_MAXBIN2_DEPTHS": {
                     "gawk": "5.3.1"
                 },
                 "GAWK_PROCESS_HMM_TBLOUT": {
@@ -103,21 +90,11 @@
                 "MAGSCOT_MAGSCOT": {
                     "magscot": 1.1
                 },
-                "MAXBIN2": {
-                    "maxbin2": "2.2.7"
-                },
                 "METABAT2_METABAT2": {
                     "metabat2": 2.17
                 },
-                "METATOR_PIPELINE": {
-                    "metator": "1.3.10"
-                },
                 "MINIMAP2_INDEX": {
                     "minimap2": "2.30-r1287"
-                },
-                "PAIRTOOLS_PARSESORTFILTER": {
-                    "pairtools": "1.1.3",
-                    "samtools": "1.23.1"
                 },
                 "PYRODIGAL": {
                     "pyrodigal": "3.6.3"
@@ -125,20 +102,8 @@
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
                 },
-                "SAMTOOLS_INDEX": {
-                    "samtools": "1.23.1"
-                },
                 "SAMTOOLS_MERGE": {
                     "samtools": "1.23.1"
-                },
-                "SAMTOOLS_MERGEDUP": {
-                    "samtools": "1.23.1"
-                },
-                "SAMTOOLS_SPLITHEADER": {
-                    "samtools": "1.23.1"
-                },
-                "SPLIT_CIRCLES": {
-                    "seqkit": "2.13.0"
                 },
                 "TRNASCANSE": {
                     "tRNAscan-SE": "2.0.12"
@@ -155,7 +120,6 @@
                 "annotation/xyTesTing1_metamdbg.gff.gz",
                 "annotation/xyTesTing1_metamdbg.score.gz",
                 "mapping",
-                "mapping/xyTesTing1_metamdbg.minimap2.hifi.filtered.txt",
                 "mapping/xyTesTing1_metamdbg.pacbio.bam",
                 "qc",
                 "qc/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
@@ -163,12 +127,14 @@
                 "qc/xyTesTing1_metamdbg.stats.tsv"
             ],
             [
-                "contig2bin/xyTesTing1_metamdbg_circular_contig2bin.tsv",
+                "contig2bin/xyTesTing1_metamdbg_comebin_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
+                "log/comebin/xyTesTing1_metamdbg_comebin/comebin.log",
+                "log/comebin/xyTesTing1_metamdbg_comebin/comebin_res.tsv",
+                "log/comebin/xyTesTing1_metamdbg_comebin/covembeddings.tsv",
+                "log/comebin/xyTesTing1_metamdbg_comebin/embeddings.tsv",
                 "log/dastool/xyTesTing1_metamdbg.faa.all.b6",
                 "log/dastool/xyTesTing1_metamdbg.faa.archaea.scg",
                 "log/dastool/xyTesTing1_metamdbg.faa.bacteria.scg",
@@ -182,40 +148,24 @@
                 "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.contig_to_bin.out",
                 "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.out",
                 "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.scores.out",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.log.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker_of_each_bin.tar.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.noclass.gz",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.summary",
-                "log/maxbin2/xyTesTing1_metamdbg_maxbin2.tooshort.gz",
                 "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
-                "log/metator/bin_summary.txt",
-                "log/metator/binning.txt",
                 "qc/xyTesTing1_checkm2_report.tsv",
-                "qc/xyTesTing1_metamdbg.circular.minimap2.hifi.cov.stats.depth.tsv",
+                "qc/xyTesTing1_metamdbg.comebin.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.dastool.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_metamdbg.maxbin2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_metamdbg_circular.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_circular.stats.tsv",
-                "qc/xyTesTing1_metamdbg_circular.trna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_comebin.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_comebin.stats.tsv",
+                "qc/xyTesTing1_metamdbg_comebin.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.stats.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
                 "qc/xyTesTing1_metamdbg_magscot.trna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.stats.tsv",
-                "qc/xyTesTing1_metamdbg_maxbin2.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.trna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_metator.stats.tsv",
-                "qc/xyTesTing1_metamdbg_metator.trna_summary.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
                 "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
@@ -234,7 +184,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-04-28T18:14:44.199168256",
+        "timestamp": "2026-05-05T13:12:10.340879022",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
