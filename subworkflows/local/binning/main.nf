@@ -21,7 +21,7 @@ workflow BINNING {
     val_enable_metabat2
     val_enable_maxbin2
     val_enable_comebin
-    val_enable_semibin
+    val_enable_semibin2
     val_enable_vamb
     val_enable_metator
 
@@ -94,7 +94,7 @@ workflow BINNING {
         )
     }
 
-    if (val_enable_semibin) {
+    if (val_enable_semibin2) {
         //
         // Module: Bin assembly using Semibin
         //

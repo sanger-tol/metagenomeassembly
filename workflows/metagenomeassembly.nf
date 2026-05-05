@@ -40,7 +40,7 @@ workflow METAGENOMEASSEMBLY {
     val_enable_metabat2 // boolean: enable metabat2?
     val_enable_maxbin2 // boolean: enable maxbin2?
     val_enable_comebin // boolean: enable comebin?
-    val_enable_semibin // boolean: enable semibin?
+    val_enable_semibin2 // boolean: enable semibin?
     val_enable_vamb // boolean: enable vamb?
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
@@ -123,7 +123,7 @@ workflow METAGENOMEASSEMBLY {
             val_enable_metabat2,
             val_enable_maxbin2,
             val_enable_comebin,
-            val_enable_semibin,
+            val_enable_semibin2,
             val_enable_vamb,
             val_enable_metator,
         )

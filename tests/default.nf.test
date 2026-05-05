@@ -75,6 +75,9 @@ nextflow_pipeline {
                 // Check GTDB-Tk output has expected number of rows
                 { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
 
+                // Check group_summary.tsv file has expected number of rows
+                { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 4 },
+
                 // Check files with stable names
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions

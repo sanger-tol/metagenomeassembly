@@ -43,6 +43,7 @@ nextflow_pipeline {
             params {
                 outdir                 = "$outputDir"
                 gtdbtk_db              = "${launchDir}/r226_mockup"
+                checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
                 genomad_db             = "${launchDir}/genomad_db"
                 gtdbtk_use_full_tree   = true
                 gtdbtk_skip_ani_screen = true
@@ -74,6 +75,9 @@ nextflow_pipeline {
 
                 // Check GTDB-Tk output has expected number of rows
                 { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
+
+                // Check group_summary.tsv file has expected number of rows
+                { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 2 },
 
                 // Check files with stable names
                 { assert snapshot(

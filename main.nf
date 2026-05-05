@@ -43,7 +43,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_enable_metabat2 // boolean: enable metabat2?
     val_enable_maxbin2 // boolean: enable maxbin2?
     val_enable_comebin // boolean: enable comebin?
-    val_enable_semibin // boolean: enable semibin?
+    val_enable_semibin2 // boolean: enable semibin?
     val_enable_vamb // boolean: enable vamb?
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
@@ -85,7 +85,7 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_enable_metabat2,
         val_enable_maxbin2,
         val_enable_comebin,
-        val_enable_semibin,
+        val_enable_semibin2,
         val_enable_vamb,
         val_enable_metator,
         val_hic_aligner,
@@ -154,7 +154,7 @@ workflow {
         params.enable_metabat2,
         params.enable_maxbin2,
         params.enable_comebin,
-        params.enable_semibin,
+        params.enable_semibin2,
         params.enable_vamb,
         params.enable_metator,
         params.hic_aligner,
