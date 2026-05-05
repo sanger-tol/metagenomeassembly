@@ -27,7 +27,6 @@ workflow METAGENOMEASSEMBLY {
     ch_long_reads // channel: pacbio read in from yaml
     ch_provided_assembly // channel: pre-built metagenome assembly, optional
     ch_hic_cram // channel: hic cram files from yaml, optional
-    ch_hic_enzymes // channel: hic enzyme list from yaml, optional
     val_assembler // string: assembler to use
     ch_genomad_db // file: genomad db from params
     val_enable_rrna_prediction // boolean: enable rrna prediction
@@ -40,6 +39,9 @@ workflow METAGENOMEASSEMBLY {
     val_extract_circular_contigs // boolean: extract circular contigs?
     val_enable_metabat2 // boolean: enable metabat2?
     val_enable_maxbin2 // boolean: enable maxbin2?
+    val_enable_comebin // boolean: enable comebin?
+    val_enable_semibin2 // boolean: enable semibin?
+    val_enable_vamb // boolean: enable vamb?
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
@@ -109,17 +111,20 @@ workflow METAGENOMEASSEMBLY {
         )
 
         //
-        // SUBWORKFLOW: Bin the assembly using binning tools
+        // Subworkflow: Bin the assembly using binning tools
         //
         BINNING(
             ch_assemblies_to_bin,
             ASSEMBLY.out.circular_contigs,
             READ_MAPPING.out.depths,
+            READ_MAPPING.out.filtered_bam,
             READ_MAPPING.out.hic_pairs,
-            ch_hic_enzymes,
             val_extract_circular_contigs,
             val_enable_metabat2,
             val_enable_maxbin2,
+            val_enable_comebin,
+            val_enable_semibin2,
+            val_enable_vamb,
             val_enable_metator,
         )
         ch_versions = ch_versions.mix(BINNING.out.versions)
@@ -151,7 +156,7 @@ workflow METAGENOMEASSEMBLY {
                 ch_bins,
                 ch_contig2bin,
                 ASSEMBLY.out.circles_list,
-                READ_MAPPING.out.pacbio_bam,
+                READ_MAPPING.out.full_bam,
                 ch_checkm2_db,
                 ASSEMBLY_QC.out.trna_summary,
                 ASSEMBLY_QC.out.rrna_summary,

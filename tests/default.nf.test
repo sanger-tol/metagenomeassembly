@@ -76,7 +76,6 @@ nextflow_pipeline {
                 { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
 
                 // Check group_summary.tsv file has expected number of rows
-                // (17 if GTDB-Tk not run - 6 otherwise)
                 { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 6 },
 
                 // Check files with stable names

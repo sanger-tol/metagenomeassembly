@@ -11,11 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Circular contigs above a given size are now treated as complete genomes. This can be disabled by setting `--extract_circular_contigs false`.
   - The threshold for circular contig minimum size can be configured with `--minimum_circular_contig_length`
 - Hi-C BAM is now converted to a pairs file, which is fed into Metator
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Add three new binners - ComeBin, SemiBin2, and VAMB.
 
 ### `Fixed`
 
 - [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Remove all references to `params` outside the entry subworkflow (by @prototaxites)
 - [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) tRNAscan-SE now runs once per assembly rather than for each bin. The results are aggregated as with the rRNA results (by @prototaxites)
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) MaxBin2 is now disabled by default.
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) The `hic: cram: enzymes:` section of the samplesheet is deprecated - please supply enzymes as an optional comma-separated list of enzymes to `--hic_enzymes`.
 - [#97](https://github.com/sanger-tol/metagenomeassembly/pull/97/) Update to nf-core template version 4.0.2
   - Note that this update removes the existing Teams and Slack notification functionality. If
     you were using this functionality, please configure the

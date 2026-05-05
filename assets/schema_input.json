@@ -36,17 +36,7 @@
                         "exists": true
                     },
                     "uniqueItems": true
-                },
-                "enzymes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "uniqueItems": true
                 }
-            },
-            "dependentRequired": {
-                "cram": ["enzymes"]
             }
         },
         "assembly": {

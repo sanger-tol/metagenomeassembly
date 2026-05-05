@@ -55,7 +55,7 @@
         "assembly_qc_options": {
             "title": "Assembly QC options",
             "type": "object",
-            "description": "",
+            "description": "Options controlling assembly QC.",
             "default": "",
             "properties": {
                 "enable_rrna_prediction": {
@@ -95,13 +95,18 @@
         "read_mapping_options": {
             "title": "Read mapping options",
             "type": "object",
-            "description": "",
+            "description": "Options controlling the mapping of reads to the assembly for coverage estimation or Hi-C contacts.",
             "default": "",
             "properties": {
                 "long_read_mapping_reads_per_chunk": {
                     "type": "integer",
                     "default": 1000000,
                     "description": "When mapping long reads, how many long reads to map to the assembly in a single chunk."
+                },
+                "minimum_hifi_perc_identity": {
+                    "type": "integer",
+                    "default": 99,
+                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
                 },
                 "hic_aligner": {
                     "type": "string",
@@ -134,10 +139,25 @@
                     "default": true,
                     "description": "Enable binning of metagenomes into genome bins."
                 },
+                "minimum_contig_size": {
+                    "type": "integer",
+                    "default": 3000,
+                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
+                },
+                "minimum_bin_size": {
+                    "type": "integer",
+                    "default": 150000,
+                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 but not Metator or MaxBin2."
+                },
                 "extract_circular_contigs": {
                     "type": "boolean",
                     "default": true,
                     "description": "Extract circular contigs and treat them as bins."
+                },
+                "minimum_circular_contig_length": {
+                    "type": "integer",
+                    "default": 250000,
+                    "description": "The minimum length of a circular contig required to be treated as a bin."
                 },
                 "enable_metabat2": {
                     "type": "boolean",
@@ -146,33 +166,36 @@
                 },
                 "enable_maxbin2": {
                     "type": "boolean",
-                    "default": true,
                     "description": "Enable binning with MaxBin2."
+                },
+                "enable_comebin": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Comebin."
+                },
+                "enable_vamb": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with VAMB."
+                },
+                "enable_semibin2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Semibin."
+                },
+                "semibin_environment_model": {
+                    "type": "string",
+                    "default": "global",
+                    "description": "Pre-trained model to use with semibin for binning. Defaults to \"global\", see the SemiBin2 docs for full details: https://semibin.readthedocs.io/en/latest/usage/"
                 },
                 "enable_metator": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with MetaTor."
                 },
-                "minimum_circular_contig_length": {
-                    "type": "integer",
-                    "default": 300000,
-                    "description": "The minimum length of a circular contig required to be treated as a bin."
-                },
-                "minimum_contig_size": {
-                    "type": "integer",
-                    "default": 3000,
-                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
-                },
-                "minimum_hifi_perc_identity": {
-                    "type": "integer",
-                    "default": 99,
-                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
-                },
-                "minimum_bin_size": {
-                    "type": "integer",
-                    "default": 150000,
-                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 but not Metator or MaxBin2."
+                "hic_enzymes": {
+                    "type": "string",
+                    "description": "A comma-separated list of Hi-C enzymes to use for binning with MetaTOR."
                 }
             }
         },

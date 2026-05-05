@@ -1,6 +1,6 @@
 include { COVERM_CONTIG             } from '../../../modules/nf-core/coverm/contig'
+include { FILTER_BAM                } from '../../../modules/local/filter_bam'
 include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/pairtools/parsesortfilter'
-include { RIPGREP as FILTER_DEPTHS  } from '../../../modules/nf-core/ripgrep/main'
 include { SAMTOOLS_FAIDX            } from '../../../modules/nf-core/samtools/faidx'
 
 include { CRAM_MAP_ILLUMINA_HIC     } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic'
@@ -79,45 +79,36 @@ workflow READ_MAPPING {
     )
 
     //
+    // Logic: if we have removed circular contigs from binning, strip them
+    // out of the coverage TSV
+    //
+    if(val_extract_circular_contigs) {
+        ch_filter_input = FASTX_MAP_LONG_READS.out.bam.combine(ch_filter_list, by: 0)
+
+        //
+        // Module: filter unwanted references from bam
+        //
+        FILTER_BAM(ch_filter_input)
+
+        ch_depths_bam = FILTER_BAM.out.bam
+    } else {
+        ch_depths_bam = FASTX_MAP_LONG_READS.out.bam
+    }
+
+    //
     // Module: Calculate per-contig coverage using coverm
     //
     COVERM_CONTIG(
-        FASTX_MAP_LONG_READS.out.bam,
+        ch_depths_bam,
         [[], []],
         true,
         false,
         false
     )
 
-    //
-    // Logic: if we have removed circular contigs from binning, strip them
-    // out of the coverage TSV
-    //
-    if(val_extract_circular_contigs) {
-        ch_filter_input = COVERM_CONTIG.out.coverage
-            .combine(ch_filter_list, by: 0)
-            .multiMap { meta, depth, filt ->
-                depth: [meta, depth]
-                filt: filt
-            }
-
-        //
-        // Module: filter TSV with ripgrep -v
-        //
-        FILTER_DEPTHS(
-            ch_filter_input.depth,
-            [],
-            ch_filter_input.filt,
-            false
-        )
-
-        ch_output_depths = FILTER_DEPTHS.out.txt
-    } else {
-        ch_output_depths = COVERM_CONTIG.out.coverage
-    }
-
     emit:
-    pacbio_bam = FASTX_MAP_LONG_READS.out.bam
-    hic_pairs  = PAIRTOOLS_PARSESORTFILTER.out.pairs
-    depths     = ch_output_depths
+    full_bam     = FASTX_MAP_LONG_READS.out.bam
+    filtered_bam = ch_depths_bam
+    hic_pairs    = PAIRTOOLS_PARSESORTFILTER.out.pairs
+    depths       = COVERM_CONTIG.out.coverage
 }

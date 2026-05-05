@@ -26,6 +26,10 @@
 
   > Chklovski, A., Parks, D.H., Woodcroft, B.J., Tyson, G.W., 2023. CheckM2: a rapid, scalable and accurate tool for assessing microbial genome quality using machine learning. Nat Methods 20, 1203–1212. https://doi.org/10.1038/s41592-023-01940-w
 
+- [ComeBin](https://github.com/ziyewang/COMEBin)
+
+  > Wang, Z., You, R., Han, H. et al. Effective binning of metagenomic contigs using contrastive multi-view representation learning. Nat Commun 15, 585 (2024). https://doi.org/10.1038/s41467-023-44290-z
+
 - [Coverm](https://github.com/wwood/CoverM)
 
   > Aroney, S.T.N., Newell, R.J.P., Nissen, J.N., Camargo, A.P., Tyson, G.W., Woodcroft, B.J., 2025. CoverM: Read alignment statistics for metagenomics. https://doi.org/10.48550/arXiv.2501.11217
@@ -102,9 +106,9 @@
 
   > Shen, W., Sipos, B., Zhao, L., 2024. SeqKit2: A Swiss army knife for sequence and alignment processing. iMeta 3, e191. https://doi.org/10.1002/imt2.191
 
-- [staden-io-lib](https://github.com/jkbonfield/io_lib)
+- [SemiBin2](https://github.com/BigDataBiology/SemiBin)
 
-  > Bonfield, J., 2024. jkbonfield/io_lib (https://github.com/jkbonfield/io_lib)
+  > Pan S, Zhao XM, Coelho LP. SemiBin2: self-supervised contrastive learning leads to better MAGs for short- and long-read sequencing. Bioinformatics. 2023 Jun 30;39(39 Suppl 1):i21-i29. doi: 10.1093/bioinformatics/btad209. PMID: 37387171; PMCID: PMC10311329.
 
 - [tidyverse](https://www.tidyverse.org/)
 
@@ -113,6 +117,10 @@
 - [tRNAScan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE)
 
   > Chan, P.P., Lin, B.Y., Mak, A.J., Lowe, T.M., 2021. tRNAscan-SE 2.0: improved detection and functional classification of transfer RNA genes. Nucleic Acids Research 49, 9077–9096. https://doi.org/10.1093/nar/gkab688
+
+- [VAMB](https://github.com/RasmussenLab/vamb)
+
+  > Kutuzova, S., Piera Líndez, P., Danielsen, L.S. et al. Improving metagenome binning by integrating intrinsic features and taxonomy. Nat Biotechnol (2026). https://doi.org/10.1038/s41587-026-03098-0
 
 ## Software packaging/containerisation tools
 
