@@ -8,7 +8,6 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
-include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
 include { BINNING                } from '../subworkflows/local/binning'
 include { BIN_QC                 } from '../subworkflows/local/bin_qc'
 include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
