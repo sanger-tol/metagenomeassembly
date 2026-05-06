@@ -152,6 +152,11 @@
                         "git_sha": "f03a30b46ebe59ba12b79115f05ab545d5ca2e5e",
                         "installed_by": ["modules"]
                     },
+                    "tiara/tiara": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "trnascanse": {
                         "branch": "master",
                         "git_sha": "0c739827833fdece07eb80618fd085a9a8992406",

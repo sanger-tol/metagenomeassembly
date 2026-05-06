@@ -49,31 +49,16 @@
                     "default": "metamdbg",
                     "description": "Which assembler to use for metagenome assembly.",
                     "enum": ["metamdbg", "myloasm"]
-                }
-            }
-        },
-        "assembly_qc_options": {
-            "title": "Assembly QC options",
-            "type": "object",
-            "description": "Options controlling assembly QC.",
-            "default": "",
-            "properties": {
-                "enable_rrna_prediction": {
+                },
+                "enable_tiara": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                    "description": "Enable domain-level classification of contigs with Tiara. If enabled, contigs classified using the categories listed in --exclude_tiara_classifications will be excluded from binning."
                 },
-                "enable_trnascanse": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Predict tRNAs in an assembly using tRNAscan-SE."
-                },
-                "rfam_rrna_cm": {
+                "exclude_tiara_classifications": {
                     "type": "string",
-                    "description": "Covariance model for rRNA preditiction from RFAM.",
-                    "default": "${projectDir}/assets/rRNA.cm",
-                    "format": "file-path",
-                    "pattern": "^\\S+\\.cm$"
+                    "default": "eukarya,organelle",
+                    "description": "A comma-separated list of tiara classifications to use to exclude contigs from the assembly. Options are 'bacteria', 'archaea', 'prokarya', 'eukarya', 'organelle' or 'unknown'."
                 },
                 "enable_genomad": {
                     "type": "boolean",
@@ -142,12 +127,16 @@
                 "minimum_contig_size": {
                     "type": "integer",
                     "default": 3000,
-                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
+                    "description": "The minimum size of contig to be considered when binning."
+                },
+                "maximum_contig_size": {
+                    "type": "string",
+                    "description": "The maximum size of contig to be considered when binning."
                 },
                 "minimum_bin_size": {
                     "type": "integer",
                     "default": 150000,
-                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 but not Metator or MaxBin2."
+                    "description": "The minimum size of a bin, in basepairs, to be emitted."
                 },
                 "extract_circular_contigs": {
                     "type": "boolean",
@@ -181,7 +170,7 @@
                 "enable_semibin2": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enable binning with Semibin."
+                    "description": "Enable binning with Semibin2."
                 },
                 "semibin_environment_model": {
                     "type": "string",
@@ -257,6 +246,23 @@
                     "description": "Path to a local diamond database file for CheckM2. If not provided, the CheckM2 database will automatically be downloaded.",
                     "pattern": "^\\S+\\.dmnd$",
                     "format": "file-path"
+                },
+                "enable_trnascanse": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict tRNAs in an assembly using tRNAscan-SE."
+                },
+                "enable_rrna_prediction": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                },
+                "rfam_rrna_cm": {
+                    "type": "string",
+                    "description": "Covariance model for rRNA preditiction from RFAM.",
+                    "default": "${projectDir}/assets/rRNA.cm",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.cm$"
                 }
             }
         },
@@ -460,9 +466,6 @@
         },
         {
             "$ref": "#/$defs/assembly_options"
-        },
-        {
-            "$ref": "#/$defs/assembly_qc_options"
         },
         {
             "$ref": "#/$defs/read_mapping_options"
