@@ -87,7 +87,7 @@ workflow ASSEMBLY {
     //
     // Module: Calculate assembly statistics, including counts of circles
     //
-    GENOME_STATS_ASSEMBLIES(ch_assemblies.combine(FILTER_ASSEMBLY.out.circles_list, by: 0))
+    GENOME_STATS_ASSEMBLIES(ch_assemblies_unzipped.combine(FILTER_ASSEMBLY.out.circles_list, by: 0))
 
     if (val_enable_genomad) {
         //
