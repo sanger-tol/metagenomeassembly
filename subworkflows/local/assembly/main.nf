@@ -64,7 +64,7 @@ workflow ASSEMBLY {
         TIARA_TIARA(ch_assemblies_unzipped)
 
         ch_filter_assembly_input = ch_assemblies_unzipped
-            .combine(TIARA_TIARA.out.classifications)
+            .combine(TIARA_TIARA.out.classifications, by: 0)
 
     } else {
         ch_filter_assembly_input = ch_assemblies_unzipped
