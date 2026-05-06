@@ -55,7 +55,7 @@
                     "default": true,
                     "description": "Enable domain-level classification of contigs with Tiara. If enabled, contigs classified using the categories listed in --exclude_tiara_classifications will be excluded from binning."
                 },
-                "exclude_tiara_classifications": {
+                "tiara_exclude_classifications": {
                     "type": "string",
                     "default": "eukarya,organelle",
                     "description": "A comma-separated list of tiara classifications to use to exclude contigs from the assembly. Options are 'bacteria', 'archaea', 'prokarya', 'eukarya', 'organelle' or 'unknown'."
