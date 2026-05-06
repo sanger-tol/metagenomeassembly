@@ -95,7 +95,7 @@ workflow BIN_QC {
                 def meta_join = meta.subMap(["id", "assembler"])
                 [meta_join, meta, c2b]
             }
-            .combine(ch_assembly_trnascanse_tbl, by: 0)
+            .combine(TRNASCANSE.out.tsv, by: 0)
             .map { _meta_join, meta, c2b, trna -> [meta, c2b, trna] }
 
         BINSUMMARIES_TRNA(ch_trnascan_summary_input)
@@ -123,7 +123,7 @@ workflow BIN_QC {
                 def meta_join = meta.subMap(["id", "assembler"])
                 [meta_join, meta, c2b]
             }
-            .combine(ch_assembly_rrna_tbl, by: 0)
+            .combine(INFERNAL_CMSEARCH.out.target_summary, by: 0)
             .map { _meta_join, meta, c2b, rrna -> [meta, c2b, rrna] }
 
         BINSUMMARIES_RRNA(ch_rrna_summary_input)
