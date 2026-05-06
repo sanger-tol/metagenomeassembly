@@ -31,13 +31,13 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     ch_assembly // channel: pre-existing assembly read in from --input
     ch_hic_cram // channel: hic cram read in from --input
     val_assembler // string: assembler to use
-    val_genomad_db // channel: genomad db from params.genomad_db
     val_minimum_contig_size // integer: minimum contig size
     val_maximum_contig_size // integer: maximum contig size
     val_minimum_circular_contig_length // integer: minimum circular contig length
     val_enable_tiara // boolean: enable tiara?
     val_tiara_exclude_classifications // string: tiara exclude classifications
     val_enable_genomad // boolean: enable genomad?
+    ch_genomad_db // channel: genomad db from params.genomad_db
     val_rrna_prediction // boolean: enable rrna prediction
     val_enable_binning // boolean: enable binning?
     val_extract_circular_contigs // boolean: extract circular contigs?
@@ -77,13 +77,13 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         ch_assembly,
         ch_hic_cram,
         val_assembler,
-        val_genomad_db,
         val_minimum_contig_size,
         val_maximum_contig_size,
         val_minimum_circular_contig_length,
         val_enable_tiara,
         val_tiara_exclude_classifications,
         val_enable_genomad,
+        ch_genomad_db,
         val_rrna_prediction,
         val_enable_binning,
         val_extract_circular_contigs,
@@ -150,13 +150,13 @@ workflow {
         PIPELINE_INITIALISATION.out.assembly,
         PIPELINE_INITIALISATION.out.hic_cram,
         params.assembler,
-        PIPELINE_INITIALISATION.out.genomad_db,
         params.minimum_contig_size,
         params.maximum_contig_size,
         params.minimum_circular_contig_length,
         params.enable_tiara,
         params.tiara_exclude_classifications,
         params.enable_genomad && params.genomad_db,
+        PIPELINE_INITIALISATION.out.genomad_db,
         params.enable_rrna_prediction,
         params.enable_binning,
         params.extract_circular_contigs,

@@ -27,13 +27,13 @@ workflow METAGENOMEASSEMBLY {
     ch_provided_assembly // channel: pre-built metagenome assembly, optional
     ch_hic_cram // channel: hic cram files from yaml, optional
     val_assembler // string: assembler to use
-    ch_genomad_db // file: genomad db from params
     val_minimum_contig_size // integer: minimum contig size
     val_maximum_contig_size // integer: maximum contig size
     val_minimum_circular_contig_length // integer: minimum circular contig length
     val_enable_tiara // boolean: enable tiara?
     val_tiara_exclude_classifications // string: tiara exclude classifications
     val_enable_genomad // boolean: enable genomad?
+    ch_genomad_db // file: genomad db from params
     val_rrna_prediction // boolean: enable rrna prediction
     val_enable_binning // boolean: enable binning?
     val_extract_circular_contigs // boolean: extract circular contigs?
@@ -79,7 +79,8 @@ workflow METAGENOMEASSEMBLY {
         val_minimum_circular_contig_length,
         val_enable_tiara,
         val_tiara_exclude_classifications,
-        val_enable_genomad
+        val_enable_genomad,
+        ch_genomad_db
     )
 
     if (val_enable_binning) {

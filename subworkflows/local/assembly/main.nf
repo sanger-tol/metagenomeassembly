@@ -18,6 +18,7 @@ workflow ASSEMBLY {
     val_enable_tiara
     val_tiara_exclude_classifications
     val_enable_genomad
+    ch_genomad_db
 
     main:
     ch_assembly_input = ch_hifi_reads
