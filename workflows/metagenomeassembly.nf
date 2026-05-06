@@ -90,7 +90,7 @@ workflow METAGENOMEASSEMBLY {
         //
         READ_MAPPING(
             ASSEMBLY.out.full_assemblies,
-            ASSEMBLY.out.circles_list,
+            ASSEMBLY.out.filter_list,
             ch_long_reads,
             ch_hic_cram,
             val_enable_metator,

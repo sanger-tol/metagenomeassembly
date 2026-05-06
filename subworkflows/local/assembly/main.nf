@@ -104,4 +104,5 @@ workflow ASSEMBLY {
     circular_contigs = FILTER_ASSEMBLY.out.circles
     filtered_contigs = FILTER_ASSEMBLY.out.filtered
     circles_list     = FILTER_ASSEMBLY.out.circles_list
+    filter_list      = FILTER_ASSEMBLY.out.filter_list
 }

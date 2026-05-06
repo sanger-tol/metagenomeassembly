@@ -16,9 +16,10 @@ process FILTER_ASSEMBLY {
     val(tiara_exclude_classifications)
 
     output:
-    tuple val(meta), path("*.circles.fa.gz")   , emit: circles
+    tuple val(meta), path("*.circles.fasta.gz"), emit: circles
     tuple val(meta), path("*.filtered.fasta")  , emit: filtered
     tuple val(meta), path("*.circles.list")    , emit: circles_list
+    tuple val(meta), path("*.exclude.list")    , emit: filter_list
     tuple val("${task.process}"), val('seqkit'), eval('seqkit version | sed "s/seqkit v//"'), emit: versions_seqkit, topic: versions
 
     when:
@@ -34,21 +35,22 @@ process FILTER_ASSEMBLY {
         circular_regex = "circular-yes|circular-possibly"
     }
     def filter_tiara = (tiara_classifications && tiara_exclude_classifications)
-    def exclude_small = minimum_contig_size ? "\$2 < ${minimum_contig_size} { print header[1] > \"${prefix}.exclude.list.tmp\" }" : ""
-    def exclude_large = maximum_contig_size ? "\$2 > ${maximum_contig_size} { print header[1] > \"${prefix}.exclude.list.tmp\" }" : ""
-    def exclude_circular = extract_circular_contigs ? "print header[1] > \"${prefix}.exclude.list.tmp\"" : ""
+    def exclude_file = "${prefix}.exclude.list.tmp"
+    def exclude_small = minimum_contig_size ? "\$2 < ${minimum_contig_size} { print header[1] > excl }" : ""
+    def exclude_large = maximum_contig_size ? "\$2 > ${maximum_contig_size} { print header[1] > excl }" : ""
+    def exclude_circular = extract_circular_contigs ? "print header[1] > excl" : ""
     """
     seqkit fx2tab \\
         --length \\
         --gc \\
         --name \\
         ${fasta} |\\
-        awk \\
+        awk -v excl="${exclude_file}" \\
         'BEGIN { FS = OFS = "\t"}
         { split(\$1, header, /\s+/) }
         ${exclude_small}
         ${exclude_large}
-        (\$1 ~ /${circular_regex}/ & \$2 >= ${minimum_circular_contig_length}) {
+        (\$1 ~ /${circular_regex}/ && \$2 >= ${minimum_circular_contig_length}) {
             print header[1] > "${prefix}.circles.list"
             ${exclude_circular}
         }'
@@ -56,7 +58,8 @@ process FILTER_ASSEMBLY {
     if [ ${filter_tiara} = true ]; then
         awk \\
             'BEGIN { FS = OFS = "\t" }
-            { \$2 ~ /${tiara_exclude_classifications.join("|")}/ }' \\
+            { split(\$1, header, /\s+/) }
+            \$2 ~ /${tiara_exclude_classifications.join("|")}/ { print header[1] }' \\
             ${tiara_classifications} \\
             >> ${prefix}.exclude.list.tmp
     fi
