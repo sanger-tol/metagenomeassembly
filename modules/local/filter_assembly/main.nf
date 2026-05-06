@@ -34,9 +34,9 @@ process FILTER_ASSEMBLY {
         circular_regex = "circular-yes|circular-possibly"
     }
     def filter_tiara = (tiara_classifications && tiara_exclude_classifications)
-    def exclude_small = minimum_contig_size ? "\$2 < ${minimum_contig_size} { print header[1] > ${prefix}.exclude.list.tmp }" : ""
-    def exclude_large = maximum_contig_size ? "\$2 > ${maximum_contig_size} { print header[1] > ${prefix}.exclude.list.tmp }" : ""
-    def exclude_circular = extract_circular_contigs ? "print header[1] > ${prefix}.exclude.list.tmp" : ""
+    def exclude_small = minimum_contig_size ? "\$2 < ${minimum_contig_size} { print header[1] > \"${prefix}.exclude.list.tmp\" }" : ""
+    def exclude_large = maximum_contig_size ? "\$2 > ${maximum_contig_size} { print header[1] > \"${prefix}.exclude.list.tmp\" }" : ""
+    def exclude_circular = extract_circular_contigs ? "print header[1] > \"${prefix}.exclude.list.tmp\"" : ""
     """
     seqkit fx2tab \\
         --length \\
@@ -49,7 +49,7 @@ process FILTER_ASSEMBLY {
         ${exclude_small}
         ${exclude_large}
         (\$1 ~ /${circular_regex}/ & \$2 >= ${minimum_circular_contig_length}) {
-            print header[1] > ${prefix}.circles.list
+            print header[1] > "${prefix}.circles.list"
             ${exclude_circular}
         }'
 
