@@ -8,7 +8,7 @@ nextflow_pipeline {
 
         setup {
             print "\n\n\t"
-            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz", "${launchDir}/")
+            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/gtdbtk_mockup_r232.tar.gz", "${launchDir}/")
             print "\t"
             curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz", "${launchDir}/")
             print "\t"
