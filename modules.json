@@ -78,7 +78,8 @@
                     "hmmer/hmmsearch": {
                         "branch": "master",
                         "git_sha": "a971f6723149313787b278969dcbe0fb4411bb4a",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
                     },
                     "infernal/cmsearch": {
                         "branch": "master",
