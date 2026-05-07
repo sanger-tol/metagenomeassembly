@@ -16,14 +16,12 @@ workflow BIN_REFINEMENT {
     val_enable_magscot
 
     main:
-    ch_versions = channel.empty()
     ch_refined_contig2bin_raw = channel.empty()
 
     //
     // Module: Identify ORFs in assembly using Pyrodigal
     //
     PYRODIGAL(ch_assemblies, 'gff')
-    ch_versions = ch_versions.mix(PYRODIGAL.out.versions)
 
     if (val_enable_dastool) {
         ch_contig2bins_to_merge = ch_contig2bin
@@ -60,7 +58,6 @@ workflow BIN_REFINEMENT {
         // Module: Determine which ORFs are GTDB marker genes
         //
         HMMER_HMMSEARCH(ch_hmmsearch_gtdb_input)
-        ch_versions = ch_versions.mix(HMMER_HMMSEARCH.out.versions)
 
         //
         // Module: Process HMM output to summarise per-contig
@@ -135,5 +132,4 @@ workflow BIN_REFINEMENT {
     emit:
     refined_bins = ch_refined_bins
     contig2bin   = ch_refined_contig2bin
-    versions     = ch_versions
 }

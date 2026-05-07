@@ -120,7 +120,6 @@ workflow METAGENOMEASSEMBLY {
             ch_centrifuger_db,
             val_enable_metator,
         )
-        ch_versions = ch_versions.mix(BINNING.out.versions)
         ch_bins = BINNING.out.bins
         ch_contig2bin = BINNING.out.contig2bin
 
@@ -135,7 +134,6 @@ workflow METAGENOMEASSEMBLY {
                 val_enable_dastool,
                 val_enable_magscot
             )
-            ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
             ch_bins = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
             ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)
         }

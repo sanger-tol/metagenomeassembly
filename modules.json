@@ -12,9 +12,8 @@
                     },
                     "centrifuger/centrifuger": {
                         "branch": "master",
-                        "git_sha": "21cb62503483e95510ee1977192b9a74e02493ee",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/centrifuger/centrifuger/centrifuger-centrifuger.diff"
+                        "git_sha": "17b8938b3822985c18e8bb563b13ea0bbd04e29f",
+                        "installed_by": ["modules"]
                     },
                     "checkm2/predict": {
                         "branch": "master",
@@ -78,9 +77,8 @@
                     },
                     "hmmer/hmmsearch": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
+                        "git_sha": "a971f6723149313787b278969dcbe0fb4411bb4a",
+                        "installed_by": ["modules"]
                     },
                     "infernal/cmsearch": {
                         "branch": "master",
@@ -119,7 +117,7 @@
                     },
                     "pyrodigal": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "0ca6ca6c6e068635d01f979d0aed2f59c5d7cec4",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {

@@ -109,7 +109,7 @@ read_stats <- function(file) {
     df <- read_tsv(file) |>
         mutate(
             filename = file,
-            bin = str_extract(file, "(.*)\\.fa", group = 1),
+            bin = str_extract(file, "(.*)\\.(fa|fna|fasta)", group = 1),
             assembler = str_split(file, "[\\.|_]", simplify = TRUE)[,2],
             binner = str_split(file, "[\\.|_]", simplify = TRUE)[,3]
         ) |>
