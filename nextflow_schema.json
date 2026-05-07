@@ -167,6 +167,14 @@
                     "default": true,
                     "description": "Enable binning with VAMB."
                 },
+                "enable_centrifuger": {
+                    "type": "boolean",
+                    "description": "Enable taxonomic classification of assembled contigs with centrifuger. These are passed to VAMB to enable its taxonomic binning mode."
+                },
+                "centrifuger_db": {
+                    "type": "string",
+                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically."
+                },
                 "enable_semibin2": {
                     "type": "boolean",
                     "default": true,

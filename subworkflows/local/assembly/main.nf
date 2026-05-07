@@ -1,10 +1,10 @@
-include { FILTER_ASSEMBLY                         } from '../../../modules/local/filter_assembly/main'
+include { FILTER_ASSEMBLY                         } from '../../../modules/local/filter_assembly'
 include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
 include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats'
 include { GUNZIP                                  } from '../../../modules/nf-core/gunzip/main'
-include { METAMDBG_ASM                            } from '../../../modules/nf-core/metamdbg/asm/main'
-include { MYLOASM                                 } from '../../../modules/nf-core/myloasm/main'
-include { TIARA_TIARA                             } from '../../../modules/nf-core/tiara/tiara/main'
+include { METAMDBG_ASM                            } from '../../../modules/nf-core/metamdbg/asm'
+include { MYLOASM                                 } from '../../../modules/nf-core/myloasm'
+include { TIARA_TIARA                             } from '../../../modules/nf-core/tiara/tiara'
 
 workflow ASSEMBLY {
     take:
@@ -72,9 +72,10 @@ workflow ASSEMBLY {
     }
 
     //
-    // Module: Extract circular contigs
+    // Module: Filter the assembled contigs to remove circles (if requested), as well
+    // as too-large or too-small contigs. If tiara was run, it can also be used to
+    // filter the assembly.
     //
-
     FILTER_ASSEMBLY(
         ch_filter_assembly_input,
         val_minimum_contig_size ?: [],

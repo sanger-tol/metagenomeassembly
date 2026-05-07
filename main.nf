@@ -38,7 +38,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_tiara_exclude_classifications // string: tiara exclude classifications
     val_enable_genomad // boolean: enable genomad?
     ch_genomad_db // channel: genomad db from params.genomad_db
-    val_rrna_prediction // boolean: enable rrna prediction
     val_enable_binning // boolean: enable binning?
     val_extract_circular_contigs // boolean: extract circular contigs?
     val_enable_metabat2 // boolean: enable metabat2?
@@ -46,6 +45,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_enable_comebin // boolean: enable comebin?
     val_enable_semibin2 // boolean: enable semibin?
     val_enable_vamb // boolean: enable vamb?
+    val_enable_taxvamb // boolean: enable taxvamb?
+    ch_centrifuger_db // channel: centrifuger db from params.centrifuger_db
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
@@ -84,7 +85,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_tiara_exclude_classifications,
         val_enable_genomad,
         ch_genomad_db,
-        val_rrna_prediction,
         val_enable_binning,
         val_extract_circular_contigs,
         val_enable_metabat2,
@@ -92,6 +92,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_enable_comebin,
         val_enable_semibin2,
         val_enable_vamb,
+        val_enable_taxvamb,
+        ch_centrifuger_db,
         val_enable_metator,
         val_hic_aligner,
         val_cram_chunk_size,
@@ -139,7 +141,8 @@ workflow {
         params.hmm_gtdb_pfam,
         params.hmm_gtdb_tigrfam,
         params.checkm2_db,
-        params.gtdbtk_db
+        params.gtdbtk_db,
+        params.centrifuger_db
     )
 
     //
@@ -157,7 +160,6 @@ workflow {
         params.tiara_exclude_classifications,
         params.enable_genomad && params.genomad_db,
         PIPELINE_INITIALISATION.out.genomad_db,
-        params.enable_rrna_prediction,
         params.enable_binning,
         params.extract_circular_contigs,
         params.enable_metabat2,
@@ -165,6 +167,8 @@ workflow {
         params.enable_comebin,
         params.enable_semibin2,
         params.enable_vamb,
+        params.enable_taxvamb && params.centrifuger_db,
+        PIPELINE_INITIALISATION.out.centrifuger_db,
         params.enable_metator,
         params.hic_aligner,
         params.hic_mapping_cram_bin_size,

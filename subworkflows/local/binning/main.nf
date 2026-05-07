@@ -1,14 +1,15 @@
-include { COMEBIN_RUNCOMEBIN                 } from '../../../modules/nf-core/comebin/runcomebin/main'
-include { MAXBIN2                            } from '../../../modules/nf-core/maxbin2/main'
-include { GAWK as GAWK_FASTATOCONTIG2BIN     } from '../../../modules/nf-core/gawk/main'
-include { GAWK as GAWK_MAXBIN2_DEPTHS        } from '../../../modules/nf-core/gawk/main'
-include { GAWK as GAWK_VAMB_DEPTHS           } from '../../../modules/nf-core/gawk/main'
-include { METABAT2_METABAT2                  } from '../../../modules/nf-core/metabat2/metabat2/main'
-include { METATOR_PIPELINE                   } from '../../../modules/nf-core/metator/pipeline/main'
-include { SEMIBIN_SINGLEEASYBIN              } from '../../../modules/nf-core/semibin/singleeasybin/main'
-include { SEQKIT_REPLACE as FIX_METATOR_BINS } from '../../../modules/nf-core/seqkit/replace/main'
-include { SEQKIT_SPLIT2 as SPLIT_CIRCLES     } from '../../../modules/nf-core/seqkit/split2/main'
-include { VAMB_BIN                           } from '../../../modules/nf-core/vamb/bin/main'
+include { COMEBIN_RUNCOMEBIN                 } from '../../../modules/nf-core/comebin/runcomebin'
+include { MAXBIN2                            } from '../../../modules/nf-core/maxbin2'
+include { GAWK as GAWK_FASTATOCONTIG2BIN     } from '../../../modules/nf-core/gawk'
+include { GAWK as GAWK_MAXBIN2_DEPTHS        } from '../../../modules/nf-core/gawk'
+include { METABAT2_METABAT2                  } from '../../../modules/nf-core/metabat2/metabat2'
+include { METATOR_PIPELINE                   } from '../../../modules/nf-core/metator/pipeline'
+include { SEMIBIN_SINGLEEASYBIN              } from '../../../modules/nf-core/semibin/singleeasybin'
+include { SEQKIT_REPLACE as FIX_METATOR_BINS } from '../../../modules/nf-core/seqkit/replace'
+include { SEQKIT_SPLIT2 as SPLIT_CIRCLES     } from '../../../modules/nf-core/seqkit/split2'
+
+include { BINNING_VAMB                       } from '../../../subworkflows/local/binning_vamb'
+include { BINNING_VAMB as BINNING_TAXVAMB    } from '../../../subworkflows/local/binning_vamb'
 
 workflow BINNING {
     take:
@@ -23,12 +24,12 @@ workflow BINNING {
     val_enable_comebin
     val_enable_semibin2
     val_enable_vamb
+    val_enable_taxvamb
+    ch_centrifuger_db
     val_enable_metator
 
     main:
-    ch_versions = channel.empty()
     ch_bins = channel.empty()
-    ch_contig2bin = channel.empty()
 
     //
     // Module: Split circular contigs into separate bin files
@@ -72,7 +73,6 @@ workflow BINNING {
         // Module: Bin assembly using MaxBin2
         //
         MAXBIN2(ch_maxbin2_input)
-        ch_versions = ch_versions.mix(MAXBIN2.out.versions)
 
         ch_bins = ch_bins.mix(
             MAXBIN2.out.binned_fastas.map { meta, fasta -> [meta + [binner: "maxbin2"], fasta] }
@@ -111,24 +111,33 @@ workflow BINNING {
 
     if (val_enable_vamb) {
         //
-        // Module: Convert depths TSV to format acceptable to VAMB
+        // Subworkflow: Bin assembly with VAMB in standard mode
         //
-        GAWK_VAMB_DEPTHS(ch_depths, file("${projectDir}/bin/convert_depths_vamb.awk"), false)
-
-        //
-        // Module: Bin contigs with VAMB
-        //
-        ch_vamb_input = ch_assemblies
-            .combine(GAWK_VAMB_DEPTHS.out.output, by: 0)
-            .map { meta, contigs, depths ->
-                [meta, contigs, depths, [], []]
-            }
-
-        VAMB_BIN(ch_vamb_input)
-        ch_versions = ch_versions.mix(VAMB_BIN.out.versions)
+        BINNING_VAMB(
+            ch_assemblies,
+            ch_depths,
+            false,
+            channel.empty()
+        )
 
         ch_bins = ch_bins.mix(
-            VAMB_BIN.out.bins.map { meta, fasta -> [meta + [binner: "vamb"], fasta] }
+            BINNING_VAMB.out.bins.map { meta, fasta -> [meta + [binner: "vamb"], fasta] }
+        )
+    }
+
+    if (val_enable_taxvamb) {
+        //
+        // Subworkflow: Bin assembly with VAMB with taxonomy
+        //
+        BINNING_TAXVAMB(
+            ch_assemblies,
+            ch_depths,
+            true,
+            ch_centrifuger_db
+        )
+
+        ch_bins = ch_bins.mix(
+            BINNING_TAXVAMB.out.bins.map { meta, fasta -> [meta + [binner: "taxvamb"], fasta] }
         )
     }
 
@@ -163,5 +172,4 @@ workflow BINNING {
     emit:
     bins       = ch_bins
     contig2bin = GAWK_FASTATOCONTIG2BIN.out.output
-    versions   = ch_versions
 }
