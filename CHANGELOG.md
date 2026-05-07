@@ -12,7 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The threshold for circular contig minimum size can be configured with `--minimum_circular_contig_length`
 - Hi-C BAM is now converted to a pairs file, which is fed into Metator
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Add three new binners - ComeBin, SemiBin2, and VAMB.
-
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Allow filtering of assembled contigs by size (`--min_contig_length`, `--max_contig_length`), as well as by Tiara classification (`--tiara_exclude_classifications`) if Tiara is run (`--enable_tiara`).
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Add binning with TaxVAMB. This uses contig-level taxonomic classifications classified by Centrifuge - a centrifuge DB must be supplied to `--centrifuge_db`.
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) GTDBTk updated to 2.7.1. This requires the new r232 database.
+ 
 ### `Fixed`
 
 - [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Remove all references to `params` outside the entry subworkflow (by @prototaxites)
@@ -30,12 +33,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-| module                    | tools     | old versions | new versions |
-| ------------------------- | --------- | ------------ | ------------ |
-| ripgrep                   | ripgrep   | -            | 14.1.1       |
-| pairtools/parsefiltersort | pairtools | -            | 1.1.3        |
-| bin3c/mkmap               | bin3c     | 0.3.3        | -            |
-| bin3c/cluster             | bin3c     | 0.3.3        | -            |
+| module                        | tools       | old versions | new versions |
+| ----------------------------- | ----------- | ------------ | ------------ |
+| ripgrep                       | ripgrep     | -            | 14.1.1       |
+| pairtools/parsefiltersort     | pairtools   | -            | 1.1.3        |
+| bin3c/mkmap                   | bin3c       | 0.3.3        | -            |
+| bin3c/cluster                 | bin3c       | 0.3.3        | -            |
+| tiara/tiara                   | tiara       | -            | 1.0.3        |
+| centrifuger/centrifuger       | centrifuger | -            | 1.1.1        |
+| centrifuger/lineage           | centrifuger | -            | 1.1.1        |
+| gtdbtk/classifywf             | gtdbtk      | 2.6.1        | 2.7.1        |
+| gtdbtk/gtdbtoncbimajorityvote | gtdbtk      | 2.6.1        | 2.7.1        |
 
 ## [1.4.0] - Lovely Molly - [2025-04-27]
 
