@@ -7,35 +7,12 @@ nextflow_pipeline {
     test("-profile test") {
 
         setup {
-            println "Downloading GTDB-Tk database..."
-            def gtdbtk_mockdb_url = "https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz"
-            def gtdbtk_command = ['bash', '-c', "curl -L --retry 5 ${gtdbtk_mockdb_url} | tar xzf - -C ${launchDir}"]
-            def gtdbtk_proc = gtdbtk_command.execute()
-            gtdbtk_proc.waitFor()
-
-            if (gtdbtk_proc.exitValue() != 0) {
-                throw new RuntimeException("Error - failed to download GTDB-Tk mock db: ${gtdbtk_proc.err.text}")
-            }
-
-            println "Downloading CheckM2 database..."
-            def checkm2_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz"
-            def checkm2_command = ['bash', '-c', "curl -L --retry 5 ${checkm2_db_url} | tar xzf - -C ${launchDir}"]
-            def checkm2_proc = checkm2_command.execute()
-            checkm2_proc.waitFor()
-
-            if (checkm2_proc.exitValue() != 0) {
-                throw new RuntimeException("Error - failed to download CheckM2 db: ${checkm2_proc.err.text}")
-            }
-
-            println "Downloading geNomad database..."
-            def genomad_db_url  = "https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/genomad_db_v1.9.tar.gz"
-            def genomad_command = ['bash', '-c', "curl -L --retry 5 ${genomad_db_url} | tar xzf - -C ${launchDir}"]
-            def genomad_proc = genomad_command.execute()
-            genomad_proc.waitFor()
-
-            if (genomad_proc.exitValue() != 0) {
-                throw new RuntimeException("Error - failed to download Genomad db: ${genomad_proc.err.text}")
-            }
+            print "\n\n\t"
+            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/mockup.tar.gz", "${launchDir}/")
+            print "\t"
+            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz", "${launchDir}/")
+            print "\t"
+            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/genomad_db_v1.9.tar.gz", "${launchDir}/")
         }
 
         when {
