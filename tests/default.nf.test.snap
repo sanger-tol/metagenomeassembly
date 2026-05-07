@@ -43,9 +43,6 @@
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
-                "EXTRACT_CIRCLES": {
-                    "seqkit": "2.10.0"
-                },
                 "FASTXALIGN_MINIMAP2ALIGN": {
                     "minimap2": "2.30-r1287",
                     "samtools": "1.23.1",
@@ -53,6 +50,9 @@
                 },
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "seqkit": "2.10.0"
                 },
                 "FILTER_BAM": {
                     "samtools": 1.21
@@ -128,7 +128,7 @@
                     "samtools": "1.23.1"
                 },
                 "PYRODIGAL": {
-                    "pyrodigal": "3.6.3"
+                    "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
@@ -148,6 +148,9 @@
                 "SPLIT_CIRCLES": {
                     "seqkit": "2.13.0"
                 },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
+                },
                 "TRNASCANSE": {
                     "tRNAscan-SE": "2.0.12"
                 },
@@ -162,16 +165,17 @@
                 "annotation/xyTesTing1_metamdbg.fna.gz",
                 "annotation/xyTesTing1_metamdbg.gff.gz",
                 "annotation/xyTesTing1_metamdbg.score.gz",
-                "fasta",
-                "fasta/xyTesTing1_metamdbg.contigs.fasta.gz",
-                "log",
-                "log/xyTesTing1_metamdbg.metaMDBG.log",
+                "genomad",
+                "genomad/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
+                "genomad/xyTesTing1_metamdbg.contigs_virus_summary.tsv",
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.pacbio.bam",
                 "qc",
-                "qc/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
-                "qc/xyTesTing1_metamdbg.contigs_virus_summary.tsv",
-                "qc/xyTesTing1_metamdbg.stats.tsv"
+                "taxonomy",
+                "taxonomy/log_xyTesTing1_metamdbg.txt",
+                "taxonomy/xyTesTing1_metamdbg.txt",
+                "xyTesTing1_metamdbg.contigs.fasta.gz",
+                "xyTesTing1_metamdbg.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_circular_contig2bin.tsv",
@@ -251,7 +255,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-05T12:26:59.480563705",
+        "timestamp": "2026-05-07T13:58:24.271664037",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

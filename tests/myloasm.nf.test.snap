@@ -33,9 +33,6 @@
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
-                "EXTRACT_CIRCLES": {
-                    "seqkit": "2.10.0"
-                },
                 "FASTXALIGN_MINIMAP2ALIGN": {
                     "minimap2": "2.30-r1287",
                     "samtools": "1.23.1",
@@ -43,6 +40,9 @@
                 },
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "seqkit": "2.10.0"
                 },
                 "FILTER_BAM": {
                     "samtools": 1.21
@@ -55,9 +55,6 @@
                 },
                 "GAWK_VAMB_DEPTHS": {
                     "gawk": "5.3.1"
-                },
-                "GENOMAD_ENDTOEND": {
-                    "genomad": "1.12.0"
                 },
                 "GENOME_STATS_ASSEMBLIES": {
                     "csvtk": "0.31.2",
@@ -88,7 +85,7 @@
                     "myloasm": "0.5.1"
                 },
                 "PYRODIGAL": {
-                    "pyrodigal": "3.6.3"
+                    "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
@@ -101,6 +98,9 @@
                 },
                 "SPLIT_CIRCLES": {
                     "seqkit": "2.13.0"
+                },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
                 },
                 "TRNASCANSE": {
                     "tRNAscan-SE": "2.0.12"
@@ -119,15 +119,13 @@
                 "annotation/xyTesTing1_myloasm.fna.gz",
                 "annotation/xyTesTing1_myloasm.gff.gz",
                 "annotation/xyTesTing1_myloasm.score.gz",
-                "extra",
-                "fasta",
-                "log",
                 "mapping",
                 "mapping/xyTesTing1_myloasm.pacbio.bam",
                 "qc",
-                "qc/assembly_primary_plasmid_summary.tsv",
-                "qc/assembly_primary_virus_summary.tsv",
-                "qc/xyTesTing1_myloasm.stats.tsv"
+                "taxonomy",
+                "taxonomy/log_xyTesTing1_myloasm.txt",
+                "taxonomy/xyTesTing1_myloasm.txt",
+                "xyTesTing1_myloasm.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_myloasm_circular_contig2bin.tsv",
@@ -152,6 +150,25 @@
                 "log/semibin/xyTesTing1_myloasm_semibin/data_split.csv",
                 "log/semibin/xyTesTing1_myloasm_semibin/xyTesTing1.filtered.bam_0_data_cov.csv",
                 "log/vamb/xyTesTing1_myloasm_vamb/abundance.npz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.1.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.11.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.2.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.3.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.33.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.34.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.37.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.38.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.39.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.4.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.48.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.49.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.5.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.52.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.54.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.55.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.56.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.57.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.8.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/composition.npz",
                 "log/vamb/xyTesTing1_myloasm_vamb/latent.npz",
                 "log/vamb/xyTesTing1_myloasm_vamb/log.txt",
@@ -196,7 +213,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-05T12:45:29.105411731",
+        "timestamp": "2026-05-07T15:37:00.85503615",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
