@@ -17,7 +17,7 @@ nextflow_pipeline {
         when {
             params {
                 outdir                 = "$outputDir"
-                gtdbtk_db              = "${launchDir}/r226_mockup"
+                gtdbtk_db              = "${launchDir}/release232_mockup"
                 checkm2_db             = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
                 gtdbtk_use_full_tree   = true
                 gtdbtk_skip_ani_screen = true
@@ -65,7 +65,7 @@ nextflow_pipeline {
 
         cleanup {
             new File("${launchDir}/taxdump").deleteDir()
-            new File("${launchDir}/r226_mockup").deleteDir()
+            new File("${launchDir}/release232_mockup").deleteDir()
             new File("${launchDir}/genomad_db").deleteDir()
         }
 
