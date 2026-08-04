@@ -295,7 +295,7 @@
                     "description": "Path to a directory containing the GTDB-Tk database.",
                     "format": "directory-path"
                 },
-                "gtdbtk_skip_ani_screen": {
+                "gtdbtk_place_species": {
                     "type": "boolean",
                     "description": "Skip the ANI screen check with skani when classifying genomes with GTDB-Tk."
                 },
