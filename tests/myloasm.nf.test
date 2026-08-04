@@ -21,6 +21,7 @@ nextflow_pipeline {
                 checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
                 gtdbtk_use_full_tree = true
                 gtdbtk_place_species = true
+            }
         }
 
         then {
