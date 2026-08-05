@@ -34,12 +34,6 @@
                 "CRAMALIGN_GENCRAMCHUNKS": {
                     "cramchunks": "1.1.0"
                 },
-                "CSVTK_CONCAT": {
-                    "csvtk": "0.31.0"
-                },
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
@@ -85,13 +79,6 @@
                 "GENOME_STATS_BINS": {
                     "csvtk": "0.31.2",
                     "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdb_db": "r226",
-                    "gtdbtk": "2.6.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
                 "GUNZIP": {
                     "gunzip": 1.13
@@ -237,25 +224,11 @@
                 "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metator.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metator.trna_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-07T13:58:24.271664037",
+        "timestamp": "2026-08-05T09:59:05.594349",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

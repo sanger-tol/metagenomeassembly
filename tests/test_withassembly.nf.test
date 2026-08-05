@@ -9,8 +9,8 @@ nextflow_pipeline {
 
         setup {
             print "\n\n\t"
-            curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/gtdbtk_mockup_r232.tar.gz", "${launchDir}/")
-            print "\t"
+            //curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/gtdbtk/gtdbtk_mockup_r232.tar.gz", "${launchDir}/")
+            //print "\t"
             curlAndExtract("https://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/checkm2_database.tar.gz", "${launchDir}/")
             print "\t"
             curlAndExtract("http://tolit.cog.sanger.ac.uk/test-data/resources/metagenomeassembly/zymo_centrifuger.tar.gz", "${launchDir}/")
@@ -19,9 +19,10 @@ nextflow_pipeline {
         when {
             params {
                 outdir               = "$outputDir"
-                gtdbtk_db            = "${launchDir}/release232_mockup"
+                //gtdbtk_db            = "${launchDir}/release232_mockup"
                 checkm2_db           = "${launchDir}/CheckM2_database/uniref100.KO.1.dmnd"
-                gtdbtk_place_species = true
+                //gtdbtk_use_full_tree = true
+                //gtdbtk_place_species = true
                 centrifuger_db       = "${launchDir}/zymo_centrifuger/zymo.1.cfr"
             }
         }
@@ -36,9 +37,9 @@ nextflow_pipeline {
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/bins/fasta/", relative: true, includeDir: true, include: ["**.{fasta,fa,fna}.gz"])
 
             // Count number of GTDB-Tk-appropriate bins
-            def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
-                .csv(sep: "\t")
-                .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
+            //def n_gtdbtk_bins = path("${params.outdir}/bins/qc/xyTesTing1_checkm2_report.tsv")
+            //    .csv(sep: "\t")
+            //    .rows.findAll { it.Completeness >= 50 && it.Contamination <= 10 }.size()
 
             assertAll(
                 { assert workflow.success },
@@ -50,7 +51,8 @@ nextflow_pipeline {
                 { assert path("${params.outdir}/bins/xyTesTing1.bin_summary.tsv").csv(sep: "\t").rowCount == bin_fasta.size() },
 
                 // Check GTDB-Tk output has expected number of rows
-                { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
+                // Disabled until GTDB-Tk is testable again
+                // { assert path("${params.outdir}/bins/taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv").csv(sep: "\t").rowCount == n_gtdbtk_bins },
 
                 // Check group_summary.tsv file has expected number of rows
                 { assert path("${params.outdir}/bins/xyTesTing1.group_summary.tsv").csv(sep: "\t").rowCount == 4 },

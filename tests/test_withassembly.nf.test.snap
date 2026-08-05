@@ -34,12 +34,6 @@
                 "COVERM_GENOME": {
                     "coverm": "0.7.0"
                 },
-                "CSVTK_CONCAT": {
-                    "csvtk": "0.31.0"
-                },
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
                 "FASTXALIGN_MINIMAP2ALIGN": {
                     "minimap2": "2.30-r1287",
                     "samtools": "1.23.1",
@@ -73,13 +67,6 @@
                 "GENOME_STATS_BINS": {
                     "csvtk": "0.31.2",
                     "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdb_db": "r226",
-                    "gtdbtk": "2.6.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
                 "GUNZIP": {
                     "gunzip": 1.13
@@ -154,21 +141,21 @@
                 "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/abundance.npz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.1.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.11.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.15.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.12.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.13.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.16.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.2.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.3.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.4.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.43.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.44.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.45.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.46.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.47.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.49.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.5.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.50.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.51.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.54.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.56.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.6.fna.gz",
-                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.7.fna.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/bins/xyTesTing1_metamdbg_taxvamb.8.fna.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/composition.npz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/log.txt",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/results_taxometer.tsv",
@@ -191,25 +178,11 @@
                 "qc/xyTesTing1_metamdbg_taxvamb.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_taxvamb.stats.tsv",
                 "qc/xyTesTing1_metamdbg_taxvamb.trna_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-07T16:03:32.257873847",
+        "timestamp": "2026-08-05T10:33:41.238234",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

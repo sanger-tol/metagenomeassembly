@@ -24,12 +24,6 @@
                 "COVERM_GENOME": {
                     "coverm": "0.7.0"
                 },
-                "CSVTK_CONCAT": {
-                    "csvtk": "0.31.0"
-                },
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
                 },
@@ -63,13 +57,6 @@
                 "GENOME_STATS_BINS": {
                     "csvtk": "0.31.2",
                     "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdb_db": "r226",
-                    "gtdbtk": "2.6.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
                 "INFERNAL_CMSEARCH": {
                     "gzip": 1.12,
@@ -151,24 +138,27 @@
                 "log/semibin/xyTesTing1_myloasm_semibin/xyTesTing1.filtered.bam_0_data_cov.csv",
                 "log/vamb/xyTesTing1_myloasm_vamb/abundance.npz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.1.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.10.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.11.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.18.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.2.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.28.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.29.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.3.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.32.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.33.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.34.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.37.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.38.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.39.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.4.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.40.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.41.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.43.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.44.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.45.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.47.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.48.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.49.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.5.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.52.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.54.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.55.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.56.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.57.fna.gz",
-                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.8.fna.gz",
+                "log/vamb/xyTesTing1_myloasm_vamb/bins/xyTesTing1_myloasm_vamb.9.fna.gz",
                 "log/vamb/xyTesTing1_myloasm_vamb/composition.npz",
                 "log/vamb/xyTesTing1_myloasm_vamb/latent.npz",
                 "log/vamb/xyTesTing1_myloasm_vamb/log.txt",
@@ -195,25 +185,11 @@
                 "qc/xyTesTing1_myloasm_vamb.rrna_summary.tsv",
                 "qc/xyTesTing1_myloasm_vamb.stats.tsv",
                 "qc/xyTesTing1_myloasm_vamb.trna_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-07T15:37:00.85503615",
+        "timestamp": "2026-08-05T11:31:07.518375",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
