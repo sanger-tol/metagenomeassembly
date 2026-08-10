@@ -31,13 +31,13 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     ch_assembly // channel: pre-existing assembly read in from --input
     ch_hic_cram // channel: hic cram read in from --input
     val_assembler // string: assembler to use
-    val_genomad_db // channel: genomad db from params.genomad_db
-    val_enable_rrna_prediction // boolean: enable rrna prediction
-    val_rfam_rrna_cm // channel: rrna cm file from params.rfam_rrna_cm
+    val_minimum_contig_size // integer: minimum contig size
+    val_maximum_contig_size // integer: maximum contig size
     val_minimum_circular_contig_length // integer: minimum circular contig length
+    val_enable_tiara // boolean: enable tiara?
+    val_tiara_exclude_classifications // string: tiara exclude classifications
     val_enable_genomad // boolean: enable genomad?
-    val_rrna_prediction // boolean: enable rrna prediction
-    val_enable_trnascanse // boolean: enable trnascan se?
+    ch_genomad_db // channel: genomad db from params.genomad_db
     val_enable_binning // boolean: enable binning?
     val_extract_circular_contigs // boolean: extract circular contigs?
     val_enable_metabat2 // boolean: enable metabat2?
@@ -45,6 +45,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_enable_comebin // boolean: enable comebin?
     val_enable_semibin2 // boolean: enable semibin?
     val_enable_vamb // boolean: enable vamb?
+    val_enable_taxvamb // boolean: enable taxvamb?
+    ch_centrifuger_db // channel: centrifuger db from params.centrifuger_db
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
@@ -56,6 +58,9 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_enable_binqc // boolean: enable binqc?
     val_enable_checkm2 // boolean: enable checkm2?
     ch_checkm2_db // channel: checkm2 db from --params.checkm2_db
+    val_enable_rrna_prediction // boolean: enable rrna prediction
+    val_rfam_rrna_cm // channel: rrna cm file from params.rfam_rrna_cm
+    val_enable_trnascanse // boolean: enable trnascan se?
     val_enable_taxonomy // boolean: enable taxonomy?
     val_enable_gtdbtk // boolean: enable gtdbtk?
     ch_gtdbtk_db // channel: gtdbtk db from --params.gtdbtk_db
@@ -73,13 +78,13 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         ch_assembly,
         ch_hic_cram,
         val_assembler,
-        val_genomad_db,
-        val_enable_rrna_prediction,
-        val_rfam_rrna_cm,
+        val_minimum_contig_size,
+        val_maximum_contig_size,
         val_minimum_circular_contig_length,
+        val_enable_tiara,
+        val_tiara_exclude_classifications,
         val_enable_genomad,
-        val_rrna_prediction,
-        val_enable_trnascanse,
+        ch_genomad_db,
         val_enable_binning,
         val_extract_circular_contigs,
         val_enable_metabat2,
@@ -87,6 +92,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_enable_comebin,
         val_enable_semibin2,
         val_enable_vamb,
+        val_enable_taxvamb,
+        ch_centrifuger_db,
         val_enable_metator,
         val_hic_aligner,
         val_cram_chunk_size,
@@ -98,6 +105,9 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_enable_binqc,
         val_enable_checkm2,
         ch_checkm2_db,
+        val_enable_rrna_prediction,
+        val_rfam_rrna_cm,
+        val_enable_trnascanse,
         val_enable_taxonomy,
         val_enable_gtdbtk,
         ch_gtdbtk_db,
@@ -131,7 +141,8 @@ workflow {
         params.hmm_gtdb_pfam,
         params.hmm_gtdb_tigrfam,
         params.checkm2_db,
-        params.gtdbtk_db
+        params.gtdbtk_db,
+        params.centrifuger_db
     )
 
     //
@@ -142,13 +153,13 @@ workflow {
         PIPELINE_INITIALISATION.out.assembly,
         PIPELINE_INITIALISATION.out.hic_cram,
         params.assembler,
-        PIPELINE_INITIALISATION.out.genomad_db,
-        params.enable_rrna_prediction,
-        PIPELINE_INITIALISATION.out.rfam_rrna_cm,
+        params.minimum_contig_size,
+        params.maximum_contig_size,
         params.minimum_circular_contig_length,
+        params.enable_tiara,
+        params.tiara_exclude_classifications,
         params.enable_genomad && params.genomad_db,
-        params.enable_rrna_prediction,
-        params.enable_trnascanse,
+        PIPELINE_INITIALISATION.out.genomad_db,
         params.enable_binning,
         params.extract_circular_contigs,
         params.enable_metabat2,
@@ -156,6 +167,8 @@ workflow {
         params.enable_comebin,
         params.enable_semibin2,
         params.enable_vamb,
+        params.enable_taxvamb && params.centrifuger_db,
+        PIPELINE_INITIALISATION.out.centrifuger_db,
         params.enable_metator,
         params.hic_aligner,
         params.hic_mapping_cram_bin_size,
@@ -167,6 +180,9 @@ workflow {
         params.enable_binqc,
         params.enable_checkm2 && params.checkm2_db,
         PIPELINE_INITIALISATION.out.checkm2_db,
+        params.enable_rrna_prediction,
+        PIPELINE_INITIALISATION.out.rfam_rrna_cm,
+        params.enable_trnascanse,
         params.enable_taxonomy,
         params.enable_gtdbtk && params.gtdbtk_db,
         PIPELINE_INITIALISATION.out.gtdbtk_db,

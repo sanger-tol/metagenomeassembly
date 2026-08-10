@@ -12,6 +12,13 @@
                     "R": "4.4.2",
                     "metator": "2.0.0"
                 },
+                "CENTRIFUGER_CENTRIFUGER": {
+                    "centrifuger": "1.1.0-r299"
+                },
+                "CENTRIFUGER_LINEAGE": {
+                    "centrifuger": "1.1.0-r299",
+                    "csvtk": "0.37.0"
+                },
                 "CHECKM2_PREDICT": {
                     "checkm2": "1.1.0"
                 },
@@ -27,15 +34,6 @@
                 "COVERM_GENOME": {
                     "coverm": "0.7.0"
                 },
-                "CSVTK_CONCAT": {
-                    "csvtk": "0.31.0"
-                },
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
-                "EXTRACT_CIRCLES": {
-                    "seqkit": "2.10.0"
-                },
                 "FASTXALIGN_MINIMAP2ALIGN": {
                     "minimap2": "2.30-r1287",
                     "samtools": "1.23.1",
@@ -43,6 +41,9 @@
                 },
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "seqkit": "2.10.0"
                 },
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
@@ -56,8 +57,8 @@
                 "GAWK_RENAME_BINS": {
                     "gawk": "5.3.1"
                 },
-                "GENOMAD_ENDTOEND": {
-                    "genomad": "1.12.0"
+                "GAWK_VAMB_DEPTHS": {
+                    "gawk": "5.3.1"
                 },
                 "GENOME_STATS_ASSEMBLIES": {
                     "csvtk": "0.31.2",
@@ -66,13 +67,6 @@
                 "GENOME_STATS_BINS": {
                     "csvtk": "0.31.2",
                     "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdb_db": "r226",
-                    "gtdbtk": "2.6.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
                 "GUNZIP": {
                     "gunzip": 1.13
@@ -94,7 +88,7 @@
                     "minimap2": "2.30-r1287"
                 },
                 "PYRODIGAL": {
-                    "pyrodigal": "3.6.3"
+                    "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
@@ -102,8 +96,14 @@
                 "SAMTOOLS_MERGE": {
                     "samtools": "1.23.1"
                 },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
+                },
                 "TRNASCANSE": {
                     "tRNAscan-SE": "2.0.12"
+                },
+                "VAMB_BIN": {
+                    "vamb": "5.0.4"
                 },
                 "Workflow": {
                     "sanger-tol/metagenomeassembly": "v1.5.0dev"
@@ -119,14 +119,18 @@
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.pacbio.bam",
                 "qc",
-                "qc/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
-                "qc/xyTesTing1_metamdbg.contigs_virus_summary.tsv",
-                "qc/xyTesTing1_metamdbg.stats.tsv"
+                "taxonomy",
+                "taxonomy/log_xyTesTing1_metamdbg.txt",
+                "taxonomy/xyTesTing1_metamdbg.lineage.tsv",
+                "taxonomy/xyTesTing1_metamdbg.tsv",
+                "taxonomy/xyTesTing1_metamdbg.txt",
+                "xyTesTing1_metamdbg.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_comebin_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
+                "contig2bin/xyTesTing1_metamdbg_taxvamb_contig2bin.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin.log",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin_res.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/covembeddings.tsv",
@@ -135,10 +139,17 @@
                 "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.out",
                 "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.scores.out",
                 "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/abundance.npz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/composition.npz",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/log.txt",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/results_taxometer.tsv",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/vaevae_clusters_metadata.tsv",
+                "log/taxvamb/xyTesTing1_metamdbg_taxvamb/vaevae_clusters_unsplit.tsv",
                 "qc/xyTesTing1_checkm2_report.tsv",
                 "qc/xyTesTing1_metamdbg.comebin.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.depth.tsv",
+                "qc/xyTesTing1_metamdbg.taxvamb.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.stats.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.trna_summary.tsv",
@@ -148,25 +159,14 @@
                 "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.trna_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_summary.csv",
+                "qc/xyTesTing1_metamdbg_taxvamb.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_taxvamb.stats.tsv",
+                "qc/xyTesTing1_metamdbg_taxvamb.trna_summary.tsv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-05T13:12:10.340879022",
+        "timestamp": "2026-08-05T10:33:41.238234",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

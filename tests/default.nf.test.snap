@@ -34,17 +34,8 @@
                 "CRAMALIGN_GENCRAMCHUNKS": {
                     "cramchunks": "1.1.0"
                 },
-                "CSVTK_CONCAT": {
-                    "csvtk": "0.31.0"
-                },
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
                 "DASTOOL_DASTOOL": {
                     "dastool": "1.1.7"
-                },
-                "EXTRACT_CIRCLES": {
-                    "seqkit": "2.10.0"
                 },
                 "FASTXALIGN_MINIMAP2ALIGN": {
                     "minimap2": "2.30-r1287",
@@ -53,6 +44,9 @@
                 },
                 "FASTXALIGN_PYFASTXINDEX": {
                     "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "seqkit": "2.10.0"
                 },
                 "FILTER_BAM": {
                     "samtools": 1.21
@@ -85,13 +79,6 @@
                 "GENOME_STATS_BINS": {
                     "csvtk": "0.31.2",
                     "seqkit": "2.9.0"
-                },
-                "GTDBTK_CLASSIFYWF": {
-                    "gtdb_db": "r226",
-                    "gtdbtk": "2.6.1"
-                },
-                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
-                    "gtdb_to_ncbi_majority_vote.py": "0.2.1"
                 },
                 "GUNZIP": {
                     "gunzip": 1.13
@@ -128,7 +115,7 @@
                     "samtools": "1.23.1"
                 },
                 "PYRODIGAL": {
-                    "pyrodigal": "3.6.3"
+                    "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.23.1"
@@ -148,6 +135,9 @@
                 "SPLIT_CIRCLES": {
                     "seqkit": "2.13.0"
                 },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
+                },
                 "TRNASCANSE": {
                     "tRNAscan-SE": "2.0.12"
                 },
@@ -162,16 +152,17 @@
                 "annotation/xyTesTing1_metamdbg.fna.gz",
                 "annotation/xyTesTing1_metamdbg.gff.gz",
                 "annotation/xyTesTing1_metamdbg.score.gz",
-                "fasta",
-                "fasta/xyTesTing1_metamdbg.contigs.fasta.gz",
-                "log",
-                "log/xyTesTing1_metamdbg.metaMDBG.log",
+                "genomad",
+                "genomad/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
+                "genomad/xyTesTing1_metamdbg.contigs_virus_summary.tsv",
                 "mapping",
                 "mapping/xyTesTing1_metamdbg.pacbio.bam",
                 "qc",
-                "qc/xyTesTing1_metamdbg.contigs_plasmid_summary.tsv",
-                "qc/xyTesTing1_metamdbg.contigs_virus_summary.tsv",
-                "qc/xyTesTing1_metamdbg.stats.tsv"
+                "taxonomy",
+                "taxonomy/log_xyTesTing1_metamdbg.txt",
+                "taxonomy/xyTesTing1_metamdbg.txt",
+                "xyTesTing1_metamdbg.contigs.fasta.gz",
+                "xyTesTing1_metamdbg.stats.tsv"
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_circular_contig2bin.tsv",
@@ -233,25 +224,11 @@
                 "qc/xyTesTing1_metamdbg_metator.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metator.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metator.trna_summary.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.filtered.tsv",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.msa.fasta.gz",
-                "taxonomy/gtdbtk/align/xyTesTing1.bac120.user_msa.fasta.gz",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.classify.tree",
-                "taxonomy/gtdbtk/classify/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/gtdbtk.json",
-                "taxonomy/gtdbtk/identify/xyTesTing1.ar53.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.bac120.markers_summary.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.failed_genomes.tsv",
-                "taxonomy/gtdbtk/identify/xyTesTing1.translation_table_summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.bac120.summary.tsv",
-                "taxonomy/gtdbtk/xyTesTing1.log",
-                "taxonomy/gtdbtk/xyTesTing1.warnings.log",
-                "taxonomy/xyTesTing1.gtdb_summary.csv",
                 "xyTesTing1.bin_summary.tsv",
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-05-05T12:26:59.480563705",
+        "timestamp": "2026-08-05T09:59:05.594349",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

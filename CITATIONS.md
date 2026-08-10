@@ -110,6 +110,10 @@
 
   > Pan S, Zhao XM, Coelho LP. SemiBin2: self-supervised contrastive learning leads to better MAGs for short- and long-read sequencing. Bioinformatics. 2023 Jun 30;39(39 Suppl 1):i21-i29. doi: 10.1093/bioinformatics/btad209. PMID: 37387171; PMCID: PMC10311329.
 
+- [Tiara](https://github.com/ibe-uw/tiara)
+
+  > Karlicki, M., Antonowicz, S., Karnkowska, A., 2022. Tiara: deep learning-based classification system for eukaryotic sequences. Bioinformatics 38, 344–350. doi: 10.1093/bioinformatics/btab672
+
 - [tidyverse](https://www.tidyverse.org/)
 
   > Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L.D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T.L., Miller, E., Bache, S.M., Müller, K., Ooms, J., Robinson, D., Seidel, D.P., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the tidyverse. Journal of Open Source Software 4, 1686. https://doi.org/10.21105/joss.01686

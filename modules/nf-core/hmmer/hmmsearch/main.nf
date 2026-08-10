@@ -15,33 +15,33 @@ process HMMER_HMMSEARCH {
     tuple val(meta), path('*.sto.gz')   , emit: alignments    , optional: true
     tuple val(meta), path('*.tbl.gz')   , emit: target_summary, optional: true
     tuple val(meta), path('*.domtbl.gz'), emit: domain_summary, optional: true
-    path "versions.yml"                 , emit: versions
+    tuple val("${task.process}"), val('hmmer'), eval("hmmsearch -h | sed '2!d;s/^# HMMER *//;s/ .*//'"), emit: versions_hmmer, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args        = task.ext.args   ?: ''
-    def prefix      = task.ext.prefix ?: "${meta.id}"
-    output          = "${prefix}.txt"
-    alignment       = write_align     ? "-A ${prefix}.sto" : ''
-    target_summary  = write_target    ? "--tblout ${prefix}.tbl" : ''
-    domain_summary  = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
+    def args       = task.ext.args   ?: ''
+    def prefix     = task.ext.prefix ?: "${meta.id}"
+    output         = "${prefix}.txt"
+    alignment      = write_align     ? "-A ${prefix}.sto" : ''
+    target_summary = write_target    ? "--tblout ${prefix}.tbl" : ''
+    domain_summary = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
     def seqdb_input = seqdb.toString() - ~/\.gz$/
     def gunzip      = seqdb.getExtension() == "gz" ? "gunzip -c ${seqdb} > ${seqdb_input}" : ""
     def cleanup     = seqdb.getExtension() == "gz" ? "rm ${seqdb_input}" : ""
     """
-    $gunzip
-    
+    ${gunzip}
+
     hmmsearch \\
         $args \\
-        --cpu $task.cpus \\
-        -o $output \\
-        $alignment \\
-        $target_summary \\
-        $domain_summary \\
-        $hmmfile \\
-        $seqdb_input
+        --cpu ${task.cpus} \\
+        -o ${output} \\
+        ${alignment} \\
+        ${target_summary} \\
+        ${domain_summary} \\
+        ${hmmfile} \\
+        ${seqdb_input}
 
     gzip --no-name *.txt \\
         ${write_align ? '*.sto' : ''} \\
@@ -49,11 +49,6 @@ process HMMER_HMMSEARCH {
         ${write_domain ? '*.domtbl' : ''}
 
     ${cleanup}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        hmmer: \$(hmmsearch -h | grep -o '^# HMMER [0-9.]*' | sed 's/^# HMMER *//')
-    END_VERSIONS
     """
 
     stub:
@@ -68,10 +63,5 @@ process HMMER_HMMSEARCH {
         ${write_align ? '*.sto' : ''} \\
         ${write_target ? '*.tbl' : ''} \\
         ${write_domain ? '*.domtbl' : ''}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        hmmer: \$(hmmsearch -h | grep -o '^# HMMER [0-9.]*' | sed 's/^# HMMER *//')
-    END_VERSIONS
     """
 }

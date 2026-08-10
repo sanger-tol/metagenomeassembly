@@ -8,7 +8,6 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
-include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
 include { BINNING                } from '../subworkflows/local/binning'
 include { BIN_QC                 } from '../subworkflows/local/bin_qc'
 include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
@@ -28,13 +27,13 @@ workflow METAGENOMEASSEMBLY {
     ch_provided_assembly // channel: pre-built metagenome assembly, optional
     ch_hic_cram // channel: hic cram files from yaml, optional
     val_assembler // string: assembler to use
-    ch_genomad_db // file: genomad db from params
-    val_enable_rrna_prediction // boolean: enable rrna prediction
-    ch_rfam_rrna_cm // channel: rRNA cm file from params
+    val_minimum_contig_size // integer: minimum contig size
+    val_maximum_contig_size // integer: maximum contig size
     val_minimum_circular_contig_length // integer: minimum circular contig length
+    val_enable_tiara // boolean: enable tiara?
+    val_tiara_exclude_classifications // string: tiara exclude classifications
     val_enable_genomad // boolean: enable genomad?
-    val_rrna_prediction // boolean: enable rrna prediction
-    val_enable_trnascanse // boolean: enable trnascan se?
+    ch_genomad_db // file: genomad db from params
     val_enable_binning // boolean: enable binning?
     val_extract_circular_contigs // boolean: extract circular contigs?
     val_enable_metabat2 // boolean: enable metabat2?
@@ -42,6 +41,8 @@ workflow METAGENOMEASSEMBLY {
     val_enable_comebin // boolean: enable comebin?
     val_enable_semibin2 // boolean: enable semibin?
     val_enable_vamb // boolean: enable vamb?
+    val_enable_taxvamb // boolean: enable centrifuger?
+    ch_centrifuger_db // channel: centrifuger db from params.centrifuger_db
     val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
@@ -53,6 +54,9 @@ workflow METAGENOMEASSEMBLY {
     val_enable_binqc // boolean: enable binqc?
     val_enable_checkm2 // boolean: enable checkm2?
     ch_checkm2_db // file: checkm2 db from params
+    val_enable_rrna_prediction // boolean: enable rrna prediction
+    ch_rfam_rrna_cm // channel: rRNA cm file from params
+    val_enable_trnascanse // boolean: enable trnascan se?
     val_enable_taxonomy // boolean: enable taxonomy?
     val_enable_gtdbtk // boolean: enable gtdbtk?
     ch_gtdbtk_db // channel: gtdbtk db from params
@@ -64,43 +68,30 @@ workflow METAGENOMEASSEMBLY {
     ch_versions = channel.empty()
 
     //
-    // SUBWORKFLOW: Assemble PacBio hifi reads
+    // Subworkflow: Assemble PacBio hifi reads
     //
     ASSEMBLY(
         ch_long_reads,
         ch_provided_assembly,
         val_assembler,
-        val_minimum_circular_contig_length
-    )
-
-    //
-    // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
-    // check contig circularity and classify circular contigs
-    //
-    ASSEMBLY_QC(
-        ASSEMBLY.out.full_assemblies,
-        ASSEMBLY.out.circles_list,
+        val_minimum_contig_size,
+        val_maximum_contig_size,
+        val_extract_circular_contigs,
+        val_minimum_circular_contig_length,
+        val_enable_tiara,
+        val_tiara_exclude_classifications,
         val_enable_genomad,
-        ch_genomad_db,
-        val_enable_rrna_prediction,
-        ch_rfam_rrna_cm,
-        val_enable_trnascanse
+        ch_genomad_db
     )
 
     if (val_enable_binning) {
-        if (val_extract_circular_contigs) {
-            ch_assemblies_to_bin = ASSEMBLY.out.linear_contigs
-        } else {
-            ch_assemblies_to_bin = ASSEMBLY.out.full_assemblies
-        }
-
         //
         // Subworkflow: Map PacBio Hifi reads and Illumina Hi-C
         // reads to the assembly and estimate per-contig coverages
         //
         READ_MAPPING(
             ASSEMBLY.out.full_assemblies,
-            ASSEMBLY.out.circles_list,
+            ASSEMBLY.out.filter_list,
             ch_long_reads,
             ch_hic_cram,
             val_enable_metator,
@@ -114,7 +105,7 @@ workflow METAGENOMEASSEMBLY {
         // Subworkflow: Bin the assembly using binning tools
         //
         BINNING(
-            ch_assemblies_to_bin,
+            ASSEMBLY.out.filtered_contigs,
             ASSEMBLY.out.circular_contigs,
             READ_MAPPING.out.depths,
             READ_MAPPING.out.filtered_bam,
@@ -125,9 +116,10 @@ workflow METAGENOMEASSEMBLY {
             val_enable_comebin,
             val_enable_semibin2,
             val_enable_vamb,
+            val_enable_taxvamb,
+            ch_centrifuger_db,
             val_enable_metator,
         )
-        ch_versions = ch_versions.mix(BINNING.out.versions)
         ch_bins = BINNING.out.bins
         ch_contig2bin = BINNING.out.contig2bin
 
@@ -136,13 +128,12 @@ workflow METAGENOMEASSEMBLY {
             // Subworkflow: Refine bins using DAS_Tool and MAGScoT
             //
             BIN_REFINEMENT(
-                ch_assemblies_to_bin,
-                BINNING.out.contig2bin.filter { meta, c2b -> meta.binner != "circular" },
+                ASSEMBLY.out.filtered_contigs,
+                BINNING.out.contig2bin.filter { meta, _c2b -> meta.binner != "circular" },
                 ch_magscot_gtdb_hmm_db,
                 val_enable_dastool,
                 val_enable_magscot
             )
-            ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
             ch_bins = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
             ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)
         }
@@ -153,14 +144,16 @@ workflow METAGENOMEASSEMBLY {
             // CheckM2, statistics, tRNAs + ncRNAs
             //
             BIN_QC(
+                ASSEMBLY.out.full_assemblies,
                 ch_bins,
                 ch_contig2bin,
                 ASSEMBLY.out.circles_list,
                 READ_MAPPING.out.full_bam,
                 ch_checkm2_db,
-                ASSEMBLY_QC.out.trna_summary,
-                ASSEMBLY_QC.out.rrna_summary,
-                val_enable_checkm2
+                val_enable_checkm2,
+                ch_rfam_rrna_cm,
+                val_enable_rrna_prediction,
+                val_enable_trnascanse
             )
 
             ch_taxonomy_tsv = channel.empty()
@@ -252,5 +245,5 @@ workflow METAGENOMEASSEMBLY {
             newLine: true
         )
     emit:
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    versions       = ch_collated_versions // channel: [ path(versions.yml) ]
 }

@@ -109,7 +109,7 @@ read_stats <- function(file) {
     df <- read_tsv(file) |>
         mutate(
             filename = file,
-            bin = str_extract(file, "(.*)\\.fa", group = 1),
+            bin = str_extract(file, "(.*)\\.(fa|fna|fasta)", group = 1),
             assembler = str_split(file, "[\\.|_]", simplify = TRUE)[,2],
             binner = str_split(file, "[\\.|_]", simplify = TRUE)[,3]
         ) |>
@@ -175,7 +175,7 @@ split_and_read <- function(input, input_type) {
 ##                    >=18 unique tRNA genes; all ribosomal rRNA genes
 ## Medium quality bins: completeness >= 50%, contamination < 10%
 ## Low quality bins: all other bins
-score_bins <- function(summary_df, comp_score, cont_score) {
+add_bin_scores <- function(summary_df, comp_score, cont_score) {
     summary_df <- summary_df |>
         mutate(
             quality = case_when(
@@ -199,8 +199,10 @@ bin_summary <- map(input_types, \(x) split_and_read(input, x)) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))
 
 ## If we have all required input types, score bins
-if(all(c("stats", "checkm2", "trnas", "rrnas") %in% names(input))) {
-    bin_summary <- score_bins(
+score_bins <- all(c("stats", "checkm2", "trnas", "rrnas") %in% names(input))
+
+if(score_bins == TRUE) {
+    bin_summary <- add_bin_scores(
         bin_summary,
         input$completeness_score,
         input$contamination_score
@@ -215,7 +217,7 @@ group_summary <- bin_summary |>
     group_by(across(all_of(groups))) |>
     summarise(n = n())
 
-if(all(input_types %in% names(input))) {
+if(score_bins == TRUE) {
     group_summary <- group_summary |>
         mutate(quality = factor(quality, levels = c("high", "medium", "low"))) |>
         pivot_wider(names_from = "quality", values_from = "n", names_sort = TRUE)

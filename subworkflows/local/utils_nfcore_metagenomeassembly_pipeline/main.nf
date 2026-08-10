@@ -40,6 +40,7 @@ workflow PIPELINE_INITIALISATION {
     val_hmm_gtdb_tigrfam
     val_checkm2_db
     val_gtdbtk_db
+    val_centrifuger_db
 
     main:
     ch_versions = channel.empty()
@@ -129,6 +130,13 @@ workflow PIPELINE_INITIALISATION {
         ch_genomad_db = channel.of(file(val_genomad_db, checkIfExists: true)).collect()
     }
 
+    ch_centrifuger_db = channel.empty()
+    if(val_centrifuger_db) {
+        ch_centrifuger_db = channel.fromPath(val_centrifuger_db.replaceAll(/\.1\.cfr$/, '.*.cfr'), checkIfExists: true)
+            .collect()
+            .map { db -> [[id: "centrifuger"], db] }
+    }
+
     // Create channels for input database files
     // rRNA covariance models
     ch_rfam_rrna_cm = channel.empty()
@@ -166,6 +174,7 @@ workflow PIPELINE_INITIALISATION {
     magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
     checkm2_db          = ch_checkm2_db
     gtdbtk_db           = ch_gtdbtk_db
+    centrifuger_db      = ch_centrifuger_db
     versions            = ch_versions
 }
 

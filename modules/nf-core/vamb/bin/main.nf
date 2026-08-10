@@ -11,7 +11,7 @@ process VAMB_BIN {
     tuple val(meta), path(assembly), path(abundance_tsv), path(bams, stageAs: "bams/*"), path(taxonomy)
 
     output:
-    tuple val(meta), path("${prefix}/bins/*.fa.gz")              , emit: bins             , optional: true
+    tuple val(meta), path("${prefix}/bins/*.fna.gz")             , emit: bins             , optional: true
     tuple val(meta), path("${prefix}/vae*_clusters_metadata.tsv"), emit: clusters_metadata
     tuple val(meta), path("${prefix}/vae*_clusters_split.tsv")   , emit: clusters_split   , optional: true
     tuple val(meta), path("${prefix}/vae*_clusters_unsplit.tsv") , emit: clusters_unsplit
@@ -20,7 +20,7 @@ process VAMB_BIN {
     tuple val(meta), path("${prefix}/abundance.npz")             , emit: abundance
     tuple val(meta), path("${prefix}/composition.npz")           , emit: composition
     tuple val(meta), path("${prefix}/log.txt")                   , emit: log
-    path "versions.yml"                                          , emit: versions
+    tuple val("${task.process}"), val('vamb'), eval("vamb --version | sed 's/Vamb //'"), emit: versions_vamb, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -44,18 +44,11 @@ process VAMB_BIN {
         ${tax_input} \\
         ${args}
 
-    for file in ${prefix}/bins/*.fna; do
-        dir=\$(dirname "\$file")
-        base=\$(basename "\$file" .fna)
-        newname="\$dir/${prefix}.\$base.fa"
+    find ${prefix}/bins -maxdepth 1 -name "*.fna" -type f | while read file; do
+        newname="${prefix}/bins/${prefix}.\$(basename "\$file")"
         mv "\$file" "\$newname"
         gzip "\$newname"
     done
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vamb: \$(vamb --version | sed 's/Vamb //')
-    END_VERSIONS
     """
 
     stub:
@@ -66,8 +59,8 @@ process VAMB_BIN {
     """
     mkdir -p ${prefix}/bins
 
-    echo "" | gzip > ${prefix}/bins/1.fa.gz
-    echo "" | gzip > ${prefix}/bins/2.fa.gz
+    echo "" | gzip > ${prefix}/bins/${prefix}.1.fna.gz
+    echo "" | gzip > ${prefix}/bins/${prefix}.2.fna.gz
 
     touch ${prefix}/results_taxometer.tsv
     touch ${prefix}/predictor_model.pt
@@ -79,10 +72,5 @@ process VAMB_BIN {
     touch ${prefix}/abundance.npz
     touch ${prefix}/composition.npz
     touch ${prefix}/log.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vamb: \$(vamb --version | sed 's/Vamb //')
-    END_VERSIONS
     """
 }

@@ -10,6 +10,11 @@
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["cram_map_illumina_hic"]
                     },
+                    "centrifuger/centrifuger": {
+                        "branch": "master",
+                        "git_sha": "17b8938b3822985c18e8bb563b13ea0bbd04e29f",
+                        "installed_by": ["modules"]
+                    },
                     "checkm2/predict": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
@@ -57,12 +62,12 @@
                     },
                     "gtdbtk/classifywf": {
                         "branch": "master",
-                        "git_sha": "ade859ec322e8ca528f55fc704e275550308e6cf",
+                        "git_sha": "b581ebb37c529fa07e22c38d128a7c5c273ed286",
                         "installed_by": ["modules"]
                     },
                     "gtdbtk/gtdbtoncbimajorityvote": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "b581ebb37c529fa07e22c38d128a7c5c273ed286",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
@@ -72,7 +77,7 @@
                     },
                     "hmmer/hmmsearch": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "a971f6723149313787b278969dcbe0fb4411bb4a",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
                     },
@@ -83,7 +88,7 @@
                     },
                     "maxbin2": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "0853ee37feb67f35fb7432e805def5fed7c2ee3d",
                         "installed_by": ["modules"]
                     },
                     "metabat2/metabat2": {
@@ -113,7 +118,7 @@
                     },
                     "pyrodigal": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "0ca6ca6c6e068635d01f979d0aed2f59c5d7cec4",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -152,6 +157,11 @@
                         "git_sha": "f03a30b46ebe59ba12b79115f05ab545d5ca2e5e",
                         "installed_by": ["modules"]
                     },
+                    "tiara/tiara": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "trnascanse": {
                         "branch": "master",
                         "git_sha": "0c739827833fdece07eb80618fd085a9a8992406",
@@ -159,9 +169,8 @@
                     },
                     "vamb/bin": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/vamb/bin/vamb-bin.diff"
+                        "git_sha": "2d55a0b8f209055f0a2512ce515bc70fef74125c",
+                        "installed_by": ["modules"]
                     }
                 }
             },

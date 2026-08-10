@@ -4,17 +4,21 @@ include { CHECKM2_PREDICT                   } from '../../../modules/nf-core/che
 include { COVERM_GENOME                     } from '../../../modules/nf-core/coverm/genome/main'
 include { GENOME_STATS as GENOME_STATS_BINS } from '../../../modules/local/genome_stats/main'
 include { GAWK as GAWK_TRNASCAN_SUMMARY     } from '../../../modules/nf-core/gawk/main'
+include { INFERNAL_CMSEARCH                 } from '../../../modules/nf-core/infernal/cmsearch'
+include { TRNASCANSE                        } from '../../../modules/nf-core/trnascanse'
 
 workflow BIN_QC {
     take:
+    ch_assemblies
     ch_bin_sets
     ch_contig2bin
     ch_circular_list
     ch_mapped_bam
     ch_checkm2_db
-    ch_assembly_trnascanse_tbl
-    ch_assembly_rrna_tbl
     val_enable_checkm2
+    ch_rfam_rrna_cm
+    val_rrna_prediction
+    val_enable_trnascanse
 
     main:
     //
@@ -73,30 +77,57 @@ workflow BIN_QC {
     }
 
     //
-    // Module: Summarise tRNA results for each bin
+    // Module: Predict tRNAs using tRNAScan-SE
     //
-    ch_trnascan_summary_input = ch_contig2bin
-        .map { meta, c2b ->
-            def meta_join = meta.subMap(["id", "assembler"])
-            [meta_join, meta, c2b]
-        }
-        .combine(ch_assembly_trnascanse_tbl, by: 0)
-        .map { _meta_join, meta, c2b, trna -> [meta, c2b, trna] }
+    if(val_enable_trnascanse) {
+        //
+        // Module: Predict tRNAs across a whole assembly
+        //
+        TRNASCANSE(
+            ch_assemblies,
+        )
 
-    BINSUMMARIES_TRNA(ch_trnascan_summary_input)
+        //
+        // Module: Summarise tRNA results for each bin
+        //
+        ch_trnascan_summary_input = ch_contig2bin
+            .map { meta, c2b ->
+                def meta_join = meta.subMap(["id", "assembler"])
+                [meta_join, meta, c2b]
+            }
+            .combine(TRNASCANSE.out.tsv, by: 0)
+            .map { _meta_join, meta, c2b, trna -> [meta, c2b, trna] }
 
-    //
-    // Module: Summarise rRNA results for each bin
-    //
-    ch_rrna_summary_input = ch_contig2bin
-        .map { meta, c2b ->
-            def meta_join = meta.subMap(["id", "assembler"])
-            [meta_join, meta, c2b]
-        }
-        .combine(ch_assembly_rrna_tbl, by: 0)
-        .map { _meta_join, meta, c2b, rrna -> [meta, c2b, rrna] }
+        BINSUMMARIES_TRNA(ch_trnascan_summary_input)
+    }
 
-    BINSUMMARIES_RRNA(ch_rrna_summary_input)
+    if (val_rrna_prediction) {
+        //
+        // Module: Identify rRNA genes in the assembly using Infernal
+        //
+        ch_infernal_input = ch_assemblies
+            .combine(ch_rfam_rrna_cm)
+            .map { meta, assembly, cm -> [meta, cm, assembly] }
+
+        INFERNAL_CMSEARCH(
+            ch_infernal_input,
+            false,
+            true,
+        )
+
+        //
+        // Module: Summarise rRNA results for each bin
+        //
+        ch_rrna_summary_input = ch_contig2bin
+            .map { meta, c2b ->
+                def meta_join = meta.subMap(["id", "assembler"])
+                [meta_join, meta, c2b]
+            }
+            .combine(INFERNAL_CMSEARCH.out.target_summary, by: 0)
+            .map { _meta_join, meta, c2b, rrna -> [meta, c2b, rrna] }
+
+        BINSUMMARIES_RRNA(ch_rrna_summary_input)
+    }
 
     emit:
     stats            = GENOME_STATS_BINS.out.stats
