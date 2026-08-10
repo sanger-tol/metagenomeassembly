@@ -95,7 +95,7 @@ workflow ASSEMBLY {
         // Module: Classify circular contigs using genomad
         //
         GENOMAD_ENDTOEND(
-            ch_assemblies_unzipped.filter { val_enable_genomad },
+            ch_assemblies_unzipped
             ch_genomad_db,
         )
     }
