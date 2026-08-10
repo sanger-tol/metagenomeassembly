@@ -25,6 +25,7 @@ repos:
               .*ro-crate-metadata.json$|
               modules/(?!local/).*|
               subworkflows/(?!local/).*|
+              .*\.svg$|
               .*\.snap$
           )$
       - id: check-added-large-files
