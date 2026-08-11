@@ -2,6 +2,9 @@
     "-profile test_withassembly": {
         "content": [
             {
+                "BINETTE": {
+                    "binette": "1.2.1"
+                },
                 "BINSUMMARIES_RRNA": {
                     "gawk": "5.3.0"
                 },
@@ -25,9 +28,6 @@
                 "COMEBIN_RUNCOMEBIN": {
                     "comebin": "1.0.4"
                 },
-                "CONTIG2BINTOFASTA": {
-                    "seqkit": "2.9.0"
-                },
                 "COVERM_CONTIG": {
                     "coverm": "0.7.0"
                 },
@@ -48,15 +48,6 @@
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
                 },
-                "GAWK_MAGSCOT_PROCESS_CONTIG2BIN": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_PROCESS_HMM_TBLOUT": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_RENAME_BINS": {
-                    "gawk": "5.3.1"
-                },
                 "GAWK_VAMB_DEPTHS": {
                     "gawk": "5.3.1"
                 },
@@ -71,15 +62,9 @@
                 "GUNZIP": {
                     "gunzip": 1.13
                 },
-                "HMMER_HMMSEARCH": {
-                    "hmmer": 3.4
-                },
                 "INFERNAL_CMSEARCH": {
                     "gzip": 1.12,
                     "infernal": "1.1.5"
-                },
-                "MAGSCOT_MAGSCOT": {
-                    "magscot": 1.1
                 },
                 "METABAT2_METABAT2": {
                     "metabat2": 2.17
@@ -127,17 +112,18 @@
                 "xyTesTing1_metamdbg.stats.tsv"
             ],
             [
+                "contig2bin/xyTesTing1_metamdbg_binette.final_contig_to_bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_comebin_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_taxvamb_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_1.xyTesTing1_metamdbg_comebin_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_2.xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_3.xyTesTing1_metamdbg_taxvamb_contig2bin.tsv",
+                "log/binette/xyTesTing1_metamdbg_binette.final_bins_quality_reports.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin.log",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin_res.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/covembeddings.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/embeddings.tsv",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.contig_to_bin.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.scores.out",
                 "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/abundance.npz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/composition.npz",
@@ -146,16 +132,16 @@
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/vaevae_clusters_metadata.tsv",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/vaevae_clusters_unsplit.tsv",
                 "qc/xyTesTing1_checkm2_report.tsv",
+                "qc/xyTesTing1_metamdbg.binette.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.comebin.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.taxvamb.minimap2.hifi.cov.stats.depth.tsv",
+                "qc/xyTesTing1_metamdbg_binette.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_binette.stats.tsv",
+                "qc/xyTesTing1_metamdbg_binette.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.stats.tsv",
                 "qc/xyTesTing1_metamdbg_comebin.trna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_metabat2.trna_summary.tsv",
@@ -166,7 +152,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-08-05T10:33:41.238234",
+        "timestamp": "2026-08-11T16:31:59.212089853",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

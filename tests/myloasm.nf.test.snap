@@ -69,7 +69,7 @@
                     "minimap2": "2.30-r1287"
                 },
                 "MYLOASM": {
-                    "myloasm": "0.5.1"
+                    "myloasm": "0.6.0"
                 },
                 "PYRODIGAL": {
                     "pyrodigal": "3.7.1"
@@ -116,6 +116,7 @@
             ],
             [
                 "contig2bin/xyTesTing1_myloasm_circular_contig2bin.tsv",
+                "contig2bin/xyTesTing1_myloasm_dastool_DASTool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_dastool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_myloasm_semibin_contig2bin.tsv",
@@ -127,7 +128,6 @@
                 "log/dastool/xyTesTing1_myloasm.faa.scg.candidates.faa",
                 "log/dastool/xyTesTing1_myloasm_dastool.seqlength",
                 "log/dastool/xyTesTing1_myloasm_dastool_DASTool.log",
-                "log/dastool/xyTesTing1_myloasm_dastool_DASTool_contig2bin.tsv",
                 "log/dastool/xyTesTing1_myloasm_dastool_DASTool_summary.tsv",
                 "log/dastool/xyTesTing1_myloasm_dastool_allBins.eval",
                 "log/metabat2/xyTesTing1_myloasm_metabat2.tsv.gz",
@@ -167,7 +167,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-08-05T11:31:07.518375",
+        "timestamp": "2026-08-11T16:04:39.47244154",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

@@ -2,6 +2,9 @@
     "-profile test": {
         "content": [
             {
+                "BINETTE": {
+                    "binette": "1.2.1"
+                },
                 "BINSUMMARIES_RRNA": {
                     "gawk": "5.3.0"
                 },
@@ -153,12 +156,17 @@
                 "xyTesTing1_metamdbg.stats.tsv"
             ],
             [
+                "contig2bin/xyTesTing1_metamdbg_binette.final_contig_to_bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_circular_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_DASTool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_1.xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_2.xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
+                "log/binette/input_bins_quality_reports/xyTesTing1_metamdbg_binette.input_bins_3.xyTesTing1_metamdbg_metator_contig2bin.tsv",
+                "log/binette/xyTesTing1_metamdbg_binette.final_bins_quality_reports.tsv",
                 "log/dastool/xyTesTing1_metamdbg.faa.all.b6",
                 "log/dastool/xyTesTing1_metamdbg.faa.archaea.scg",
                 "log/dastool/xyTesTing1_metamdbg.faa.bacteria.scg",
@@ -184,11 +192,15 @@
                 "log/metator/plot/bins_distribution.png",
                 "log/metator/plot/bins_size_distribution.png",
                 "qc/xyTesTing1_checkm2_report.tsv",
+                "qc/xyTesTing1_metamdbg.binette.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.circular.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.dastool.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.maxbin2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.depth.tsv",
+                "qc/xyTesTing1_metamdbg_binette.rrna_summary.tsv",
+                "qc/xyTesTing1_metamdbg_binette.stats.tsv",
+                "qc/xyTesTing1_metamdbg_binette.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_circular.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_circular.stats.tsv",
                 "qc/xyTesTing1_metamdbg_circular.trna_summary.tsv",
@@ -208,7 +220,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-08-11T13:12:13.918461",
+        "timestamp": "2026-08-11T15:45:45.182352298",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
