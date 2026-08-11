@@ -48,9 +48,8 @@ workflow METAGENOMEASSEMBLY {
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
     val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
     val_enable_bin_refinement // boolean: enable bin refinement?
-    ch_magscot_gtdb_hmm_db // channel: magscot hmm files from params
     val_enable_dastool // boolean: enable dastool?
-    val_enable_magscot // boolean: enable magscot?
+    val_enable_binette // boolean: enable magscot?
     val_enable_binqc // boolean: enable binqc?
     val_enable_checkm2 // boolean: enable checkm2?
     ch_checkm2_db // file: checkm2 db from params
@@ -130,9 +129,9 @@ workflow METAGENOMEASSEMBLY {
             BIN_REFINEMENT(
                 ASSEMBLY.out.filtered_contigs,
                 BINNING.out.contig2bin.filter { meta, _c2b -> meta.binner != "circular" },
-                ch_magscot_gtdb_hmm_db,
+                ch_checkm2_db,
                 val_enable_dastool,
-                val_enable_magscot
+                val_enable_binette
             )
             ch_bins = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
             ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)

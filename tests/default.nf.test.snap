@@ -57,13 +57,7 @@
                 "GAWK_FASTATOCONTIG2BIN": {
                     "gawk": "5.3.1"
                 },
-                "GAWK_MAGSCOT_PROCESS_CONTIG2BIN": {
-                    "gawk": "5.3.1"
-                },
                 "GAWK_MAXBIN2_DEPTHS": {
-                    "gawk": "5.3.1"
-                },
-                "GAWK_PROCESS_HMM_TBLOUT": {
                     "gawk": "5.3.1"
                 },
                 "GAWK_RENAME_BINS": {
@@ -83,15 +77,9 @@
                 "GUNZIP": {
                     "gunzip": 1.13
                 },
-                "HMMER_HMMSEARCH": {
-                    "hmmer": 3.4
-                },
                 "INFERNAL_CMSEARCH": {
                     "gzip": 1.12,
                     "infernal": "1.1.5"
-                },
-                "MAGSCOT_MAGSCOT": {
-                    "magscot": 1.1
                 },
                 "MAXBIN2": {
                     "maxbin2": "2.2.7"
@@ -166,8 +154,8 @@
             ],
             [
                 "contig2bin/xyTesTing1_metamdbg_circular_contig2bin.tsv",
+                "contig2bin/xyTesTing1_metamdbg_dastool_DASTool_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_dastool_contig2bin.tsv",
-                "contig2bin/xyTesTing1_metamdbg_magscot_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_maxbin2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metabat2_contig2bin.tsv",
                 "contig2bin/xyTesTing1_metamdbg_metator_contig2bin.tsv",
@@ -178,12 +166,8 @@
                 "log/dastool/xyTesTing1_metamdbg.faa.scg.candidates.faa",
                 "log/dastool/xyTesTing1_metamdbg_dastool.seqlength",
                 "log/dastool/xyTesTing1_metamdbg_dastool_DASTool.log",
-                "log/dastool/xyTesTing1_metamdbg_dastool_DASTool_contig2bin.tsv",
                 "log/dastool/xyTesTing1_metamdbg_dastool_DASTool_summary.tsv",
                 "log/dastool/xyTesTing1_metamdbg_dastool_allBins.eval",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.contig_to_bin.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.refined.out",
-                "log/magscot/xyTesTing1_metamdbg_magscot.MAGScoT.scores.out",
                 "log/maxbin2/xyTesTing1_metamdbg_maxbin2.log.gz",
                 "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker.gz",
                 "log/maxbin2/xyTesTing1_metamdbg_maxbin2.marker_of_each_bin.tar.gz",
@@ -202,7 +186,6 @@
                 "qc/xyTesTing1_checkm2_report.tsv",
                 "qc/xyTesTing1_metamdbg.circular.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.dastool.minimap2.hifi.cov.stats.depth.tsv",
-                "qc/xyTesTing1_metamdbg.magscot.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.maxbin2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metabat2.minimap2.hifi.cov.stats.depth.tsv",
                 "qc/xyTesTing1_metamdbg.metator.minimap2.hifi.cov.stats.depth.tsv",
@@ -212,9 +195,6 @@
                 "qc/xyTesTing1_metamdbg_dastool.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.stats.tsv",
                 "qc/xyTesTing1_metamdbg_dastool.trna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.rrna_summary.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.stats.tsv",
-                "qc/xyTesTing1_metamdbg_magscot.trna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.rrna_summary.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.stats.tsv",
                 "qc/xyTesTing1_metamdbg_maxbin2.trna_summary.tsv",
@@ -228,7 +208,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-08-05T09:59:05.594349",
+        "timestamp": "2026-08-11T13:12:13.918461",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

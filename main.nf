@@ -52,9 +52,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
     val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
     val_enable_bin_refinement // boolean: enable bin refinement?
-    ch_magscot_gtdb_hmm_db // channel: hmms for magscot
     val_enable_dastool // boolean: enable dastool?
-    val_enable_magscot // boolean: enable magscot?
+    val_enable_binette // boolean: enable magscot?
     val_enable_binqc // boolean: enable binqc?
     val_enable_checkm2 // boolean: enable checkm2?
     ch_checkm2_db // channel: checkm2 db from --params.checkm2_db
@@ -99,9 +98,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         val_cram_chunk_size,
         val_reads_per_fasta_chunk,
         val_enable_bin_refinement,
-        ch_magscot_gtdb_hmm_db,
         val_enable_dastool,
-        val_enable_magscot,
+        val_enable_binette,
         val_enable_binqc,
         val_enable_checkm2,
         ch_checkm2_db,
@@ -138,8 +136,6 @@ workflow {
         params.show_hidden,
         params.genomad_db,
         params.rfam_rrna_cm,
-        params.hmm_gtdb_pfam,
-        params.hmm_gtdb_tigrfam,
         params.checkm2_db,
         params.gtdbtk_db,
         params.centrifuger_db
@@ -174,9 +170,8 @@ workflow {
         params.hic_mapping_cram_bin_size,
         params.long_read_mapping_reads_per_chunk,
         params.enable_bin_refinement,
-        PIPELINE_INITIALISATION.out.magscot_gtdb_hmm_db,
         params.enable_dastool,
-        params.enable_magscot,
+        params.enable_binette,
         params.enable_binqc,
         params.enable_checkm2 && params.checkm2_db,
         PIPELINE_INITIALISATION.out.checkm2_db,
