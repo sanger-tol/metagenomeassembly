@@ -125,7 +125,7 @@
         {
             "@id": "main.nf",
             "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
-            "creator": [
+            "contributor": [
                 {
                     "@id": "https://orcid.org/0000-0002-7175-0533"
                 },
@@ -141,11 +141,6 @@
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": ["nf-core", "nextflow"],
             "license": ["MIT"],
-            "maintainer": [
-                {
-                    "@id": "https://orcid.org/0000-0002-7175-0533"
-                }
-            ],
             "name": ["sanger-tol/metagenomeassembly"],
             "programmingLanguage": {
                 "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
