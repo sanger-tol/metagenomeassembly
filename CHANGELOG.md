@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) GTDBTk updated to 2.7.2. This requires the new r232 database.
   - The `--gtdbtk_skip_ani_screen` parameter has been replaced with the `--gtdbtk_place_species` parameter.
 - [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) Added bin refinement with Binette, which can be enabled with `--enable_binette`. Binette uses the Checkm2 database, and thus the `--checkm2_db` parameter is required.
- 
+
 ### `Fixed`
 
 - [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Remove all references to `params` outside the entry subworkflow (by @prototaxites)
@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Deprecated`
 
-- Removed the parameters `hmm_gtdb_tigrfam` and `hmm_gtdb_pfam`, as MagScoT has been removed. 
+- Removed the parameters `hmm_gtdb_tigrfam` and `hmm_gtdb_pfam`, as MagScoT has been removed.
 
 ## [1.4.0] - Lovely Molly - [2025-04-27]
 
