@@ -16,10 +16,10 @@
                     "metator": "2.0.0"
                 },
                 "CENTRIFUGER_CENTRIFUGER": {
-                    "centrifuger": "1.1.2-r399"
+                    "centrifuger": "1.1.2-r329"
                 },
                 "CENTRIFUGER_LINEAGE": {
-                    "centrifuger": "1.1.2-r399",
+                    "centrifuger": "1.1.2-r329",
                     "csvtk": "0.37.0"
                 },
                 "CHECKM2_PREDICT": {
