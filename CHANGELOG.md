@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Note that this update removes the existing Teams and Slack notification functionality. If
     you were using this functionality, please configure the
     [nf-slack](https://github.com/seqeralabs/nf-slack) or [nf-teams](https://github.com/nvnieuwk/nf-teams) Nextflow plugins.
+- [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) Modules updated to their latest versions.
 
 ### `Removed`
 
@@ -41,14 +42,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | bin3c/mkmap                   | bin3c       | 0.3.3        | -            |
 | bin3c/cluster                 | bin3c       | 0.3.3        | -            |
 | binette                       | binette     | -            | 1.2.1        |
-| tiara/tiara                   | tiara       | -            | 1.0.3        |
+| csvtk/concat                  | csvtk       | 0.31.0       | 0.37.0       |
+| csvtk/join                    | csvtk       | 0.31.0       | 0.37.0       |
 | centrifuger/centrifuger       | centrifuger | -            | 1.1.1        |
 | centrifuger/lineage           | centrifuger | -            | 1.1.1        |
 | gtdbtk/classifywf             | gtdbtk      | 2.6.1        | 2.7.2        |
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk      | 2.6.1        | 2.7.2        |
+| metamdbg/asm                  | metamdb     | 1.3.1        | 1.4.0        |
 | myloasm                       | myloasm     | 0.5.1        | 0.6.0        |
 | pairtools/parsefiltersort     | pairtools   | -            | 1.1.3        |
 | ripgrep                       | ripgrep     | -            | 14.1.1       |
+| tiara/tiara                   | tiara       | -            | 1.0.3        |
+| samtools/faidx                | samtools    | 1.23.1       | 1.24         |
+| samtools/index                | samtools    | 1.23.1       | 1.24         |
+| samtools/merge                | samtools    | 1.23.1       | 1.24         |
+| samtools/splitheader          | samtools    | 1.23.1       | 1.24         |
+| seqkit/replace                | seqkit      | 2.9.0        | 2.13.0       |
+| seqkit/split2                 | seqkit      | 2.9.0        | 2.13.0       |
 
 ### `Deprecated`
 

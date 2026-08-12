@@ -157,7 +157,7 @@ workflow BINNING {
         // Module: Metator keeps the contig descriptions whereas all other binners drop them
         // This causes problems downstream.
         //
-        FIX_METATOR_BINS(METATOR_PIPELINE.out.bins.transpose())
+        FIX_METATOR_BINS(METATOR_PIPELINE.out.bins.transpose(), "fa.gz")
 
         ch_bins = ch_bins.mix(
             FIX_METATOR_BINS.out.fastx.groupTuple(by: 0).map { meta, fasta -> [meta + [binner: "metator"], fasta] }

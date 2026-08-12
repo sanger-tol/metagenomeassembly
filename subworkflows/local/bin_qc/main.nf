@@ -3,7 +3,6 @@ include { BINSUMMARIES_TRNA                 } from '../../../modules/local/binsu
 include { CHECKM2_PREDICT                   } from '../../../modules/nf-core/checkm2/predict/main'
 include { COVERM_GENOME                     } from '../../../modules/nf-core/coverm/genome/main'
 include { GENOME_STATS as GENOME_STATS_BINS } from '../../../modules/local/genome_stats/main'
-include { GAWK as GAWK_TRNASCAN_SUMMARY     } from '../../../modules/nf-core/gawk/main'
 include { INFERNAL_CMSEARCH                 } from '../../../modules/nf-core/infernal/cmsearch'
 include { TRNASCANSE                        } from '../../../modules/nf-core/trnascanse'
 
