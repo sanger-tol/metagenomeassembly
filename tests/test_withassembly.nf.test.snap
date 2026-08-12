@@ -16,10 +16,10 @@
                     "metator": "2.0.0"
                 },
                 "CENTRIFUGER_CENTRIFUGER": {
-                    "centrifuger": "1.1.0-r299"
+                    "centrifuger": "1.1.2-r399"
                 },
                 "CENTRIFUGER_LINEAGE": {
-                    "centrifuger": "1.1.0-r299",
+                    "centrifuger": "1.1.2-r399",
                     "csvtk": "0.37.0"
                 },
                 "CHECKM2_PREDICT": {
@@ -76,10 +76,10 @@
                     "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "TIARA_TIARA": {
                     "tiara": "1.0.3"

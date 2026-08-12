@@ -44,8 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | binette                       | binette     | -            | 1.2.1        |
 | csvtk/concat                  | csvtk       | 0.31.0       | 0.37.0       |
 | csvtk/join                    | csvtk       | 0.31.0       | 0.37.0       |
-| centrifuger/centrifuger       | centrifuger | -            | 1.1.1        |
-| centrifuger/lineage           | centrifuger | -            | 1.1.1        |
+| centrifuger/centrifuger       | centrifuger | -            | 1.1.2        |
+| centrifuger/lineage           | centrifuger | -            | 1.1.2        |
 | gtdbtk/classifywf             | gtdbtk      | 2.6.1        | 2.7.2        |
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk      | 2.6.1        | 2.7.2        |
 | metamdbg/asm                  | metamdb     | 1.3.1        | 1.4.0        |
