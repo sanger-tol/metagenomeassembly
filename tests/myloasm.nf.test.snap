@@ -75,10 +75,10 @@
                     "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SEMIBIN_SINGLEEASYBIN": {
                     "SemiBin": "2.2.1"

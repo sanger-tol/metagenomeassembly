@@ -91,7 +91,7 @@
                     "metabat2": 2.17
                 },
                 "METAMDBG_ASM": {
-                    "metamdbg": "1.4"
+                    "metamdbg": 1.4
                 },
                 "METATOR_PIPELINE": {
                     "find": "4.9.0",
@@ -109,19 +109,19 @@
                     "pyrodigal": "3.7.1"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SAMTOOLS_MERGEDUP": {
                     "samtools": "1.23.1"
                 },
                 "SAMTOOLS_SPLITHEADER": {
-                    "samtools": "1.24"
+                    "samtools": 1.24
                 },
                 "SPLIT_CIRCLES": {
                     "seqkit": "2.13.0"
