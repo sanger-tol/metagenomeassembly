@@ -148,7 +148,8 @@
                     "seqkit/replace": {
                         "branch": "master",
                         "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/seqkit/replace/seqkit-replace.diff"
                     },
                     "seqkit/split2": {
                         "branch": "master",
