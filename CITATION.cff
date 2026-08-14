@@ -17,13 +17,13 @@ authors:
     orcid: https://orcid.org/0000-0003-3407-4086
     website: https://github.com/gettl008
 cff-version: 1.2.0
-date-released: "2026-04-24"
+date-released: "2026-08-14"
 doi: 10.5281/zenodo.15090769
 license: MIT
 message: If you use this software, please cite it using the metadata from this file
-  and all references from CITATIONS.md .
+  and all references from CITATIONS.md.
 repository-code: https://github.com/sanger-tol/metagenomeassembly
-title: sanger-tol/metagenomeassembly v1.4.0 - Lovely Molly
+title: sanger-tol/metagenomeassembly v1.5.0 - Polly on the Shore
 type: software
 url: https://pipelines.tol.sanger.ac.uk/metagenomeassembly
-version: 1.4.0
+version: 1.5.0
