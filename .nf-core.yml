@@ -44,8 +44,6 @@ lint:
     - validation.summary.beforeText
     - validation.summary.afterText
     - config_defaults:
-        - params.hmm_gtdb_pfam
-        - params.hmm_gtdb_tigrfam
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge

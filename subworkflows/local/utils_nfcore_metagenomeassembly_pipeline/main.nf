@@ -10,8 +10,8 @@
 
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
-include { samplesheetToList         } from 'plugin/nf-schema'
-include { paramsHelp                } from 'plugin/nf-schema'
+//include { samplesheetToList         } from 'plugin/nf-schema'
+//include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
@@ -36,8 +36,6 @@ workflow PIPELINE_INITIALISATION {
     show_hidden // boolean: Show hidden parameters in the help message
     val_genomad_db
     val_rfam_rrna_cm
-    val_hmm_gtdb_pfam
-    val_hmm_gtdb_tigrfam
     val_checkm2_db
     val_gtdbtk_db
     val_centrifuger_db
@@ -145,15 +143,6 @@ workflow PIPELINE_INITIALISATION {
         ch_rfam_rrna_cm = channel.of(file(val_rfam_rrna_cm, checkIfExists: true))
     }
 
-    // MagScoT hmm models
-    ch_magscot_gtdb_hmm_db = channel.empty()
-    if (val_hmm_gtdb_pfam && val_hmm_gtdb_tigrfam) {
-        ch_magscot_gtdb_hmm_db = channel.of(
-            file(params.hmm_gtdb_pfam, checkIfExists: true),
-            file(params.hmm_gtdb_tigrfam, checkIfExists: true),
-        )
-    }
-
     // CheckM2 database
     ch_checkm2_db = channel.empty()
     if(val_checkm2_db) {
@@ -172,7 +161,6 @@ workflow PIPELINE_INITIALISATION {
     hic_cram            = ch_hic_cram
     genomad_db          = ch_genomad_db
     rfam_rrna_cm        = ch_rfam_rrna_cm
-    magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
     checkm2_db          = ch_checkm2_db
     gtdbtk_db           = ch_gtdbtk_db
     centrifuger_db      = ch_centrifuger_db

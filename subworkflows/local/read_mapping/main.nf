@@ -76,6 +76,7 @@ workflow READ_MAPPING {
         ch_pacbio_mapping_inputs.reads,
         val_reads_per_fasta_chunk,
         true,
+        channel.empty()
     )
 
     //

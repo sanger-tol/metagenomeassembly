@@ -4,8 +4,8 @@ Changes in component 'nf-core/seqkit/replace'
 Changes in 'seqkit/replace/main.nf':
 --- modules/nf-core/seqkit/replace/main.nf
 +++ modules/nf-core/seqkit/replace/main.nf
-@@ -11,7 +11,7 @@
-     tuple val(meta), path(fastx)
+@@ -12,7 +12,7 @@
+     val out_ext
  
      output:
 -    tuple val(meta), path("*.fast*"), emit: fastx
@@ -14,8 +14,7 @@ Changes in 'seqkit/replace/main.nf':
  
      when:
 
-'modules/nf-core/seqkit/replace/tests/replace.config' is unchanged
 'modules/nf-core/seqkit/replace/tests/main.nf.test.snap' is unchanged
-'modules/nf-core/seqkit/replace/tests/uncomp.config' is unchanged
+'modules/nf-core/seqkit/replace/tests/nextflow.config' is unchanged
 'modules/nf-core/seqkit/replace/tests/main.nf.test' is unchanged
 ************************************************************

@@ -94,7 +94,7 @@ workflow BIN_TAXONOMY {
 
         CSVTK_JOIN(ch_csvtk_join_input)
 
-        ch_gtdb_merged_summary = CSVTK_JOIN.out.csv
+        ch_gtdb_merged_summary = CSVTK_JOIN.out.out_file
     }
 
     emit:

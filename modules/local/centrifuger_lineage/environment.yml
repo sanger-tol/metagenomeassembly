@@ -4,5 +4,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::centrifuger=1.1.0
+  - bioconda::centrifuger=1.1.2
   - conda-forge::csvtk=0.37.0

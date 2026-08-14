@@ -172,7 +172,7 @@
         <mxCell id="i8tW-RdKxGwg-YplNnFy-36" parent="1" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;DAS_Tool&lt;/font&gt;" vertex="1">
           <mxGeometry height="30" width="60" x="273" y="414" as="geometry" />
         </mxCell>
-        <mxCell id="i8tW-RdKxGwg-YplNnFy-37" parent="1" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;MagScoT&lt;/font&gt;" vertex="1">
+        <mxCell id="i8tW-RdKxGwg-YplNnFy-37" parent="1" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="Binette" vertex="1">
           <mxGeometry height="30" width="60" x="177" y="414" as="geometry" />
         </mxCell>
         <mxCell id="i8tW-RdKxGwg-YplNnFy-38" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeWidth=10;strokeColor=#F96862;fillColor=#F96862;" value="">
@@ -406,7 +406,7 @@
         <mxCell id="6KLKD7ss2HwldtYF_Mel-3" parent="1" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=0;aspect=fixed;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJzdmc3MzYyIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA3LjkzNzQ5NjcgNy45Mzc0OTYyIiBoZWlnaHQ9IjcuOTM3NDk2Mm1tIiB3aWR0aD0iNy45Mzc0OTY3bW0iPiYjeGE7ICAmI3hhOyAgICAmI3hhOyAgJiN4YTsgIDxkZWZzIGlkPSJkZWZzNzM1OSIvPiYjeGE7ICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMy45ODk0MzAzLC0zMy4wNzI5MjEpIiBpZD0ibGF5ZXI1Ij4mI3hhOyAgICA8ZyBpZD0ibGF5ZXI2Ij4mI3hhOyAgICAgIDxjaXJjbGUgcj0iMi42NDU4MzMzIiBjeT0iMzcuMDQxNjY4IiBjeD0iNy45NTgxNzg1IiBpZD0icGF0aDM0NDciIHN0eWxlPSJmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjIuNjQ1ODM7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7cGFpbnQtb3JkZXI6c3Ryb2tlIG1hcmtlcnMgZmlsbDtzdG9wLWNvbG9yOiMwMDAwMDAiLz4mI3hhOyAgICA8L2c+JiN4YTsgIDwvZz4mI3hhOzwvc3ZnPg==" value="" vertex="1">
           <mxGeometry height="30" width="30" x="684" y="377" as="geometry" />
         </mxCell>
-        <mxCell id="6KLKD7ss2HwldtYF_Mel-4" parent="1" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="VAMB" vertex="1">
+        <mxCell id="6KLKD7ss2HwldtYF_Mel-4" parent="1" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="VAMB/taxVamb" vertex="1">
           <mxGeometry height="30" width="60" x="669" y="414" as="geometry" />
         </mxCell>
         <mxCell id="6KLKD7ss2HwldtYF_Mel-11" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeWidth=10;strokeColor=#fa6863;" value="">
