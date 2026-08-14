@@ -49,7 +49,7 @@ workflow METAGENOMEASSEMBLY {
     val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
     val_enable_bin_refinement // boolean: enable bin refinement?
     val_enable_dastool // boolean: enable dastool?
-    val_enable_binette // boolean: enable magscot?
+    val_enable_binette // boolean: enable binette?
     val_enable_binqc // boolean: enable binqc?
     val_enable_checkm2 // boolean: enable checkm2?
     ch_checkm2_db // file: checkm2 db from params
