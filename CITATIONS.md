@@ -14,9 +14,9 @@
 
   > aria2 [WWW Document], n.d. URL https://aria2.github.io/ (accessed 3.7.25).
 
-- [bin3C](https://github.com/cerebis/bin3C)
+- [Binette](https://github.com/genotoul-bioinfo/Binette)
 
-  > DeMaere, M.Z., Darling, A.E., 2019. bin3C: exploiting Hi-C sequencing data to accurately resolve metagenome-assembled genomes. Genome Biology 20, 46. https://doi.org/10.1186/s13059-019-1643-1
+  > Mainguy et al., (2024). Binette: a fast and accurate bin refinement tool to construct high quality Metagenome Assembled Genomes.. Journal of Open Source Software, 9(102), 6782, https://doi.org/10.21105/joss.06782
 
 - [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
 
@@ -61,10 +61,6 @@
 - [Infernal](http://eddylab.org/infernal/)
 
   > Nawrocki, E.P., Eddy, S.R., 2013. Infernal 1.1: 100-fold faster RNA homology searches. Bioinformatics 29, 2933–2935. https://doi.org/10.1093/bioinformatics/btt509
-
-- [MAGScoT](https://github.com/ikmb/MAGScoT)
-
-  > Rühlemann, M.C., Wacker, E.M., Ellinghaus, D., Franke, A., 2022. MAGScoT: a fast, lightweight and accurate bin-refinement tool. Bioinformatics 38, 5430–5433. https://doi.org/10.1093/bioinformatics/btac694
 
 - [MaxBin2](https://sourceforge.net/projects/maxbin2/)
 
