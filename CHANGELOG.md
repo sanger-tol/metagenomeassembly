@@ -24,10 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) tRNAscan-SE now runs once per assembly rather than for each bin. The results are aggregated as with the rRNA results (by @prototaxites)
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) MaxBin2 is now disabled by default.
 - [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) The `hic: cram: enzymes:` section of the samplesheet is deprecated - please supply enzymes as an optional comma-separated list of enzymes to `--hic_enzymes`.
-- [#97](https://github.com/sanger-tol/metagenomeassembly/pull/97/) Update to nf-core template version 4.0.2
-  - Note that this update removes the existing Teams and Slack notification functionality. If
-    you were using this functionality, please configure the
-    [nf-slack](https://github.com/seqeralabs/nf-slack) or [nf-teams](https://github.com/nvnieuwk/nf-teams) Nextflow plugins.
+- [#99](https://github.com/sanger-tol/metagenomeassembly/pull/99/) Update to nf-core template version 4.1.0.
+  - Note that this update removes the existing Teams and Slack notification functionality. If you were using this functionality, please configure the [nf-slack](https://github.com/seqeralabs/nf-slack) or [nf-teams](https://github.com/nvnieuwk/nf-teams) Nextflow plugins.
 - [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) Modules updated to their latest versions.
 
 ### `Removed`
