@@ -6,3 +6,4 @@ channels:
 dependencies:
   - bioconda::centrifuger=1.1.2
   - conda-forge::csvtk=0.37.0
+  - conda-forge::findutils=4.10.0

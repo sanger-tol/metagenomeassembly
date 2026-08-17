@@ -4,8 +4,8 @@ process CENTRIFUGER_LINEAGE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/27/27220cee0848b185c512b40779cb85738da0ad7eac58d65024f5d54495fab310/data':
-        'community.wave.seqera.io/library/centrifuger_csvtk:4d755e9e2e1b3d33' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/43/4307210ff24411b79a1b7c513ea63333844777d78075ca2ddd7fb3dc058db4d5/data':
+        'community.wave.seqera.io/library/centrifuger_csvtk_findutils:607c59bcf2a3209e' }"
 
     input:
     tuple val(meta), path(classifications)
