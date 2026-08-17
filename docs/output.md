@@ -24,7 +24,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 Assembly of raw input HiFi reads.
 
-### metaMDBG
+### metaMDBG
 
 [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG) is a metagenome assembler for long read (PacBio HiFi and ONT) data.
 
@@ -37,7 +37,7 @@ Assembly of raw input HiFi reads.
 
 </details>
 
-## Assembly QC
+## Assembly QC
 
 Genome assembly statistics (contig counts, length, N50, etc.) tallied using [Seqkit](https://bioinf.shenwei.me/seqkit/), as well as information on the number of circular contigs, and ribosomal RNA annotations using [Infernal](http://eddylab.org/infernal/).
 
