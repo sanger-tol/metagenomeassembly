@@ -26,13 +26,22 @@ using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
 ## Pipeline summary
 
-1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG).
-2. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).
-3. Bins the assembly using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), [Bin3C](https://github.com/cerebis/bin3C) (Hi-C binning), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
-4. Optionally, refine the bins using [DAS_Tool](https://github.com/cmks/DAS_Tool) and [MagScoT](https://github.com/ikmb/MAGScoT).
-5. Assesses the completeness and contamination of bins using [CheckM2](https://github.com/chklovski/CheckM2) and assesses ncRNA content using [tRNAscan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE) for tRNA and [Infernal](http://eddylab.org/infernal/)+Rfam for rRNA.
-6. Assigns taxonomy to bins using [GTDB-TK](https://github.com/Ecogenomics/GTDBTk/) and converts assignments to NCBI taxonomy labels.
-7. Summarises information at the bin level.
+1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG) or [myloasm](https://github.com/bluenote-1577/myloasm).
+2. Complete circular genomes are extracted from the assembly directly.
+3. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).
+4. For the remaining contigs, runs a suite of binning tools to split the genome assembly into its constituent genomes:
+
+- [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/)
+- [MaxBin2](https://sourceforge.net/projects/maxbin2/)
+- [VAMB](https://github.com/RasmussenLab/vamb) - taxVAMB mode is also supported, with contig classifications from [centrifuger](https://github.com/mourisl/centrifuger)
+- [COMEBIN](https://github.com/ziyewang/COMEBin)
+- [SemiBin2](https://github.com/BigDataBiology/SemiBin)
+- [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning)
+
+5. Refines the bins using [DAS_Tool](https://github.com/cmks/DAS_Tool) and [Binette](https://github.com/genotoul-bioinfo/Binette).
+6. Assesses the completeness and contamination of bins using [CheckM2](https://github.com/chklovski/CheckM2) and assesses ncRNA content using [tRNAscan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE) for tRNA and [Infernal](http://eddylab.org/infernal/)+Rfam for rRNA.
+7. Assigns taxonomy to bins using [GTDB-TK](https://github.com/Ecogenomics/GTDBTk/) and converts assignments to NCBI taxonomy labels.
+8. Collates information for each bin into a summary table.
 
 ## Usage
 
@@ -54,10 +63,6 @@ hic:
   cram:
     - /path/to/hic/hic1.cram
     - /path/to/hic/hic2.cram
-    - ...
-  enzymes:
-    - enzyme_name_1 (e.g. DpnII)
-    - enzyme_name_1 (e.g. HinfI)
     - ...
 ```
 
