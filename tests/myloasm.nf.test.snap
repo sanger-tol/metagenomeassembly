@@ -81,7 +81,7 @@
                     "samtools": 1.24
                 },
                 "SEMIBIN_SINGLEEASYBIN": {
-                    "SemiBin": "2.2.1"
+                    "SemiBin": "2.4.1"
                 },
                 "SPLIT_CIRCLES": {
                     "seqkit": "2.13.0"

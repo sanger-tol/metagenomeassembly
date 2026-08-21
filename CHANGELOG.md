@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | csvtk/join                    | csvtk       | 0.31.0       | 0.37.0       |
 | centrifuger/centrifuger       | centrifuger | -            | 1.1.2        |
 | centrifuger/lineage           | centrifuger | -            | 1.1.2        |
+| comebin/runcomebin            | comebin     | -            | 1.1.0        |
 | gtdbtk/classifywf             | gtdbtk      | 2.6.1        | 2.7.2        |
 | gtdbtk/gtdbtoncbimajorityvote | gtdbtk      | 2.6.1        | 2.7.2        |
 | metamdbg/asm                  | metamdb     | 1.3.1        | 1.4.0        |
@@ -55,8 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools/index                | samtools    | 1.23.1       | 1.24         |
 | samtools/merge                | samtools    | 1.23.1       | 1.24         |
 | samtools/splitheader          | samtools    | 1.23.1       | 1.24         |
+| semibin/singleeasybin         | semibin     | -            | 2.4.1        |
 | seqkit/replace                | seqkit      | 2.9.0        | 2.13.0       |
 | seqkit/split2                 | seqkit      | 2.9.0        | 2.13.0       |
+| vamb/bin                      | vamb        | -            | 5.0.4        |
 
 ### `Deprecated`
 
