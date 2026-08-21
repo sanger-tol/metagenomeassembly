@@ -142,7 +142,7 @@
                     },
                     "semibin/singleeasybin": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "041fbd98880c9af7762aec2f54fa4f35503d50f2",
                         "installed_by": ["modules"]
                     },
                     "seqkit/replace": {
