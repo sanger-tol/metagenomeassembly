@@ -27,7 +27,7 @@
                     },
                     "comebin/runcomebin": {
                         "branch": "master",
-                        "git_sha": "fcc9c9adc59e6b0bfb91fc4b8855de00c81a9bd5",
+                        "git_sha": "974db4cfc4dfe066c896a3a1af35dfa37eeec7a7",
                         "installed_by": ["modules"]
                     },
                     "coverm/contig": {
