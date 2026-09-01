@@ -26,7 +26,8 @@
                     "checkm2": "1.1.0"
                 },
                 "COMEBIN_RUNCOMEBIN": {
-                    "comebin": "1.1.0"
+                    "comebin": "1.1.0",
+                    "cuda": "no CUDA available"
                 },
                 "COVERM_CONTIG": {
                     "coverm": "0.7.0"
@@ -122,8 +123,9 @@
                 "log/binette/xyTesTing1_metamdbg_binette.final_bins_quality_reports.tsv",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin.log",
                 "log/comebin/xyTesTing1_metamdbg_comebin/comebin_res.tsv",
-                "log/comebin/xyTesTing1_metamdbg_comebin/covembeddings.tsv",
-                "log/comebin/xyTesTing1_metamdbg_comebin/embeddings.tsv",
+                "log/comebin/xyTesTing1_metamdbg_comebin/covembeddings.npy",
+                "log/comebin/xyTesTing1_metamdbg_comebin/embedding_ids.txt",
+                "log/comebin/xyTesTing1_metamdbg_comebin/embeddings.npy",
                 "log/metabat2/xyTesTing1_metamdbg_metabat2.tsv.gz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/abundance.npz",
                 "log/taxvamb/xyTesTing1_metamdbg_taxvamb/composition.npz",
@@ -152,7 +154,7 @@
                 "xyTesTing1.group_summary.tsv"
             ]
         ],
-        "timestamp": "2026-08-11T16:31:59.212089853",
+        "timestamp": "2026-09-01T10:37:44.233099052",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
