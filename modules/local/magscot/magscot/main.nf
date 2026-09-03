@@ -11,7 +11,7 @@ process MAGSCOT_MAGSCOT {
     tuple val(meta), path("*.scores.out"), emit: scores
     tuple val(meta), path("*.refined.out"), emit: refined
     tuple val(meta), path("*.contig_to_bin.out"), emit: contig2bin
-    path ("versions.yml"), emit: versions
+    tuple val("${task.process}"), val('magscot'), val("1.1"), topic: versions, emit: versions_magscot
 
     script:
     def args = task.ext.args ?: ''
@@ -33,11 +33,6 @@ process MAGSCOT_MAGSCOT {
     ## magscot puts out contig2bin file in wrong format
     awk 'BEGIN{OFS="\t"} NR > 1 {print \$2,\$1}' MAGScoT.refined.contig_to_bin.out > ${prefix}.MAGScoT.refined.contig_to_bin.out
     rm MAGScoT.refined.contig_to_bin.out
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        magscot: 1.1
-    END_VERSIONS
     """
 
     stub:
@@ -46,10 +41,5 @@ process MAGSCOT_MAGSCOT {
     touch ${prefix}.MAGScoT.scores.out
     touch ${prefix}.MAGScoT.refined.out
     touch ${prefix}.MAGScoT.refined.contig_to_bin.out
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        magscot: 1.1
-    END_VERSIONS
     """
 }

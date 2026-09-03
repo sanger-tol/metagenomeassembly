@@ -8,17 +8,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
-include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
-include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { samplesheetToList       } from 'plugin/nf-schema'
-include { paramsHelp              } from 'plugin/nf-schema'
-include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification          } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
-include { READ_YAML               } from '../../../modules/local/read_yaml'
-
+include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
+include { paramsSummaryMap          } from 'plugin/nf-schema'
+//include { samplesheetToList         } from 'plugin/nf-schema'
+//include { paramsHelp                } from 'plugin/nf-schema'
+include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
+include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
+include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
+include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
+include { READ_YAML                 } from '../../../modules/local/read_yaml'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SUBWORKFLOW TO INITIALISE PIPELINE
@@ -29,16 +27,20 @@ workflow PIPELINE_INITIALISATION {
     take:
     version // boolean: Display version and exit
     validate_params // boolean: Boolean whether to validate parameters against the schema at runtime
-    _monochrome_logs // boolean: Do not use coloured log outputs
+    monochrome_logs // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir //  string: The output directory where the results will be saved
     input //  string: Path to input samplesheet
     help // boolean: Display help message and exit
     help_full // boolean: Show the full help message
     show_hidden // boolean: Show hidden parameters in the help message
+    val_genomad_db
+    val_rfam_rrna_cm
+    val_checkm2_db
+    val_gtdbtk_db
+    val_centrifuger_db
 
     main:
-
     ch_versions = channel.empty()
 
     //
@@ -55,6 +57,9 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+
+    def before_text = ""
+    def after_text = ""
     before_text = """
 -\033[2m----------------------------------------------------\033[0m-
 \033[0;34m   _____                               \033[0;32m _______   \033[0;31m _\033[0m
@@ -67,7 +72,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;34m                     |___/\033[0m
 \033[0;35m  ${workflow.manifest.name} ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
-        """
+    """
     after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
@@ -75,6 +80,10 @@ workflow PIPELINE_INITIALISATION {
 * Software dependencies
     https://github.com/nf-core/genomeassembly/blob/main/CITATIONS.md
 """
+    if (monochrome_logs) {
+        before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
+    }
+
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN(
@@ -87,6 +96,7 @@ workflow PIPELINE_INITIALISATION {
         before_text,
         after_text,
         command,
+        false
     )
 
     //
@@ -102,77 +112,58 @@ workflow PIPELINE_INITIALISATION {
     READ_YAML(file(input))
 
     ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
+        .map { meta, reads -> [meta, reads.collect { it -> file(it, checkIfExists: true) }] }
 
     // filter out results with empty lists to remove non-provided inputs
-    ch_hic_cram = READ_YAML.out.hic_cram.filter { _meta, cram -> !cram.isEmpty() }
+    ch_hic_cram = READ_YAML.out.hic_cram
+        .filter { _meta, cram -> !cram.isEmpty() }
+        .map { meta, cram -> [meta, cram.collect { it -> file(it, checkIfExists: true) }] }
 
     ch_assembly = READ_YAML.out.assembly
         .filter { _meta, asm -> asm }
         .map { meta, asm -> [meta, file(asm, checkIfExists: true)] }
 
-    // collect as have to ensure this is a value channel
-    ch_hic_enzymes = READ_YAML.out.hic_enzymes
-        .filter { enzymes -> !enzymes.isEmpty() }
-        .collect()
-
     // Genomad database
     ch_genomad_db = channel.empty()
-    if (params.genomad_db) {
-        ch_genomad_db = channel.of(
-            file(params.genomad_db, checkIfExists: true)
-        )
+    if(val_genomad_db) {
+        ch_genomad_db = channel.of(file(val_genomad_db, checkIfExists: true)).collect()
+    }
+
+    ch_centrifuger_db = channel.empty()
+    if(val_centrifuger_db) {
+        ch_centrifuger_db = channel.fromPath(val_centrifuger_db.replaceAll(/\.1\.cfr$/, '.*.cfr'), checkIfExists: true)
+            .collect()
+            .map { db -> [[id: "centrifuger"], db] }
     }
 
     // Create channels for input database files
     // rRNA covariance models
     ch_rfam_rrna_cm = channel.empty()
-    if (params.rfam_rrna_cm) {
-        ch_rfam_rrna_cm = channel.of(
-            file(params.rfam_rrna_cm, checkIfExists: true)
-        )
-    }
-
-    // MagScoT hmm models
-    ch_magscot_gtdb_hmm_db = channel.empty()
-    if (params.enable_magscot && params.hmm_gtdb_pfam && params.hmm_gtdb_tigrfam) {
-        ch_magscot_gtdb_hmm_db = channel.of(
-            file(params.hmm_gtdb_pfam, checkIfExists: true),
-            file(params.hmm_gtdb_tigrfam, checkIfExists: true),
-        )
+    if(val_rfam_rrna_cm) {
+        ch_rfam_rrna_cm = channel.of(file(val_rfam_rrna_cm, checkIfExists: true))
     }
 
     // CheckM2 database
     ch_checkm2_db = channel.empty()
-    if (params.checkm2_db) {
-        ch_checkm2_db = channel.of(
-            [
-                [id: "checkm2"],
-                file(params.checkm2_db, checkIfExists: true),
-            ]
-        )
+    if(val_checkm2_db) {
+        ch_checkm2_db = channel.of([[id: "checkm2"], file(val_checkm2_db, checkIfExists: true)]).collect()
     }
 
     // GTDB-Tk database
     ch_gtdbtk_db = channel.empty()
-    if (params.gtdbtk_db) {
-        ch_gtdbtk_db = channel.of(
-            [
-                [id: "gtdb"],
-                file(params.gtdbtk_db, checkIfExists: true),
-            ]
-        )
+    if (val_gtdbtk_db) {
+        ch_gtdbtk_db = channel.of([[id: "gtdb"], file(params.gtdbtk_db, checkIfExists: true)]).collect()
     }
 
     emit:
     pacbio_fasta        = ch_pacbio_fasta
     assembly            = ch_assembly
     hic_cram            = ch_hic_cram
-    hic_enzymes         = ch_hic_enzymes
     genomad_db          = ch_genomad_db
     rfam_rrna_cm        = ch_rfam_rrna_cm
-    magscot_gtdb_hmm_db = ch_magscot_gtdb_hmm_db
     checkm2_db          = ch_checkm2_db
     gtdbtk_db           = ch_gtdbtk_db
+    centrifuger_db      = ch_centrifuger_db
     versions            = ch_versions
 }
 
@@ -189,7 +180,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url //  string: hook URL for notifications
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
@@ -211,13 +201,11 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
+
     }
 
     workflow.onError {
-        log.error("Pipeline failed. Please refer to troubleshooting docs: https://nf-co.re/docs/usage/troubleshooting")
+        log.error "Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting"
     }
 }
 

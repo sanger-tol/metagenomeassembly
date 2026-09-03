@@ -12,7 +12,6 @@ process READ_YAML {
     tuple val(meta), val(pacbio), emit: pacbio_fasta
     tuple val(meta), val(hic_cram), emit: hic_cram
     tuple val(asm_meta), val(assembly), emit: assembly
-    val (hic_enzymes), emit: hic_enzymes
 
     exec:
     // Read input
@@ -26,7 +25,6 @@ process READ_YAML {
     // Raw data
     pacbio = input.pacbio.fasta.flatten()
     hic_cram = input?.hic?.cram ? input.hic.cram.flatten() : []
-    hic_enzymes = input?.hic?.enzymes ? input.hic.enzymes.flatten() : []
 
     // Assembly
     assembly = input?.assembly?.fasta ? input.assembly.fasta : []

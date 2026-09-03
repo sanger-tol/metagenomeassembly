@@ -8,7 +8,6 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { ASSEMBLY               } from '../subworkflows/local/assembly'
-include { ASSEMBLY_QC            } from '../subworkflows/local/assembly_qc'
 include { BINNING                } from '../subworkflows/local/binning'
 include { BIN_QC                 } from '../subworkflows/local/bin_qc'
 include { BIN_TAXONOMY           } from '../subworkflows/local/bin_taxonomy'
@@ -24,119 +23,152 @@ include { READ_MAPPING           } from '../subworkflows/local/read_mapping'
 
 workflow METAGENOMEASSEMBLY {
     take:
-    pacbio_fasta // channel: pacbio read in from yaml
-    assembly // channel: pre-built metagenome assembly, optional
-    hic_cram // channel: hic cram files from yaml, optional
-    hic_enzymes // channel: hic enzyme list from yaml, optional
-    genomad_db // channel: genomad db from params
-    rfam_rrna_cm // channel: rRNA cm file from params
-    magscot_gtdb_hmm_db // channel: magscot hmm files from params
-    checkm2_db // channel: checkm2 db from params
-    gtdbtk_db // channel: gtdbtk db from params
-    val_hic_binning // boolean: hic binnning enabled
+    ch_long_reads // channel: pacbio read in from yaml
+    ch_provided_assembly // channel: pre-built metagenome assembly, optional
+    ch_hic_cram // channel: hic cram files from yaml, optional
+    val_assembler // string: assembler to use
+    val_minimum_contig_size // integer: minimum contig size
+    val_maximum_contig_size // integer: maximum contig size
+    val_minimum_circular_contig_length // integer: minimum circular contig length
+    val_enable_tiara // boolean: enable tiara?
+    val_tiara_exclude_classifications // string: tiara exclude classifications
+    val_enable_genomad // boolean: enable genomad?
+    ch_genomad_db // file: genomad db from params
+    val_enable_binning // boolean: enable binning?
+    val_extract_circular_contigs // boolean: extract circular contigs?
+    val_enable_metabat2 // boolean: enable metabat2?
+    val_enable_maxbin2 // boolean: enable maxbin2?
+    val_enable_comebin // boolean: enable comebin?
+    val_enable_semibin2 // boolean: enable semibin?
+    val_enable_vamb // boolean: enable vamb?
+    val_enable_taxvamb // boolean: enable centrifuger?
+    ch_centrifuger_db // channel: centrifuger db from params.centrifuger_db
+    val_enable_metator // boolean: enable metator?
     val_hic_aligner // string: which aligner to use for Hi-C mapping
     val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
     val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
+    val_enable_bin_refinement // boolean: enable bin refinement?
+    val_enable_dastool // boolean: enable dastool?
+    val_enable_binette // boolean: enable binette?
+    val_enable_binqc // boolean: enable binqc?
+    val_enable_checkm2 // boolean: enable checkm2?
+    ch_checkm2_db // file: checkm2 db from params
+    val_enable_rrna_prediction // boolean: enable rrna prediction
+    ch_rfam_rrna_cm // channel: rRNA cm file from params
+    val_enable_trnascanse // boolean: enable trnascan se?
+    val_enable_taxonomy // boolean: enable taxonomy?
+    val_enable_gtdbtk // boolean: enable gtdbtk?
+    ch_gtdbtk_db // channel: gtdbtk db from params
+    val_ar53_metadata // path: ar53 metadata file
+    val_bac120_metadata // path: bac120 metadata file
+    outdir
 
     main:
     ch_versions = channel.empty()
 
     //
-    // SUBWORKFLOW: Assemble PacBio hifi reads
+    // Subworkflow: Assemble PacBio hifi reads
     //
     ASSEMBLY(
-        pacbio_fasta,
-        assembly,
+        ch_long_reads,
+        ch_provided_assembly,
+        val_assembler,
+        val_minimum_contig_size,
+        val_maximum_contig_size,
+        val_extract_circular_contigs,
+        val_minimum_circular_contig_length,
+        val_enable_tiara,
+        val_tiara_exclude_classifications,
+        val_enable_genomad,
+        ch_genomad_db
     )
-    ch_versions = ch_versions.mix(ASSEMBLY.out.versions)
 
-    ch_assemblies = ASSEMBLY.out.assemblies
-
-    //
-    // SUBWORKFLOW: QC for assemblies - statistics, rRNA models,
-    // check contig circularity and classify circular contigs
-    //
-    ASSEMBLY_QC(
-        ch_assemblies,
-        rfam_rrna_cm,
-        genomad_db,
-    )
-    ch_versions = ch_versions.mix(ASSEMBLY_QC.out.versions)
-
-    ch_assembly_rrna = ASSEMBLY_QC.out.rrna
-    ch_circles = ASSEMBLY_QC.out.circle_list
-
-    if (params.enable_binning) {
+    if (val_enable_binning) {
         //
-        // SUBWORKFLOW: Map PacBio Hifi reads and Illumina Hi-C
+        // Subworkflow: Map PacBio Hifi reads and Illumina Hi-C
         // reads to the assembly and estimate per-contig coverages
         //
         READ_MAPPING(
-            ch_assemblies,
-            pacbio_fasta,
-            hic_cram,
-            val_hic_binning,
+            ASSEMBLY.out.full_assemblies,
+            ASSEMBLY.out.filter_list,
+            ch_long_reads,
+            ch_hic_cram,
+            val_enable_metator,
             val_hic_aligner,
             val_cram_chunk_size,
             val_reads_per_fasta_chunk,
+            val_extract_circular_contigs,
         )
-        ch_versions = ch_versions.mix(READ_MAPPING.out.versions)
 
         //
-        // SUBWORKFLOW: Bin the assembly using binning tools
+        // Subworkflow: Bin the assembly using binning tools
         //
         BINNING(
-            ch_assemblies,
+            ASSEMBLY.out.filtered_contigs,
+            ASSEMBLY.out.circular_contigs,
             READ_MAPPING.out.depths,
-            READ_MAPPING.out.hic_bam,
-            hic_enzymes,
+            READ_MAPPING.out.filtered_bam,
+            READ_MAPPING.out.hic_pairs,
+            val_extract_circular_contigs,
+            val_enable_metabat2,
+            val_enable_maxbin2,
+            val_enable_comebin,
+            val_enable_semibin2,
+            val_enable_vamb,
+            val_enable_taxvamb,
+            ch_centrifuger_db,
+            val_enable_metator,
         )
-        ch_versions = ch_versions.mix(BINNING.out.versions)
         ch_bins = BINNING.out.bins
         ch_contig2bin = BINNING.out.contig2bin
 
-        if (params.enable_bin_refinement) {
+        if (val_enable_bin_refinement) {
             //
-            // SUBWORKFLOW: Refine bins using DAS_Tool and MAGScoT
+            // Subworkflow: Refine bins using DAS_Tool and MAGScoT
             //
             BIN_REFINEMENT(
-                ch_assemblies,
-                ch_contig2bin,
-                magscot_gtdb_hmm_db,
+                ASSEMBLY.out.filtered_contigs,
+                BINNING.out.contig2bin.filter { meta, _c2b -> meta.binner != "circular" },
+                ch_checkm2_db,
+                val_enable_dastool,
+                val_enable_binette
             )
-            ch_versions = ch_versions.mix(BIN_REFINEMENT.out.versions)
             ch_bins = ch_bins.mix(BIN_REFINEMENT.out.refined_bins)
             ch_contig2bin = ch_contig2bin.mix(BIN_REFINEMENT.out.contig2bin)
         }
 
-        if (params.enable_binqc) {
+        if (val_enable_binqc) {
             //
-            // SUBWORKFLOW: QC of bins - completeness/contamination using
+            // Subworkflow: QC of bins - completeness/contamination using
             // CheckM2, statistics, tRNAs + ncRNAs
             //
             BIN_QC(
+                ASSEMBLY.out.full_assemblies,
                 ch_bins,
                 ch_contig2bin,
-                ch_circles,
-                READ_MAPPING.out.pacbio_bam,
-                ch_assembly_rrna,
-                checkm2_db,
+                ASSEMBLY.out.circles_list,
+                READ_MAPPING.out.full_bam,
+                ch_checkm2_db,
+                val_enable_checkm2,
+                ch_rfam_rrna_cm,
+                val_enable_rrna_prediction,
+                val_enable_trnascanse
             )
-            ch_versions = ch_versions.mix(BIN_QC.out.versions)
 
             ch_taxonomy_tsv = channel.empty()
-
-            if (params.enable_taxonomy) {
+            if (val_enable_taxonomy) {
                 //
-                // SUBWORKFLOW: Taxonomic classification of bins using
+                // Subworkflow: Taxonomic classification of bins using
                 // GTDB-Tk and conversion of classifications to NCBI taxonomy
                 //
                 BIN_TAXONOMY(
                     ch_bins,
                     BIN_QC.out.checkm2_tsv,
-                    gtdbtk_db,
+                    ch_gtdbtk_db,
+                    val_enable_gtdbtk,
+                    val_ar53_metadata,
+                    val_bac120_metadata
                 )
-                ch_versions = ch_versions.mix(BIN_TAXONOMY.out.versions)
                 ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_summary
             }
 
@@ -181,7 +213,6 @@ workflow METAGENOMEASSEMBLY {
                 ch_trnascan_collated,
                 ch_rrna_collated,
             )
-            ch_versions = ch_versions.mix(BIN_SUMMARY.out.versions)
         }
     }
     //
@@ -204,16 +235,14 @@ workflow METAGENOMEASSEMBLY {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'metagenomeassembly_software_' + 'versions.yml',
+            storeDir: "${outdir}/pipeline_info",
+            name:  'metagenomeassembly_software_'  + 'versions.yml',
             sort: true,
-            newLine: true,
+            newLine: true
         )
-        .set { _ch_collated_versions }
-
     emit:
-    versions = ch_versions // channel: [ path(versions.yml) ]
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }

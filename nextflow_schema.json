@@ -49,26 +49,16 @@
                     "default": "metamdbg",
                     "description": "Which assembler to use for metagenome assembly.",
                     "enum": ["metamdbg", "myloasm"]
-                }
-            }
-        },
-        "assembly_qc_options": {
-            "title": "Assembly QC options",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "enable_rrna_prediction": {
+                },
+                "enable_tiara": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                    "description": "Enable domain-level classification of contigs with Tiara. If enabled, contigs classified using the categories listed in --exclude_tiara_classifications will be excluded from binning."
                 },
-                "rfam_rrna_cm": {
+                "tiara_exclude_classifications": {
                     "type": "string",
-                    "description": "Covariance model for rRNA preditiction from RFAM.",
-                    "default": "${projectDir}/assets/rRNA.cm",
-                    "format": "file-path",
-                    "pattern": "^\\S+\\.cm$"
+                    "default": "eukarya,organelle",
+                    "description": "A comma-separated list of tiara classifications to use to exclude contigs from the assembly. Options are 'bacteria', 'archaea', 'prokarya', 'eukarya', 'organelle' or 'unknown'."
                 },
                 "enable_genomad": {
                     "type": "boolean",
@@ -90,13 +80,18 @@
         "read_mapping_options": {
             "title": "Read mapping options",
             "type": "object",
-            "description": "",
+            "description": "Options controlling the mapping of reads to the assembly for coverage estimation or Hi-C contacts.",
             "default": "",
             "properties": {
                 "long_read_mapping_reads_per_chunk": {
                     "type": "integer",
                     "default": 1000000,
                     "description": "When mapping long reads, how many long reads to map to the assembly in a single chunk."
+                },
+                "minimum_hifi_perc_identity": {
+                    "type": "integer",
+                    "default": 99,
+                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
                 },
                 "hic_aligner": {
                     "type": "string",
@@ -112,7 +107,7 @@
                 "hic_mapping_minq": {
                     "type": "integer",
                     "default": 10,
-                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Bin3C or Metator.",
+                    "description": "Minimum map quality for a Hi-C read to be passed on for binning by Metator.",
                     "minimum": 0
                 }
             },
@@ -129,6 +124,30 @@
                     "default": true,
                     "description": "Enable binning of metagenomes into genome bins."
                 },
+                "minimum_contig_size": {
+                    "type": "integer",
+                    "default": 3000,
+                    "description": "The minimum size of contig to be considered when binning."
+                },
+                "maximum_contig_size": {
+                    "type": "string",
+                    "description": "The maximum size of contig to be considered when binning."
+                },
+                "minimum_bin_size": {
+                    "type": "integer",
+                    "default": 150000,
+                    "description": "The minimum size of a bin, in basepairs, to be emitted."
+                },
+                "extract_circular_contigs": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract circular contigs and treat them as bins."
+                },
+                "minimum_circular_contig_length": {
+                    "type": "integer",
+                    "default": 250000,
+                    "description": "The minimum length of a circular contig required to be treated as a bin."
+                },
                 "enable_metabat2": {
                     "type": "boolean",
                     "default": true,
@@ -136,33 +155,44 @@
                 },
                 "enable_maxbin2": {
                     "type": "boolean",
-                    "default": true,
                     "description": "Enable binning with MaxBin2."
                 },
-                "enable_bin3c": {
+                "enable_comebin": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enable binning with Bin3C."
+                    "description": "Enable binning with Comebin."
+                },
+                "enable_vamb": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with VAMB."
+                },
+                "enable_taxvamb": {
+                    "type": "boolean",
+                    "description": "Enable taxonomic classification of assembled contigs with centrifuger. These are passed to VAMB to enable its taxonomic binning mode."
+                },
+                "centrifuger_db": {
+                    "type": "string",
+                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically."
+                },
+                "enable_semibin2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Semibin2."
+                },
+                "semibin_environment_model": {
+                    "type": "string",
+                    "default": "global",
+                    "description": "Pre-trained model to use with semibin for binning. Defaults to \"global\", see the SemiBin2 docs for full details: https://semibin.readthedocs.io/en/latest/usage/"
                 },
                 "enable_metator": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with MetaTor."
                 },
-                "minimum_contig_size": {
-                    "type": "integer",
-                    "default": 3000,
-                    "description": "The minimum size of contig to be considered when binning. This option applies to MetaBat2, MaxBin2, and Bin3C, but not Metator."
-                },
-                "minimum_hifi_perc_identity": {
-                    "type": "integer",
-                    "default": 99,
-                    "description": "The minimum required percent identity of a read mapping to the assembly to be counted during coverage estimation for MetaBat2 and MaxBin2."
-                },
-                "minimum_bin_size": {
-                    "type": "integer",
-                    "default": 150000,
-                    "description": "The minimum size of a bin, in basepairs, to be emitted. This parameter is currently respected by MetaBat2 and Bin3C, but not Metator or MaxBin2."
+                "hic_enzymes": {
+                    "type": "string",
+                    "description": "A comma-separated list of Hi-C enzymes to use for binning with MetaTOR."
                 }
             }
         },
@@ -182,24 +212,10 @@
                     "default": true,
                     "description": "Enable bin refinement using DAS_Tool."
                 },
-                "enable_magscot": {
+                "enable_binette": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enable bin refinement using MagScoT."
-                },
-                "hmm_gtdb_pfam": {
-                    "type": "string",
-                    "description": "Path to the GTDB r207 Pfam HMM database.",
-                    "default": "${projectDir}/assets/gtdbtk_rel207_Pfam-A.hmm",
-                    "pattern": "^\\S+\\.hmm$",
-                    "format": "file-path"
-                },
-                "hmm_gtdb_tigrfam": {
-                    "type": "string",
-                    "description": "Path to the GTDB r207 TigrFam HMM database.",
-                    "default": "${projectDir}/assets/gtdbtk_rel207_tigrfam.hmm",
-                    "pattern": "^\\S+\\.hmm$",
-                    "format": "file-path"
+                    "description": "Enable bin refinement using Binette."
                 }
             }
         },
@@ -225,10 +241,22 @@
                     "pattern": "^\\S+\\.dmnd$",
                     "format": "file-path"
                 },
-                "enable_trnascan_se": {
+                "enable_trnascanse": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Predict tRNAs in genome bins using tRNAscan-SE."
+                    "description": "Predict tRNAs in an assembly using tRNAscan-SE."
+                },
+                "enable_rrna_prediction": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
+                },
+                "rfam_rrna_cm": {
+                    "type": "string",
+                    "description": "Covariance model for rRNA preditiction from RFAM.",
+                    "default": "${projectDir}/assets/rRNA.cm",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.cm$"
                 }
             }
         },
@@ -253,7 +281,7 @@
                     "description": "Path to a directory containing the GTDB-Tk database.",
                     "format": "directory-path"
                 },
-                "gtdbtk_skip_ani_screen": {
+                "gtdbtk_place_species": {
                     "type": "boolean",
                     "description": "Skip the ANI screen check with skani when classifying genomes with GTDB-Tk."
                 },
@@ -263,12 +291,12 @@
                 },
                 "gtdb_bac120_metadata": {
                     "type": "string",
-                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release226/226.0/bac120_metadata_r226.tsv.gz",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/bac120_metadata_r232.tsv.gz",
                     "description": "Path to the GTDB-Tk bac120 metadata file."
                 },
                 "gtdb_ar53_metadata": {
                     "type": "string",
-                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release226/226.0/ar53_metadata_r226.tsv.gz",
+                    "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/ar53_metadata_r232.tsv.gz",
                     "description": "Path to the GTDB-Tk ar53 metadata file."
                 },
                 "gtdbtk_min_completeness": {
@@ -391,13 +419,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
-                    "hidden": true
-                },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
@@ -439,9 +460,6 @@
         },
         {
             "$ref": "#/$defs/assembly_options"
-        },
-        {
-            "$ref": "#/$defs/assembly_qc_options"
         },
         {
             "$ref": "#/$defs/read_mapping_options"

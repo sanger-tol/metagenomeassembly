@@ -12,7 +12,7 @@ process CONTIG2BINTOFASTA {
 
     output:
     tuple val(meta), path("*.fa.gz"), emit: bins
-    path ("versions.yml"), emit: versions
+    tuple val("${task.process}"), val('seqkit'), eval('seqkit version | sed "s/seqkit v//"'), emit: versions_seqkit, topic: versions
 
     script:
     """
@@ -21,21 +21,11 @@ process CONTIG2BINTOFASTA {
         grep -w \${bin} ${contig2bin} | awk '{ print \$1 }' > \${bin}.ctglst
         seqkit grep -f \${bin}.ctglst ${contigs} | gzip > \${bin}.fa.gz
     done
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        seqkit: \$( seqkit version | sed 's/seqkit v//' )
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     echo "" | gzip > ${prefix}.bin1.fa.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        seqkit: \$( seqkit version | sed 's/seqkit v//' )
-    END_VERSIONS
     """
 }

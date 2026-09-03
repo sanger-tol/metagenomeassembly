@@ -14,9 +14,9 @@
 
   > aria2 [WWW Document], n.d. URL https://aria2.github.io/ (accessed 3.7.25).
 
-- [bin3C](https://github.com/cerebis/bin3C)
+- [Binette](https://github.com/genotoul-bioinfo/Binette)
 
-  > DeMaere, M.Z., Darling, A.E., 2019. bin3C: exploiting Hi-C sequencing data to accurately resolve metagenome-assembled genomes. Genome Biology 20, 46. https://doi.org/10.1186/s13059-019-1643-1
+  > Mainguy et al., (2024). Binette: a fast and accurate bin refinement tool to construct high quality Metagenome Assembled Genomes.. Journal of Open Source Software, 9(102), 6782, https://doi.org/10.21105/joss.06782
 
 - [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
 
@@ -25,6 +25,10 @@
 - [CheckM2](https://github.com/chklovski/CheckM2)
 
   > Chklovski, A., Parks, D.H., Woodcroft, B.J., Tyson, G.W., 2023. CheckM2: a rapid, scalable and accurate tool for assessing microbial genome quality using machine learning. Nat Methods 20, 1203–1212. https://doi.org/10.1038/s41592-023-01940-w
+
+- [ComeBin](https://github.com/ziyewang/COMEBin)
+
+  > Wang, Z., You, R., Han, H. et al. Effective binning of metagenomic contigs using contrastive multi-view representation learning. Nat Commun 15, 585 (2024). https://doi.org/10.1038/s41467-023-44290-z
 
 - [Coverm](https://github.com/wwood/CoverM)
 
@@ -57,10 +61,6 @@
 - [Infernal](http://eddylab.org/infernal/)
 
   > Nawrocki, E.P., Eddy, S.R., 2013. Infernal 1.1: 100-fold faster RNA homology searches. Bioinformatics 29, 2933–2935. https://doi.org/10.1093/bioinformatics/btt509
-
-- [MAGScoT](https://github.com/ikmb/MAGScoT)
-
-  > Rühlemann, M.C., Wacker, E.M., Ellinghaus, D., Franke, A., 2022. MAGScoT: a fast, lightweight and accurate bin-refinement tool. Bioinformatics 38, 5430–5433. https://doi.org/10.1093/bioinformatics/btac694
 
 - [MaxBin2](https://sourceforge.net/projects/maxbin2/)
 
@@ -102,9 +102,13 @@
 
   > Shen, W., Sipos, B., Zhao, L., 2024. SeqKit2: A Swiss army knife for sequence and alignment processing. iMeta 3, e191. https://doi.org/10.1002/imt2.191
 
-- [staden-io-lib](https://github.com/jkbonfield/io_lib)
+- [SemiBin2](https://github.com/BigDataBiology/SemiBin)
 
-  > Bonfield, J., 2024. jkbonfield/io_lib (https://github.com/jkbonfield/io_lib)
+  > Pan S, Zhao XM, Coelho LP. SemiBin2: self-supervised contrastive learning leads to better MAGs for short- and long-read sequencing. Bioinformatics. 2023 Jun 30;39(39 Suppl 1):i21-i29. doi: 10.1093/bioinformatics/btad209. PMID: 37387171; PMCID: PMC10311329.
+
+- [Tiara](https://github.com/ibe-uw/tiara)
+
+  > Karlicki, M., Antonowicz, S., Karnkowska, A., 2022. Tiara: deep learning-based classification system for eukaryotic sequences. Bioinformatics 38, 344–350. doi: 10.1093/bioinformatics/btab672
 
 - [tidyverse](https://www.tidyverse.org/)
 
@@ -113,6 +117,10 @@
 - [tRNAScan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE)
 
   > Chan, P.P., Lin, B.Y., Mak, A.J., Lowe, T.M., 2021. tRNAscan-SE 2.0: improved detection and functional classification of transfer RNA genes. Nucleic Acids Research 49, 9077–9096. https://doi.org/10.1093/nar/gkab688
+
+- [VAMB](https://github.com/RasmussenLab/vamb)
+
+  > Kutuzova, S., Piera Líndez, P., Danielsen, L.S. et al. Improving metagenome binning by integrating intrinsic features and taxonomy. Nat Biotechnol (2026). https://doi.org/10.1038/s41587-026-03098-0
 
 ## Software packaging/containerisation tools
 

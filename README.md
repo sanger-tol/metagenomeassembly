@@ -10,8 +10,8 @@
 [![GitHub Actions Linting Status](https://github.com/sanger-tol/metagenomeassembly/actions/workflows/linting.yml/badge.svg)](https://github.com/sanger-tol/metagenomeassembly/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.15090769-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.15090769)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.2)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.1.0-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.1.0)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -22,22 +22,31 @@
 **sanger-tol/metagenomeassembly** is a bioinformatics pipeline for the assembly and binning of metagenomes
 using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
-![sanger-tol/metagenomeassembly workflow diagram](docs/images/metagenomeassembly.metromap.png)
+![sanger-tol/metagenomeassembly workflow diagram](docs/images/metagenomeassembly.metromap.svg)
 
 ## Pipeline summary
 
-1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG).
-2. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).
-3. Bins the assembly using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), [Bin3C](https://github.com/cerebis/bin3C) (Hi-C binning), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
-4. Optionally, refine the bins using [DAS_Tool](https://github.com/cmks/DAS_Tool) and [MagScoT](https://github.com/ikmb/MAGScoT).
-5. Assesses the completeness and contamination of bins using [CheckM2](https://github.com/chklovski/CheckM2) and assesses ncRNA content using [tRNAscan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE) for tRNA and [Infernal](http://eddylab.org/infernal/)+Rfam for rRNA.
-6. Assigns taxonomy to bins using [GTDB-TK](https://github.com/Ecogenomics/GTDBTk/) and converts assignments to NCBI taxonomy labels.
-7. Summarises information at the bin level.
+1. Assembles raw reads using [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG) or [myloasm](https://github.com/bluenote-1577/myloasm).
+2. Complete circular genomes are extracted from the assembly directly.
+3. Maps HiFi and (optionally) Hi-C reads to the assembly using [minimap2](https://github.com/lh3/minimap2) and [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2).
+4. For the remaining contigs, runs a suite of binning tools to split the genome assembly into its constituent genomes:
+
+- [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/)
+- [MaxBin2](https://sourceforge.net/projects/maxbin2/)
+- [VAMB](https://github.com/RasmussenLab/vamb) - taxVAMB mode is also supported, with contig classifications from [centrifuger](https://github.com/mourisl/centrifuger)
+- [COMEBIN](https://github.com/ziyewang/COMEBin)
+- [SemiBin2](https://github.com/BigDataBiology/SemiBin)
+- [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning)
+
+5. Refines the bins using [DAS_Tool](https://github.com/cmks/DAS_Tool) and [Binette](https://github.com/genotoul-bioinfo/Binette).
+6. Assesses the completeness and contamination of bins using [CheckM2](https://github.com/chklovski/CheckM2) and assesses ncRNA content using [tRNAscan-SE](https://github.com/UCSC-LoweLab/tRNAscan-SE) for tRNA and [Infernal](http://eddylab.org/infernal/)+Rfam for rRNA.
+7. Assigns taxonomy to bins using [GTDB-TK](https://github.com/Ecogenomics/GTDBTk/) and converts assignments to NCBI taxonomy labels.
+8. Collates information for each bin into a summary table.
 
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
 First, prepare a YAML with your input data that looks as follows:
 
@@ -55,10 +64,6 @@ hic:
     - /path/to/hic/hic1.cram
     - /path/to/hic/hic2.cram
     - ...
-  enzymes:
-    - enzyme_name_1 (e.g. DpnII)
-    - enzyme_name_1 (e.g. HinfI)
-    - ...
 ```
 
 Now, you can run the pipeline using:
@@ -71,7 +76,7 @@ nextflow run sanger-tol/metagenomeassembly \
 ```
 
 > [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
 
 ## Credits
 
@@ -81,7 +86,7 @@ sanger-tol/metagenomeassembly was originally written by Jim Downie, Will Eagles,
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 ## Citations
 

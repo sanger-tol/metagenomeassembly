@@ -27,6 +27,7 @@ lint:
     - ro-crate-metadata.json
     - LICENSE
     - .github/PULL_REQUEST_TEMPLATE.md
+    - .gitattributes
   included_configs: false
   multiqc_config: false
   nextflow_config:
@@ -43,12 +44,10 @@ lint:
     - validation.summary.beforeText
     - validation.summary.afterText
     - config_defaults:
-        - params.hmm_gtdb_pfam
-        - params.hmm_gtdb_tigrfam
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge
-nf_core_version: 3.5.2
+nf_core_version: 4.1.0
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -62,4 +61,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.4.0
+  version: 1.5.0

@@ -8,13 +8,17 @@ workflow BIN_TAXONOMY {
     bin_sets
     checkm2_summary
     gtdbtk_db
+    val_enable_gtdbtk
+    val_gtdbtk_ar53_metadata
+    val_gtdbtk_bac120_metadata
 
     main:
-    ch_versions = channel.empty()
     ch_gtdb_merged_summary = channel.empty()
 
-    // GTDB-Tk is memory-intensive and loads a large database.
+    //
+    // Logic: GTDB-Tk is memory-intensive and loads a large database.
     // Collate all bins together so it operates in a single process.
+    //
     ch_bins = bin_sets
         .map { meta, bins ->
             [meta.subMap("id"), bins]
@@ -22,12 +26,13 @@ workflow BIN_TAXONOMY {
         .transpose()
 
     //
-    // LOGIC: GTDB-Tk classifications are only accurate for bins with high
-    //        completeness and low contamination as it needs a good number
-    //        of single-copy genes for accurate placement - filter input
-    //        bins using the checkm2 summary scores.
+    // Logic: GTDB-Tk classifications are only accurate for bins with high
+    // completeness and low contamination as it needs a good number
+    // of single-copy genes for accurate placement - filter input
+    // bins using the checkm2 summary scores.
     //
-    //        This code is adapted from nf-core/mag
+    // This code is adapted from nf-core/mag
+    //
     if (checkm2_summary) {
         ch_bin_scores = checkm2_summary
             .splitCsv(header: true, sep: '\t')
@@ -57,47 +62,41 @@ workflow BIN_TAXONOMY {
         ch_filtered_bins = ch_bins.groupTuple(by: 0)
     }
 
-    if (params.enable_gtdbtk && params.gtdbtk_db) {
+    if (val_enable_gtdbtk) {
         //
-        // MODULE: Classify bins using GTDB-Tk
+        // Module: Classify bins using GTDB-Tk
         //
         GTDBTK_CLASSIFYWF(
             ch_filtered_bins,
             gtdbtk_db,
             false,
         )
-        ch_gtdb_summary = GTDBTK_CLASSIFYWF.out.summary
-
         ch_gtdb_majorityvote_input = GTDBTK_CLASSIFYWF.out.gtdb_outdir.map { meta, outdir -> [meta, outdir, meta.id] }
 
         GTDBTK_GTDBTONCBIMAJORITYVOTE(
             ch_gtdb_majorityvote_input,
-            [[id: "ar53"], file(params.gtdb_ar53_metadata)],
-            [[id: "bac120"], file(params.gtdb_bac120_metadata)],
+            [[id: "ar53"], file(val_gtdbtk_ar53_metadata)],
+            [[id: "bac120"], file(val_gtdbtk_bac120_metadata)],
         )
-        ch_versions = ch_versions.mix(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.versions)
 
         //
-        // MODULE: GTDB-Tk outputs separate summary files for archaea and bacteria - we need
+        // Module: GTDB-Tk outputs separate summary files for archaea and bacteria - we need
         // to concatenate them
         //
-        CSVTK_CONCAT(ch_gtdb_summary, "tsv", "tsv")
-        ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
+        CSVTK_CONCAT(GTDBTK_CLASSIFYWF.out.summary, "tsv", "tsv")
 
         //
-        // MODULE: Join NCBI taxonomy tsv to GTDB-Tk taxonomy TSV
+        // Module: Join NCBI taxonomy tsv to GTDB-Tk taxonomy TSV
         //
         ch_csvtk_join_input = CSVTK_CONCAT.out.csv
             .join(GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv)
             .map { meta, gtdb, ncbi -> [meta, [gtdb, ncbi]] }
 
         CSVTK_JOIN(ch_csvtk_join_input)
-        ch_versions = ch_versions.mix(CSVTK_JOIN.out.versions)
 
-        ch_gtdb_merged_summary = CSVTK_JOIN.out.csv
+        ch_gtdb_merged_summary = CSVTK_JOIN.out.out_file
     }
 
     emit:
     gtdb_summary = ch_gtdb_merged_summary
-    versions     = ch_versions
 }

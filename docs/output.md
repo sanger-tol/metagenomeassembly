@@ -24,7 +24,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 Assembly of raw input HiFi reads.
 
-### metaMDBG
+### metaMDBG
 
 [metaMDBG](https://github.com/GaetanBenoitDev/metaMDBG) is a metagenome assembler for long read (PacBio HiFi and ONT) data.
 
@@ -37,7 +37,7 @@ Assembly of raw input HiFi reads.
 
 </details>
 
-## Assembly QC
+## Assembly QC
 
 Genome assembly statistics (contig counts, length, N50, etc.) tallied using [Seqkit](https://bioinf.shenwei.me/seqkit/), as well as information on the number of circular contigs, and ribosomal RNA annotations using [Infernal](http://eddylab.org/infernal/).
 
@@ -68,7 +68,7 @@ Mapping of HiFi reads to the assembly using [minimap2](https://github.com/lh3/mi
 
 ## Binning
 
-Binning of assembled contigs using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), [Bin3C](https://github.com/cerebis/bin3C) (Hi-C binning), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
+Binning of assembled contigs using [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [MaxBin2](https://sourceforge.net/projects/maxbin2/), and [Metator](https://github.com/koszullab/metaTOR/) (Hi-C binning).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -153,4 +153,4 @@ Summarising key information into a final table, scoring and classification of bi
 
 </details>
 
-[Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+[Nextflow](https://docs.seqera.io/platform-cloud/reports/overview) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.

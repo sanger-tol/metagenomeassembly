@@ -18,7 +18,8 @@ process BIN_SUMMARY {
     output:
     path ("*.bin_summary.tsv"), emit: bin_summary
     path ("*.group_summary.tsv"), emit: group_summary
-    path ("versions.yml"), emit: versions
+    tuple val("${task.process}"), val('R'), eval("R --version | sed '1!d; s/.*version //; s/ .*//'"), topic: versions, emit: versions_r
+    tuple val("${task.process}"), val('metator'), eval('Rscript -e "cat(as.character(packageVersion(\'tidyverse\')))"'), topic: versions, emit: versions_tidyverse
 
     script:
     def args = task.ext.args ?: ''
@@ -39,12 +40,6 @@ process BIN_SUMMARY {
         ${trna_input} \\
         ${rrna_input} \\
         ${args}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        R: \$(Rscript -e 'cat(paste0(R.Version()[c("major","minor")], collapse = "."))')
-        tidyverse: \$(Rscript -e 'cat(as.character(packageVersion("tidyverse")))')
-    END_VERSIONS
     """
 
     stub:
@@ -52,11 +47,5 @@ process BIN_SUMMARY {
     """
     touch ${prefix}.bin_summary.tsv
     touch ${prefix}.group_summary.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        R: \$(Rscript -e 'cat(paste0(R.Version()[c("major","minor")], collapse = "."))')
-        tidyverse: \$(Rscript -e 'cat(as.character(packageVersion("tidyverse")))')
-    END_VERSIONS
     """
 }

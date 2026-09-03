@@ -1,22 +1,24 @@
-include { COVERM_CONTIG         } from '../../../modules/nf-core/coverm/contig/main'
-include { SAMTOOLS_SORT         } from '../../../modules/nf-core/samtools/sort/main'
+include { COVERM_CONTIG             } from '../../../modules/nf-core/coverm/contig'
+include { FILTER_BAM                } from '../../../modules/local/filter_bam'
+include { PAIRTOOLS_PARSESORTFILTER } from '../../../modules/local/pairtools/parsesortfilter'
+include { SAMTOOLS_FAIDX            } from '../../../modules/nf-core/samtools/faidx'
 
-include { CRAM_MAP_ILLUMINA_HIC } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic/main'
-include { FASTX_MAP_LONG_READS  } from '../../../subworkflows/sanger-tol/fastx_map_long_reads/main'
+include { CRAM_MAP_ILLUMINA_HIC     } from '../../../subworkflows/sanger-tol/cram_map_illumina_hic'
+include { FASTX_MAP_LONG_READS      } from '../../../subworkflows/sanger-tol/fastx_map_long_reads'
 
 workflow READ_MAPPING {
     take:
     ch_assemblies
-    ch_pacbio
+    ch_filter_list
+    ch_long_reads
     ch_hic_cram
     val_hic_binning
     val_hic_aligner
     val_cram_chunk_size
     val_reads_per_fasta_chunk
+    val_extract_circular_contigs
 
     main:
-    ch_versions = channel.empty()
-
     //
     // Subworkflow: run chunked hi-c mapping
     //
@@ -24,10 +26,17 @@ workflow READ_MAPPING {
         .filter { val_hic_binning }
         .combine(ch_hic_cram)
         .multiMap { meta, asm, _meta_hic, cram ->
-            def meta_new = meta + [size: asm.size()]
-            assemblies: [meta_new, asm]
-            cram: [meta_new, cram]
+            assemblies: [meta, asm]
+            cram: [meta, cram]
         }
+
+    //
+    // Logic: Index input assemblies to get chromsizes
+    //
+    SAMTOOLS_FAIDX(
+        ch_assemblies.map { meta, asm -> [meta, asm, []] },
+        true
+    )
 
     CRAM_MAP_ILLUMINA_HIC(
         ch_hic_mapping_inputs.assemblies,
@@ -35,34 +44,31 @@ workflow READ_MAPPING {
         val_hic_aligner,
         val_cram_chunk_size,
     )
-    ch_versions = ch_versions.mix(CRAM_MAP_ILLUMINA_HIC.out.versions)
 
     //
-    // Logic: remove size information we added from meta
+    // Module: Parse BAM into pairs format
     //
-    ch_hic_bam = CRAM_MAP_ILLUMINA_HIC.out.bam.map { meta, bam ->
-        [meta - meta.subMap("size"), bam]
+    ch_pairtools_parse_input = CRAM_MAP_ILLUMINA_HIC.out.bam
+        .combine(SAMTOOLS_FAIDX.out.sizes, by: 0)
+
+    if (val_extract_circular_contigs) {
+        ch_pairtools_parse_input = ch_pairtools_parse_input
+            .combine(ch_filter_list, by: 0)
+    } else {
+        ch_pairtools_parse_input = ch_pairtools_parse_input
+            .map { meta, bam, sizes -> [meta, bam, sizes, []] }
     }
 
-    //
-    // Module: sort output BAM file by name
-    //
-    SAMTOOLS_SORT(
-        ch_hic_bam,
-        [[], []],
-        "csi",
-    )
-    ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions)
+    PAIRTOOLS_PARSESORTFILTER(ch_pairtools_parse_input)
 
     //
     // Subworkflow: Chunked mapping of long reads to metagenome assembly
     //
     ch_pacbio_mapping_inputs = ch_assemblies
-        .combine(ch_pacbio)
+        .combine(ch_long_reads)
         .multiMap { meta, asm, _meta_pb, reads ->
-            def meta_new = meta + [size: asm.size()]
-            assemblies: [meta_new, asm]
-            reads: [meta_new, reads]
+            assemblies: [meta, asm]
+            reads: [meta, reads]
         }
 
     FASTX_MAP_LONG_READS(
@@ -70,30 +76,40 @@ workflow READ_MAPPING {
         ch_pacbio_mapping_inputs.reads,
         val_reads_per_fasta_chunk,
         true,
+        channel.empty()
     )
-    ch_versions = ch_versions.mix(FASTX_MAP_LONG_READS.out.versions)
 
     //
-    // Logic: remove size information we added from meta
+    // Logic: if we have removed circular contigs from binning, strip them
+    // out of the coverage TSV
     //
-    ch_pacbio_bam = FASTX_MAP_LONG_READS.out.bam.map { meta, bam ->
-        [meta - meta.subMap("size"), bam]
+    if(val_extract_circular_contigs) {
+        ch_filter_input = FASTX_MAP_LONG_READS.out.bam.combine(ch_filter_list, by: 0)
+
+        //
+        // Module: filter unwanted references from bam
+        //
+        FILTER_BAM(ch_filter_input)
+
+        ch_depths_bam = FILTER_BAM.out.bam
+    } else {
+        ch_depths_bam = FASTX_MAP_LONG_READS.out.bam
     }
 
     //
     // Module: Calculate per-contig coverage using coverm
     //
     COVERM_CONTIG(
-        ch_pacbio_bam,
+        ch_depths_bam,
         [[], []],
         true,
         false,
+        false
     )
-    ch_versions = ch_versions.mix(COVERM_CONTIG.out.versions)
 
     emit:
-    pacbio_bam = ch_pacbio_bam
-    hic_bam    = SAMTOOLS_SORT.out.bam
-    depths     = COVERM_CONTIG.out.coverage
-    versions   = ch_versions
+    full_bam     = FASTX_MAP_LONG_READS.out.bam
+    filtered_bam = ch_depths_bam
+    hic_pairs    = PAIRTOOLS_PARSESORTFILTER.out.pairs
+    depths       = COVERM_CONTIG.out.coverage
 }

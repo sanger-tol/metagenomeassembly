@@ -55,7 +55,7 @@ parser <- add_option(
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by GAWK_TRNASCAN_SUMMARY.",
+    help = "Comma-separated list of TSV files output by BINSUMMARIES_TRNA",
     metavar="filename"
 )
 
@@ -65,7 +65,7 @@ parser <- add_option(
     type = "character",
     action = "store",
     default = NULL,
-    help = "Comma-separated list of TSV files output by BIN_RRNAS",
+    help = "Comma-separated list of TSV files output by BINSUMMARIES_RRNA",
     metavar="filename"
 )
 
@@ -101,15 +101,15 @@ parser <- add_option(
 
 input <- parse_args(parser)
 
-## Functions to read in summary information about each bin
+## Functions to read in summary information about each bin
 ## Each should be named in the format "read_X", and X
-## should be the full name of one of the arguments defined in
+## should be the full name of one of the arguments defined in
 ## the optparse section
 read_stats <- function(file) {
     df <- read_tsv(file) |>
         mutate(
             filename = file,
-            bin = str_extract(file, "(.*)\\.fa", group = 1),
+            bin = str_extract(file, "(.*)\\.(fa|fna|fasta)", group = 1),
             assembler = str_split(file, "[\\.|_]", simplify = TRUE)[,2],
             binner = str_split(file, "[\\.|_]", simplify = TRUE)[,3]
         ) |>
@@ -157,7 +157,7 @@ read_trnas <- read_tsv
 read_rrnas <- read_tsv
 
 ## Takes the arg input list and a defined input type
-## Check if the arg has been passed, then split the string into
+## Check if the arg has been passed, then split the string into
 ## filenames, read them, and call the relevant
 ## read_X function
 split_and_read <- function(input, input_type) {
@@ -171,11 +171,11 @@ split_and_read <- function(input, input_type) {
 }
 
 ## Score bins
-## High quality bins: contamination < 5%; either >90% complete, or >50% but all contigs circular.
+## High quality bins: contamination < 5%; either >90% complete, or >50% but all contigs circular.
 ##                    >=18 unique tRNA genes; all ribosomal rRNA genes
 ## Medium quality bins: completeness >= 50%, contamination < 10%
-## Low quality bins: all other bins
-score_bins <- function(summary_df, comp_score, cont_score) {
+## Low quality bins: all other bins
+add_bin_scores <- function(summary_df, comp_score, cont_score) {
     summary_df <- summary_df |>
         mutate(
             quality = case_when(
@@ -191,16 +191,18 @@ score_bins <- function(summary_df, comp_score, cont_score) {
     return(summary_df)
 }
 
-## Map across all input types, read them, discard any that weren't provided
-## and then bind them all together by bin
+## Map across all input types, read them, discard any that weren't provided
+## and then bind them all together by bin
 input_types <- c("stats", "coverage", "checkm2", "taxonomy", "trnas", "rrnas")
 bin_summary <- map(input_types, \(x) split_and_read(input, x)) |>
     discard(is.null) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))
 
-## If we have all required input types, score bins
-if(all(c("stats", "checkm2", "trnas", "rrnas") %in% names(input))) {
-    bin_summary <- score_bins(
+## If we have all required input types, score bins
+score_bins <- all(c("stats", "checkm2", "trnas", "rrnas") %in% names(input))
+
+if(score_bins == TRUE) {
+    bin_summary <- add_bin_scores(
         bin_summary,
         input$completeness_score,
         input$contamination_score
@@ -215,7 +217,7 @@ group_summary <- bin_summary |>
     group_by(across(all_of(groups))) |>
     summarise(n = n())
 
-if(all(input_types %in% names(input))) {
+if(score_bins == TRUE) {
     group_summary <- group_summary |>
         mutate(quality = factor(quality, levels = c("high", "medium", "low"))) |>
         pivot_wider(names_from = "quality", values_from = "n", names_sort = TRUE)

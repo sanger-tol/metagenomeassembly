@@ -3,6 +3,68 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - Polly on the Shore - [2026-09-03]
+
+### `Added`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Circular contig extraction (by @prototaxites)
+  - Circular contigs above a given size are now treated as complete genomes. This can be disabled by setting `--extract_circular_contigs false`.
+  - The threshold for circular contig minimum size can be configured with `--minimum_circular_contig_length`
+- Hi-C BAM is now converted to a pairs file, which is fed into Metator
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Add three new binners - ComeBin, SemiBin2, and VAMB.
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Allow filtering of assembled contigs by size (`--min_contig_length`, `--max_contig_length`), as well as by Tiara classification (`--tiara_exclude_classifications`) if Tiara is run (`--enable_tiara`).
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) Add binning with TaxVAMB. This uses contig-level taxonomic classifications classified by Centrifuge - a centrifuge DB must be supplied to `--centrifuge_db`.
+- [#98](https://github.com/sanger-tol/metagenomeassembly/pull/96/) GTDBTk updated to 2.7.2. This requires the new r232 database.
+  - The `--gtdbtk_skip_ani_screen` parameter has been replaced with the `--gtdbtk_place_species` parameter.
+- [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) Added bin refinement with Binette, which can be enabled with `--enable_binette`. Binette uses the Checkm2 database, and thus the `--checkm2_db` parameter is required.
+
+### `Fixed`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Remove all references to `params` outside the entry subworkflow (by @prototaxites)
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) tRNAscan-SE now runs once per assembly rather than for each bin. The results are aggregated as with the rRNA results (by @prototaxites)
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) MaxBin2 is now disabled by default.
+- [#96](https://github.com/sanger-tol/metagenomeassembly/pull/96/) The `hic: cram: enzymes:` section of the samplesheet is deprecated - please supply enzymes as an optional comma-separated list of enzymes to `--hic_enzymes`.
+- [#99](https://github.com/sanger-tol/metagenomeassembly/pull/99/) Update to nf-core template version 4.1.0.
+  - Note that this update removes the existing Teams and Slack notification functionality. If you were using this functionality, please configure the [nf-slack](https://github.com/seqeralabs/nf-slack) or [nf-teams](https://github.com/nvnieuwk/nf-teams) Nextflow plugins.
+- [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) Modules updated to their latest versions.
+
+### `Removed`
+
+- [#95](https://github.com/sanger-tol/metagenomeassembly/pull/95/) Bin3C is now deprecated. It was not maintainable, as it depended on a container provided by the developer (by @prototaxites)
+- [#100](https://github.com/sanger-tol/metagenomeassembly/pull/100/) MagScoT has been removed from the pipeline as it did not provide satisfactory results and was not compatible with Conda (by @prototaxites)
+
+### `Dependencies`
+
+| module                        | tools       | old versions | new versions |
+| ----------------------------- | ----------- | ------------ | ------------ |
+| bin3c/mkmap                   | bin3c       | 0.3.3        | -            |
+| bin3c/cluster                 | bin3c       | 0.3.3        | -            |
+| binette                       | binette     | -            | 1.2.1        |
+| csvtk/concat                  | csvtk       | 0.31.0       | 0.37.0       |
+| csvtk/join                    | csvtk       | 0.31.0       | 0.37.0       |
+| centrifuger/centrifuger       | centrifuger | -            | 1.1.2        |
+| centrifuger/lineage           | centrifuger | -            | 1.1.2        |
+| comebin/runcomebin            | comebin     | -            | 1.1.0        |
+| gtdbtk/classifywf             | gtdbtk      | 2.6.1        | 2.7.2        |
+| gtdbtk/gtdbtoncbimajorityvote | gtdbtk      | 2.6.1        | 2.7.2        |
+| metamdbg/asm                  | metamdb     | 1.3.1        | 1.4.0        |
+| myloasm                       | myloasm     | 0.5.1        | 0.6.0        |
+| pairtools/parsefiltersort     | pairtools   | -            | 1.1.3        |
+| ripgrep                       | ripgrep     | -            | 14.1.1       |
+| tiara/tiara                   | tiara       | -            | 1.0.3        |
+| samtools/faidx                | samtools    | 1.23.1       | 1.24         |
+| samtools/index                | samtools    | 1.23.1       | 1.24         |
+| samtools/merge                | samtools    | 1.23.1       | 1.24         |
+| samtools/splitheader          | samtools    | 1.23.1       | 1.24         |
+| semibin/singleeasybin         | semibin     | -            | 2.4.1        |
+| seqkit/replace                | seqkit      | 2.9.0        | 2.13.0       |
+| seqkit/split2                 | seqkit      | 2.9.0        | 2.13.0       |
+| vamb/bin                      | vamb        | -            | 5.0.4        |
+
+### `Deprecated`
+
+- Removed the parameters `hmm_gtdb_tigrfam` and `hmm_gtdb_pfam`, as MagScoT has been removed.
+
 ## [1.4.0] - Lovely Molly - [2025-04-27]
 
 ### `Added`
