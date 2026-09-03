@@ -17,7 +17,7 @@ authors:
     orcid: https://orcid.org/0000-0003-3407-4086
     website: https://github.com/gettl008
 cff-version: 1.2.0
-date-released: "2026-08-14"
+date-released: "2026-09-03"
 doi: 10.5281/zenodo.15090769
 license: MIT
 message: If you use this software, please cite it using the metadata from this file
