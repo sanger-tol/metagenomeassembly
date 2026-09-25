@@ -1,7 +1,8 @@
-include { GUNZIP                   } from '../../../modules/nf-core/gunzip/main'
-include { METAMDBG_ASM             } from '../../../modules/nf-core/metamdbg/asm'
-include { MYLOASM                  } from '../../../modules/nf-core/myloasm'
-include { SEMIBIN_CONCATENATEFASTA } from '../../../modules/nf-core/semibin/concatenatefasta/main'
+include { GUNZIP                 } from '../../../modules/nf-core/gunzip/main'
+include { METAMDBG_ASM           } from '../../../modules/nf-core/metamdbg/asm'
+include { MYLOASM                } from '../../../modules/nf-core/myloasm'
+include { CONCATENATE_FASTA      } from '../../../modules/local/concatenate_fasta/main'
+include { METABINTOOLS_IMPORTASM } from '../../../modules/local/metabintools/importasm'
 
 workflow ASSEMBLY {
     take:
@@ -27,7 +28,7 @@ workflow ASSEMBLY {
         // Module: Assemble PacBio reads using metaMDBG
         //
         ch_metamdbg_input = ch_assembly_input.multiMap { meta, reads ->
-            reads: [meta, reads]
+            reads: [meta + [assembler: "metamdbg"], reads]
             input_type: meta.platform == "pacbio_hifi" ? "hifi" : "ont"
         }
 
@@ -36,34 +37,33 @@ workflow ASSEMBLY {
             ch_metamdbg_input.input_type,
         )
 
-        ch_assemblies = ch_assemblies.mix(
-            METAMDBG_ASM.out.contigs.map { meta, contigs ->
-                def meta_new = meta + [assembler: val_assembler]
-                [meta_new, contigs]
-            }
-        )
+        ch_assemblies = ch_assemblies.mix(METAMDBG_ASM.out.contigs)
+
+        ch_assembly_out = METAMDBG_ASM.out.contigs
+            .join(METAMDBG_ASM.out.log)
+            .map { meta, asm, log -> meta + [assembly_files: [asm, log]] }
+
     }
     else if (val_assembler == "myloasm") {
         //
         // Module: Assemble PacBio reads using myloasm
         //
-        MYLOASM(ch_assembly_input)
+        MYLOASM(ch_assembly_input.map { meta, reads -> [meta + [assembler: "myloasm"], reads] })
 
-        ch_assemblies = ch_assemblies.mix(
-            MYLOASM.out.contigs.map { meta, contigs ->
-                def meta_new = meta + [assembler: val_assembler]
-                [meta_new, contigs]
-            }
-        )
+        ch_assemblies = ch_assemblies.mix(MYLOASM.out.contigs)
+
+        ch_assembly_out = MYLOASM.out.results
+            .map { meta, results -> meta + [assembly_files: results.listDirectory()] }
     }
 
     //
     // Module: ungzip gzipped assemblies
     //
-    ch_assemblies_split = ch_assemblies.branch { _meta, asm ->
-        gzipped: asm.getExtension() == "gz"
-        ungzipped: true
-    }
+    ch_assemblies_split = ch_assemblies
+        .branch { _meta, asm ->
+            gzipped: asm.getExtension() == "gz"
+            ungzipped: true
+        }
 
     GUNZIP(ch_assemblies_split.gzipped)
     ch_assemblies_unzipped = ch_assemblies_split.ungzipped.mix(GUNZIP.out.gunzip)
@@ -71,9 +71,9 @@ workflow ASSEMBLY {
     //
     // Module: Concatenate FASTAs for multisample split binning if requested
     //
-    ch_assemblies_to_concatenate = ch_assemblies
-        .filter { val_binners.semibin2 || val_binners.vamb }
+    ch_assemblies_to_concatenate = ch_assemblies_unzipped
         .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .filter { val_binners.multisplit }
         .map { list ->
             def ids = []
             def assemblers = []
@@ -87,9 +87,19 @@ workflow ASSEMBLY {
             return [[id: "collated", collated: true, ids: ids, assemblers: assemblers], out_assemblies]
         }
 
-    SEMIBIN_CONCATENATEFASTA(ch_assemblies_to_concatenate)
+    //
+    // Module: Concatenate assemblies to a single file for binsplitting binners
+    //
+    CONCATENATE_FASTA(ch_assemblies_to_concatenate.map { meta, fasta -> [meta, fasta, meta.ids] })
+
+    //
+    // Module: Import assemblies to binsfiles
+    //
+    METABINTOOLS_IMPORTASM(ch_assemblies_unzipped.filter { meta, _fasta -> !meta?.collated })
 
     emit:
-    assemblies              = ch_assemblies_unzipped
-    concatenated_assemblies = SEMIBIN_CONCATENATEFASTA.out.concat_fasta
+    assembly_output = ch_assembly_out
+    assemblies = ch_assemblies_unzipped
+    concatenated_assembly = CONCATENATE_FASTA.out.concat_fasta
+    assembly_binsfile = METABINTOOLS_IMPORTASM.out.binsfile
 }

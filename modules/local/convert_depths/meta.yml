@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "convert_depths"
+description: Convert depth/coverage files between different binning tool formats
+keywords:
+  - metagenomics
+  - coverage
+  - depth
+  - format conversion
+tools:
+  - "convert_depths.py":
+      description: "Python script to convert depth files between formats"
+      homepage: "https://github.com/wwood/CoverM"
+      licence: ["GPL v3"]
+
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - depths:
+        type: file
+        description: "Depth file to convert"
+        pattern: "*"
+  - format:
+      type: string
+      description: "Output format (e.g., maxbin2, vamb)"
+
+output:
+  depths:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.tsv":
+          type: file
+          description: Converted depth file in target format
+          pattern: "*.tsv"
+
+  versions:
+    - - ${task.process}:
+          type: string
+      - convert_depths.py:
+          type: string
+      - 'convert_depths.py --version':
+          type: string
+
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+      - convert_depths.py:
+          type: string
+
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

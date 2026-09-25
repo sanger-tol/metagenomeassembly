@@ -65,6 +65,11 @@
                         "git_sha": "781f2625386fe0bf2f337c7b99f56e618c59fc99",
                         "installed_by": ["modules"]
                     },
+                    "gfastats": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "gtdbtk/classifywf": {
                         "branch": "master",
                         "git_sha": "b581ebb37c529fa07e22c38d128a7c5c273ed286",
@@ -112,7 +117,7 @@
                     },
                     "myloasm": {
                         "branch": "master",
-                        "git_sha": "14cc9eccb1a8a20c3ae969a0070e9585ba960945",
+                        "git_sha": "77a9e6b9af89bde2a2b472f21c6a9bfecb9c8c7d",
                         "installed_by": ["modules"]
                     },
                     "pyrodigal": {
@@ -139,11 +144,6 @@
                         "branch": "master",
                         "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
                         "installed_by": ["cram_map_illumina_hic"]
-                    },
-                    "semibin/concatenatefasta": {
-                        "branch": "master",
-                        "git_sha": "ace7e02d9d1a61d9998f6bbed18e723945def56b",
-                        "installed_by": ["modules"]
                     },
                     "semibin/multieasybin": {
                         "branch": "master",
@@ -178,7 +178,7 @@
                     },
                     "trnascanse": {
                         "branch": "master",
-                        "git_sha": "0c739827833fdece07eb80618fd085a9a8992406",
+                        "git_sha": "610fdc0f12df14140cfa6164a4c8b61132d74a2e",
                         "installed_by": ["modules"]
                     },
                     "vamb/bin": {

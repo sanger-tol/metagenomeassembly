@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "bin_refinement"
+description: |
+  Refine genomic bins using DAS_Tool or Binette to improve bin quality.
+keywords:
+  - binning
+  - refinement
+  - dastool
+  - binette
+components:
+  - pyrodigal
+  - dastool/dastool
+  - binette
+  - contig2bintofasta
+  - gawk
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_contig2bin:
+      description: |
+        Contig to bin mapping files.
+        Structure: [ val(meta), path(tsv) ]
+  - ch_checkm2_db:
+      description: |
+        CheckM2 database (required for Binette).
+  - val_enable_dastool:
+      description: |
+        Boolean. Enable DAS_Tool refinement.
+  - val_enable_binette:
+      description: |
+        Boolean. Enable Binette refinement.
+output:
+  - refined_bins:
+      type: file
+      description: |
+        Refined bin FASTA files.
+        Structure: [ val(meta), path(bins) ]
+      pattern: "*.fasta"
+  - contig2bin:
+      type: file
+      description: |
+        Updated contig to bin mappings.
+        Structure: [ val(meta), path(tsv) ]
+      pattern: "*.tsv"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

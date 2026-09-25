@@ -16,6 +16,10 @@
 include { METAGENOMEASSEMBLY      } from './workflows/metagenomeassembly'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
+
+include { countSamples            } from './functions/local/inputs.nf'
+include { getOutdir               } from './functions/local/outputs.nf'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -23,6 +27,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_meta
 */
 
 workflow {
+    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
@@ -45,6 +50,8 @@ workflow {
         params.gtdb_bac120_metadata,
     )
 
+    def n_samples = countSamples(params.input)
+
     def pipeline_stages = [
         enable_binning: params.enable_binning,
         enable_bin_refinement: params.enable_bin_refinement,
@@ -53,12 +60,12 @@ workflow {
     ]
 
     def binners = [
+        multisplit: params.enable_multisplit && (params.enable_semibin2 || params.enable_vamb) && (n_samples > 1),
         circular: params.extract_circular_contigs,
         metabat2: params.enable_metabat2,
         maxbin2: params.enable_maxbin2,
         comebin: params.enable_comebin,
-        semibin2_single: params.enable_semibin2_single,
-        semibin2_multi: params.enable_semibin2_multi,
+        semibin2: params.enable_semibin2,
         vamb: params.enable_vamb,
         taxvamb: params.enable_taxvamb && params.centrifuger_db,
         metator: params.enable_metator,
@@ -69,19 +76,8 @@ workflow {
         dastool: params.enable_dastool,
     ]
 
-    def tools = [
+    def optional_tools = [
         genomad: params.enable_genomad && params.genomad_db,
-        tiara: params.enable_tiara,
-        checkm2: params.enable_checkm2 && params.checkm2_db,
-        gtdbtk: params.enable_gtdbtk && params.gtdbtk_db,
-        rrna: params.enable_rrna_prediction && params.rfam_rrna_cm,
-        trnascanse: params.enable_trnascanse,
-    ]
-
-    def contig_filters = [
-        minimum_contig_size: params.minimum_contig_size,
-        maximum_contig_size: params.maximum_contig_size,
-        tiara_exclude_classifications: params.tiara_exclude_classifications,
     ]
 
     def alignment_options = [
@@ -105,10 +101,9 @@ workflow {
         PIPELINE_INITIALISATION.out.gtdb_bac120_metadata,
         pipeline_stages,
         params.assembler,
-        contig_filters,
         binners,
         bin_refiners,
-        tools,
+        optional_tools,
         alignment_options,
         params.outdir,
     )
@@ -123,7 +118,50 @@ workflow {
         params.outdir,
         params.monochrome_logs,
     )
+
+    publish:
+    assemblies          = SANGERTOL_METAGENOMEASSEMBLY.out.assemblies.map { it -> it + [n_samples: n_samples] }
+    assembly_analysis   = SANGERTOL_METAGENOMEASSEMBLY.out.assembly_analysis.map { it -> it + [n_samples: n_samples] }
+    binning_preparation = SANGERTOL_METAGENOMEASSEMBLY.out.binning_preparation.map { it -> it + [n_samples: n_samples] }
+    binning             = SANGERTOL_METAGENOMEASSEMBLY.out.binning.map { it -> it + [n_samples: n_samples] }
+    centrifuger         = SANGERTOL_METAGENOMEASSEMBLY.out.centrifuger.map { it -> it + [n_samples: n_samples] }
 }
+
+output {
+    assemblies {
+        path { obj ->
+            obj.assembly_files >> getOutdir(obj) + "assembly/"
+        }
+    }
+    assembly_analysis {
+        path { obj ->
+            obj.stats >> getOutdir(obj) + "assembly/"
+            obj.tiara >> getOutdir(obj) + "assembly/tiara/"
+            obj.tiara_log >> getOutdir(obj) + "assembly/tiara/"
+            obj.genomad >> getOutdir(obj) + "assembly/genomad/"
+        }
+    }
+    binning_preparation {
+        path { obj ->
+            obj.bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
+            obj.hic_bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
+            obj.hic_pairs >> getOutdir(obj) + "assembly/mapping/"
+            obj.depths >> getOutdir(obj) + "assembly/mapping/"
+        }
+    }
+    binning {
+        path { obj ->
+            obj.bins >> getOutdir(obj) + "binning/${obj.binner}/fasta/"
+            obj.extra_files >> getOutdir(obj) + "binning/${obj.binner}/"
+        }
+    }
+    centrifuger {
+        path { obj ->
+            obj.out >> getOutdir(obj) + "assembly/centrifuger/"
+        }
+    }
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -146,7 +184,6 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     ch_gtdb_bac120_metadata
     val_pipeline_stages
     val_assembler
-    val_contig_filters
     val_binners
     val_bin_refiners
     val_tools
@@ -170,11 +207,17 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
         ch_gtdb_bac120_metadata,
         val_pipeline_stages,
         val_assembler,
-        val_contig_filters,
         val_binners,
         val_bin_refiners,
         val_tools,
         val_alignment_options,
         outdir,
     )
+
+    emit:
+    assemblies          = METAGENOMEASSEMBLY.out.assemblies
+    assembly_analysis   = METAGENOMEASSEMBLY.out.assembly_analysis
+    binning_preparation = METAGENOMEASSEMBLY.out.binning_preparation
+    binning             = METAGENOMEASSEMBLY.out.binning
+    centrifuger         = METAGENOMEASSEMBLY.out.centrifuger
 }

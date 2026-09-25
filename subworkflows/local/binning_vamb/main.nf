@@ -1,6 +1,6 @@
 include { CENTRIFUGER_CENTRIFUGER  } from '../../../modules/nf-core/centrifuger/centrifuger'
 include { CENTRIFUGER_LINEAGE      } from '../../../modules/local/centrifuger_lineage'
-include { GAWK as GAWK_VAMB_DEPTHS } from '../../../modules/nf-core/gawk'
+include { CONVERT_DEPTHS           } from '../../../modules/local/convert_depths'
 include { VAMB_BIN                 } from '../../../modules/nf-core/vamb/bin'
 
 workflow BINNING_VAMB {
@@ -14,7 +14,10 @@ workflow BINNING_VAMB {
     //
     // Module: Convert depths TSV to format acceptable to VAMB
     //
-    GAWK_VAMB_DEPTHS(ch_depths, file("${projectDir}/bin/convert_depths_vamb.awk"), false)
+    CONVERT_DEPTHS(
+        ch_depths,
+        "vamb"
+    )
 
     if (val_enable_centrifuger) {
         //
@@ -38,16 +41,20 @@ workflow BINNING_VAMB {
         )
 
         ch_vamb_taxonomy_input = CENTRIFUGER_LINEAGE.out.lineage_tsv.map { meta, tsv -> [meta - meta.subMap("single_end"), tsv] }
+
+        ch_centrifuger_output = CENTRIFUGER_CENTRIFUGER.out.classification_file
+            .map { meta, out -> meta + [out: out] }
     }
     else {
         ch_vamb_taxonomy_input = ch_assemblies.map { meta, _asm -> [meta, []] }
+        ch_centrifuger_output = channel.empty()
     }
 
     //
     // Module: Bin contigs with VAMB
     //
     ch_vamb_input = ch_assemblies
-        .combine(GAWK_VAMB_DEPTHS.out.output, by: 0)
+        .combine(CONVERT_DEPTHS.out.depths, by: 0)
         .combine(ch_vamb_taxonomy_input, by: 0)
         .map { meta, contigs, depths, taxonomy ->
             [meta, contigs, depths, [], taxonomy]
@@ -67,7 +74,29 @@ workflow BINNING_VAMB {
                 }
         }
 
+    ch_vamb_single_output = VAMB_BIN.out.taxometer_results
+        .join(VAMB_BIN.out.latent_encoding)
+        .join(VAMB_BIN.out.abundance)
+        .join(VAMB_BIN.out.composition)
+        .join(VAMB_BIN.out.log)
+        .map { meta, _bins, taxometer_results, latent_encoding, abundance, composition, log ->
+            meta + [binner: "vamb_single", extra_files: [taxometer_results, latent_encoding, abundance, composition, log].findAll().flatten()]
+        }
+
+    ch_vamb_multi_output = VAMB_BIN.out.bins
+        .combine(VAMB_BIN.out.taxometer_results)
+        .combine(VAMB_BIN.out.latent_encoding)
+        .combine(VAMB_BIN.out.abundance)
+        .combine(VAMB_BIN.out.composition)
+        .combine(VAMB_BIN.out.log)
+        .map { meta, _bins, taxometer_results, latent_encoding, abundance, composition, log ->
+            meta + [binner: "vamb_multi", extra_files: [taxometer_results, latent_encoding, abundance, composition, log].findAll().flatten()]
+        }
+
     emit:
-    single_bins = BINNING_VAMB.out.bins.filter { meta, _bins -> !meta?.collated }
+    centrifuger = ch_centrifuger_output
+    single_bins = VAMB_BIN.out.bins.filter { meta, _bins -> !meta?.collated }
     multi_bins  = ch_vamb_multi_bins
+    vamb_single = ch_vamb_single_output
+    vamb_multi  = ch_vamb_multi_output
 }

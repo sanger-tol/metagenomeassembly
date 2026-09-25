@@ -15,8 +15,8 @@ workflow LONG_READ_MAPPING {
     //
     ch_pacbio_mapping_inputs = ch_assemblies
         .combine(ch_long_reads)
-        .multiMap { meta, asm, _meta_pb, reads ->
-            def meta_new = meta + [read_name: reads.getName()]
+        .multiMap { meta, asm, meta_pb, reads ->
+            def meta_new = meta + [read_id: meta_pb.id]
             assemblies: [meta_new, asm]
             reads: [meta_new, reads]
         }
@@ -34,11 +34,13 @@ workflow LONG_READ_MAPPING {
     // out of the coverage TSV
     //
     ch_filter_bam_input = FASTX_MAP_LONG_READS.out.bam
-        .join(ch_filter_list, by: 0, remainder: true)
-        .branch { meta, bam, filter_list ->
-            filter: filter_list || filter_list.size() > 0
+        .combine(ch_filter_list)
+        .filter { meta_bam, _bam, meta_asm, _filt -> meta_bam.id == meta_asm.id }
+        .branch { meta_bam, bam, meta_asm, filt ->
+            filter: filt && filt?.size() > 0
+                return [meta_bam, bam, filt]
             skip_filter: true
-            return [meta, bam]
+                return [meta_asm, bam]
         }
 
     //
@@ -46,13 +48,13 @@ workflow LONG_READ_MAPPING {
     //
     FILTER_BAM(ch_filter_bam_input.filter)
 
-    ch_output_bam = FASTX_MAP_LONG_READS.out.bam.map { meta, bam -> [meta - meta.subMap("read_name"), bam] }.groupTuple(by: 0)
     ch_output_filtered_bam = FILTER_BAM.out.bam
-        .mix(FILTER_BAM.out.bam)
-        .map { meta, bam -> [meta - meta.subMap("read_name"), bam] }
+        .mix(ch_filter_bam_input.skip_filter)
+        .map { meta, bam -> [meta - meta.subMap("read_id"), bam] }
         .groupTuple(by: 0)
+        .map { meta, bams -> [meta, bams.sort { it -> it.getName() }] }
 
     emit:
-    bam          = ch_output_bam
+    bam          = FASTX_MAP_LONG_READS.out.bam
     filtered_bam = ch_output_filtered_bam
 }

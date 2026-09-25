@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "binning_vamb"
+description: |
+  VAMB binning with optional taxonomic profiling using Centrifuger for taxVAMB mode.
+keywords:
+  - binning
+  - vamb
+  - taxonomy
+  - centrifuger
+components:
+  - vamb/bin
+  - centrifuger/centrifuger
+  - centrifuger_lineage
+  - convert_depths
+  - fix_bin_contigs
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_depths:
+      description: |
+        Contig depth/coverage TSV files.
+        Structure: [ val(meta), path(tsv) ]
+  - val_enable_centrifuger:
+      description: |
+        Boolean. Enable Centrifuger for taxVAMB mode.
+  - ch_centrifuger_db:
+      description: |
+        Centrifuger database (required if val_enable_centrifuger is true).
+output:
+  - centrifuger:
+      type: file
+      description: |
+        Centrifuger classification output.
+  - single_bins:
+      type: file
+      description: |
+        VAMB bins from single-sample binning.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - multi_bins:
+      type: file
+      description: |
+        VAMB bins from multi-sample binning.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - vamb_single:
+      type: file
+      description: |
+        VAMB single-sample results and metadata.
+  - vamb_multi:
+      type: file
+      description: |
+        VAMB multi-sample results and metadata.
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

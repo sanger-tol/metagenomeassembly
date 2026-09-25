@@ -57,7 +57,7 @@
                 },
                 "tiara_exclude_classifications": {
                     "type": "string",
-                    "default": "eukarya,organelle",
+                    "default": "",
                     "description": "A comma-separated list of tiara classifications to use to exclude contigs from the assembly. Options are 'bacteria', 'archaea', 'prokarya', 'eukarya', 'organelle' or 'unknown'."
                 },
                 "enable_genomad": {
@@ -148,6 +148,11 @@
                     "default": 250000,
                     "description": "The minimum length of a circular contig required to be treated as a bin."
                 },
+                "enable_multisplit": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable multi-split binning modes when binning with SemiBin2 or VAMB."
+                },
                 "enable_metabat2": {
                     "type": "boolean",
                     "default": true,
@@ -162,15 +167,10 @@
                     "default": true,
                     "description": "Enable binning with Comebin."
                 },
-                "enable_semibin2_single": {
+                "enable_semibin2": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning with Semibin2 in single-sample mode."
-                },
-                "enable_semibin2_multi": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable binning with Semibin2 in multi-sample mode."
                 },
                 "enable_vamb": {
                     "type": "boolean",
@@ -183,7 +183,8 @@
                 },
                 "centrifuger_db": {
                     "type": "string",
-                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically."
+                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically.",
+                    "format": "file-path"
                 },
                 "semibin_environment_model": {
                     "type": "string",
@@ -297,12 +298,14 @@
                 "gtdb_bac120_metadata": {
                     "type": "string",
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/bac120_metadata_r232.tsv.gz",
-                    "description": "Path to the GTDB-Tk bac120 metadata file."
+                    "description": "Path to the GTDB-Tk bac120 metadata file.",
+                    "format": "file-path"
                 },
                 "gtdb_ar53_metadata": {
                     "type": "string",
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/ar53_metadata_r232.tsv.gz",
-                    "description": "Path to the GTDB-Tk ar53 metadata file."
+                    "description": "Path to the GTDB-Tk ar53 metadata file.",
+                    "format": "file-path"
                 },
                 "gtdbtk_min_completeness": {
                     "type": "integer",

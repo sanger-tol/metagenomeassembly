@@ -71,30 +71,20 @@ parser <- add_option(
 
 parser <- add_option(
     object = parser,
+    opt_str = c("-x", "--circles"),
+    type = "character",
+    action = "store",
+    default = NULL,
+    help = "TSV file output by COUNT_CIRCLES",
+    metavar="filename"
+)
+
+parser <- add_option(
+    object = parser,
     opt_str = c("-o", "--prefix"),
     type = "character",
     action = "store",
     default = "output",
-    help = "Output file prefix",
-    metavar="filename"
-)
-
-parser <- add_option(
-    object = parser,
-    opt_str = c("-x", "--completeness_score"),
-    type = "numeric",
-    action = "store",
-    default = 1,
-    help = "Output file prefix",
-    metavar="filename"
-)
-
-parser <- add_option(
-    object = parser,
-    opt_str = c("-y", "--contamination_score"),
-    type = "numeric",
-    action = "store",
-    default = 0.5,
     help = "Output file prefix",
     metavar="filename"
 )
@@ -113,7 +103,7 @@ read_stats <- function(file) {
             assembler = str_split(file, "[\\.|_]", simplify = TRUE)[,2],
             binner = str_split(file, "[\\.|_]", simplify = TRUE)[,3]
         ) |>
-        select(filename, bin, assembler, binner, num_seqs, n_circ, sum_len, min_len, max_len, N50, L50 = N50_num, GC = `GC(%)`)
+        select(filename, bin, assembler, binner, num_seqs, sum_len, min_len, max_len, N50, L50 = N50_num, GC = `GC(%)`)
 
     return(df)
 }
@@ -155,6 +145,7 @@ read_taxonomy <- function(file) {
 
 read_trnas <- read_tsv
 read_rrnas <- read_tsv
+read_circles <- read_tsv
 
 ## Takes the arg input list and a defined input type
 ## Check if the arg has been passed, then split the string into
@@ -181,25 +172,24 @@ add_bin_scores <- function(summary_df, comp_score, cont_score) {
             quality = case_when(
                 contamination <= 5 & unique_trnas >= 18 & n_ssu > 0 & n_lsu > 0 & n_5s > 0 &
                     (
-                        (completeness >= 50 & num_seqs == n_circ) | (completeness >= 90)
+                        (completeness >= 50 & num_seqs == n_circular) | (completeness >= 90)
                     ) ~ "high",
                 completeness >= 50 & contamination <= 10 ~ "medium",
                 .default = "low"
-            ),
-            score = (completeness * comp_score) - (contamination * cont_score)
+            )
         )
     return(summary_df)
 }
 
 ## Map across all input types, read them, discard any that weren't provided
 ## and then bind them all together by bin
-input_types <- c("stats", "coverage", "checkm2", "taxonomy", "trnas", "rrnas")
+input_types <- c("stats", "circles", "coverage", "checkm2", "taxonomy", "trnas", "rrnas")
 bin_summary <- map(input_types, \(x) split_and_read(input, x)) |>
     discard(is.null) |>
     reduce(\(x, y) left_join(x, y, by = "bin"))
 
 ## If we have all required input types, score bins
-score_bins <- all(c("stats", "checkm2", "trnas", "rrnas") %in% names(input))
+score_bins <- all(c("stats", "circles", "checkm2", "trnas", "rrnas") %in% names(input))
 
 if(score_bins == TRUE) {
     bin_summary <- add_bin_scores(
