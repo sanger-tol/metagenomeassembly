@@ -250,8 +250,6 @@ workflow BINNING {
         ch_binning_out = ch_binning_out.mix(ch_metator_output)
     }
 
-    ch_bins.view()
-
     //
     // Module: Import each set of bins to a binsfile with the assembly
     // Each bin is renamed to a consistent naming schema.

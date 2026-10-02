@@ -58,7 +58,7 @@ nextflow_pipeline {
                 ]
             )
 
-            def assembly_dirs = path("${params.outdir}/").listFiles().findAll { it.isDirectory() }.collect { it.name }
+            def assembly_dirs = path("${params.outdir}/").listDirectory().findAll { it.isDirectory() }.collect { it.name }
             assembly_dirs.collect { asm ->
                 // Unstable and uncountable files
                 def bin_fasta = getAllFilesFromDir(
