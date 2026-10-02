@@ -12,11 +12,21 @@ workflow ASSEMBLY {
 
     main:
 
+    //
+    // Logic: Filter the input datasets to remove those where the assemblies have been provided.
+    // Initialise the output channels with these assemblies.
+    //
     ch_assemblies = ch_long_reads_assemblies
         .filter { _meta, _reads, assembly -> assembly }
         .map { meta, _reads, assembly ->
             log.info("Skipping assembly for ${meta.id}: assembly provided")
             [meta, assembly]
+        }
+
+    ch_assembly_out = ch_long_reads_assemblies
+        .filter { _meta, _reads, assembly -> assembly }
+        .map { meta, _reads, assembly ->
+            [meta, assembly, []]
         }
 
     ch_assembly_input = ch_long_reads_assemblies
@@ -39,9 +49,12 @@ workflow ASSEMBLY {
 
         ch_assemblies = ch_assemblies.mix(METAMDBG_ASM.out.contigs)
 
-        ch_assembly_out = METAMDBG_ASM.out.contigs
-            .join(METAMDBG_ASM.out.log)
-            .map { meta, asm, log -> meta + [assembly_files: [asm, log]] }
+        ch_assembly_out = ch_assembly_out
+            .mix(
+                METAMDBG_ASM.out.contigs
+                .join(METAMDBG_ASM.out.log)
+                .map { meta, asm, metamdbg_log -> [meta, asm, [metamdbg_log]] }
+            )
 
     }
     else if (val_assembler == "myloasm") {
@@ -52,8 +65,12 @@ workflow ASSEMBLY {
 
         ch_assemblies = ch_assemblies.mix(MYLOASM.out.contigs)
 
-        ch_assembly_out = MYLOASM.out.results
-            .map { meta, results -> meta + [assembly_files: results.listDirectory()] }
+        ch_assembly_out = ch_assembly_out.mix(
+            MYLOASM.out.contigs.join(MYLOASM.out.results, by: 0)
+            .map { meta, asm, results ->
+                [meta, asm, results.findAll { f -> !(f.getName() =~ "assembly_primary.fa.gz") }]
+            }
+        )
     }
 
     //
@@ -78,13 +95,15 @@ workflow ASSEMBLY {
             def ids = []
             def assemblers = []
             def out_assemblies = []
+            def out_platforms = []
             list.collect { meta, fasta ->
                 ids << meta.id
                 assemblers << meta.assembler
+                out_platforms << meta.platform
                 out_assemblies << fasta
             }
 
-            return [[id: "collated", collated: true, ids: ids, assemblers: assemblers], out_assemblies]
+            return [[id: "collated", collated: true, ids: ids, assemblers: assemblers, platforms: out_platforms], out_assemblies]
         }
 
     //

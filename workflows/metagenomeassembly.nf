@@ -3,19 +3,21 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap           } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc       } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML     } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText     } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
-include { ASSEMBLY                   } from '../subworkflows/local/assembly'
-include { ASSEMBLY_ANALYSIS          } from '../subworkflows/local/assembly_analysis'
-include { BINNING                    } from '../subworkflows/local/binning'
-include { BIN_QC                     } from '../subworkflows/local/bin_qc'
-include { BIN_TAXONOMY               } from '../subworkflows/local/bin_taxonomy'
-include { BINNING_PREPARATION        } from '../subworkflows/local/binning_preparation'
-include { BIN_REFINEMENT             } from '../subworkflows/local/bin_refinement'
+include { paramsSummaryMap             } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc         } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML       } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText       } from '../subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
+include { ASSEMBLY                     } from '../subworkflows/local/assembly'
+include { ASSEMBLY_ANALYSIS            } from '../subworkflows/local/assembly_analysis'
+include { BINNING                      } from '../subworkflows/local/binning'
+include { BIN_QC                       } from '../subworkflows/local/bin_qc'
+include { BIN_TAXONOMY                 } from '../subworkflows/local/bin_taxonomy'
+include { BINNING_PREPARATION          } from '../subworkflows/local/binning_preparation'
+include { BIN_REFINEMENT               } from '../subworkflows/local/bin_refinement'
 
-include { METABINTOOLS_MERGEANNOTATE } from '../modules/local/metabintools/mergeannotate'
+include { METABINTOOLS_MERGEANNOTATE   } from '../modules/local/metabintools/mergeannotate'
+include { METABINTOOLS_SUMMARISEBINS   } from '../modules/local/metabintools/summarisebins'
+include { METABINTOOLS_SUMMARISEGROUPS } from '../modules/local/metabintools/summarisegroups'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,104 +67,135 @@ workflow METAGENOMEASSEMBLY {
         ch_rfam_rrna_cm,
     )
 
-    ch_binning_preparation_out = channel.empty()
-    ch_binning_out = channel.empty()
-    ch_centrifuger = channel.empty()
-    if (val_pipeline_stages.enable_binning) {
-        //
-        // Subworkflow: Map PacBio Hifi reads and Illumina Hi-C
-        // reads to the assembly and estimate per-contig coverages
-        //
-        BINNING_PREPARATION(
-            ASSEMBLY.out.assemblies,
-            ASSEMBLY.out.concatenated_assembly,
-            ch_long_reads,
-            ch_hic_reads,
-            ASSEMBLY_ANALYSIS.out.tiara_classifications,
-            val_binners,
-            val_alignment_options,
-        )
-        ch_binning_preparation_out = BINNING_PREPARATION.out.binning_preparation_output
+    //
+    // Subworkflow: Map PacBio Hifi reads and Illumina Hi-C
+    // reads to the assembly and estimate per-contig coverages
+    //
+    BINNING_PREPARATION(
+        ASSEMBLY.out.assemblies.filter { val_pipeline_stages.enable_binning },
+        ASSEMBLY.out.concatenated_assembly,
+        ch_long_reads,
+        ch_hic_reads,
+        ASSEMBLY_ANALYSIS.out.tiara_classifications,
+        val_binners,
+        val_alignment_options,
+    )
+    ch_binning_preparation_out = BINNING_PREPARATION.out.binning_preparation_output
 
-        //
-        // Subworkflow: Bin the assembly using binning tools
-        //
-        BINNING(
-            BINNING_PREPARATION.out.filtered_assembly,
-            ASSEMBLY.out.assembly_binsfile,
-            BINNING_PREPARATION.out.circles_fasta,
-            BINNING_PREPARATION.out.filtered_contig_depths,
-            BINNING_PREPARATION.out.filtered_bam,
-            BINNING_PREPARATION.out.hic_pairs,
-            ch_centrifuger_db,
-            val_binners,
-        )
-        ch_bins_fasta = BINNING.out.bins_fasta
-        ch_bins_binsfile = BINNING.out.bins_binsfile
+    //
+    // Subworkflow: Bin the assembly using binning tools
+    //
+    BINNING(
+        BINNING_PREPARATION.out.filtered_assembly.filter { val_pipeline_stages.enable_binning },
+        ASSEMBLY.out.assembly_binsfile,
+        BINNING_PREPARATION.out.circles_fasta,
+        BINNING_PREPARATION.out.filtered_contig_depths,
+        BINNING_PREPARATION.out.filtered_bam,
+        BINNING_PREPARATION.out.hic_pairs,
+        ch_centrifuger_db,
+        val_binners,
+    )
+    ch_bins_fasta = BINNING.out.bins_fasta
+    ch_bins_binsfile = BINNING.out.bins_binsfile
 
-        if (val_pipeline_stages.enable_bin_refinement) {
-            //
-            // Subworkflow: Refine bins using DAS_Tool and MAGScoT
-            //
-            BIN_REFINEMENT(
-                BINNING_PREPARATION.out.filtered_assembly,
-                ASSEMBLY.out.assembly_binsfile,
-                ch_bins_binsfile.filter { meta, _c2b -> meta.binner != "circular" },
-                ch_checkm2_db,
-                val_bin_refiners.dastool,
-                val_bin_refiners.binette
-            )
-            ch_bins_fasta = ch_bins_fasta.mix(BIN_REFINEMENT.out.refined_bins_fasta)
-            ch_bins_binsfile = ch_bins_binsfile.mix(BIN_REFINEMENT.out.refined_bins_binsfile)
+    //
+    // Subworkflow: Refine bins using DAS_Tool and MAGScoT
+    //
+    BIN_REFINEMENT(
+        BINNING_PREPARATION.out.filtered_assembly.filter { val_pipeline_stages.enable_bin_refinement },
+        ASSEMBLY.out.assembly_binsfile.filter { val_pipeline_stages.enable_bin_refinement },
+        ch_bins_binsfile.filter { meta, _c2b -> meta.binner != "circular" && val_pipeline_stages.enable_bin_refinement },
+        ch_checkm2_db,
+        val_bin_refiners.dastool,
+        val_bin_refiners.binette
+    )
+    ch_bins_fasta = ch_bins_fasta.mix(BIN_REFINEMENT.out.refined_bins_fasta)
+    ch_bins_binsfile = ch_bins_binsfile.mix(BIN_REFINEMENT.out.refined_bins_binsfile)
+
+    //
+    // Subworkflow: QC of bins - completeness/contamination using
+    // CheckM2, statistics, tRNAs + ncRNAs
+    //
+    BIN_QC(
+        ch_bins_fasta.filter { val_pipeline_stages.enable_binqc },
+        BINNING_PREPARATION.out.full_bam,
+        ch_checkm2_db,
+    )
+
+    //
+    // Subworkflow: Taxonomic classification of bins using
+    // GTDB-Tk and conversion of classifications to NCBI taxonomy
+    //
+    BIN_TAXONOMY(
+        ch_bins_fasta.filter { val_pipeline_stages.enable_taxonomy },
+        BIN_QC.out.checkm2_tsv,
+        ch_gtdbtk_db,
+        ch_gtdb_ar53_metadata,
+        ch_gtdb_bac120_metadata
+    )
+
+    //
+    // Module: Merge all binfiles together and annotate bins and contigs
+    //
+    ch_metabintools_input = ch_bins_binsfile
+        .map { meta, binsfiles -> [meta - meta.subMap("binner"), binsfiles] }
+        .groupTuple(sort: { f -> f.getName() })
+        .join(ASSEMBLY_ANALYSIS.out.trna_gff, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.rrna_gff, by: 0)
+        .join(BINNING_PREPARATION.out.sample_contig_depths, by: 0)
+        .join(BIN_QC.out.checkm2_tsv, by: 0, remainder: true)
+        .join(BIN_TAXONOMY.out.gtdb_ncbi_tsv, by: 0, remainder: true)
+        .map { meta, binsfiles, trna, rrna, depths, checkm2, tax ->
+            [meta, binsfiles, trna, rrna, depths, checkm2 ?:  [], tax ?: []]
         }
 
-        ch_taxonomy_tsv = channel.empty()
-        if (val_pipeline_stages.enable_binqc) {
-            //
-            // Subworkflow: QC of bins - completeness/contamination using
-            // CheckM2, statistics, tRNAs + ncRNAs
-            //
-            BIN_QC(
-                ch_bins_fasta,
-                BINNING_PREPARATION.out.full_bam,
-                ch_checkm2_db,
-            )
+    METABINTOOLS_MERGEANNOTATE(
+        ch_metabintools_input,
+        "gtdbtk_ncbi",
+        "checkm2"
+    )
 
+    METABINTOOLS_SUMMARISEBINS(METABINTOOLS_MERGEANNOTATE.out.binsfile)
+    METABINTOOLS_SUMMARISEGROUPS(METABINTOOLS_MERGEANNOTATE.out.binsfile)
 
-            if (val_pipeline_stages.enable_taxonomy) {
-                //
-                // Subworkflow: Taxonomic classification of bins using
-                // GTDB-Tk and conversion of classifications to NCBI taxonomy
-                //
-                BIN_TAXONOMY(
-                    ch_bins_fasta,
-                    BIN_QC.out.checkm2_tsv,
-                    ch_gtdbtk_db,
-                    ch_gtdb_ar53_metadata,
-                    ch_gtdb_bac120_metadata
-                )
-                ch_taxonomy_tsv = BIN_TAXONOMY.out.gtdb_summary
-            }
+    ch_binfiles_publish = METABINTOOLS_MERGEANNOTATE.out.binsfile
+        .join(METABINTOOLS_SUMMARISEBINS.out.tsv, by: 0)
+        .join(METABINTOOLS_SUMMARISEGROUPS.out.tsv, by: 0)
+        .map { meta, binsfile, bin_summary, group_summary ->
+            meta + [binsfile: binsfile, bin_summary: bin_summary, group_summary: group_summary]
         }
 
-        //
-        // Module: Merge all binfiles together and annotate bins and contigs
-        //
-        ch_metabintools_input = ch_bins_binsfile
-            .map { meta, binsfiles -> [meta - meta.subMap("binner"), binsfiles] }
-            .groupTuple()
-            .join(ASSEMBLY_ANALYSIS.out.trna_gff, by: 0)
-            .join(ASSEMBLY_ANALYSIS.out.rrna_gff, by: 0)
-            .join(BINNING_PREPARATION.out.sample_contig_depths, by: 0)
-            .join(BIN_QC.out.checkm2_tsv, by: 0)
-            .join(BIN_TAXONOMY.out.gtdb_ncbi_tsv, by: 0)
-
-        METABINTOOLS_MERGEANNOTATE(
-            ch_metabintools_input,
-            "gtdbtk",
-            "checkm2"
-        )
-    }
+    ch_assembly_publish = ASSEMBLY.out.assembly_output
+        .join(ASSEMBLY_ANALYSIS.out.assembly_statistics, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.tiara_classifications, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.tiara_log, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.genomad_results, by: 0, remainder: true)
+        .join(ASSEMBLY_ANALYSIS.out.trna_tsv, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.trna_stats, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.trna_gff, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.trna_log, by: 0)
+        .join(ASSEMBLY_ANALYSIS.out.rrna_gff, by: 0)
+        .join(BINNING.out.centrifuger, by: 0, remainder: true)
+        .join(BIN_REFINEMENT.out.annotations, by: 0, remainder: true)
+        .map { meta, asm, asm_files, stats, tiara, tiara_log, genomad, trna_tsv, trna_stats, trna_gff, trna_log, rrna_gff, centrifuger_tsv, pyrodigal_annotations ->
+            meta + [
+                // nextflow bug: https://github.com/nextflow-io/nextflow/issues/7667
+                // explicitly null external assemblies
+                assembly: asm.toUriString() =~ "${workflow.workDir}/[0-9a-z]{2}/[0-9a-z]{30}" ? asm : null,
+                assembly_files: asm_files,
+                stats: stats,
+                tiara: tiara,
+                tiara_log: tiara_log,
+                genomad: genomad ? genomad.listDirectory() : null,
+                trna_tsv: trna_tsv,
+                trna_stats: trna_stats,
+                trna_gff: trna_gff,
+                trna_log: trna_log,
+                rrna_gff: rrna_gff,
+                centrifuger_tsv: centrifuger_tsv,
+                pyrodigal_annotations: pyrodigal_annotations,
+            ]
+        }
 
     //
     // Collate and save software versions
@@ -194,11 +227,11 @@ workflow METAGENOMEASSEMBLY {
         )
 
     emit:
-    assemblies          = ASSEMBLY.out.assembly_output
-    assembly_analysis   = ASSEMBLY_ANALYSIS.out.assembly_analysis_output
-    binning_preparation = ch_binning_preparation_out
-    binning             = ch_binning_out
-    bins                = ch_bins_fasta
-    centrifuger         = ch_centrifuger
+    assemblies          = ch_assembly_publish
+    mapping             = ch_binning_preparation_out
+    binning             = BINNING.out.binning_publish.mix(BIN_REFINEMENT.out.bin_refinement_publish)
+    bin_qc              = BIN_QC.out.binqc_publish
+    bin_taxonomy        = BIN_TAXONOMY.out.bin_taxonomy_publish
+    binning_summary     = ch_binfiles_publish
     versions            = ch_versions // channel: [ path(versions.yml) ]
 }

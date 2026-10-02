@@ -120,28 +120,33 @@ workflow {
     )
 
     publish:
-    assemblies          = SANGERTOL_METAGENOMEASSEMBLY.out.assemblies.map { it -> it + [n_samples: n_samples] }
-    assembly_analysis   = SANGERTOL_METAGENOMEASSEMBLY.out.assembly_analysis.map { it -> it + [n_samples: n_samples] }
-    binning_preparation = SANGERTOL_METAGENOMEASSEMBLY.out.binning_preparation.map { it -> it + [n_samples: n_samples] }
-    binning             = SANGERTOL_METAGENOMEASSEMBLY.out.binning.map { it -> it + [n_samples: n_samples] }
-    centrifuger         = SANGERTOL_METAGENOMEASSEMBLY.out.centrifuger.map { it -> it + [n_samples: n_samples] }
+    assemblies      = SANGERTOL_METAGENOMEASSEMBLY.out.assemblies.map { it -> it + [n_samples: n_samples] }
+    mapping         = SANGERTOL_METAGENOMEASSEMBLY.out.mapping.map { it -> it + [n_samples: n_samples] }
+    binning         = SANGERTOL_METAGENOMEASSEMBLY.out.binning.map { it -> it + [n_samples: n_samples] }
+    bin_qc          = SANGERTOL_METAGENOMEASSEMBLY.out.bin_qc.map { it -> it + [n_samples: n_samples] }
+    bin_taxonomy    = SANGERTOL_METAGENOMEASSEMBLY.out.bin_taxonomy.map { it -> it + [n_samples: n_samples] }
+    binning_summary = SANGERTOL_METAGENOMEASSEMBLY.out.binning_summary.map { it -> it + [n_samples: n_samples] }
 }
 
 output {
     assemblies {
         path { obj ->
-            obj.assembly_files >> getOutdir(obj) + "assembly/"
-        }
-    }
-    assembly_analysis {
-        path { obj ->
+            obj.assembly >> getOutdir(obj) + "assembly/"
+            obj.assembly_files >> getOutdir(obj) + "assembly/${obj.assembler}/"
             obj.stats >> getOutdir(obj) + "assembly/"
             obj.tiara >> getOutdir(obj) + "assembly/tiara/"
             obj.tiara_log >> getOutdir(obj) + "assembly/tiara/"
             obj.genomad >> getOutdir(obj) + "assembly/genomad/"
+            obj.trna_tsv >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_stats >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_gff >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_log >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.rrna_gff >> getOutdir(obj) + "assembly/rrna/"
+            obj.centrifuger_tsv >> getOutdir(obj) + "assembly/centrifuger/"
+            obj.pyrodigal_annotations >> getOutdir(obj) + "assembly/pyrodigal/"
         }
     }
-    binning_preparation {
+    mapping {
         path { obj ->
             obj.bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
             obj.hic_bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
@@ -151,13 +156,27 @@ output {
     }
     binning {
         path { obj ->
-            obj.bins >> getOutdir(obj) + "binning/${obj.binner}/fasta/"
-            obj.extra_files >> getOutdir(obj) + "binning/${obj.binner}/"
+            obj.bins >> getOutdir(obj) + "binning/bins/${obj.binner}/fasta/"
+            obj.extra_files >> getOutdir(obj) + "binning/bins/${obj.binner}/"
         }
     }
-    centrifuger {
+    bin_qc {
         path { obj ->
-            obj.out >> getOutdir(obj) + "assembly/centrifuger/"
+            obj.checkm2_tsv >> getOutdir(obj) + "binning/"
+            obj.coverage >> getOutdir(obj) + "binning/"
+        }
+    }
+    bin_taxonomy {
+        path { obj ->
+            obj.gtdbtk_outdir >> getOutdir(obj) + "binning/gtdbtk/"
+            obj.merged_summary >> getOutdir(obj) + "binning/"
+        }
+    }
+    binning_summary {
+        path { obj ->
+            obj.binsfile >> getOutdir(obj) + "binning/"
+            obj.bin_summary >> getOutdir(obj) + "binning/"
+            obj.group_summary >> getOutdir(obj) + "binning/"
         }
     }
 }
@@ -215,9 +234,10 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
     )
 
     emit:
-    assemblies          = METAGENOMEASSEMBLY.out.assemblies
-    assembly_analysis   = METAGENOMEASSEMBLY.out.assembly_analysis
-    binning_preparation = METAGENOMEASSEMBLY.out.binning_preparation
-    binning             = METAGENOMEASSEMBLY.out.binning
-    centrifuger         = METAGENOMEASSEMBLY.out.centrifuger
+    assemblies      = METAGENOMEASSEMBLY.out.assemblies
+    mapping         = METAGENOMEASSEMBLY.out.mapping
+    binning         = METAGENOMEASSEMBLY.out.binning
+    bin_qc          = METAGENOMEASSEMBLY.out.bin_qc
+    bin_taxonomy    = METAGENOMEASSEMBLY.out.bin_taxonomy
+    binning_summary = METAGENOMEASSEMBLY.out.binning_summary
 }

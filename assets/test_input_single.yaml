@@ -1,7 +1,3 @@
-- id: xyTesTing1
-  platform: "pacbio_hifi"
-  reads:
-    - https://tolit.cog.sanger.ac.uk/test-data/Zymo_D6311_Metagenome/genomic_data/pacbio/fasta/subsampled.pacbio.part_001.fa.gz
 - id: xyTesTing2
   platform: "pacbio_hifi"
   reads:

@@ -11,13 +11,13 @@ process MYLOASM {
     tuple val(meta), path(reads)
 
     output:
-    tuple val(meta), path("${prefix}"), emit: results
-    tuple val(meta), path("${prefix}/assembly_primary.fa.gz"), emit: contigs
-    tuple val(meta), path("${prefix}/final_contig_graph.gfa.gz"), emit: gfa
-    tuple val(meta), path("${prefix}/alternate_assemblies/assembly_alternate.fa.gz"), emit: contigs_alt
-    tuple val(meta), path("${prefix}/alternate_assemblies/duplicated_contigs.fa.gz"), emit: contigs_dup
-    tuple val(meta), path("${prefix}/3-mapping/map_to_unitigs.paf.gz"), emit: mapping
-    tuple val(meta), path("${prefix}/*.log"), emit: log
+    tuple val(meta), path("*"), emit: results
+    tuple val(meta), path("${prefix}.assembly_primary.fa.gz"), emit: contigs
+    tuple val(meta), path("${prefix}.final_contig_graph.gfa.gz"), emit: gfa
+    tuple val(meta), path("alternate_assemblies/${prefix}.assembly_alternate.fa.gz"), emit: contigs_alt
+    tuple val(meta), path("alternate_assemblies/${prefix}.duplicated_contigs.fa.gz"), emit: contigs_dup
+    tuple val(meta), path("3-mapping/${prefix}.map_to_unitigs.paf.gz"), emit: mapping
+    tuple val(meta), path("*.log"), emit: log
     tuple val("${task.process}"), val('myloasm'), eval("myloasm --version | sed 's/.* //'"), emit: versions_myloasm, topic: versions
 
     when:
@@ -29,13 +29,16 @@ process MYLOASM {
     """
     myloasm \\
         ${reads} \\
-        -o ${prefix} \\
+        -o . \\
         -t ${task.cpus} \\
         ${args}
 
-    find ${prefix}/ -name "*.fa" -exec gzip {} \\;
-    find ${prefix}/ -name "*.gfa" -exec gzip {} \\;
-    find ${prefix}/ -name "*.edges" -exec gzip {} \\;
+    find . \\( -name "*.fa" -o -name "*.gfa" -o -name "*.edges" -o -name "*.paf.gz" \\) -type f | while read file; do
+        dirname=\$(dirname "\${file}")
+        basename=\$(basename "\${file}")
+        mv "\$file" "\${dirname}/${prefix}.\${basename}"
+        gzip \${dirname}/${prefix}.\${basename}
+    done
     """
 
     stub:
@@ -44,13 +47,13 @@ process MYLOASM {
     """
     echo ${args}
 
-    mkdir -p ${prefix}/alternate_assemblies
-    mkdir -p ${prefix}/3-mapping
-    echo "" | gzip > ${prefix}/assembly_primary.fa.gz
-    echo "" | gzip > ${prefix}/final_contig_graph.gfa.gz
-    echo "" | gzip > ${prefix}/alternate_assemblies/assembly_alternate.fa.gz
-    echo "" | gzip > ${prefix}/alternate_assemblies/duplicated_contigs.fa.gz
-    echo "" | gzip > ${prefix}/3-mapping/map_to_unitigs.paf.gz
-    touch ${prefix}/myloasm_1.log
+    mkdir -p alternate_assemblies
+    mkdir -p 3-mapping
+    echo "" | gzip > ${prefix}.assembly_primary.fa.gz
+    echo "" | gzip > ${prefix}.final_contig_graph.gfa.gz
+    echo "" | gzip > alternate_assemblies/${prefix}.assembly_alternate.fa.gz
+    echo "" | gzip > alternate_assemblies/${prefix}.duplicated_contigs.fa.gz
+    echo "" | gzip > 3-mapping/${prefix}.map_to_unitigs.paf.gz
+    touch myloasm_1.log
     """
 }

@@ -34,7 +34,7 @@ def get_stem(path):
 
 
 @click.command()
-@click.version_option(version="1.0.0")
+@click.version_option(version="1.0.0", message="%(version)s")
 @click.option("--fasta", type=click.Path(exists=True), multiple=True, required=True)
 @click.option("--id", type=str, multiple=True)
 @click.option("--separator", default=":", type=str)

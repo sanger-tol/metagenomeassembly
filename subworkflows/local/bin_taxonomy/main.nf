@@ -20,7 +20,7 @@ workflow BIN_TAXONOMY {
     //
     ch_bins = bin_sets
         .map { meta, bins ->
-            [meta.subMap("id"), bins]
+            [meta.subMap("id", "platform", "assembler"), bins]
         }
         .transpose()
 
@@ -95,9 +95,17 @@ workflow BIN_TAXONOMY {
 
     CSVTK_JOIN(ch_csvtk_join_input)
 
-    ch_gtdb_merged_summary = CSVTK_JOIN.out.out_file
+    ch_bin_taxonomy_publish = GTDBTK_CLASSIFYWF.out.gtdb_outdir
+        .join(CSVTK_JOIN.out.out_file)
+        .map { meta, outdir, summary ->
+            meta + [
+                gtdbtk_outdir: outdir.listDirectory(),
+                merged_summary: summary
+            ]
+        }
 
     emit:
-    gtdb_summary = ch_gtdb_merged_summary
-    gtdb_ncbi_tsv =GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
+    gtdb_summary = CSVTK_JOIN.out.out_file
+    gtdb_ncbi_tsv = GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
+    bin_taxonomy_publish = ch_bin_taxonomy_publish
 }

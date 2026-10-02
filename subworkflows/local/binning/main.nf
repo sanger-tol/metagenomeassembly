@@ -44,12 +44,6 @@ workflow BINNING {
             [meta - meta.subMap("single_end") + [binner: "circular"], fasta]
         }
         ch_bins = ch_bins.mix(ch_circular_bins)
-
-        ch_binning_out = ch_binning_out.mix(
-            ch_circular_bins.map { meta, fasta ->
-                meta + [bins: fasta, extra_files: []]
-            }
-        )
     }
 
     //
@@ -95,8 +89,8 @@ workflow BINNING {
             .join(MAXBIN2.out.marker_counts, remainder: true)
             .join(MAXBIN2.out.marker_bins, remainder: true)
             .join(MAXBIN2.out.marker_genes, remainder: true)
-            .map { meta, summary, abundance, log, marker_counts, marker_bins, marker_genes ->
-                meta + [binner: "maxbin2", extra: [summary, abundance, log, marker_counts, marker_bins, marker_genes].findAll().flatten()]
+            .map { meta, summary, abundance, maxbin_log, marker_counts, marker_bins, marker_genes ->
+                [meta + [binner: "maxbin2"], [summary, abundance, maxbin_log, marker_counts, marker_bins, marker_genes].findAll().flatten()]
             }
 
             ch_binning_out = ch_binning_out.mix(ch_maxbin2_out)
@@ -122,7 +116,7 @@ workflow BINNING {
             .join(COMEBIN_RUNCOMEBIN.out.covembeddings)
             .join(COMEBIN_RUNCOMEBIN.out.embedding_ids)
             .map { meta, tsv, log, embeddings, covembeddings, embedding_ids ->
-                meta + [binner: "comebin", extra_files: [tsv, log, embeddings, covembeddings, embedding_ids].findAll().flatten()]
+                [meta + [binner: "comebin"], [tsv, log, embeddings, covembeddings, embedding_ids].findAll().flatten()]
             }
 
         ch_binning_out = ch_binning_out.mix(ch_comebin_out)
@@ -147,7 +141,7 @@ workflow BINNING {
                 .join(SEMIBIN_SINGLEEASYBIN.out.model)
                 .join(SEMIBIN_SINGLEEASYBIN.out.tsv)
                 .map { meta, csv, model, tsv ->
-                    meta + [binner: "semibin_single", extra_files: [csv, model, tsv].findAll().flatten()]
+                    [meta + [binner: "semibin_single"], [csv, model, tsv].findAll().flatten()]
                 }
 
             ch_binning_out = ch_binning_out.mix(ch_semibin_single_out)
@@ -164,7 +158,8 @@ workflow BINNING {
                     .collect { id, idx ->
                         def bins_subset = bins.findAll { bin -> bin.getName() =~ id }
                         def assembler = meta.assemblers[idx]
-                        return [[id: id, binner: "semibin_multi", assembler: assembler], bins_subset]
+                        def platform = meta.platforms[idx]
+                        return [[id: id, binner: "semibin_multi", assembler: assembler, platform: platform], bins_subset]
                     }
             }
             ch_bins = ch_bins.mix(ch_semibin_multi_bins)
@@ -173,8 +168,8 @@ workflow BINNING {
                 .combine(SEMIBIN_MULTIEASYBIN.out.csv)
                 .combine(SEMIBIN_MULTIEASYBIN.out.tsv)
                 .combine(SEMIBIN_MULTIEASYBIN.out.log)
-                .map { meta, _bins, _meta_csv, csv, _meta_tsv, tsv, _meta_log, log ->
-                    meta + [extra_files: [csv, tsv, log].findAll().flatten()]
+                .map { meta, _bins, _meta_csv, csv, _meta_tsv, tsv, _meta_log, semibin_log ->
+                    [meta + [binner: "semibin_multi"], [csv, tsv, semibin_log].flatten().findAll { f -> f.toUriString() =~ "${meta.id}" }]
                 }
 
             ch_binning_out = ch_binning_out.mix(ch_semibin_multi_output)
@@ -243,15 +238,19 @@ workflow BINNING {
 
         METATOR_PIPELINE(ch_metator_inputs)
 
+        ch_bins = ch_bins.mix(METATOR_PIPELINE.out.bins.map { meta, bins -> [meta + [binner: "metator"], bins] })
+
         ch_metator_output = METATOR_PIPELINE.out.network
             .join(METATOR_PIPELINE.out.contig_data)
             .join(METATOR_PIPELINE.out.plots)
             .map { meta, network, contig_data, plots ->
-                meta + [extra_files: [network, contig_data, plots].findAll().flatten()]
+                [meta + [binner: "metator"], [network, contig_data, plots].findAll().flatten()]
             }
 
         ch_binning_out = ch_binning_out.mix(ch_metator_output)
     }
+
+    ch_bins.view()
 
     //
     // Module: Import each set of bins to a binsfile with the assembly
@@ -269,9 +268,13 @@ workflow BINNING {
     //
     METABINTOOLS_EXPORTFASTA(METABINTOOLS_IMPORTBINSET.out.binsfile)
 
+    ch_binning_publish = METABINTOOLS_EXPORTFASTA.out.fasta
+        .join(ch_binning_out, by:0, remainder: true)
+        .map { meta, bins, extra_files -> meta + [bins: bins, extra_files: extra_files] }
+
     emit:
     bins_fasta      = METABINTOOLS_EXPORTFASTA.out.fasta
     bins_binsfile   = METABINTOOLS_IMPORTBINSET.out.binsfile
-    binning_output  = ch_binning_out
+    binning_publish = ch_binning_publish
     centrifuger     = ch_centrifuger_output
 }

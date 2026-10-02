@@ -1,6 +1,0 @@
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - bioconda::pyfastx=2.3.1
-  - conda-forge::click=8.5.0

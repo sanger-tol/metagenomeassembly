@@ -27,7 +27,7 @@ import polars as pl
 
 
 @click.command()
-@click.version_option(version="1.0.0")
+@click.version_option(version="1.0.0", message="%(version)s")
 @click.argument("depths_file", type=click.Path(exists=True))
 @click.option(
     "--format",

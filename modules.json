@@ -22,7 +22,7 @@
                     },
                     "checkm2/predict": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "deb8254027c27a9e505befc68ab449db1f3dadef",
                         "installed_by": ["modules"]
                     },
                     "comebin/runcomebin": {
@@ -53,11 +53,6 @@
                     "dastool/dastool": {
                         "branch": "master",
                         "git_sha": "5be91832f7c6a2d229f900a239d9532c9ae133c7",
-                        "installed_by": ["modules"]
-                    },
-                    "gawk": {
-                        "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "genomad/endtoend": {
@@ -117,8 +112,9 @@
                     },
                     "myloasm": {
                         "branch": "master",
-                        "git_sha": "77a9e6b9af89bde2a2b472f21c6a9bfecb9c8c7d",
-                        "installed_by": ["modules"]
+                        "git_sha": "2a55fbb146d13f5058756c27cbf0b2e41e2a0729",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/myloasm/myloasm.diff"
                     },
                     "pyrodigal": {
                         "branch": "master",
@@ -152,7 +148,7 @@
                     },
                     "semibin/singleeasybin": {
                         "branch": "master",
-                        "git_sha": "041fbd98880c9af7762aec2f54fa4f35503d50f2",
+                        "git_sha": "9f8642c41bf67d2787820e4c4aa34c0356a0d464",
                         "installed_by": ["modules"]
                     },
                     "seqkit/replace": {
@@ -183,7 +179,7 @@
                     },
                     "vamb/bin": {
                         "branch": "master",
-                        "git_sha": "a0961c41021561ac7cf139f86bd7812a2f99e994",
+                        "git_sha": "7844e96252d0693fb2331969a1c9790eb831b0f6",
                         "installed_by": ["modules"]
                     }
                 }

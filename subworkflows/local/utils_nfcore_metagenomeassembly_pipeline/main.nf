@@ -123,7 +123,7 @@ workflow PIPELINE_INITIALISATION {
     // Genomad database
     ch_genomad_db = channel.empty()
     if (val_genomad_db) {
-        ch_genomad_db = channel.of(file(val_genomad_db, checkIfExists: true)).collect()
+        ch_genomad_db = channel.of([[id: "genomad"], file(val_genomad_db, checkIfExists: true)]).collect()
     }
 
     // Centrifuger database

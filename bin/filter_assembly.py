@@ -61,7 +61,7 @@ def check_circular(header: str) -> bool:
 
 
 @click.command()
-@click.version_option(version="1.0.0")
+@click.version_option(version="1.0.0", message="%(version)s")
 @click.argument("assembly", type=click.Path(exists=True))
 @click.option("--extract-circles/--no-extract-circles", is_flag=True)
 @click.option("--minimum-contig-size", type=int, default=0)

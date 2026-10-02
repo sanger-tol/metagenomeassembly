@@ -3,4 +3,4 @@ channels:
   - bioconda
 dependencies:
   - pip:
-      - metabintools==0.2.3
+      - metabintools==0.4.0

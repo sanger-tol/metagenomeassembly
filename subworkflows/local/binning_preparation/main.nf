@@ -28,13 +28,15 @@ workflow BINNING_PREPARATION {
             def ids = []
             def assemblers = []
             def out_classifications = []
+            def out_platforms = []
             list.collect { meta, classification ->
                 ids << meta.id
                 assemblers << meta.assembler
+                out_platforms << meta.platform
                 out_classifications << classification
             }
 
-            return [[id: "collated", collated: true, ids: ids, assemblers: assemblers], out_classifications]
+            return [[id: "collated", collated: true, ids: ids, assemblers: assemblers, platforms: out_platforms], out_classifications]
         }
 
     ch_filter_assembly_input = ch_assemblies
@@ -82,11 +84,16 @@ workflow BINNING_PREPARATION {
     )
 
     //
-    // Module: Calculate per-contig coverage from the unfiltered BAM files\
+    // Module: Calculate per-contig coverage from the unfiltered BAM files
     // for annotation in the output binsfiles.
     //
+    ch_coverm_all_input = LONG_READ_MAPPING.out.bam
+        .filter { meta, _bam -> !meta?.collated }
+        .map { meta, bam -> [meta - meta.subMap("read_id"), bam] }
+        .groupTuple(by: 0)
+
     COVERM_CONTIG_ALL(
-        LONG_READ_MAPPING.out.bam.filter { meta, _bam -> meta.id == meta.read_id },
+        ch_coverm_all_input,
         [[], []],
         true,
         false,
@@ -98,7 +105,7 @@ workflow BINNING_PREPARATION {
         .groupTuple(by: 0)
         .join(HIC_MAPPING.out.bam.map { meta, bam -> [meta - meta.subMap("hic_id"), bam] }, remainder: true)
         .join(HIC_MAPPING.out.pairs, remainder: true)
-        .join(COVERM_CONTIG_FILTERED.out.coverage, remainder: true)
+        .join(COVERM_CONTIG_ALL.out.coverage, remainder: true)
         .filter { meta, _bam, _hic_bam, _pairs, _depths -> !meta?.collated }
         .map { meta, bam, hic_bam, pairs, depths ->
             return meta + [bams: bam, hic_bam: hic_bam ?: [], pairs: pairs ?: [], depths: depths ?: []]

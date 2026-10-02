@@ -1,7 +1,5 @@
 include { BINETTE                                 } from '../../../modules/nf-core/binette/main'
-include { CONTIG2BINTOFASTA                       } from '../../../modules/local/contig2bintofasta/main'
 include { DASTOOL_DASTOOL                         } from '../../../modules/nf-core/dastool/dastool/main'
-include { GAWK as GAWK_RENAME_BINS                } from '../../../modules/nf-core/gawk/main'
 include { PYRODIGAL                               } from '../../../modules/nf-core/pyrodigal/main'
 include { METABINTOOLS_IMPORTBINSET               } from '../../../modules/local/metabintools/importbinset'
 include { METABINTOOLS_EXPORTCONTIG2BIN           } from '../../../modules/local/metabintools/exportcontig2bin'
@@ -59,7 +57,7 @@ workflow BIN_REFINEMENT {
             .join(DASTOOL_DASTOOL.out.fasta_archaea_scg, remainder: true)
             .join(DASTOOL_DASTOOL.out.fasta_bacteria_scg, remainder: true)
             .map { meta, log, eval, pdfs, fasta_archaea_scg, fasta_bacteria_scg ->
-                meta + [extra_files: [
+                [meta + [binner: "dastool"], [
                     log,
                     eval ?: [],
                     pdfs ?: [],
@@ -93,7 +91,7 @@ workflow BIN_REFINEMENT {
         ch_binette_output = BINETTE.out.final_bins_quality_report
             .join(BINETTE.out.input_bins_quality_reports, by: 0, remainder: true)
             .map { meta, final_qr, input_qr ->
-                meta + [binner: "binette", extra_files: [final_qr, input_qr].findAll().flatten()]
+                [meta + [binner: "binette"], [final_qr, input_qr].findAll().flatten()]
             }
 
         ch_bin_refinement_output = ch_bin_refinement_output.mix(ch_binette_output)
@@ -115,8 +113,14 @@ workflow BIN_REFINEMENT {
     //
     METABINTOOLS_EXPORTFASTA(METABINTOOLS_IMPORTBINSET.out.binsfile)
 
+    ch_bin_refinement_publish = METABINTOOLS_EXPORTFASTA.out.fasta
+        .join(ch_bin_refinement_output, by:0, remainder: true)
+        .map { meta, bins, extra_files -> meta + [bins: bins, extra_files: extra_files] }
+
 
     emit:
-    refined_bins_fasta    = METABINTOOLS_EXPORTFASTA.out.fasta
-    refined_bins_binsfile = METABINTOOLS_IMPORTBINSET.out.binsfile
+    refined_bins_fasta     = METABINTOOLS_EXPORTFASTA.out.fasta
+    refined_bins_binsfile  = METABINTOOLS_IMPORTBINSET.out.binsfile
+    bin_refinement_publish = ch_bin_refinement_publish
+    annotations            = PYRODIGAL.out.annotations
 }
