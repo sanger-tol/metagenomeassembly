@@ -42,16 +42,9 @@ nextflow_pipeline {
                 "${params.outdir}/assembly/",
                 relative: true,
                 includeDir: true,
-                ignore: [
-                    "**/*.assembly_primary_annotate/**",
-                    "**/*.assembly_primary_find_proviruses/**",
-                    "**/*.assembly_primary_marker_classification/**",
-                    "**/*.assembly_primary_nn_classification/**",
-                    "**/*.assembly_primary_aggregated_classification/**",
-                    "**/myloasm/*.log"
-                ]
+                ignoreFile: "tests/.nftignore"
             )
-            def bin_files      = getAllFilesFromDir("${params.outdir}/binning/", relative: true, ignore: ["**/fasta/*.fa.gz"])
+            def bin_files      = getAllFilesFromDir("${params.outdir}/binning/", relative: true, ignore: ["**/fasta/*.fa.gz"], ignoreFile: "tests/.nftignore")
 
             // Unstable and uncountable files
             def bin_fasta      = getAllFilesFromDir("${params.outdir}/binning/bins/", relative: true, includeDir: true, include: ["**/fasta/*.fa.gz"])

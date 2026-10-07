@@ -117,11 +117,6 @@
             },
             [
                 "pipeline_info",
-                "pipeline_info/execution_report_2026-10-07_10-36-40.html",
-                "pipeline_info/execution_timeline_2026-10-07_10-36-40.html",
-                "pipeline_info/metagenomeassembly_software_versions.yml",
-                "pipeline_info/params_2026-10-07_10-36-48.json",
-                "pipeline_info/pipeline_dag_2026-10-07_10-36-40.html",
                 "xyTesTing1",
                 "xyTesTing1/assembly",
                 "xyTesTing1/assembly/mapping",
@@ -338,7 +333,6 @@
                 "xyTesTing2/assembly/myloasm/misc",
                 "xyTesTing2/assembly/myloasm/misc/kmer_count_histogram.tsv",
                 "xyTesTing2/assembly/myloasm/misc/timing_steps.tsv",
-                "xyTesTing2/assembly/myloasm/myloasm_2026-10-07_10-37-00.log",
                 "xyTesTing2/assembly/myloasm/xyTesTing2.final_contig_graph.edges.gz",
                 "xyTesTing2/assembly/myloasm/xyTesTing2.final_contig_graph.gfa.gz",
                 "xyTesTing2/assembly/pyrodigal",
@@ -358,11 +352,6 @@
                 "xyTesTing2/binning"
             ],
             [
-                "pipeline_info/execution_report_2026-10-07_10-36-40.html",
-                "pipeline_info/execution_timeline_2026-10-07_10-36-40.html",
-                "pipeline_info/metagenomeassembly_software_versions.yml",
-                "pipeline_info/params_2026-10-07_10-36-48.json",
-                "pipeline_info/pipeline_dag_2026-10-07_10-36-40.html",
                 "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/abundance.npz",
                 "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/composition.npz",
                 "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/latent.npz",
@@ -411,7 +400,7 @@
                 "xyTesTing2/binning/xyTesTing2_checkm2_report.tsv"
             ]
         ],
-        "timestamp": "2026-10-07T10:54:14.152066229",
+        "timestamp": "2026-10-07T15:13:39.588289724",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

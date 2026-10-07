@@ -31,19 +31,15 @@ nextflow_pipeline {
                 "${params.outdir}/",
                 relative: true,
                 includeDir: true,
+                ignoreFile: "tests/.nftignore",
                 ignore: [
-                    "**/*.assembly_primary_annotate/**",
-                    "**/*.assembly_primary_find_proviruses/**",
-                    "**/*.assembly_primary_marker_classification/**",
-                    "**/*.assembly_primary_nn_classification/**",
-                    "**/*.assembly_primary_aggregated_classification/**",
                     "**/binning/**",
-                    "**/myloasm/*.log"
                 ]
             )
             def bin_files = getAllFilesFromDir(
                 "${params.outdir}/",
                 relative: true,
+                ignoreFile: "tests/.nftignore",
                 ignore: [
                     "**/assembly/**",
                     "**/fasta/*.fa.gz"

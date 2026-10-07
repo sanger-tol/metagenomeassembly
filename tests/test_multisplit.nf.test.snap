@@ -121,11 +121,6 @@
             },
             [
                 "pipeline_info",
-                "pipeline_info/execution_report_2026-10-07_10-54-20.html",
-                "pipeline_info/execution_timeline_2026-10-07_10-54-20.html",
-                "pipeline_info/metagenomeassembly_software_versions.yml",
-                "pipeline_info/params_2026-10-07_10-54-28.json",
-                "pipeline_info/pipeline_dag_2026-10-07_10-54-20.html",
                 "xyTesTing1",
                 "xyTesTing1/assembly",
                 "xyTesTing1/assembly/mapping",
@@ -163,11 +158,6 @@
                 "xyTesTing2/binning"
             ],
             [
-                "pipeline_info/execution_report_2026-10-07_10-54-20.html",
-                "pipeline_info/execution_timeline_2026-10-07_10-54-20.html",
-                "pipeline_info/metagenomeassembly_software_versions.yml",
-                "pipeline_info/params_2026-10-07_10-54-28.json",
-                "pipeline_info/pipeline_dag_2026-10-07_10-54-20.html",
                 "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/bins_info.tsv",
                 "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/contig_bins.tsv",
                 "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/data.csv",
@@ -234,7 +224,7 @@
                 "xyTesTing2/binning/xyTesTing2_checkm2_report.tsv"
             ]
         ],
-        "timestamp": "2026-10-07T11:18:47.468180163",
+        "timestamp": "2026-10-07T15:37:00.016712171",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
