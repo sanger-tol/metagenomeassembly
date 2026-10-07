@@ -42,7 +42,7 @@ output:
           type: string
       - concatenate_fasta.py:
           type: string
-      - 'concatenate_fasta.py --version':
+      - "concatenate_fasta.py --version":
           type: string
 
 topics:

@@ -43,7 +43,7 @@ output:
           type: string
       - convert_depths.py:
           type: string
-      - 'convert_depths.py --version':
+      - "convert_depths.py --version":
           type: string
 
 topics:

@@ -100,7 +100,7 @@ output:
           type: string
       - filter_assembly.py:
           type: string
-      - 'filter_assembly.py --version':
+      - "filter_assembly.py --version":
           type: string
 
 topics:
