@@ -13,9 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Dependencies`
 
-| module  | tools   | old versions | new versions |
-| ------- | ------- | ------------ | ------------ |
-| myloasm | myloasm | 0.6.0        | 0.7.0        |
+| module                | tools                | old versions | new versions |
+| --------------------- | -------------------- | ------------ | ------------ |
+| cmsearch_to_gff       | cmsearch_to_gff.py   | -            | 1.0.0        |
+| concatenate_fasta     | concatenate_fasta.py | -            | 1.0.0        |
+| convert_depths        | convert_depths.py    | -            | 1.0.0        |
+| filter_assembly       | filter_assembly.py   | -            | 1.0.0        |
+| gfastats              | gfastats             | -            | 1.3.11       |
+| metabintools/*        | metabintools         | -            | 0.4.0        |
+| myloasm               | myloasm              | 0.6.0        | 0.7.0        |
+| semibin2/multieasybin | semibin2             | -            | 2.4.1        |
+| seqkit/stats          | seqkit               | -            | 2.13.0       |
+| trnascanse            | trnascan-SE          | 2.0.12       | 2.0.13       |
+| bin_summary           | bin_summary.R        | 1.0.0        | -            |
+| binsummaries/trna     | gawk                 | 5.3.0        | -            |
+| binsummaries/rrna     | gawk                 | 5.3.0        | -            |
+| binsummaries/rrna     | gawk                 | 5.3.0        | -            |
+| contig2bintofasta     | seqkit               | 2.9.0        | -            |
+| genome_stats          | seqkit               | 2.9.0        | -            |
 
 ## [1.5.0] - Polly on the Shore - [2026-09-03]
 

@@ -147,6 +147,10 @@ workflow BINNING {
             ch_binning_out = ch_binning_out.mix(ch_semibin_single_out)
         }
         else {
+            //
+            // Module: Bin assembly using Semibin2 with multisplitting
+            //
+
             ch_semibin_input = ch_assemblies_collated
                 .combine(ch_bam_collated, by: 0)
                 .map { meta, asm, bam -> [meta, asm, bam, []] }

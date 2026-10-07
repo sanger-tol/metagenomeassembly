@@ -19,7 +19,7 @@ workflow ASSEMBLY {
     ch_assemblies = ch_long_reads_assemblies
         .filter { _meta, _reads, assembly -> assembly }
         .map { meta, _reads, assembly ->
-            log.info("Skipping assembly for ${meta.id}: assembly provided")
+            log.info("Warn[assembly]: Skipping assembly for ${meta.id}: assembly provided")
             [meta, assembly]
         }
 

@@ -64,6 +64,9 @@ workflow ASSEMBLY_ANALYSIS {
         true,
     )
 
+    //
+    // Module: Convert the infernal cmsearch output to gff
+    //
     CMSEARCH_TO_GFF(INFERNAL_CMSEARCH.out.target_summary.combine(ch_rfam_rrna_cm))
 
     emit:

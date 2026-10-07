@@ -155,7 +155,14 @@ workflow METAGENOMEASSEMBLY {
         "checkm2",
     )
 
+    //
+    // Module: Export summary TSV from merged binsfile
+    //
     METABINTOOLS_SUMMARISEBINS(METABINTOOLS_MERGEANNOTATE.out.binsfile)
+
+    //
+    // Module: Export per-group summary from merged binsfile
+    //
     METABINTOOLS_SUMMARISEGROUPS(METABINTOOLS_MERGEANNOTATE.out.binsfile)
 
     ch_binfiles_publish = METABINTOOLS_MERGEANNOTATE.out.binsfile
