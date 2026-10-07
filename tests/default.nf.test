@@ -48,6 +48,7 @@ nextflow_pipeline {
                     "**/*.assembly_primary_marker_classification/**",
                     "**/*.assembly_primary_nn_classification/**",
                     "**/*.assembly_primary_aggregated_classification/**",
+                    "**/myloasm/*.log"
                 ]
             )
             def bin_files      = getAllFilesFromDir("${params.outdir}/binning/", relative: true, ignore: ["**/fasta/*.fa.gz"])

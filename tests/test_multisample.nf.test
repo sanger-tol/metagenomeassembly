@@ -35,7 +35,8 @@ nextflow_pipeline {
                     "**/*.assembly_primary_marker_classification/**",
                     "**/*.assembly_primary_nn_classification/**",
                     "**/*.assembly_primary_aggregated_classification/**",
-                    "**/binning/**"
+                    "**/binning/**",
+                    "**/myloasm/*.log",
                 ]
             )
             def bin_files = getAllFilesFromDir(
