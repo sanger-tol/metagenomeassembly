@@ -1,0 +1,420 @@
+{
+    "test multisample input": {
+        "content": [
+            {
+                "CHECKM2_PREDICT": {
+                    "checkm2": "1.1.0"
+                },
+                "CMSEARCH_TO_GFF": {
+                    "cmsearch_to_gff.py": "1.0.0"
+                },
+                "CONCATENATE_COVERM_GENOME": {
+                    "csvtk": "0.37.0"
+                },
+                "CONVERT_DEPTHS": {
+                    "convert_depths.py": "1.0.0"
+                },
+                "COVERM_CONTIG_ALL": {
+                    "coverm": "0.7.0"
+                },
+                "COVERM_CONTIG_FILTERED": {
+                    "coverm": "0.7.0"
+                },
+                "COVERM_GENOME": {
+                    "coverm": "0.7.0"
+                },
+                "CSVTK_CONCAT": {
+                    "csvtk": "0.37.0"
+                },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.37.0"
+                },
+                "FASTXALIGN_MINIMAP2ALIGN": {
+                    "minimap2": "2.30-r1287",
+                    "samtools": "1.23.1",
+                    "slice_fasta.py": "1.0.0"
+                },
+                "FASTXALIGN_PYFASTXINDEX": {
+                    "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "filter_assembly.py": "1.0.0"
+                },
+                "GFASTATS": {
+                    "gfastats": "1.3.11"
+                },
+                "GTDBTK_CLASSIFYWF": {
+                    "gtdb_db": "r232",
+                    "gtdbtk": "2.7.2"
+                },
+                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
+                    "gtdb_to_ncbi_majority_vote.py": "0.2.1",
+                    "gtdbtk": "2.7.2"
+                },
+                "GUNZIP": {
+                    "gunzip": 1.13
+                },
+                "INFERNAL_CMSEARCH": {
+                    "gzip": 1.12,
+                    "infernal": "1.1.5"
+                },
+                "METABAT2_METABAT2": {
+                    "metabat2": 2.17
+                },
+                "METABINTOOLS_EXPORTCONTIG2BIN": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_EXPORTFASTA": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_IMPORTASM": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_IMPORTBINSET": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_MERGEANNOTATE": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_SUMMARISEBINS": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_SUMMARISEGROUPS": {
+                    "metabintools": "0.4.0"
+                },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.30-r1287"
+                },
+                "MYLOASM": {
+                    "myloasm": "0.7.0"
+                },
+                "PYRODIGAL": {
+                    "pyrodigal": "3.7.1"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.24
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.24
+                },
+                "SEMIBIN_SINGLEEASYBIN": {
+                    "SemiBin": "2.4.1",
+                    "cuda": "no CUDA available"
+                },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
+                },
+                "TRNASCANSE": {
+                    "tRNAscan-SE": "2.0.13"
+                },
+                "VAMB_BIN": {
+                    "cuda": "no CUDA available",
+                    "vamb": "5.0.4"
+                },
+                "Workflow": {
+                    "sanger-tol/metagenomeassembly": "v2.0.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/execution_report_2026-10-07_10-36-40.html",
+                "pipeline_info/execution_timeline_2026-10-07_10-36-40.html",
+                "pipeline_info/metagenomeassembly_software_versions.yml",
+                "pipeline_info/params_2026-10-07_10-36-48.json",
+                "pipeline_info/pipeline_dag_2026-10-07_10-36-40.html",
+                "xyTesTing1",
+                "xyTesTing1/assembly",
+                "xyTesTing1/assembly/mapping",
+                "xyTesTing1/assembly/mapping/xyTesTing1.all.depth.tsv",
+                "xyTesTing1/assembly/pyrodigal",
+                "xyTesTing1/assembly/pyrodigal/xyTesTing1.gff.gz",
+                "xyTesTing1/assembly/rrna",
+                "xyTesTing1/assembly/rrna/xyTesTing1.rrna.gff",
+                "xyTesTing1/assembly/tiara",
+                "xyTesTing1/assembly/tiara/log_xyTesTing1.tiara.txt",
+                "xyTesTing1/assembly/tiara/xyTesTing1.tiara.txt",
+                "xyTesTing1/assembly/trnascanse",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.gff",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.log",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.stats",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.tsv",
+                "xyTesTing1/assembly/xyTesTing1_metamdbg.contigs.fasta.assembly_summary",
+                "xyTesTing1/binning",
+                "xyTesTing2",
+                "xyTesTing2/assembly",
+                "xyTesTing2/assembly/mapping",
+                "xyTesTing2/assembly/mapping/xyTesTing2.all.depth.tsv",
+                "xyTesTing2/assembly/myloasm",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/all-cont-r2.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/contained_during_overlaps.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/lax_overlaps_cut.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/overlaps.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/read_coverages.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/remap_temp",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/remap_temp/all-cont-r3.txt.gz",
+                "xyTesTing2/assembly/myloasm/0-cleaning_and_unitigs/remap_temp/read_coverages.txt.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/1-pre_bridge_cuts.txt",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/2-pre_bridge_cuts.txt",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/3-pre_bridge_cuts.txt",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.1-resolve_unitig_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.1-resolve_unitig_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.2-resolve_unitig_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.2-resolve_unitig_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.3-resolve_unitig_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/1-light_resolve/xyTesTing2.3-resolve_unitig_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_0",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_0/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_0/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_1",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_1/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_1/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_2",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_2/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_2/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_3",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_3/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_3/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_4",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_4/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_4/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_5",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_5/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_5/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_6",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_6/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_6/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_7",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_7/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_7/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_8",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_8/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_8/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_9",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_9/xyTesTing2.filtered_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/progressive/cov_9/xyTesTing2.filtered_graph.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G0-m10-t2-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G1-m10-t2-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G10-m10-t1.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G11-m10-t1.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G11-m15-t1.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G12-m15-t1.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G13-m15-t1.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G13-m30-t1.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G14-m30-t1.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G15-m10-t1-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G15-m30-t1.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G16-m10-t1-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G17-m10-t1-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G18-m10-t1-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G18-m15-t1-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G19-m15-t1-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G2-m10-t2-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G20-m15-t1-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G20-m30-t1-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G21-m30-t1-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G22-m10-t0.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G22-m30-t1-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G23-m10-t0.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G24-m10-t0.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G25-m10-t0.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G25-m15-t0.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G26-m15-t0.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G27-m15-t0.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G27-m30-t0.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G28-m30-t0.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G29-m30-t0.5-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G3-m10-t2-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G4-m10-t2-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G4-m15-t2-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G5-m15-t2-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G6-m15-t2-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G6-m30-t2-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G7-m30-t2-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G8-m10-t1.5-r0.125.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G8-m30-t2-r0.5.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_edges/walk-edge-G9-m10-t1.5-r0.25.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_for_tip_clean-0.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/walk_for_tip_clean-1.txt",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t0.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t1.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m10-t2-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t0.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t1.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m15-t2-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t0.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t1.5-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.125.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.125.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.25.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.25.gfa.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.5.edges.gz",
+                "xyTesTing2/assembly/myloasm/2-heavy_path_resolve/xyTesTing2.heavy-m30-t2-r0.5.gfa.gz",
+                "xyTesTing2/assembly/myloasm/3-mapping",
+                "xyTesTing2/assembly/myloasm/3-mapping/low_quality_regions.bed",
+                "xyTesTing2/assembly/myloasm/3-mapping/xyTesTing2.dereplicate_unitigs.paf.gz",
+                "xyTesTing2/assembly/myloasm/3-mapping/xyTesTing2.final_contigs_nopolish.fa.gz",
+                "xyTesTing2/assembly/myloasm/3-mapping/xyTesTing2.map_to_unitigs.paf.gz",
+                "xyTesTing2/assembly/myloasm/alternate_assemblies",
+                "xyTesTing2/assembly/myloasm/alternate_assemblies/xyTesTing2.assembly_alternate.fa.gz",
+                "xyTesTing2/assembly/myloasm/alternate_assemblies/xyTesTing2.duplicated_contigs.fa.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.after_light_cleaning-1.edges.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.after_light_cleaning-1.gfa.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.after_walk_heavy_cleaned-2.edges.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.after_walk_heavy_cleaned-2.gfa.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.small_and_tip_bubble-3.edges.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.small_and_tip_bubble-3.gfa.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.unitig_graph-0.edges.gz",
+                "xyTesTing2/assembly/myloasm/assembly_graphs/xyTesTing2.unitig_graph-0.gfa.gz",
+                "xyTesTing2/assembly/myloasm/binary_temp",
+                "xyTesTing2/assembly/myloasm/binary_temp/contig_graph.bin",
+                "xyTesTing2/assembly/myloasm/binary_temp/huffman_tables.bin",
+                "xyTesTing2/assembly/myloasm/binary_temp/overlaps.bin",
+                "xyTesTing2/assembly/myloasm/binary_temp/snpmer_info.bin",
+                "xyTesTing2/assembly/myloasm/binary_temp/twin_reads.bin",
+                "xyTesTing2/assembly/myloasm/misc",
+                "xyTesTing2/assembly/myloasm/misc/kmer_count_histogram.tsv",
+                "xyTesTing2/assembly/myloasm/misc/timing_steps.tsv",
+                "xyTesTing2/assembly/myloasm/myloasm_2026-10-07_10-37-00.log",
+                "xyTesTing2/assembly/myloasm/xyTesTing2.final_contig_graph.edges.gz",
+                "xyTesTing2/assembly/myloasm/xyTesTing2.final_contig_graph.gfa.gz",
+                "xyTesTing2/assembly/pyrodigal",
+                "xyTesTing2/assembly/pyrodigal/xyTesTing2.gff.gz",
+                "xyTesTing2/assembly/rrna",
+                "xyTesTing2/assembly/rrna/xyTesTing2.rrna.gff",
+                "xyTesTing2/assembly/tiara",
+                "xyTesTing2/assembly/tiara/log_xyTesTing2.tiara.txt",
+                "xyTesTing2/assembly/tiara/xyTesTing2.tiara.txt",
+                "xyTesTing2/assembly/trnascanse",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.gff",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.log",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.stats",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.tsv",
+                "xyTesTing2/assembly/xyTesTing2.assembly_primary.fa.assembly_summary",
+                "xyTesTing2/assembly/xyTesTing2.assembly_primary.fa.gz",
+                "xyTesTing2/binning"
+            ],
+            [
+                "pipeline_info/execution_report_2026-10-07_10-36-40.html",
+                "pipeline_info/execution_timeline_2026-10-07_10-36-40.html",
+                "pipeline_info/metagenomeassembly_software_versions.yml",
+                "pipeline_info/params_2026-10-07_10-36-48.json",
+                "pipeline_info/pipeline_dag_2026-10-07_10-36-40.html",
+                "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/abundance.npz",
+                "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/composition.npz",
+                "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/latent.npz",
+                "xyTesTing1/binning/bins/vamb_single/xyTesTing1.vamb/log.txt",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.filtered.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.msa.fasta.gz",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.user_msa.fasta.gz",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/classify/xyTesTing1.bac120.classify.tree",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/classify/xyTesTing1.bac120.summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/gtdbtk.json",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.ar53.markers_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.bac120.markers_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.failed_genomes.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.translation_table_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.bac120.summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.log",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.warnings.log",
+                "xyTesTing1/binning/xyTesTing1.bins.zstd",
+                "xyTesTing1/binning/xyTesTing1.bins_summary.tsv",
+                "xyTesTing1/binning/xyTesTing1.coverm.genome.tsv",
+                "xyTesTing1/binning/xyTesTing1.groups_summary.tsv",
+                "xyTesTing1/binning/xyTesTing1.gtdb_summary.csv",
+                "xyTesTing1/binning/xyTesTing1_checkm2_report.tsv",
+                "xyTesTing2/binning/bins/vamb_single/xyTesTing2.vamb/abundance.npz",
+                "xyTesTing2/binning/bins/vamb_single/xyTesTing2.vamb/composition.npz",
+                "xyTesTing2/binning/bins/vamb_single/xyTesTing2.vamb/latent.npz",
+                "xyTesTing2/binning/bins/vamb_single/xyTesTing2.vamb/log.txt",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.filtered.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.msa.fasta.gz",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.user_msa.fasta.gz",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/classify/xyTesTing2.bac120.classify.tree",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/classify/xyTesTing2.bac120.summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/gtdbtk.json",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.ar53.markers_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.bac120.markers_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.failed_genomes.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.translation_table_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.bac120.summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.log",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.warnings.log",
+                "xyTesTing2/binning/xyTesTing2.bins.zstd",
+                "xyTesTing2/binning/xyTesTing2.bins_summary.tsv",
+                "xyTesTing2/binning/xyTesTing2.coverm.genome.tsv",
+                "xyTesTing2/binning/xyTesTing2.groups_summary.tsv",
+                "xyTesTing2/binning/xyTesTing2.gtdb_summary.csv",
+                "xyTesTing2/binning/xyTesTing2_checkm2_report.tsv"
+            ]
+        ],
+        "timestamp": "2026-10-07T10:54:14.152066229",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

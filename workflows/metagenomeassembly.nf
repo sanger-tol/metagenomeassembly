@@ -175,9 +175,8 @@ workflow METAGENOMEASSEMBLY {
         .join(ASSEMBLY_ANALYSIS.out.trna_gff, by: 0)
         .join(ASSEMBLY_ANALYSIS.out.trna_log, by: 0)
         .join(ASSEMBLY_ANALYSIS.out.rrna_gff, by: 0)
-        .join(BINNING.out.centrifuger, by: 0, remainder: true)
         .join(BIN_REFINEMENT.out.annotations, by: 0, remainder: true)
-        .map { meta, asm, asm_files, stats, tiara, tiara_log, genomad, trna_tsv, trna_stats, trna_gff, trna_log, rrna_gff, centrifuger_tsv, pyrodigal_annotations ->
+        .map { meta, asm, asm_files, stats, tiara, tiara_log, genomad, trna_tsv, trna_stats, trna_gff, trna_log, rrna_gff, pyrodigal_annotations ->
             meta + [
                 // nextflow bug: https://github.com/nextflow-io/nextflow/issues/7667
                 // explicitly null external assemblies
@@ -192,7 +191,6 @@ workflow METAGENOMEASSEMBLY {
                 trna_gff: trna_gff,
                 trna_log: trna_log,
                 rrna_gff: rrna_gff,
-                centrifuger_tsv: centrifuger_tsv,
                 pyrodigal_annotations: pyrodigal_annotations,
             ]
         }

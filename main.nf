@@ -142,7 +142,6 @@ output {
             obj.trna_gff >> getOutdir(obj) + "assembly/trnascanse/"
             obj.trna_log >> getOutdir(obj) + "assembly/trnascanse/"
             obj.rrna_gff >> getOutdir(obj) + "assembly/rrna/"
-            obj.centrifuger_tsv >> getOutdir(obj) + "assembly/centrifuger/"
             obj.pyrodigal_annotations >> getOutdir(obj) + "assembly/pyrodigal/"
         }
     }

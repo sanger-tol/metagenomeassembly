@@ -3,7 +3,7 @@ nextflow_pipeline {
     name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
-    profile "test"
+    profile "test_multisplit"
 
     test("test multisplit binning") {
 
@@ -17,23 +17,7 @@ nextflow_pipeline {
         when {
             params {
                 outdir               = "$outputDir"
-
-                assembler                 = "metamdbg"
-                tiara_exclude_classifications = "eukarya,organelle"
-                enable_multisplit         = true
-
-                // enable/disable binners
-                extract_circular_contigs  = false
-                enable_metabat2           = false
-                enable_maxbin2            = false
-                enable_metator            = false
-                enable_comebin            = false
-                enable_semibin2           = true
-                enable_vamb               = true
-                enable_taxvamb            = true
-                enable_bin_refinement     = false
-                enable_dastool            = false
-                enable_binette            = false
+                input                = "${projectDir}/assets/test_input_multisample.yaml"
 
                 gtdbtk_db = "${launchDir}/release232_mockup"
                 centrifuger_db = "${launchDir}/zymo_centrifuger/zymo.1.cfr"
@@ -44,7 +28,7 @@ nextflow_pipeline {
             // We are going to write some funky assertions as we cannot expect that any output (files or counts) are stable
             // Stable file names
             def assembly_files = getAllFilesFromDir(
-                "${params.outdir}/assembly/",
+                "${params.outdir}/",
                 relative: true,
                 includeDir: true,
                 ignore: [
@@ -53,10 +37,11 @@ nextflow_pipeline {
                     "**/*.assembly_primary_marker_classification/**",
                     "**/*.assembly_primary_nn_classification/**",
                     "**/*.assembly_primary_aggregated_classification/**",
+                    "**/binning/**"
                 ]
             )
             def bin_files = getAllFilesFromDir(
-                "${params.outdir}/binning/",
+                "${params.outdir}/",
                 relative: true,
                 ignore: [
                     "**/assembly/**",
@@ -64,7 +49,8 @@ nextflow_pipeline {
                 ]
             )
 
-            def assembly_dirs = path("${params.outdir}/").listFiles().findAll { it.isDirectory() }.collect { it.name }
+            def assembly_dirs = file("${params.outdir}/").listFiles().findAll { it.isDirectory() && it.getName() != "pipeline_info" }.collect { it.name }
+            println assembly_dirs
             assembly_dirs.collect { asm ->
                 // Unstable and uncountable files
                 def bin_fasta = getAllFilesFromDir(
@@ -72,7 +58,7 @@ nextflow_pipeline {
                     relative: true,
                     includeDir: true,
                     include: [
-                        "**/binning/bins/*/fasta/*.fa.gz"
+                        "**/fasta/*.fa.gz"
                     ]
                 )
 
@@ -100,7 +86,7 @@ nextflow_pipeline {
                 { assert workflow.success },
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
+                    removeNextflowVersion("${outputDir}/pipeline_info/metagenomeassembly_software_versions.yml"),
                     assembly_files,
                     bin_files
                 ).match() }

@@ -3,7 +3,7 @@ nextflow_pipeline {
     name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
-    profile "test"
+    profile "test_multisample"
 
     test("test multisample input") {
 
@@ -16,18 +16,6 @@ nextflow_pipeline {
             params {
                 input = "${projectDir}/assets/test_input_multisample.yaml"
                 outdir = "$outputDir"
-
-                // binners
-                extract_circular_contigs  = false
-                enable_metabat2           = true
-                enable_maxbin2            = false
-                enable_metator            = false
-                enable_comebin            = false
-                enable_semibin2           = true
-                enable_vamb               = true
-                enable_taxvamb            = false
-                enable_dastool            = false
-                enable_binette            = false
 
                 // databases
                 gtdbtk_db            = "${launchDir}/release232_mockup"
@@ -47,6 +35,7 @@ nextflow_pipeline {
                     "**/*.assembly_primary_marker_classification/**",
                     "**/*.assembly_primary_nn_classification/**",
                     "**/*.assembly_primary_aggregated_classification/**",
+                    "**/binning/**"
                 ]
             )
             def bin_files = getAllFilesFromDir(
@@ -58,7 +47,8 @@ nextflow_pipeline {
                 ]
             )
 
-            def assembly_dirs = path("${params.outdir}/").listDirectory().findAll { it.isDirectory() }.collect { it.name }
+            def assembly_dirs = file("${params.outdir}/").listFiles().findAll { it.isDirectory() && it.getName() != "pipeline_info" }.collect { it.name }
+            println assembly_dirs
             assembly_dirs.collect { asm ->
                 // Unstable and uncountable files
                 def bin_fasta = getAllFilesFromDir(
@@ -66,7 +56,7 @@ nextflow_pipeline {
                     relative: true,
                     includeDir: true,
                     include: [
-                        "**/binning/bins/*/fasta/*.fa.gz"
+                        "**/fasta/*.fa.gz"
                     ]
                 )
 
@@ -94,7 +84,7 @@ nextflow_pipeline {
                 { assert workflow.success },
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/metagenomeassembly_software_versions.yml"),
+                    removeNextflowVersion("${outputDir}/pipeline_info/metagenomeassembly_software_versions.yml"),
                     assembly_files,
                     bin_files
                 ).match() }

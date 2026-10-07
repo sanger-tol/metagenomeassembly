@@ -379,7 +379,7 @@
                 "myloasm/misc",
                 "myloasm/misc/kmer_count_histogram.tsv",
                 "myloasm/misc/timing_steps.tsv",
-                "myloasm/myloasm_2026-10-02_09-41-49.log",
+                "myloasm/myloasm_2026-10-07_10-17-29.log",
                 "myloasm/xyTesTing2.final_contig_graph.edges.gz",
                 "myloasm/xyTesTing2.final_contig_graph.gfa.gz",
                 "pyrodigal",
@@ -443,7 +443,7 @@
                 "xyTesTing2_checkm2_report.tsv"
             ]
         ],
-        "timestamp": "2026-10-02T09:59:52.880746429",
+        "timestamp": "2026-10-07T10:36:34.380557417",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

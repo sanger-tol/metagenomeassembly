@@ -1,0 +1,243 @@
+{
+    "test multisplit binning": {
+        "content": [
+            {
+                "CENTRIFUGER_CENTRIFUGER": {
+                    "centrifuger": "1.1.2-r329"
+                },
+                "CENTRIFUGER_LINEAGE": {
+                    "centrifuger": "1.1.2-r329",
+                    "csvtk": "0.37.0"
+                },
+                "CHECKM2_PREDICT": {
+                    "checkm2": "1.1.0"
+                },
+                "CMSEARCH_TO_GFF": {
+                    "cmsearch_to_gff.py": "1.0.0"
+                },
+                "CONCATENATE_COVERM_GENOME": {
+                    "csvtk": "0.37.0"
+                },
+                "CONCATENATE_FASTA": {
+                    "concatenate_fasta.py": "1.0.0"
+                },
+                "CONVERT_DEPTHS": {
+                    "convert_depths.py": "1.0.0"
+                },
+                "COVERM_CONTIG_ALL": {
+                    "coverm": "0.7.0"
+                },
+                "COVERM_CONTIG_FILTERED": {
+                    "coverm": "0.7.0"
+                },
+                "COVERM_GENOME": {
+                    "coverm": "0.7.0"
+                },
+                "CSVTK_CONCAT": {
+                    "csvtk": "0.37.0"
+                },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.37.0"
+                },
+                "FASTXALIGN_MINIMAP2ALIGN": {
+                    "minimap2": "2.30-r1287",
+                    "samtools": "1.23.1",
+                    "slice_fasta.py": "1.0.0"
+                },
+                "FASTXALIGN_PYFASTXINDEX": {
+                    "slice_fasta.py": "1.0.0"
+                },
+                "FILTER_ASSEMBLY": {
+                    "filter_assembly.py": "1.0.0"
+                },
+                "FILTER_BAM": {
+                    "samtools": 1.21
+                },
+                "GFASTATS": {
+                    "gfastats": "1.3.11"
+                },
+                "GTDBTK_CLASSIFYWF": {
+                    "gtdb_db": "r232",
+                    "gtdbtk": "2.7.2"
+                },
+                "GTDBTK_GTDBTONCBIMAJORITYVOTE": {
+                    "gtdb_to_ncbi_majority_vote.py": "0.2.1",
+                    "gtdbtk": "2.7.2"
+                },
+                "GUNZIP": {
+                    "gunzip": 1.13
+                },
+                "INFERNAL_CMSEARCH": {
+                    "gzip": 1.12,
+                    "infernal": "1.1.5"
+                },
+                "METABINTOOLS_EXPORTFASTA": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_IMPORTASM": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_IMPORTBINSET": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_MERGEANNOTATE": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_SUMMARISEBINS": {
+                    "metabintools": "0.4.0"
+                },
+                "METABINTOOLS_SUMMARISEGROUPS": {
+                    "metabintools": "0.4.0"
+                },
+                "METAMDBG_ASM": {
+                    "metamdbg": 1.4
+                },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.30-r1287"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.24
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.24
+                },
+                "SEMIBIN_MULTIEASYBIN": {
+                    "SemiBin": "2.4.1",
+                    "cuda": "no CUDA available"
+                },
+                "TIARA_TIARA": {
+                    "tiara": "1.0.3"
+                },
+                "TRNASCANSE": {
+                    "tRNAscan-SE": "2.0.13"
+                },
+                "VAMB_BIN": {
+                    "cuda": "no CUDA available",
+                    "vamb": "5.0.4"
+                },
+                "Workflow": {
+                    "sanger-tol/metagenomeassembly": "v2.0.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/execution_report_2026-10-07_10-54-20.html",
+                "pipeline_info/execution_timeline_2026-10-07_10-54-20.html",
+                "pipeline_info/metagenomeassembly_software_versions.yml",
+                "pipeline_info/params_2026-10-07_10-54-28.json",
+                "pipeline_info/pipeline_dag_2026-10-07_10-54-20.html",
+                "xyTesTing1",
+                "xyTesTing1/assembly",
+                "xyTesTing1/assembly/mapping",
+                "xyTesTing1/assembly/mapping/xyTesTing1.all.depth.tsv",
+                "xyTesTing1/assembly/rrna",
+                "xyTesTing1/assembly/rrna/xyTesTing1.rrna.gff",
+                "xyTesTing1/assembly/tiara",
+                "xyTesTing1/assembly/tiara/log_xyTesTing1.tiara.txt",
+                "xyTesTing1/assembly/tiara/xyTesTing1.tiara.txt",
+                "xyTesTing1/assembly/trnascanse",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.gff",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.log",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.stats",
+                "xyTesTing1/assembly/trnascanse/xyTesTing1.trna.tsv",
+                "xyTesTing1/assembly/xyTesTing1_metamdbg.contigs.fasta.assembly_summary",
+                "xyTesTing1/binning",
+                "xyTesTing2",
+                "xyTesTing2/assembly",
+                "xyTesTing2/assembly/mapping",
+                "xyTesTing2/assembly/mapping/xyTesTing2.all.depth.tsv",
+                "xyTesTing2/assembly/metamdbg",
+                "xyTesTing2/assembly/metamdbg/xyTesTing2.metaMDBG.log",
+                "xyTesTing2/assembly/rrna",
+                "xyTesTing2/assembly/rrna/xyTesTing2.rrna.gff",
+                "xyTesTing2/assembly/tiara",
+                "xyTesTing2/assembly/tiara/log_xyTesTing2.tiara.txt",
+                "xyTesTing2/assembly/tiara/xyTesTing2.tiara.txt",
+                "xyTesTing2/assembly/trnascanse",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.gff",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.log",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.stats",
+                "xyTesTing2/assembly/trnascanse/xyTesTing2.trna.tsv",
+                "xyTesTing2/assembly/xyTesTing2.contigs.fasta.assembly_summary",
+                "xyTesTing2/assembly/xyTesTing2.contigs.fasta.gz",
+                "xyTesTing2/binning"
+            ],
+            [
+                "pipeline_info/execution_report_2026-10-07_10-54-20.html",
+                "pipeline_info/execution_timeline_2026-10-07_10-54-20.html",
+                "pipeline_info/metagenomeassembly_software_versions.yml",
+                "pipeline_info/params_2026-10-07_10-54-28.json",
+                "pipeline_info/pipeline_dag_2026-10-07_10-54-20.html",
+                "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/bins_info.tsv",
+                "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/contig_bins.tsv",
+                "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/data.csv",
+                "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/data_cov.csv",
+                "xyTesTing1/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing1/data_split.csv",
+                "xyTesTing1/binning/bins/taxvamb_multi/collated.taxvamb/abundance.npz",
+                "xyTesTing1/binning/bins/taxvamb_multi/collated.taxvamb/composition.npz",
+                "xyTesTing1/binning/bins/taxvamb_multi/collated.taxvamb/log.txt",
+                "xyTesTing1/binning/bins/taxvamb_multi/collated.taxvamb/results_taxometer.tsv",
+                "xyTesTing1/binning/bins/vamb_multi/collated.vamb/abundance.npz",
+                "xyTesTing1/binning/bins/vamb_multi/collated.vamb/composition.npz",
+                "xyTesTing1/binning/bins/vamb_multi/collated.vamb/latent.npz",
+                "xyTesTing1/binning/bins/vamb_multi/collated.vamb/log.txt",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.filtered.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.msa.fasta.gz",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/align/xyTesTing1.bac120.user_msa.fasta.gz",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/classify/xyTesTing1.bac120.classify.tree",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/classify/xyTesTing1.bac120.summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/gtdbtk.json",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.ar53.markers_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.bac120.markers_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.failed_genomes.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/identify/xyTesTing1.translation_table_summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.bac120.summary.tsv",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.log",
+                "xyTesTing1/binning/gtdbtk/xyTesTing1/xyTesTing1.warnings.log",
+                "xyTesTing1/binning/xyTesTing1.bins.zstd",
+                "xyTesTing1/binning/xyTesTing1.bins_summary.tsv",
+                "xyTesTing1/binning/xyTesTing1.coverm.genome.tsv",
+                "xyTesTing1/binning/xyTesTing1.groups_summary.tsv",
+                "xyTesTing1/binning/xyTesTing1.gtdb_summary.csv",
+                "xyTesTing1/binning/xyTesTing1_checkm2_report.tsv",
+                "xyTesTing2/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing2/bins_info.tsv",
+                "xyTesTing2/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing2/contig_bins.tsv",
+                "xyTesTing2/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing2/data.csv",
+                "xyTesTing2/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing2/data_cov.csv",
+                "xyTesTing2/binning/bins/semibin_multi/collated.semibin/samples/xyTesTing2/data_split.csv",
+                "xyTesTing2/binning/bins/taxvamb_multi/collated.taxvamb/abundance.npz",
+                "xyTesTing2/binning/bins/taxvamb_multi/collated.taxvamb/composition.npz",
+                "xyTesTing2/binning/bins/taxvamb_multi/collated.taxvamb/log.txt",
+                "xyTesTing2/binning/bins/taxvamb_multi/collated.taxvamb/results_taxometer.tsv",
+                "xyTesTing2/binning/bins/vamb_multi/collated.vamb/abundance.npz",
+                "xyTesTing2/binning/bins/vamb_multi/collated.vamb/composition.npz",
+                "xyTesTing2/binning/bins/vamb_multi/collated.vamb/latent.npz",
+                "xyTesTing2/binning/bins/vamb_multi/collated.vamb/log.txt",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.filtered.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.msa.fasta.gz",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/align/xyTesTing2.bac120.user_msa.fasta.gz",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/classify/xyTesTing2.bac120.classify.tree",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/classify/xyTesTing2.bac120.summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/gtdbtk.json",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.ar53.markers_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.bac120.markers_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.failed_genomes.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/identify/xyTesTing2.translation_table_summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.bac120.summary.tsv",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.log",
+                "xyTesTing2/binning/gtdbtk/xyTesTing2/xyTesTing2.warnings.log",
+                "xyTesTing2/binning/xyTesTing2.bins.zstd",
+                "xyTesTing2/binning/xyTesTing2.bins_summary.tsv",
+                "xyTesTing2/binning/xyTesTing2.coverm.genome.tsv",
+                "xyTesTing2/binning/xyTesTing2.groups_summary.tsv",
+                "xyTesTing2/binning/xyTesTing2.gtdb_summary.csv",
+                "xyTesTing2/binning/xyTesTing2_checkm2_report.tsv"
+            ]
+        ],
+        "timestamp": "2026-10-07T11:18:47.468180163",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}
