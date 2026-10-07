@@ -1,11 +1,11 @@
 process CONVERT_DEPTHS {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/e1/e124c5011eb7ab8326d2ee69afd95807605fc7182989473100ebbcb946824a57/data'
-        : 'community.wave.seqera.io/library/click_polars:3728b1a8c2814122' }"
+        : 'community.wave.seqera.io/library/click_polars:3728b1a8c2814122'}"
 
     input:
     tuple val(meta), path(depths)
@@ -19,8 +19,8 @@ process CONVERT_DEPTHS {
     task.ext.when == null || task.ext.when
 
     script:
-    def args       = task.ext.args  ?: ''
-    def prefix     = task.ext.prefix ?: "${meta.id}"
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     convert_depths.py \\
         --format ${format} \\
@@ -30,7 +30,7 @@ process CONVERT_DEPTHS {
     """
 
     stub:
-    def prefix     = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     if [ ${format} == 'maxbin2' ]; then
         touch ${prefix}.sample1.maxbin2.depth.tsv

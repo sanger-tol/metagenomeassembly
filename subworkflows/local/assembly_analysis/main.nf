@@ -1,9 +1,9 @@
-include { CMSEARCH_TO_GFF        } from '../../../modules/local/cmsearch_to_gff'
-include { GENOMAD_ENDTOEND       } from '../../../modules/nf-core/genomad/endtoend'
-include { GFASTATS               } from '../../../modules/nf-core/gfastats'
-include { INFERNAL_CMSEARCH      } from '../../../modules/nf-core/infernal/cmsearch'
-include { TRNASCANSE             } from '../../../modules/nf-core/trnascanse'
-include { TIARA_TIARA            } from '../../../modules/nf-core/tiara/tiara'
+include { CMSEARCH_TO_GFF   } from '../../../modules/local/cmsearch_to_gff'
+include { GENOMAD_ENDTOEND  } from '../../../modules/nf-core/genomad/endtoend'
+include { GFASTATS          } from '../../../modules/nf-core/gfastats'
+include { INFERNAL_CMSEARCH } from '../../../modules/nf-core/infernal/cmsearch'
+include { TRNASCANSE        } from '../../../modules/nf-core/trnascanse'
+include { TIARA_TIARA       } from '../../../modules/nf-core/tiara/tiara'
 
 workflow ASSEMBLY_ANALYSIS {
     take:
@@ -16,14 +16,15 @@ workflow ASSEMBLY_ANALYSIS {
     //
     // Module: Calculate basic assembly statistics
     //
-    GFASTATS(ch_assemblies,
+    GFASTATS(
+        ch_assemblies,
         "",
         "",
         "",
-        [[],[]],
-        [[],[]],
-        [[],[]],
-        [[],[]],
+        [[], []],
+        [[], []],
+        [[], []],
+        [[], []],
     )
 
     //
@@ -47,7 +48,7 @@ workflow ASSEMBLY_ANALYSIS {
         true,
         false,
         true,
-        false
+        false,
     )
 
     //
@@ -66,13 +67,13 @@ workflow ASSEMBLY_ANALYSIS {
     CMSEARCH_TO_GFF(INFERNAL_CMSEARCH.out.target_summary.combine(ch_rfam_rrna_cm))
 
     emit:
-    assembly_statistics      = GFASTATS.out.assembly_summary
-    tiara_classifications    = TIARA_TIARA.out.classifications
-    tiara_log                = TIARA_TIARA.out.log
-    genomad_results          = GENOMAD_ENDTOEND.out.genomad_results
-    trna_tsv                 = TRNASCANSE.out.tsv
-    trna_gff                 = TRNASCANSE.out.gff
-    trna_log                 = TRNASCANSE.out.log
-    trna_stats               = TRNASCANSE.out.stats
-    rrna_gff                 = CMSEARCH_TO_GFF.out.gff
+    assembly_statistics   = GFASTATS.out.assembly_summary
+    tiara_classifications = TIARA_TIARA.out.classifications
+    tiara_log             = TIARA_TIARA.out.log
+    genomad_results       = GENOMAD_ENDTOEND.out.genomad_results
+    trna_tsv              = TRNASCANSE.out.tsv
+    trna_gff              = TRNASCANSE.out.gff
+    trna_log              = TRNASCANSE.out.log
+    trna_stats            = TRNASCANSE.out.stats
+    rrna_gff              = CMSEARCH_TO_GFF.out.gff
 }

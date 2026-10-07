@@ -1,7 +1,7 @@
-include { CENTRIFUGER_CENTRIFUGER  } from '../../../modules/nf-core/centrifuger/centrifuger'
-include { CENTRIFUGER_LINEAGE      } from '../../../modules/local/centrifuger_lineage'
-include { CONVERT_DEPTHS           } from '../../../modules/local/convert_depths'
-include { VAMB_BIN                 } from '../../../modules/nf-core/vamb/bin'
+include { CENTRIFUGER_CENTRIFUGER } from '../../../modules/nf-core/centrifuger/centrifuger'
+include { CENTRIFUGER_LINEAGE     } from '../../../modules/local/centrifuger_lineage'
+include { CONVERT_DEPTHS          } from '../../../modules/local/convert_depths'
+include { VAMB_BIN                } from '../../../modules/nf-core/vamb/bin'
 
 workflow BINNING_VAMB {
     take:
@@ -16,7 +16,7 @@ workflow BINNING_VAMB {
     //
     CONVERT_DEPTHS(
         ch_depths,
-        "vamb"
+        "vamb",
     )
 
     if (val_enable_centrifuger) {
@@ -63,8 +63,7 @@ workflow BINNING_VAMB {
 
     VAMB_BIN(ch_vamb_input)
 
-    ch_vamb_single_bins = VAMB_BIN.out.bins
-        .filter { meta, _bins -> !meta?.collated }
+    ch_vamb_single_bins = VAMB_BIN.out.bins.filter { meta, _bins -> !meta?.collated }
 
     ch_vamb_multi = VAMB_BIN.out.bins
         .join(VAMB_BIN.out.abundance)
@@ -80,17 +79,13 @@ workflow BINNING_VAMB {
                     def bins_subset = bins.findAll { bin -> bin.getName() =~ id }
                     def assembler = meta.assemblers[idx]
                     def platform = meta.platforms[idx]
-                    return [
-                        [id: id, binner: "${meta.binner}", assembler: assembler, platform: platform],
-                        bins_subset, abundance, composition, vamb_log, taxometer, latent
-                    ]
+                    return [[id: id, binner: "${meta.binner}", assembler: assembler, platform: platform], bins_subset, abundance, composition, vamb_log, taxometer, latent]
                 }
         }
 
-    ch_vamb_multi_bins = ch_vamb_multi
-        .map { meta, bins, abundance, composition, vamb_log, taxometer, latent ->
-            [meta, bins]
-        }
+    ch_vamb_multi_bins = ch_vamb_multi.map { meta, bins, abundance, composition, vamb_log, taxometer, latent ->
+        [meta, bins]
+    }
 
     ch_vamb_single_output = VAMB_BIN.out.log
         .join(VAMB_BIN.out.abundance)
@@ -102,10 +97,9 @@ workflow BINNING_VAMB {
         }
         .filter { meta, _bins -> !meta?.collated }
 
-    ch_vamb_multi_output = ch_vamb_multi
-        .map { meta, _bins, abundance, composition, vamb_log, taxometer, latent ->
-            [meta, [abundance, composition, vamb_log, taxometer, latent].findAll().flatten()]
-        }
+    ch_vamb_multi_output = ch_vamb_multi.map { meta, _bins, abundance, composition, vamb_log, taxometer, latent ->
+        [meta, [abundance, composition, vamb_log, taxometer, latent].findAll().flatten()]
+    }
 
     emit:
     centrifuger = ch_centrifuger_output

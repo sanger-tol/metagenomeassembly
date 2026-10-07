@@ -66,9 +66,9 @@ workflow BIN_TAXONOMY {
     )
     ch_gtdb_majorityvote_input = GTDBTK_CLASSIFYWF.out.gtdb_outdir
         .map { meta, outdir -> [meta, outdir, meta.id] }
-        .combine(ch_gtdb_ar53_metadata.ifEmpty([[],[]]))
-        .combine(ch_gtdb_bac120_metadata.ifEmpty([[],[]]))
-        .multiMap {meta, outdir, id, ar53_meta, ar53, bac120_meta, bac120 ->
+        .combine(ch_gtdb_ar53_metadata.ifEmpty([[], []]))
+        .combine(ch_gtdb_bac120_metadata.ifEmpty([[], []]))
+        .multiMap { meta, outdir, id, ar53_meta, ar53, bac120_meta, bac120 ->
             input: [meta, outdir, id]
             ar53: ar53 ? [ar53_meta, ar53] : [[], []]
             bac120: bac120 ? [bac120_meta, bac120] : [[], []]
@@ -98,14 +98,11 @@ workflow BIN_TAXONOMY {
     ch_bin_taxonomy_publish = GTDBTK_CLASSIFYWF.out.gtdb_outdir
         .join(CSVTK_JOIN.out.out_file)
         .map { meta, outdir, summary ->
-            meta + [
-                gtdbtk_outdir: outdir.listDirectory(),
-                merged_summary: summary
-            ]
+            meta + [gtdbtk_outdir: outdir.listDirectory(), merged_summary: summary]
         }
 
     emit:
-    gtdb_summary = CSVTK_JOIN.out.out_file
-    gtdb_ncbi_tsv = GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
+    gtdb_summary         = CSVTK_JOIN.out.out_file
+    gtdb_ncbi_tsv        = GTDBTK_GTDBTONCBIMAJORITYVOTE.out.tsv
     bin_taxonomy_publish = ch_bin_taxonomy_publish
 }

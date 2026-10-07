@@ -27,6 +27,7 @@ include { getOutdir               } from './functions/local/outputs.nf'
 */
 
 workflow {
+
     main:
     //
     // SUBWORKFLOW: Run initialisation tasks
@@ -77,7 +78,7 @@ workflow {
     ]
 
     def optional_tools = [
-        genomad: params.enable_genomad && params.genomad_db,
+        genomad: params.enable_genomad && params.genomad_db
     ]
 
     def alignment_options = [

@@ -65,7 +65,7 @@ workflow BINNING {
     if (val_binners.maxbin2) {
         CONVERT_DEPTHS_MAXBIN2(
             ch_depths_individual,
-            "maxbin2"
+            "maxbin2",
         )
 
         ch_maxbin2_input = ch_assemblies_individual
@@ -93,7 +93,7 @@ workflow BINNING {
                 [meta + [binner: "maxbin2"], [summary, abundance, maxbin_log, marker_counts, marker_bins, marker_genes].findAll().flatten()]
             }
 
-            ch_binning_out = ch_binning_out.mix(ch_maxbin2_out)
+        ch_binning_out = ch_binning_out.mix(ch_maxbin2_out)
     }
 
     if (val_binners.comebin) {
@@ -145,7 +145,8 @@ workflow BINNING {
                 }
 
             ch_binning_out = ch_binning_out.mix(ch_semibin_single_out)
-        } else {
+        }
+        else {
             ch_semibin_input = ch_assemblies_collated
                 .combine(ch_bam_collated, by: 0)
                 .map { meta, asm, bam -> [meta, asm, bam, []] }
@@ -174,7 +175,6 @@ workflow BINNING {
 
             ch_binning_out = ch_binning_out.mix(ch_semibin_multi_output)
         }
-
     }
 
     if (val_binners.vamb) {
@@ -222,8 +222,7 @@ workflow BINNING {
             .mix(BINNING_TAXVAMB.out.vamb_single)
             .mix(BINNING_TAXVAMB.out.vamb_multi)
 
-        ch_centrifuger_output = ch_centrifuger_output
-            .mix(BINNING_TAXVAMB.out.centrifuger)
+        ch_centrifuger_output = ch_centrifuger_output.mix(BINNING_TAXVAMB.out.centrifuger)
     }
 
     if (val_binners.metator) {
@@ -267,7 +266,7 @@ workflow BINNING {
     METABINTOOLS_EXPORTFASTA(METABINTOOLS_IMPORTBINSET.out.binsfile)
 
     ch_binning_publish = METABINTOOLS_EXPORTFASTA.out.fasta
-        .join(ch_binning_out, by:0, remainder: true)
+        .join(ch_binning_out, by: 0, remainder: true)
         .map { meta, bins, extra_files -> meta + [bins: bins, extra_files: extra_files] }
 
     emit:

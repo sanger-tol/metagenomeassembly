@@ -49,7 +49,7 @@ workflow BINNING_PREPARATION {
 
     FILTER_ASSEMBLY(
         ch_filter_assembly_input.asm,
-        ch_filter_assembly_input.tiara
+        ch_filter_assembly_input.tiara,
     )
 
     //

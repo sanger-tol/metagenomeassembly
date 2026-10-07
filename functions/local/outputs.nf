@@ -11,13 +11,14 @@
  */
 def getOutdir(obj) {
     if (obj?.n_samples) {
-        if(obj?.n_samples == 1) {
+        if (obj?.n_samples == 1) {
             return ""
-        } else {
+        }
+        else {
             return "${obj.id}/"
         }
-    } else {
+    }
+    else {
         return "${obj.id}/"
     }
-
 }

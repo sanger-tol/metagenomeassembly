@@ -43,7 +43,7 @@ workflow HIC_MAPPING {
     //
     ch_pairtools_parse_input = CRAM_MAP_ILLUMINA_HIC.out.bam
         .combine(SAMTOOLS_FAIDX.out.sizes.join(ch_filter_list, by: 0, remainder: true))
-        .filter { meta_bam, _bam, meta_asm, _sizes, _filt ->  meta_bam.id == meta_asm.id }
+        .filter { meta_bam, _bam, meta_asm, _sizes, _filt -> meta_bam.id == meta_asm.id }
         .map { _meta_bam, bam, meta_asm, sizes, filt -> [meta_asm, bam, sizes, filt && filt?.size() > 0 ? filt : []] }
 
     PAIRTOOLS_PARSESELECTSORT(ch_pairtools_parse_input)

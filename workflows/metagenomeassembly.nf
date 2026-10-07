@@ -107,7 +107,7 @@ workflow METAGENOMEASSEMBLY {
         ch_bins_binsfile.filter { meta, _c2b -> meta.binner != "circular" && val_pipeline_stages.enable_bin_refinement },
         ch_checkm2_db,
         val_bin_refiners.dastool,
-        val_bin_refiners.binette
+        val_bin_refiners.binette,
     )
     ch_bins_fasta = ch_bins_fasta.mix(BIN_REFINEMENT.out.refined_bins_fasta)
     ch_bins_binsfile = ch_bins_binsfile.mix(BIN_REFINEMENT.out.refined_bins_binsfile)
@@ -131,7 +131,7 @@ workflow METAGENOMEASSEMBLY {
         BIN_QC.out.checkm2_tsv,
         ch_gtdbtk_db,
         ch_gtdb_ar53_metadata,
-        ch_gtdb_bac120_metadata
+        ch_gtdb_bac120_metadata,
     )
 
     //
@@ -146,13 +146,13 @@ workflow METAGENOMEASSEMBLY {
         .join(BIN_QC.out.checkm2_tsv, by: 0, remainder: true)
         .join(BIN_TAXONOMY.out.gtdb_ncbi_tsv, by: 0, remainder: true)
         .map { meta, binsfiles, trna, rrna, depths, checkm2, tax ->
-            [meta, binsfiles, trna, rrna, depths, checkm2 ?:  [], tax ?: []]
+            [meta, binsfiles, trna, rrna, depths, checkm2 ?: [], tax ?: []]
         }
 
     METABINTOOLS_MERGEANNOTATE(
         ch_metabintools_input,
         "gtdbtk_ncbi",
-        "checkm2"
+        "checkm2",
     )
 
     METABINTOOLS_SUMMARISEBINS(METABINTOOLS_MERGEANNOTATE.out.binsfile)
@@ -178,8 +178,6 @@ workflow METAGENOMEASSEMBLY {
         .join(BIN_REFINEMENT.out.annotations, by: 0, remainder: true)
         .map { meta, asm, asm_files, stats, tiara, tiara_log, genomad, trna_tsv, trna_stats, trna_gff, trna_log, rrna_gff, pyrodigal_annotations ->
             meta + [
-                // nextflow bug: https://github.com/nextflow-io/nextflow/issues/7667
-                // explicitly null external assemblies
                 assembly: asm.toUriString() =~ "${workflow.workDir}/[0-9a-z]{2}/[0-9a-z]{30}" ? asm : null,
                 assembly_files: asm_files,
                 stats: stats,
@@ -225,11 +223,11 @@ workflow METAGENOMEASSEMBLY {
         )
 
     emit:
-    assemblies          = ch_assembly_publish
-    mapping             = ch_binning_preparation_out
-    binning             = BINNING.out.binning_publish.mix(BIN_REFINEMENT.out.bin_refinement_publish)
-    bin_qc              = BIN_QC.out.binqc_publish
-    bin_taxonomy        = BIN_TAXONOMY.out.bin_taxonomy_publish
-    binning_summary     = ch_binfiles_publish
-    versions            = ch_versions // channel: [ path(versions.yml) ]
+    assemblies      = ch_assembly_publish
+    mapping         = ch_binning_preparation_out
+    binning         = BINNING.out.binning_publish.mix(BIN_REFINEMENT.out.bin_refinement_publish)
+    bin_qc          = BIN_QC.out.binqc_publish
+    bin_taxonomy    = BIN_TAXONOMY.out.bin_taxonomy_publish
+    binning_summary = ch_binfiles_publish
+    versions        = ch_versions // channel: [ path(versions.yml) ]
 }

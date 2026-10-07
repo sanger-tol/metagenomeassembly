@@ -3,9 +3,9 @@ process METABINTOOLS_EXPORTCONTIG2BIN {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/e3/e3a2adb7abed4237d28f2a25fdb019acacef6b5d918ad1f1e96c862644809bdc/data'
-        : 'community.wave.seqera.io/library/metabintools:0.4.0--e849d6679cb24725' }"
+        : 'community.wave.seqera.io/library/metabintools:0.4.0--e849d6679cb24725'}"
 
     input:
     tuple val(meta), path(binsfile)

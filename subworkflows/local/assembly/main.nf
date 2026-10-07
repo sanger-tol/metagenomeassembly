@@ -49,13 +49,9 @@ workflow ASSEMBLY {
 
         ch_assemblies = ch_assemblies.mix(METAMDBG_ASM.out.contigs)
 
-        ch_assembly_out = ch_assembly_out
-            .mix(
-                METAMDBG_ASM.out.contigs
-                .join(METAMDBG_ASM.out.log)
-                .map { meta, asm, metamdbg_log -> [meta, asm, [metamdbg_log]] }
-            )
-
+        ch_assembly_out = ch_assembly_out.mix(
+            METAMDBG_ASM.out.contigs.join(METAMDBG_ASM.out.log).map { meta, asm, metamdbg_log -> [meta, asm, [metamdbg_log]] }
+        )
     }
     else if (val_assembler == "myloasm") {
         //
@@ -66,8 +62,7 @@ workflow ASSEMBLY {
         ch_assemblies = ch_assemblies.mix(MYLOASM.out.contigs)
 
         ch_assembly_out = ch_assembly_out.mix(
-            MYLOASM.out.contigs.join(MYLOASM.out.results, by: 0)
-            .map { meta, asm, results ->
+            MYLOASM.out.contigs.join(MYLOASM.out.results, by: 0).map { meta, asm, results ->
                 [meta, asm, results.findAll { f -> !(f.getName() =~ "assembly_primary.fa.gz") }]
             }
         )
@@ -76,11 +71,10 @@ workflow ASSEMBLY {
     //
     // Module: ungzip gzipped assemblies
     //
-    ch_assemblies_split = ch_assemblies
-        .branch { _meta, asm ->
-            gzipped: asm.getExtension() == "gz"
-            ungzipped: true
-        }
+    ch_assemblies_split = ch_assemblies.branch { _meta, asm ->
+        gzipped: asm.getExtension() == "gz"
+        ungzipped: true
+    }
 
     GUNZIP(ch_assemblies_split.gzipped)
     ch_assemblies_unzipped = ch_assemblies_split.ungzipped.mix(GUNZIP.out.gunzip)
@@ -117,8 +111,8 @@ workflow ASSEMBLY {
     METABINTOOLS_IMPORTASM(ch_assemblies_unzipped.filter { meta, _fasta -> !meta?.collated })
 
     emit:
-    assembly_output = ch_assembly_out
-    assemblies = ch_assemblies_unzipped
+    assembly_output       = ch_assembly_out
+    assemblies            = ch_assemblies_unzipped
     concatenated_assembly = CONCATENATE_FASTA.out.concat_fasta
-    assembly_binsfile = METABINTOOLS_IMPORTASM.out.binsfile
+    assembly_binsfile     = METABINTOOLS_IMPORTASM.out.binsfile
 }

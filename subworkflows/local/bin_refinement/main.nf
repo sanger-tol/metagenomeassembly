@@ -1,9 +1,9 @@
-include { BINETTE                                 } from '../../../modules/nf-core/binette/main'
-include { DASTOOL_DASTOOL                         } from '../../../modules/nf-core/dastool/dastool/main'
-include { PYRODIGAL                               } from '../../../modules/nf-core/pyrodigal/main'
-include { METABINTOOLS_IMPORTBINSET               } from '../../../modules/local/metabintools/importbinset'
-include { METABINTOOLS_EXPORTCONTIG2BIN           } from '../../../modules/local/metabintools/exportcontig2bin'
-include { METABINTOOLS_EXPORTFASTA                } from '../../../modules/local/metabintools/exportfasta'
+include { BINETTE                       } from '../../../modules/nf-core/binette/main'
+include { DASTOOL_DASTOOL               } from '../../../modules/nf-core/dastool/dastool/main'
+include { PYRODIGAL                     } from '../../../modules/nf-core/pyrodigal/main'
+include { METABINTOOLS_IMPORTBINSET     } from '../../../modules/local/metabintools/importbinset'
+include { METABINTOOLS_EXPORTCONTIG2BIN } from '../../../modules/local/metabintools/exportcontig2bin'
+include { METABINTOOLS_EXPORTFASTA      } from '../../../modules/local/metabintools/exportfasta'
 
 workflow BIN_REFINEMENT {
     take:
@@ -81,7 +81,7 @@ workflow BIN_REFINEMENT {
 
         BINETTE(
             ch_binette_input,
-            ch_checkm2_db
+            ch_checkm2_db,
         )
 
         ch_refined_bins = ch_refined_bins.mix(
@@ -114,9 +114,8 @@ workflow BIN_REFINEMENT {
     METABINTOOLS_EXPORTFASTA(METABINTOOLS_IMPORTBINSET.out.binsfile)
 
     ch_bin_refinement_publish = METABINTOOLS_EXPORTFASTA.out.fasta
-        .join(ch_bin_refinement_output, by:0, remainder: true)
+        .join(ch_bin_refinement_output, by: 0, remainder: true)
         .map { meta, bins, extra_files -> meta + [bins: bins, extra_files: extra_files] }
-
 
     emit:
     refined_bins_fasta     = METABINTOOLS_EXPORTFASTA.out.fasta

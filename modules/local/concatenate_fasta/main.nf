@@ -1,11 +1,11 @@
 process CONCATENATE_FASTA {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/74/747d2092b8ec4907620889a7303084bd544d476436ce14297e1d8372cde3e43a/data'
-        : 'community.wave.seqera.io/library/pyfastx_click:044745d38b4e55c4' }"
+        : 'community.wave.seqera.io/library/pyfastx_click:044745d38b4e55c4'}"
 
     input:
     tuple val(meta), path(fasta), val(ids)
@@ -23,8 +23,8 @@ process CONCATENATE_FASTA {
     // either have to copy this file to ${projectDir}/bin or set the option
     // nextflow.enable.moduleBinaries = true
     // in your nextflow.config file.
-    def args       = task.ext.args  ?: ''
-    def prefix     = task.ext.prefix ?: "${meta.id}"
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
     def fasta_inputs = fasta.collect { f -> "--fasta ${f}" }.join(" ")
     def id_inputs = ids ? ids.collect { id -> "--id ${id}" }.join(" ") : ''
     """
@@ -35,7 +35,7 @@ process CONCATENATE_FASTA {
     """
 
     stub:
-    def prefix     = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.fasta
     """

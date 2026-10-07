@@ -31,7 +31,7 @@ workflow BIN_QC {
         true,
         false,
         "file",
-        false
+        false,
     )
 
     //
@@ -65,7 +65,7 @@ workflow BIN_QC {
         }
 
     emit:
-    coverage         = COVERM_GENOME.out.coverage
-    checkm2_tsv      = CHECKM2_PREDICT.out.checkm2_tsv
-    binqc_publish    = ch_binqc_publish
+    coverage      = COVERM_GENOME.out.coverage
+    checkm2_tsv   = CHECKM2_PREDICT.out.checkm2_tsv
+    binqc_publish = ch_binqc_publish
 }

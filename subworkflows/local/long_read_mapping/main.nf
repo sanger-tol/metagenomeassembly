@@ -38,9 +38,9 @@ workflow LONG_READ_MAPPING {
         .filter { meta_bam, _bam, meta_asm, _filt -> meta_bam.id == meta_asm.id }
         .branch { meta_bam, bam, meta_asm, filt ->
             filter: filt && filt?.size() > 0
-                return [meta_bam, bam, filt]
+            return [meta_bam, bam, filt]
             skip_filter: true
-                return [meta_asm, bam]
+            return [meta_asm, bam]
         }
 
     //
