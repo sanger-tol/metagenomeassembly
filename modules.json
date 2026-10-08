@@ -22,7 +22,7 @@
                     },
                     "checkm2/predict": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "deb8254027c27a9e505befc68ab449db1f3dadef",
                         "installed_by": ["modules"]
                     },
                     "comebin/runcomebin": {
@@ -55,12 +55,12 @@
                         "git_sha": "5be91832f7c6a2d229f900a239d9532c9ae133c7",
                         "installed_by": ["modules"]
                     },
-                    "gawk": {
+                    "genomad/endtoend": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "781f2625386fe0bf2f337c7b99f56e618c59fc99",
                         "installed_by": ["modules"]
                     },
-                    "genomad/endtoend": {
+                    "gfastats": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
@@ -112,8 +112,9 @@
                     },
                     "myloasm": {
                         "branch": "master",
-                        "git_sha": "14cc9eccb1a8a20c3ae969a0070e9585ba960945",
-                        "installed_by": ["modules"]
+                        "git_sha": "2a55fbb146d13f5058756c27cbf0b2e41e2a0729",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/myloasm/myloasm.diff"
                     },
                     "pyrodigal": {
                         "branch": "master",
@@ -140,9 +141,14 @@
                         "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
                         "installed_by": ["cram_map_illumina_hic"]
                     },
+                    "semibin/multieasybin": {
+                        "branch": "master",
+                        "git_sha": "9f8642c41bf67d2787820e4c4aa34c0356a0d464",
+                        "installed_by": ["modules"]
+                    },
                     "semibin/singleeasybin": {
                         "branch": "master",
-                        "git_sha": "041fbd98880c9af7762aec2f54fa4f35503d50f2",
+                        "git_sha": "9f8642c41bf67d2787820e4c4aa34c0356a0d464",
                         "installed_by": ["modules"]
                     },
                     "seqkit/replace": {
@@ -156,6 +162,11 @@
                         "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
                         "installed_by": ["modules"]
                     },
+                    "seqkit/stats": {
+                        "branch": "master",
+                        "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
+                        "installed_by": ["modules"]
+                    },
                     "tiara/tiara": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
@@ -163,12 +174,12 @@
                     },
                     "trnascanse": {
                         "branch": "master",
-                        "git_sha": "0c739827833fdece07eb80618fd085a9a8992406",
+                        "git_sha": "610fdc0f12df14140cfa6164a4c8b61132d74a2e",
                         "installed_by": ["modules"]
                     },
                     "vamb/bin": {
                         "branch": "master",
-                        "git_sha": "a0961c41021561ac7cf139f86bd7812a2f99e994",
+                        "git_sha": "7844e96252d0693fb2331969a1c9790eb831b0f6",
                         "installed_by": ["modules"]
                     }
                 }

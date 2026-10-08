@@ -1,12 +1,10 @@
-id: SampleName
-pacbio:
-  fasta:
-    - /path/to/pacbio/file1.fasta.gz
-    - /path/to/pacbio/file2.fasta.gz
-hic:
-  cram:
-    - /path/to/hic/hic1.cram
-    - /path/to/hic/hic2.cram
-  enzymes:
-    - DpnII
-    - HinfI
+- id: Sample1
+  platform: "pacbio_hifi"
+  reads:
+    - /path/to/fasta.gz
+  assembly: /path/to/assembly.fasta.gz
+  assembler: metamdbg
+- id: Sample2
+  platform: "pacbio_hifi"
+  reads:
+    - /path/to/hic.cram

@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "concatenate_fasta"
+description: Concatenate multiple FASTA files optionally filtering by sequence IDs
+keywords:
+  - fasta
+  - concatenation
+tools:
+  - "concatenate_fasta.py":
+      description: "Python script to concatenate FASTA files"
+      homepage: "https://github.com/wwood/CoverM"
+      licence: ["GPL v3"]
+
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - fasta:
+        type: file
+        description: "FASTA file(s) to concatenate"
+        pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
+    - ids:
+        type: string
+        description: "Optional sequence IDs to include"
+        optional: true
+
+output:
+  concat_fasta:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.fasta":
+          type: file
+          description: Concatenated FASTA file
+          pattern: "*.fasta"
+
+  versions:
+    - - ${task.process}:
+          type: string
+      - concatenate_fasta.py:
+          type: string
+      - "concatenate_fasta.py --version":
+          type: string
+
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+      - concatenate_fasta.py:
+          type: string
+
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

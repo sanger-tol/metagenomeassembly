@@ -1,61 +1,54 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/metagenomeassembly/main/assets/schema_input.json",
-    "title": "sanger-tol/metagenomeassembly pipeline - params.input schema",
-    "description": "Schema for the file provided with params.input",
-    "type": "object",
-    "properties": {
-        "id": {
-            "type": "string"
-        },
-        "pacbio": {
-            "type": "object",
-            "properties": {
-                "fasta": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "format": "file-path",
-                        "pattern": "^\\S+\\.(fa|fna|fasta|fq|fastq)(\\.gz)?$",
-                        "exists": true
-                    },
-                    "uniqueItems": true
-                }
+    "$id": "https://raw.githubusercontent.com/test/test/master/assets/schema_input.json",
+    "title": "Test schema for samplesheets",
+    "description": "Schema for the file provided with params.data_input",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string",
+                "description": "Sample identifier for the dataset.",
+                "errorMessage": "Identifier for a dataset must be provided and contain no spaces.",
+                "pattern": "^\\S+$",
+                "meta": "id"
             },
-            "required": ["fasta"]
-        },
-        "hic": {
-            "type": "object",
-            "properties": {
-                "cram": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "format": "file-path",
-                        "pattern": "^.*\\.cram$",
-                        "exists": true
-                    },
-                    "uniqueItems": true
-                }
-            }
-        },
-        "assembly": {
-            "type": "object",
-            "properties": {
-                "fasta": {
+            "platform": {
+                "type": "string",
+                "description": "Sequencing platform .",
+                "errorMessage": "Unique identifier for a dataset must be provided and contain no spaces.",
+                "pattern": "^\\S+$",
+                "meta": "platform",
+                "enum": ["pacbio_hifi", "oxford_nanopore", "illumina_hic"]
+            },
+            "reads": {
+                "type": "array",
+                "description": "List of files containing the sequencing reads for the sample. Can be in FASTA, FASTQ or CRAM format.",
+                "items": {
                     "type": "string",
                     "format": "file-path",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.gz$",
+                    "pattern": "^\\S+\\.((fastq|fq|fasta|fna|fa)(\\.gz)?|cram)$",
                     "exists": true
                 },
-                "assembler": {
-                    "type": "string"
-                }
+                "uniqueItems": true
             },
-            "dependentRequired": {
-                "fasta": ["assembler"]
+            "assembly": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.(fa|fasta)(\\.gz)?",
+                "exists": true
+            },
+            "assembler": {
+                "type": "string",
+                "description": "Name of the assembler used to produce the assembly.",
+                "meta": "assembler"
             }
-        }
-    },
-    "required": ["id", "pacbio"]
+        },
+        "required": ["id", "platform", "reads"],
+        "dependentRequired": {
+            "assembly": ["assembler"]
+        },
+        "uniqueEntries": ["id", "platform"]
+    }
 }

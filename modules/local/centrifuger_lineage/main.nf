@@ -1,11 +1,11 @@
 process CENTRIFUGER_LINEAGE {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/43/4307210ff24411b79a1b7c513ea63333844777d78075ca2ddd7fb3dc058db4d5/data':
-        'community.wave.seqera.io/library/centrifuger_csvtk_findutils:607c59bcf2a3209e' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/43/4307210ff24411b79a1b7c513ea63333844777d78075ca2ddd7fb3dc058db4d5/data'
+        : 'community.wave.seqera.io/library/centrifuger_csvtk_findutils:607c59bcf2a3209e'}"
 
     input:
     tuple val(meta), path(classifications)
@@ -13,7 +13,7 @@ process CENTRIFUGER_LINEAGE {
 
     output:
     tuple val(meta), path("*.lineage.tsv"), emit: lineage_tsv
-    tuple val("${task.process}"), val('centrifuger'), eval("centrifuger -v 2>&1 | sed 's/Centrifuger v//'"),emit: versions_centrifuger,  topic: versions
+    tuple val("${task.process}"), val('centrifuger'), eval("centrifuger -v 2>&1 | sed 's/Centrifuger v//'"), emit: versions_centrifuger, topic: versions
     tuple val("${task.process}"), val('csvtk'), eval("csvtk version | sed -e 's/csvtk v//g'"), emit: versions_csvtk, topic: versions
 
     when:

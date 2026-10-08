@@ -16,104 +16,10 @@
 include { METAGENOMEASSEMBLY      } from './workflows/metagenomeassembly'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_metagenomeassembly_pipeline'
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
-workflow SANGERTOL_METAGENOMEASSEMBLY {
-    take:
-    ch_pacbio_fasta // channel: pacbio fasta read in from --input
-    ch_assembly // channel: pre-existing assembly read in from --input
-    ch_hic_cram // channel: hic cram read in from --input
-    val_assembler // string: assembler to use
-    val_minimum_contig_size // integer: minimum contig size
-    val_maximum_contig_size // integer: maximum contig size
-    val_minimum_circular_contig_length // integer: minimum circular contig length
-    val_enable_tiara // boolean: enable tiara?
-    val_tiara_exclude_classifications // string: tiara exclude classifications
-    val_enable_genomad // boolean: enable genomad?
-    ch_genomad_db // channel: genomad db from params.genomad_db
-    val_enable_binning // boolean: enable binning?
-    val_extract_circular_contigs // boolean: extract circular contigs?
-    val_enable_metabat2 // boolean: enable metabat2?
-    val_enable_maxbin2 // boolean: enable maxbin2?
-    val_enable_comebin // boolean: enable comebin?
-    val_enable_semibin2 // boolean: enable semibin?
-    val_enable_vamb // boolean: enable vamb?
-    val_enable_taxvamb // boolean: enable taxvamb?
-    ch_centrifuger_db // channel: centrifuger db from params.centrifuger_db
-    val_enable_metator // boolean: enable metator?
-    val_hic_aligner // string: which aligner to use for Hi-C mapping
-    val_cram_chunk_size // integer: how many hic cram slices to map in a single chunk
-    val_reads_per_fasta_chunk // integer: how many long reads to map in a single chunk
-    val_enable_bin_refinement // boolean: enable bin refinement?
-    val_enable_dastool // boolean: enable dastool?
-    val_enable_binette // boolean: enable magscot?
-    val_enable_binqc // boolean: enable binqc?
-    val_enable_checkm2 // boolean: enable checkm2?
-    ch_checkm2_db // channel: checkm2 db from --params.checkm2_db
-    val_enable_rrna_prediction // boolean: enable rrna prediction
-    val_rfam_rrna_cm // channel: rrna cm file from params.rfam_rrna_cm
-    val_enable_trnascanse // boolean: enable trnascan se?
-    val_enable_taxonomy // boolean: enable taxonomy?
-    val_enable_gtdbtk // boolean: enable gtdbtk?
-    ch_gtdbtk_db // channel: gtdbtk db from --params.gtdbtk_db
-    val_ar53_metadata // path: gtdbtk ar53 metadata
-    val_bac120_metadata // path: gtdbtk bac120 metadata
-    outdir
+include { countSamples            } from './functions/local/inputs.nf'
+include { getOutdir               } from './functions/local/outputs.nf'
 
-    main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
-    METAGENOMEASSEMBLY(
-        ch_pacbio_fasta,
-        ch_assembly,
-        ch_hic_cram,
-        val_assembler,
-        val_minimum_contig_size,
-        val_maximum_contig_size,
-        val_minimum_circular_contig_length,
-        val_enable_tiara,
-        val_tiara_exclude_classifications,
-        val_enable_genomad,
-        ch_genomad_db,
-        val_enable_binning,
-        val_extract_circular_contigs,
-        val_enable_metabat2,
-        val_enable_maxbin2,
-        val_enable_comebin,
-        val_enable_semibin2,
-        val_enable_vamb,
-        val_enable_taxvamb,
-        ch_centrifuger_db,
-        val_enable_metator,
-        val_hic_aligner,
-        val_cram_chunk_size,
-        val_reads_per_fasta_chunk,
-        val_enable_bin_refinement,
-        val_enable_dastool,
-        val_enable_binette,
-        val_enable_binqc,
-        val_enable_checkm2,
-        ch_checkm2_db,
-        val_enable_rrna_prediction,
-        val_rfam_rrna_cm,
-        val_enable_trnascanse,
-        val_enable_taxonomy,
-        val_enable_gtdbtk,
-        ch_gtdbtk_db,
-        val_ar53_metadata,
-        val_bac120_metadata,
-        outdir
-    )
-}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -121,6 +27,8 @@ workflow SANGERTOL_METAGENOMEASSEMBLY {
 */
 
 workflow {
+
+    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
@@ -136,54 +44,69 @@ workflow {
         params.show_hidden,
         params.genomad_db,
         params.rfam_rrna_cm,
+        params.centrifuger_db,
         params.checkm2_db,
         params.gtdbtk_db,
-        params.centrifuger_db
+        params.gtdb_ar53_metadata,
+        params.gtdb_bac120_metadata,
     )
+
+    def n_samples = countSamples(params.input)
+
+    def pipeline_stages = [
+        enable_binning: params.enable_binning,
+        enable_bin_refinement: params.enable_bin_refinement,
+        enable_binqc: params.enable_binqc,
+        enable_taxonomy: params.enable_taxonomy,
+    ]
+
+    def binners = [
+        multisplit: params.enable_multisplit && (params.enable_semibin2 || params.enable_vamb) && (n_samples > 1),
+        circular: params.extract_circular_contigs,
+        metabat2: params.enable_metabat2,
+        maxbin2: params.enable_maxbin2,
+        comebin: params.enable_comebin,
+        semibin2: params.enable_semibin2,
+        vamb: params.enable_vamb,
+        taxvamb: params.enable_taxvamb && params.centrifuger_db,
+        metator: params.enable_metator,
+    ]
+
+    def bin_refiners = [
+        binette: params.enable_binette && params.checkm2_db,
+        dastool: params.enable_dastool,
+    ]
+
+    def optional_tools = [
+        genomad: params.enable_genomad && params.genomad_db
+    ]
+
+    def alignment_options = [
+        hic_aligner: params.hic_aligner,
+        hic_mapping_cram_slices_per_chunk: params.hic_mapping_cram_slices_per_chunk,
+        long_read_mapping_reads_per_chunk: params.long_read_mapping_reads_per_chunk,
+    ]
 
     //
     // WORKFLOW: Run main workflow
     //
     SANGERTOL_METAGENOMEASSEMBLY(
-        PIPELINE_INITIALISATION.out.pacbio_fasta,
-        PIPELINE_INITIALISATION.out.assembly,
-        PIPELINE_INITIALISATION.out.hic_cram,
-        params.assembler,
-        params.minimum_contig_size,
-        params.maximum_contig_size,
-        params.minimum_circular_contig_length,
-        params.enable_tiara,
-        params.tiara_exclude_classifications,
-        params.enable_genomad && params.genomad_db,
+        PIPELINE_INITIALISATION.out.long_reads_assembly,
+        PIPELINE_INITIALISATION.out.hic_reads,
         PIPELINE_INITIALISATION.out.genomad_db,
-        params.enable_binning,
-        params.extract_circular_contigs,
-        params.enable_metabat2,
-        params.enable_maxbin2,
-        params.enable_comebin,
-        params.enable_semibin2,
-        params.enable_vamb,
-        params.enable_taxvamb && params.centrifuger_db,
-        PIPELINE_INITIALISATION.out.centrifuger_db,
-        params.enable_metator,
-        params.hic_aligner,
-        params.hic_mapping_cram_bin_size,
-        params.long_read_mapping_reads_per_chunk,
-        params.enable_bin_refinement,
-        params.enable_dastool,
-        params.enable_binette,
-        params.enable_binqc,
-        params.enable_checkm2 && params.checkm2_db,
-        PIPELINE_INITIALISATION.out.checkm2_db,
-        params.enable_rrna_prediction,
         PIPELINE_INITIALISATION.out.rfam_rrna_cm,
-        params.enable_trnascanse,
-        params.enable_taxonomy,
-        params.enable_gtdbtk && params.gtdbtk_db,
+        PIPELINE_INITIALISATION.out.centrifuger_db,
+        PIPELINE_INITIALISATION.out.checkm2_db,
         PIPELINE_INITIALISATION.out.gtdbtk_db,
-        params.gtdb_ar53_metadata,
-        params.gtdb_bac120_metadata,
-        params.outdir
+        PIPELINE_INITIALISATION.out.gtdb_ar53_metadata,
+        PIPELINE_INITIALISATION.out.gtdb_bac120_metadata,
+        pipeline_stages,
+        params.assembler,
+        binners,
+        bin_refiners,
+        optional_tools,
+        alignment_options,
+        params.outdir,
     )
 
     //
@@ -196,4 +119,125 @@ workflow {
         params.outdir,
         params.monochrome_logs,
     )
+
+    publish:
+    assemblies      = SANGERTOL_METAGENOMEASSEMBLY.out.assemblies.map { it -> it + [n_samples: n_samples] }
+    mapping         = SANGERTOL_METAGENOMEASSEMBLY.out.mapping.map { it -> it + [n_samples: n_samples] }
+    binning         = SANGERTOL_METAGENOMEASSEMBLY.out.binning.map { it -> it + [n_samples: n_samples] }
+    bin_qc          = SANGERTOL_METAGENOMEASSEMBLY.out.bin_qc.map { it -> it + [n_samples: n_samples] }
+    bin_taxonomy    = SANGERTOL_METAGENOMEASSEMBLY.out.bin_taxonomy.map { it -> it + [n_samples: n_samples] }
+    binning_summary = SANGERTOL_METAGENOMEASSEMBLY.out.binning_summary.map { it -> it + [n_samples: n_samples] }
+}
+
+output {
+    assemblies {
+        path { obj ->
+            obj.assembly >> getOutdir(obj) + "assembly/"
+            obj.assembly_files >> getOutdir(obj) + "assembly/${obj.assembler}/"
+            obj.stats >> getOutdir(obj) + "assembly/"
+            obj.tiara >> getOutdir(obj) + "assembly/tiara/"
+            obj.tiara_log >> getOutdir(obj) + "assembly/tiara/"
+            obj.genomad >> getOutdir(obj) + "assembly/genomad/"
+            obj.trna_tsv >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_stats >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_gff >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.trna_log >> getOutdir(obj) + "assembly/trnascanse/"
+            obj.rrna_gff >> getOutdir(obj) + "assembly/rrna/"
+            obj.pyrodigal_annotations >> getOutdir(obj) + "assembly/pyrodigal/"
+        }
+    }
+    mapping {
+        path { obj ->
+            obj.bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
+            obj.hic_bam >> (params.save_bams ? getOutdir(obj) + "assembly/mapping/" : null)
+            obj.hic_pairs >> getOutdir(obj) + "assembly/mapping/"
+            obj.depths >> getOutdir(obj) + "assembly/mapping/"
+        }
+    }
+    binning {
+        path { obj ->
+            obj.bins >> getOutdir(obj) + "binning/bins/${obj.binner}/fasta/"
+            obj.extra_files >> getOutdir(obj) + "binning/bins/${obj.binner}/"
+        }
+    }
+    bin_qc {
+        path { obj ->
+            obj.checkm2_tsv >> getOutdir(obj) + "binning/"
+            obj.coverage >> getOutdir(obj) + "binning/"
+        }
+    }
+    bin_taxonomy {
+        path { obj ->
+            obj.gtdbtk_outdir >> getOutdir(obj) + "binning/gtdbtk/"
+            obj.merged_summary >> getOutdir(obj) + "binning/"
+        }
+    }
+    binning_summary {
+        path { obj ->
+            obj.binsfile >> getOutdir(obj) + "binning/"
+            obj.bin_summary >> getOutdir(obj) + "binning/"
+            obj.group_summary >> getOutdir(obj) + "binning/"
+        }
+    }
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// WORKFLOW: Run main analysis pipeline depending on type of input
+//
+workflow SANGERTOL_METAGENOMEASSEMBLY {
+    take:
+    ch_long_reads_assembly
+    ch_hic_reads
+    ch_genomad_db
+    ch_rfam_rrna_cm
+    ch_centrifuger_db
+    ch_checkm2_db
+    ch_gtdbtk_db
+    ch_gtdb_ar53_metadata
+    ch_gtdb_bac120_metadata
+    val_pipeline_stages
+    val_assembler
+    val_binners
+    val_bin_refiners
+    val_tools
+    val_alignment_options
+    outdir
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    METAGENOMEASSEMBLY(
+        ch_long_reads_assembly,
+        ch_hic_reads,
+        ch_genomad_db,
+        ch_rfam_rrna_cm,
+        ch_centrifuger_db,
+        ch_checkm2_db,
+        ch_gtdbtk_db,
+        ch_gtdb_ar53_metadata,
+        ch_gtdb_bac120_metadata,
+        val_pipeline_stages,
+        val_assembler,
+        val_binners,
+        val_bin_refiners,
+        val_tools,
+        val_alignment_options,
+        outdir,
+    )
+
+    emit:
+    assemblies      = METAGENOMEASSEMBLY.out.assemblies
+    mapping         = METAGENOMEASSEMBLY.out.mapping
+    binning         = METAGENOMEASSEMBLY.out.binning
+    bin_qc          = METAGENOMEASSEMBLY.out.bin_qc
+    bin_taxonomy    = METAGENOMEASSEMBLY.out.bin_taxonomy
+    binning_summary = METAGENOMEASSEMBLY.out.binning_summary
 }
