@@ -22,7 +22,10 @@
 **sanger-tol/metagenomeassembly** is a bioinformatics pipeline for the assembly and binning of metagenomes
 using PacBio HiFi data and (optionally) Hi-C Illumina data.
 
-![sanger-tol/metagenomeassembly workflow diagram](docs/images/metagenomeassembly.metromap.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-metagenomeassembly.metromap_dark.svg">
+  <img alt="sanger-tol/metagenomeassembly" src="docs/images/sanger-tol-metagenomeassembly.metromap_light.svg">
+</picture>
 
 ## Pipeline summary
 
