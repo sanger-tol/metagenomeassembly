@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0dev] - TBD - [TBD]
+## [2.0.0] - Pses eidia - [2026-10-12]
 
 - The pipeline now supports multiple input samples. When multiple input samples are provided, co-binning is enabled, using the contig depths across all samples as a binning input. This can get expensive with large numbers of samples.
 - The pipeline now also supports the multi-split binning approach with Vamb and SemiBin2, if `--params.enable_multisplit` is enabled. In this case, assemblies are concatenated prior to mapping and binning, and then bins are split back into their respective samples.

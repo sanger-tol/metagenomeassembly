@@ -112,7 +112,7 @@
                     "vamb": "5.0.4"
                 },
                 "Workflow": {
-                    "sanger-tol/metagenomeassembly": "v2.0.0dev"
+                    "sanger-tol/metagenomeassembly": "v2.0.0"
                 }
             },
             [
