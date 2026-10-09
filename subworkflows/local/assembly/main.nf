@@ -1,56 +1,77 @@
-include { FILTER_ASSEMBLY                         } from '../../../modules/local/filter_assembly'
-include { GENOMAD_ENDTOEND                        } from '../../../modules/nf-core/genomad/endtoend'
-include { GENOME_STATS as GENOME_STATS_ASSEMBLIES } from '../../../modules/local/genome_stats'
-include { GUNZIP                                  } from '../../../modules/nf-core/gunzip/main'
-include { METAMDBG_ASM                            } from '../../../modules/nf-core/metamdbg/asm'
-include { MYLOASM                                 } from '../../../modules/nf-core/myloasm'
-include { TIARA_TIARA                             } from '../../../modules/nf-core/tiara/tiara'
+include { GUNZIP                 } from '../../../modules/nf-core/gunzip/main'
+include { METAMDBG_ASM           } from '../../../modules/nf-core/metamdbg/asm'
+include { MYLOASM                } from '../../../modules/nf-core/myloasm'
+include { CONCATENATE_FASTA      } from '../../../modules/local/concatenate_fasta/main'
+include { METABINTOOLS_IMPORTASM } from '../../../modules/local/metabintools/importasm'
 
 workflow ASSEMBLY {
     take:
-    ch_hifi_reads
-    ch_assemblies
+    ch_long_reads_assemblies
     val_assembler
-    val_minimum_contig_size
-    val_maximum_contig_size
-    val_extract_circular_contigs
-    val_minimum_circular_contig_length
-    val_enable_tiara
-    val_tiara_exclude_classifications
-    val_enable_genomad
-    ch_genomad_db
+    val_binners
 
     main:
-    ch_assembly_input = ch_hifi_reads
-        .combine(ch_assemblies.ifEmpty([[:], []]))
-        .filter { _meta, _reads, _meta_asm, asm -> !asm }
-        .map { meta, reads, _meta_asm, _asm -> [meta, reads] }
 
-    ch_local_assemblies = channel.empty()
+    //
+    // Logic: Filter the input datasets to remove those where the assemblies have been provided.
+    // Initialise the output channels with these assemblies.
+    //
+    ch_assemblies = ch_long_reads_assemblies
+        .filter { _meta, _reads, assembly -> assembly }
+        .map { meta, _reads, assembly ->
+            log.info("Warn[assembly]: Skipping assembly for ${meta.id}: assembly provided")
+            [meta, assembly]
+        }
+
+    ch_assembly_out = ch_long_reads_assemblies
+        .filter { _meta, _reads, assembly -> assembly }
+        .map { meta, _reads, assembly ->
+            [meta, assembly, []]
+        }
+
+    ch_assembly_input = ch_long_reads_assemblies
+        .filter { _meta, _reads, assembly -> !assembly }
+        .map { meta, reads, _assembly -> [meta, reads] }
+
     if (val_assembler == "metamdbg") {
         //
         // Module: Assemble PacBio reads using metaMDBG
         //
-        METAMDBG_ASM(ch_assembly_input, 'hifi')
-        ch_local_assemblies = METAMDBG_ASM.out.contigs
-    } else if (val_assembler == "myloasm") {
+        ch_metamdbg_input = ch_assembly_input.multiMap { meta, reads ->
+            reads: [meta + [assembler: "metamdbg"], reads]
+            input_type: meta.platform == "pacbio_hifi" ? "hifi" : "ont"
+        }
+
+        METAMDBG_ASM(
+            ch_metamdbg_input.reads,
+            ch_metamdbg_input.input_type,
+        )
+
+        ch_assemblies = ch_assemblies.mix(METAMDBG_ASM.out.contigs)
+
+        ch_assembly_out = ch_assembly_out.mix(
+            METAMDBG_ASM.out.contigs.join(METAMDBG_ASM.out.log).map { meta, asm, metamdbg_log -> [meta, asm, [metamdbg_log]] }
+        )
+    }
+    else if (val_assembler == "myloasm") {
         //
         // Module: Assemble PacBio reads using myloasm
         //
-        MYLOASM(ch_assembly_input)
-        ch_local_assemblies = MYLOASM.out.contigs
-    }
-    ch_local_assemblies = ch_local_assemblies.map { meta, contigs ->
-        def meta_new = meta + [assembler: val_assembler]
-        [meta_new, contigs]
-    }
+        MYLOASM(ch_assembly_input.map { meta, reads -> [meta + [assembler: "myloasm"], reads] })
 
-    ch_assemblies_all = ch_assemblies.mix(ch_local_assemblies)
+        ch_assemblies = ch_assemblies.mix(MYLOASM.out.contigs)
+
+        ch_assembly_out = ch_assembly_out.mix(
+            MYLOASM.out.contigs.join(MYLOASM.out.results, by: 0).map { meta, asm, results ->
+                [meta, asm, results.findAll { f -> !(f.getName() =~ "assembly_primary.fa.gz") }]
+            }
+        )
+    }
 
     //
     // Module: ungzip gzipped assemblies
     //
-    ch_assemblies_split = ch_assemblies_all.branch { _meta, asm ->
+    ch_assemblies_split = ch_assemblies.branch { _meta, asm ->
         gzipped: asm.getExtension() == "gz"
         ungzipped: true
     }
@@ -58,52 +79,40 @@ workflow ASSEMBLY {
     GUNZIP(ch_assemblies_split.gzipped)
     ch_assemblies_unzipped = ch_assemblies_split.ungzipped.mix(GUNZIP.out.gunzip)
 
-    if (val_enable_tiara) {
-        //
-        // Module: Classify assembled contigs with tiara to domain level
-        TIARA_TIARA(ch_assemblies_unzipped)
+    //
+    // Module: Concatenate FASTAs for multisample split binning if requested
+    //
+    ch_assemblies_to_concatenate = ch_assemblies_unzipped
+        .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .filter { val_binners.multisplit }
+        .map { list ->
+            def ids = []
+            def assemblers = []
+            def out_assemblies = []
+            def out_platforms = []
+            list.collect { meta, fasta ->
+                ids << meta.id
+                assemblers << meta.assembler
+                out_platforms << meta.platform
+                out_assemblies << fasta
+            }
 
-        ch_filter_assembly_input = ch_assemblies_unzipped
-            .combine(TIARA_TIARA.out.classifications, by: 0)
-
-    } else {
-        ch_filter_assembly_input = ch_assemblies_unzipped
-            .map { meta, asm -> [meta, asm, []] }
-    }
+            return [[id: "collated", collated: true, ids: ids, assemblers: assemblers, platforms: out_platforms], out_assemblies]
+        }
 
     //
-    // Module: Filter the assembled contigs to remove circles (if requested), as well
-    // as too-large or too-small contigs. If tiara was run, it can also be used to
-    // filter the assembly.
+    // Module: Concatenate assemblies to a single file for binsplitting binners
     //
-    FILTER_ASSEMBLY(
-        ch_filter_assembly_input,
-        val_minimum_contig_size ?: [],
-        val_maximum_contig_size ?: [],
-        val_extract_circular_contigs,
-        val_minimum_circular_contig_length ?: [],
-        val_tiara_exclude_classifications.split(",") ?: []
-    )
+    CONCATENATE_FASTA(ch_assemblies_to_concatenate.map { meta, fasta -> [meta, fasta, meta.ids] })
 
     //
-    // Module: Calculate assembly statistics, including counts of circles
+    // Module: Import assemblies to binsfiles
     //
-    GENOME_STATS_ASSEMBLIES(ch_assemblies_unzipped.combine(FILTER_ASSEMBLY.out.circles_list, by: 0))
-
-    if (val_enable_genomad) {
-        //
-        // Module: Classify circular contigs using genomad
-        //
-        GENOMAD_ENDTOEND(
-            ch_assemblies_unzipped,
-            ch_genomad_db,
-        )
-    }
+    METABINTOOLS_IMPORTASM(ch_assemblies_unzipped.filter { meta, _fasta -> !meta?.collated })
 
     emit:
-    full_assemblies  = ch_assemblies_unzipped
-    circular_contigs = FILTER_ASSEMBLY.out.circles
-    filtered_contigs = FILTER_ASSEMBLY.out.filtered
-    circles_list     = FILTER_ASSEMBLY.out.circles_list
-    filter_list      = FILTER_ASSEMBLY.out.filter_list
+    assembly_output       = ch_assembly_out
+    assemblies            = ch_assemblies_unzipped
+    concatenated_assembly = CONCATENATE_FASTA.out.concat_fasta
+    assembly_binsfile     = METABINTOOLS_IMPORTASM.out.binsfile
 }

@@ -4,7 +4,7 @@
 
 ## Introduction
 
-`sanger-tol/metagenomeassembly` is a pipeline for _single-sample_ assembly and binning of metagenomic reads, and thus at present co-assembly and co-binning are not supported operations. Input to the pipeline is passed via the `--input` parameter, which takes a YAML file that describes the metadata and data locations of the single sample for processing. This YAML file must have at least the `id` and `pacbio: fasta:` fields specified, as shown in the examples below.
+`sanger-tol/metagenomeassembly` is a pipeline for the assembly and binning of metagenomic long reads. Input to the pipeline is passed via the `--input` parameter, which takes a YAML or JSON file that describes the samples and their data for processing.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -12,41 +12,78 @@
 
 ### Full samplesheet
 
-Raw PacBio HiFi reads must be provided to the pipeline in the `pacbio: fasta:` field. For binning metagenome assemblies with Hi-C, Hi-C sequencing input in CRAM format must be described in the input YAML in the `hic: cram:` field, and the list of enzymes used during Hi-C library preparation must be provided in the `hic: enzymes:` field.
+Each sample is represented in a separate list element in the input file. The ID field identifies the sample, and the platform field specifies the sequencing technology used to generate the reads, and can be one of `pacbio_hifi`, `oxford_nanopore`, or `illumina_hic`. The reads field is a list of paths to the read files for that sample. Illumina Hi-C data must be provided in unaligned CRAM format - see below for details if you have FASTQ files.
 
-_Currently, the pipeline contains no pre-processing steps for read QC, and so input HiFi and Hi-C reads must be QC'd prior to running the pipeline._
+Sample IDs must be unique for PacBio and ONT entries; IDs for Illumina Hi-C data must match a PacBio or ONT sample ID to be used for Hi-C binning.
 
 ```yaml title="input.yaml"
-id: SampleName
-pacbio:
-  fasta:
+- id: SampleName1
+  platform: pacbio_hifi
+  reads:
     - /path/to/pacbio/file1.fasta.gz
     - /path/to/pacbio/file2.fasta.gz
-    - ...
-hic:
-  cram:
-    - /path/to/hic/hic1.cram
-    - /path/to/hic/hic2.cram
-    - ...
-  enzymes:
-    - enzyme_name_1 (e.g. DpnII)
-    - enzyme_name_1 (e.g. HinfI)
-    - ...
+- id: SampleName1
+  platform: illumina_hic
+  reads:
+    - /path/to/pacbio/file1.fasta.gz
+    - /path/to/pacbio/file2.fasta.gz
+- id: SampleName2
+  platform: oxford_nanopore
+  reads:
+    - /path/to/pacbio/file1.fastq.gz
+    - /path/to/pacbio/file2.fastq.gz
 ```
 
-It is possible to just run the read mapping and binning parts of the pipeline by providing a path to an existing assembly in the YAML.
-In this case, the assembly stage is skipped. The extra fields in the input YAML are as follows:
+If you have one, it is possible to provide a pre-computed assembly for a sample to skip the assembly stage. Simply add the `assembly` and `assembler` fields as follows:
 
 ```yaml
-assembly:
-  fasta: /path/to/contigs.fasta.gz
-  assembler: assembler_name (e.g. metamdbg)
+- id: SampleName1
+  platform: pacbio_hifi
+  reads:
+    - /path/to/pacbio/file1.fasta.gz
+    - /path/to/pacbio/file2.fasta.gz
+  assembly: /path/to/contigs.fasta.gz
+  assembler: metamdbg
 ```
 
-Note that some assembler-specific features of the pipeline (such as identification of circular contigs) may not operate if providing
-contigs from an unsupported assembler.
+Note that some assembler-specific features of the pipeline (such as identification of circular contigs) may not operate if providing contigs from an unsupported assembler.
 
 An [example samplesheet](../assets/example_input.yaml) has been provided with the pipeline.
+
+## Tuning the pipeline
+
+### Required databases
+
+The pipeline requires a number of databases to be provided for a full run.
+
+- [CheckM2](https://zenodo.org/records/14897628) - required to assess bin completeness and contamination. Supply the extracted `.dmnd` file to the parameter `--checkm2_db`.
+- [GTDB-Tk](https://data.gtdb.aau.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/) - required for taxonomic classification of bins. Supply the extracted directory to the parmater `--gtdbtk_db`.
+- [Genomad](https://zenodo.org/records/14886553) - required for plasmid detection. Supply the extracted directory to the parameter `--genomad_db`.
+- [Centrifuger](https://github.com/mourisl/centrifuger) - for binning with TaxVamb, you will need to supply a Centrifuger DB (`.cfg` file) to the parameter `--centrifuger_db`. These can be downloaded with the `centrifuger-download` command from the Centrifuger repository.
+
+### Filtering the assemblies
+
+Each produced assembly can be filtered prior to binning. Specifically, contigs can be length-filtered with the following parameters: `--minimum_contig_size` and `--maximum_contig_size`. Contigs outside of this range will be removed from the assembly prior to binning. Contigs can also be filtered by domain classification from Tiara, such as to remove all Eukaryotic contigs. To do this, supply a comma-separated list of tiara domains (`eukarya`,`prokarya`,`bacteria`,`archaea`,`organelle`, and `unknown`) to `--tiara_exclude_classifications`.
+
+### Selecting binners
+
+The pipeline also includes a large array of binning methods, not all of which may be desirable to run. The parameters to control which binning methods are run are as follows:
+
+- `--extract_circular_contigs` - Extract circular genomes from the assembly prior to binning as individual genomes.
+- `--enable_metabat2` - Enable binning with MetaBAT2.
+- `--enable_maxbin2` - Enable binning with MaxBin2.
+- `--enable_comebin` - Enable binning with ComeBIN.
+- `--enable_semibin2` - Enable binning with SemiBin2.
+- `--enable_vamb` - Enable binning with VAMB.
+- `--enable_taxvamb` - Enable binning with TaxVAMB. Requires a Centrifuger DB to be provided via `--centrifuger_db`.
+- `--enable_metator` - Enable binning with MetaTOR. Requires Hi-C data for at least one sample to be provided.
+
+If multiple samples are provided, the pipeline can also be run in "multisplit mode" via `--enable_multisplit`. In this case, if binning with VAMB or SemiBin2, all assemblies are concatenated and reads from all samples are mapped to the concatenated assembly. The concatenated assembly is then binned and the bins are separated back into their respective samples.
+
+The pipeline also includes two approaches for ensemble bin refinement:
+
+`--enable_dastool` - Enable bin refinement with DASTool. Requires at least two binning methods to be enabled.
+`--enable_binette` - Enable bin refinement with Binette. Requires at least two binning methods to be enabled.
 
 ## Running the pipeline
 
@@ -89,6 +126,16 @@ outdir: './results/'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+## Additional setup procedures
+
+### CRAM files for Hi-C and Illumina input data
+
+Hi-C input data must currently be provided in unaligned CRAM format. If you have reads in FASTQ format, you can convert these to CRAM with the following command:
+
+```bash
+samtools import -@8 -r ID:{prefix} -r CN:{hic-kit} -r PU:{prefix} -r SM:{sample_name} {prefix}_R1.fastq.gz {prefix}_R2.fastq.gz -o {prefix}.cram
+```
 
 ### Updating the pipeline
 

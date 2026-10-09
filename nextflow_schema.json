@@ -46,18 +46,12 @@
             "properties": {
                 "assembler": {
                     "type": "string",
-                    "default": "metamdbg",
+                    "default": "myloasm",
                     "description": "Which assembler to use for metagenome assembly.",
                     "enum": ["metamdbg", "myloasm"]
                 },
-                "enable_tiara": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable domain-level classification of contigs with Tiara. If enabled, contigs classified using the categories listed in --exclude_tiara_classifications will be excluded from binning."
-                },
                 "tiara_exclude_classifications": {
                     "type": "string",
-                    "default": "eukarya,organelle",
                     "description": "A comma-separated list of tiara classifications to use to exclude contigs from the assembly. Options are 'bacteria', 'archaea', 'prokarya', 'eukarya', 'organelle' or 'unknown'."
                 },
                 "enable_genomad": {
@@ -99,7 +93,7 @@
                     "description": "Which Hi-C aligner to use - either bwa-mem2 or minimap2.",
                     "enum": ["bwamem2", "minimap2"]
                 },
-                "hic_mapping_cram_bin_size": {
+                "hic_mapping_cram_slices_per_chunk": {
                     "type": "integer",
                     "default": 10000,
                     "description": "When mapping Hi-C, map each CRAM file in slices of this size."
@@ -109,9 +103,13 @@
                     "default": 10,
                     "description": "Minimum map quality for a Hi-C read to be passed on for binning by Metator.",
                     "minimum": 0
+                },
+                "save_bams": {
+                    "type": "boolean",
+                    "description": "Save the mapped BAM files to the output directory."
                 }
             },
-            "required": ["long_read_mapping_reads_per_chunk", "hic_mapping_cram_bin_size", "hic_mapping_minq"]
+            "required": ["long_read_mapping_reads_per_chunk", "hic_mapping_minq"]
         },
         "binning_options": {
             "title": "Binning options",
@@ -123,6 +121,10 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable binning of metagenomes into genome bins."
+                },
+                "enable_multisplit": {
+                    "type": "boolean",
+                    "description": "Enable multi-split binning modes when binning with SemiBin2 or VAMB."
                 },
                 "minimum_contig_size": {
                     "type": "integer",
@@ -162,6 +164,11 @@
                     "default": true,
                     "description": "Enable binning with Comebin."
                 },
+                "enable_semibin2": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable binning with Semibin2 in single-sample mode."
+                },
                 "enable_vamb": {
                     "type": "boolean",
                     "default": true,
@@ -173,17 +180,8 @@
                 },
                 "centrifuger_db": {
                     "type": "string",
-                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically."
-                },
-                "enable_semibin2": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable binning with Semibin2."
-                },
-                "semibin_environment_model": {
-                    "type": "string",
-                    "default": "global",
-                    "description": "Pre-trained model to use with semibin for binning. Defaults to \"global\", see the SemiBin2 docs for full details: https://semibin.readthedocs.io/en/latest/usage/"
+                    "description": "Path to a centrifuger <prefix>.1.cfg file. The other files are detected automatically.",
+                    "format": "file-path"
                 },
                 "enable_metator": {
                     "type": "boolean",
@@ -230,26 +228,11 @@
                     "default": true,
                     "description": "Enable quality checks of genome bins."
                 },
-                "enable_checkm2": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable QC using CheckM2."
-                },
                 "checkm2_db": {
                     "type": "string",
                     "description": "Path to a local diamond database file for CheckM2. If not provided, the CheckM2 database will automatically be downloaded.",
                     "pattern": "^\\S+\\.dmnd$",
                     "format": "file-path"
-                },
-                "enable_trnascanse": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Predict tRNAs in an assembly using tRNAscan-SE."
-                },
-                "enable_rrna_prediction": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Predict ribosomal RNA (rRNA) genes in assemblies using Infernal and the included Rfam covariance models."
                 },
                 "rfam_rrna_cm": {
                     "type": "string",
@@ -271,11 +254,6 @@
                     "default": true,
                     "description": "Enable taxonomic classification of genome bins."
                 },
-                "enable_gtdbtk": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable taxonomic classification with GTDB-Tk."
-                },
                 "gtdbtk_db": {
                     "type": "string",
                     "description": "Path to a directory containing the GTDB-Tk database.",
@@ -292,12 +270,14 @@
                 "gtdb_bac120_metadata": {
                     "type": "string",
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/bac120_metadata_r232.tsv.gz",
-                    "description": "Path to the GTDB-Tk bac120 metadata file."
+                    "description": "Path to the GTDB-Tk bac120 metadata file.",
+                    "format": "file-path"
                 },
                 "gtdb_ar53_metadata": {
                     "type": "string",
                     "default": "https://data.ace.uq.edu.au/public/gtdb/data/releases/release232/232.0/ar53_metadata_r232.tsv.gz",
-                    "description": "Path to the GTDB-Tk ar53 metadata file."
+                    "description": "Path to the GTDB-Tk ar53 metadata file.",
+                    "format": "file-path"
                 },
                 "gtdbtk_min_completeness": {
                     "type": "integer",
@@ -308,24 +288,6 @@
                     "type": "integer",
                     "default": 10,
                     "description": "Maximum contamination allowed CheckM2 completeness for a bin to be classified by GTDB-Tk."
-                }
-            }
-        },
-        "summary_options": {
-            "title": "Summary options",
-            "type": "object",
-            "description": "General options relating to pipeline operation.",
-            "default": "",
-            "properties": {
-                "completeness_score": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Multiplier for completeness when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
-                },
-                "contamination_score": {
-                    "type": "number",
-                    "default": 0.5,
-                    "description": "Multiplier for contamination when scoring bins for the bin summary. Used in formula (compleneness_score * completeness - contamination_score * contamination)."
                 }
             }
         },
@@ -475,9 +437,6 @@
         },
         {
             "$ref": "#/$defs/bin_taxonomy_options"
-        },
-        {
-            "$ref": "#/$defs/summary_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

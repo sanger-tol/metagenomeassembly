@@ -1,32 +1,47 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
-name: "ASSEMBLY"
-description: Raw assembly of metagenomic long reads
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "assembly"
+description: |
+  Assemble long reads into contigs using metaMDBG or myloasm, or prepare provided assemblies.
+  Outputs unzipped FASTA assemblies and optionally concatenated assemblies for multi-sample binning.
 keywords:
   - assembly
-  - de novo
-  - long reads
-  - pacbio
-  - ont
+  - long-reads
+  - metaMDBG
+  - myloasm
 components:
+  - gunzip
   - metamdbg/asm
+  - myloasm
+  - concatenate_fasta
 input:
-  - ch_hifi_reads:
+  - ch_long_reads_assemblies:
+      description: |
+        Long reads for assembly or pre-assembled contigs.
+        Structure: [ val(meta), path(reads), path(assembly) ]
+  - val_assembler:
+      description: |
+        Assembler to use (metamdbg or myloasm).
+  - val_binners:
+      description: |
+        Binning configuration, used to determine if assemblies should be concatenated.
+output:
+  - assembly_output:
       type: file
       description: |
-        PacBio hifi reads for assembly.
-
-        Structure: [meta, [reads]]
-output:
+        Assembly metadata and files.
+      pattern: "*"
   - assemblies:
       type: file
       description: |
-        Final long read assemblies in FASTA format.
-
-        Structure: [meta, assembly]
-  - versions:
+        Unzipped assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - concatenated_assembly:
       type: file
-      description: File containing software versions
-      pattern: "versions.yml"
+      description: |
+        Concatenated assembly for multi-sample binning.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
 authors:
   - "@prototaxites"
 maintainers:

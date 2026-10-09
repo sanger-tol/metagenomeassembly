@@ -8,15 +8,14 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
-include { paramsSummaryMap          } from 'plugin/nf-schema'
-//include { samplesheetToList         } from 'plugin/nf-schema'
+include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
+include { paramsSummaryMap        } from 'plugin/nf-schema'
+include { samplesheetToList       } from 'plugin/nf-schema'
 //include { paramsHelp                } from 'plugin/nf-schema'
-include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
-include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
-include { READ_YAML                 } from '../../../modules/local/read_yaml'
+include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
+include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
+include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
+include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SUBWORKFLOW TO INITIALISE PIPELINE
@@ -36,13 +35,13 @@ workflow PIPELINE_INITIALISATION {
     show_hidden // boolean: Show hidden parameters in the help message
     val_genomad_db
     val_rfam_rrna_cm
+    val_centrifuger_db
     val_checkm2_db
     val_gtdbtk_db
-    val_centrifuger_db
+    val_gtdb_ar53_metadata
+    val_gtdb_bac120_metadata
 
     main:
-    ch_versions = channel.empty()
-
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
     //
@@ -96,7 +95,7 @@ workflow PIPELINE_INITIALISATION {
         before_text,
         after_text,
         command,
-        false
+        null,
     )
 
     //
@@ -109,43 +108,41 @@ workflow PIPELINE_INITIALISATION {
     //
     // MODULE: Create channels from input file provided through params.input
     //
-    READ_YAML(file(input))
+    ch_input = channel.fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
 
-    ch_pacbio_fasta = READ_YAML.out.pacbio_fasta
-        .map { meta, reads -> [meta, reads.collect { it -> file(it, checkIfExists: true) }] }
+    ch_long_reads_assembly = ch_input.filter { meta, _reads, _assembly ->
+        meta.platform in ['pacbio_hifi', 'oxford_nanopore']
+    }
 
-    // filter out results with empty lists to remove non-provided inputs
-    ch_hic_cram = READ_YAML.out.hic_cram
-        .filter { _meta, cram -> !cram.isEmpty() }
-        .map { meta, cram -> [meta, cram.collect { it -> file(it, checkIfExists: true) }] }
+    ch_hic_reads = ch_input
+        .filter { meta, _reads, _assembly -> meta.platform == 'illumina_hic' }
+        .map { meta, reads, _assembly -> [meta, reads] }
 
-    ch_assembly = READ_YAML.out.assembly
-        .filter { _meta, asm -> asm }
-        .map { meta, asm -> [meta, file(asm, checkIfExists: true)] }
+    // Create channels for input database files
 
     // Genomad database
     ch_genomad_db = channel.empty()
-    if(val_genomad_db) {
-        ch_genomad_db = channel.of(file(val_genomad_db, checkIfExists: true)).collect()
+    if (val_genomad_db) {
+        ch_genomad_db = channel.of([[id: "genomad"], file(val_genomad_db, checkIfExists: true)]).collect()
     }
 
+    // Centrifuger database
     ch_centrifuger_db = channel.empty()
-    if(val_centrifuger_db) {
+    if (val_centrifuger_db) {
         ch_centrifuger_db = channel.fromPath(val_centrifuger_db.replaceAll(/\.1\.cfr$/, '.*.cfr'), checkIfExists: true)
             .collect()
             .map { db -> [[id: "centrifuger"], db] }
     }
 
-    // Create channels for input database files
     // rRNA covariance models
     ch_rfam_rrna_cm = channel.empty()
-    if(val_rfam_rrna_cm) {
+    if (val_rfam_rrna_cm) {
         ch_rfam_rrna_cm = channel.of(file(val_rfam_rrna_cm, checkIfExists: true))
     }
 
     // CheckM2 database
     ch_checkm2_db = channel.empty()
-    if(val_checkm2_db) {
+    if (val_checkm2_db) {
         ch_checkm2_db = channel.of([[id: "checkm2"], file(val_checkm2_db, checkIfExists: true)]).collect()
     }
 
@@ -155,16 +152,26 @@ workflow PIPELINE_INITIALISATION {
         ch_gtdbtk_db = channel.of([[id: "gtdb"], file(params.gtdbtk_db, checkIfExists: true)]).collect()
     }
 
+    ch_gtdb_ar53_metadata = channel.empty()
+    if (val_gtdb_ar53_metadata) {
+        ch_gtdb_ar53_metadata = channel.of([[id: "gtdb_ar53"], file(val_gtdb_ar53_metadata, checkIfExists: true)]).collect()
+    }
+
+    ch_gtdb_bac120_metadata = channel.empty()
+    if (val_gtdb_bac120_metadata) {
+        ch_gtdb_bac120_metadata = channel.of([[id: "gtdb_bac120"], file(val_gtdb_bac120_metadata, checkIfExists: true)]).collect()
+    }
+
     emit:
-    pacbio_fasta        = ch_pacbio_fasta
-    assembly            = ch_assembly
-    hic_cram            = ch_hic_cram
-    genomad_db          = ch_genomad_db
-    rfam_rrna_cm        = ch_rfam_rrna_cm
-    checkm2_db          = ch_checkm2_db
-    gtdbtk_db           = ch_gtdbtk_db
-    centrifuger_db      = ch_centrifuger_db
-    versions            = ch_versions
+    long_reads_assembly  = ch_long_reads_assembly
+    hic_reads            = ch_hic_reads
+    genomad_db           = ch_genomad_db
+    rfam_rrna_cm         = ch_rfam_rrna_cm
+    centrifuger_db       = ch_centrifuger_db
+    checkm2_db           = ch_checkm2_db
+    gtdbtk_db            = ch_gtdbtk_db
+    gtdb_ar53_metadata   = ch_gtdb_ar53_metadata
+    gtdb_bac120_metadata = ch_gtdb_bac120_metadata
 }
 
 /*
@@ -201,11 +208,10 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
-
     }
 
     workflow.onError {
-        log.error "Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting"
+        log.error("Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting")
     }
 }
 
@@ -232,8 +238,7 @@ def toolCitationText() {
 def toolBibliographyText() {
     // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
     // Uncomment function in methodsDescriptionText to render in MultiQC report
-    def reference_text = [
-    ].join(' ').trim()
+    def reference_text = [].join(' ').trim()
 
     return reference_text
 }
