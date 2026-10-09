@@ -117,7 +117,7 @@ graph LR
     	_hidden_bins_in -->|assemblies| circular
         _hidden_bins_in -->|assemblies,mapped_reads| metabat2
 
-        circular -->|assemblies,bins| metabat2
+        circular -->|bins| metabat2
         metabat2 -->|assemblies,mapped_reads,bins| maxbin2
         maxbin2 -->|assemblies,mapped_reads,bins| comebin
         comebin -->|assemblies,mapped_reads,bins| semibin2
