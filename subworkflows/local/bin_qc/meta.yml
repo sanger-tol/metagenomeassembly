@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "bin_qc"
+description: |
+  Quality assessment of genomic bins including completeness/contamination, coverage,
+  and annotation of MiMAG-required genes (rRNA, tRNA).
+keywords:
+  - binning
+  - quality-control
+  - checkm2
+  - coverage
+  - rRNA
+  - tRNA
+components:
+  - seqkit/stats
+  - count_circles
+  - coverm/genome
+  - checkm2/predict
+  - infernal/cmsearch
+  - trnascanse
+  - binsummaries/rrna
+  - binsummaries/trna
+input:
+  - ch_assemblies:
+      description: |
+        Full assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_bin_sets:
+      description: |
+        Binned FASTA files.
+        Structure: [ val(meta), path(bins) ]
+  - ch_contig2bin:
+      description: |
+        Contig to bin mapping files.
+        Structure: [ val(meta), path(tsv) ]
+  - ch_circular_list:
+      description: |
+        Circular contig lists.
+        Structure: [ val(meta), path(list) ]
+  - ch_mapped_bam:
+      description: |
+        Mapped BAM files.
+        Structure: [ val(meta), path(bam) ]
+  - val_enable_checkm2:
+      description: |
+        Boolean. Enable CheckM2 completeness/contamination estimation.
+  - ch_checkm2_db:
+      description: |
+        CheckM2 database.
+  - ch_rfam_rrna_cm:
+      description: |
+        Rfam rRNA covariance models.
+  - val_rrna_prediction:
+      description: |
+        Boolean. Enable rRNA prediction.
+  - val_enable_trnascanse:
+      description: |
+        Boolean. Enable tRNA prediction.
+output:
+  - stats:
+      type: file
+      description: |
+        Bin statistics.
+      pattern: "*.stats"
+  - circular_counts:
+      type: file
+      description: |
+        Circular contig counts per bin.
+  - coverage:
+      type: file
+      description: |
+        Bin coverage values.
+  - checkm2_tsv:
+      type: file
+      description: |
+        CheckM2 completeness/contamination summary.
+      pattern: "*.tsv"
+  - trnascan_summary:
+      type: file
+      description: |
+        tRNA summary per bin.
+      pattern: "*.tsv"
+  - rrna_summary:
+      type: file
+      description: |
+        rRNA summary per bin.
+      pattern: "*.tsv"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

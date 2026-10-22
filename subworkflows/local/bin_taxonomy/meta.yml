@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "bin_taxonomy"
+description: |
+  Taxonomic classification of bins using GTDB-Tk with optional filtering by completeness/contamination.
+keywords:
+  - taxonomy
+  - gtdbtk
+  - classification
+components:
+  - gtdbtk/classifywf
+  - gtdbtk/gtdbtoncbimajorityvote
+  - csvtk/concat
+  - csvtk/join
+input:
+  - bin_sets:
+      description: |
+        Binned FASTA files.
+        Structure: [ val(meta), path(bins) ]
+  - checkm2_summary:
+      description: |
+        CheckM2 summary TSV for filtering by completeness/contamination.
+        Structure: [ val(meta), path(tsv) ]
+  - gtdbtk_db:
+      description: |
+        GTDB-Tk database.
+  - val_enable_gtdbtk:
+      description: |
+        Boolean. Enable GTDB-Tk classification.
+  - ch_gtdb_ar53_metadata:
+      description: |
+        GTDB AR53 metadata.
+  - ch_gtdb_bac120_metadata:
+      description: |
+        GTDB BAC120 metadata.
+output:
+  - gtdb_summary:
+      type: file
+      description: |
+        Merged GTDB-Tk and NCBI taxonomy summary.
+        Structure: [ val(meta), path(tsv) ]
+      pattern: "*.tsv"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

@@ -1,0 +1,69 @@
+Changes in component 'nf-core/myloasm'
+'modules/nf-core/myloasm/meta.yml' is unchanged
+'modules/nf-core/myloasm/environment.yml' is unchanged
+Changes in 'myloasm/main.nf':
+--- modules/nf-core/myloasm/main.nf
++++ modules/nf-core/myloasm/main.nf
+@@ -11,13 +11,13 @@
+     tuple val(meta), path(reads)
+ 
+     output:
+-    tuple val(meta), path("${prefix}"), emit: results
+-    tuple val(meta), path("${prefix}/${prefix}.assembly_primary.fa.gz"), emit: contigs
+-    tuple val(meta), path("${prefix}/${prefix}.final_contig_graph.gfa.gz"), emit: gfa
+-    tuple val(meta), path("${prefix}/alternate_assemblies/${prefix}.assembly_alternate.fa.gz"), emit: contigs_alt
+-    tuple val(meta), path("${prefix}/alternate_assemblies/${prefix}.duplicated_contigs.fa.gz"), emit: contigs_dup
+-    tuple val(meta), path("${prefix}/3-mapping/${prefix}.map_to_unitigs.paf.gz"), emit: mapping
+-    tuple val(meta), path("${prefix}/*.log"), emit: log
++    tuple val(meta), path("*"), emit: results
++    tuple val(meta), path("${prefix}.assembly_primary.fa.gz"), emit: contigs
++    tuple val(meta), path("${prefix}.final_contig_graph.gfa.gz"), emit: gfa
++    tuple val(meta), path("alternate_assemblies/${prefix}.assembly_alternate.fa.gz"), emit: contigs_alt
++    tuple val(meta), path("alternate_assemblies/${prefix}.duplicated_contigs.fa.gz"), emit: contigs_dup
++    tuple val(meta), path("3-mapping/${prefix}.map_to_unitigs.paf.gz"), emit: mapping
++    tuple val(meta), path("*.log"), emit: log
+     tuple val("${task.process}"), val('myloasm'), eval("myloasm --version | sed 's/.* //'"), emit: versions_myloasm, topic: versions
+ 
+     when:
+@@ -29,11 +29,11 @@
+     """
+     myloasm \\
+         ${reads} \\
+-        -o ${prefix} \\
++        -o . \\
+         -t ${task.cpus} \\
+         ${args}
+ 
+-    find "${prefix}" \\( -name "*.fa" -o -name "*.gfa" -o -name "*.edges" -o -name "*.paf.gz" \\) -type f | while read file; do
++    find . \\( -name "*.fa" -o -name "*.gfa" -o -name "*.edges" -o -name "*.paf.gz" \\) -type f | while read file; do
+         dirname=\$(dirname "\${file}")
+         basename=\$(basename "\${file}")
+         mv "\$file" "\${dirname}/${prefix}.\${basename}"
+@@ -47,13 +47,13 @@
+     """
+     echo ${args}
+ 
+-    mkdir -p ${prefix}/alternate_assemblies
+-    mkdir -p ${prefix}/3-mapping
+-    echo "" | gzip > ${prefix}/${prefix}.assembly_primary.fa.gz
+-    echo "" | gzip > ${prefix}/${prefix}.final_contig_graph.gfa.gz
+-    echo "" | gzip > ${prefix}/alternate_assemblies/${prefix}.assembly_alternate.fa.gz
+-    echo "" | gzip > ${prefix}/alternate_assemblies/${prefix}.duplicated_contigs.fa.gz
+-    echo "" | gzip > ${prefix}/3-mapping/${prefix}.map_to_unitigs.paf.gz
+-    touch ${prefix}/myloasm_1.log
++    mkdir -p alternate_assemblies
++    mkdir -p 3-mapping
++    echo "" | gzip > ${prefix}.assembly_primary.fa.gz
++    echo "" | gzip > ${prefix}.final_contig_graph.gfa.gz
++    echo "" | gzip > alternate_assemblies/${prefix}.assembly_alternate.fa.gz
++    echo "" | gzip > alternate_assemblies/${prefix}.duplicated_contigs.fa.gz
++    echo "" | gzip > 3-mapping/${prefix}.map_to_unitigs.paf.gz
++    touch myloasm_1.log
+     """
+ }
+
+'modules/nf-core/myloasm/.conda-lock/linux_amd64-bd-154a360acd2dca07_1.txt' is unchanged
+'modules/nf-core/myloasm/tests/nextflow.config' is unchanged
+'modules/nf-core/myloasm/tests/main.nf.test' is unchanged
+'modules/nf-core/myloasm/tests/main.nf.test.snap' is unchanged
+************************************************************

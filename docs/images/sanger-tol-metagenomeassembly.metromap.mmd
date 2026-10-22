@@ -1,0 +1,183 @@
+%%metro title: sanger-tol/metagenomeassembly
+%%metro line_order: span
+%%metro diamond_style: symmetric
+%%metro line_spread: bundle
+%%metro mode: light
+%%metro style: nfcore
+%%metro logo: sanger-tol-metagenomeassembly_logo_light.png | sanger-tol-metagenomeassembly_logo_dark.png
+
+%% Metro line definitions
+%%metro line: long_reads | Long reads | #3d95fd
+%%metro line: hic_reads | Hi-C reads | #FA6863
+%%metro line: mapped_reads | Mapped reads | #FF0000
+%%metro line: assemblies | Assembly | #24B064
+%%metro line: bins | Bins | #E81793
+
+%% File stations
+%%metro files: input_long_reads | FASTX | Long reads
+%%metro files: input_hic_reads | CRAM | Hi-C reads
+%%metro files: output_summaries | TSV | Summary TSVs
+
+%% Station styles
+%%metro marker: genomad | square, open
+
+%%metro marker: bwamem2 | square, open
+
+%%metro marker: circular | square, open
+%%metro marker: metabat2 | square, open
+%%metro marker: maxbin2 | square, open
+%%metro marker: metator | square, open
+%%metro marker: vamb | square, open
+%%metro marker: semibin2 | square, open
+%%metro marker: comebin | square, open
+
+%%metro marker: dastool | square, open
+%%metro marker: binette | square, open
+
+%%metro marker: gtdbtk | square, open
+%%metro marker: gtdbtoncbi | square, open
+
+%% Grid layout options
+%%metro grid: assembly | 0,0
+%%metro grid: assembly_analysis | 1,0
+%%metro grid: preparation | 2,0
+%%metro grid: binning | 3,0
+%%metro grid: refinement | 3,1
+%%metro grid: binqc | 2,1
+%%metro grid: taxonomy | 1,1
+%%metro grid: summary | 0,1
+
+%% legend options
+%%metro legend: br
+%%metro marker_legend: circle, solid | Mandatory
+%%metro marker_legend: square, solid | Optional
+
+graph LR
+
+    subgraph assembly [Assembly]
+        input_long_reads[ ]
+        metamdbg[metaMDBG]
+        myloasm[myloasm]
+        _hidden_asm_out[ ]
+
+        input_long_reads -->|long_reads| metamdbg
+        input_long_reads -->|long_reads| myloasm
+
+        metamdbg -->|assemblies,long_reads| _hidden_asm_out
+        myloasm -->|assemblies,long_reads| _hidden_asm_out
+    end
+
+    subgraph assembly_analysis [Assembly analysis]
+	    gfastats [GFAStats]
+    	tiara [tiara]
+        trnascanse [tRNAScan-SE]
+        infernal [Infernal (rRNA)]
+        genomad [Genomad]
+
+        gfastats --> |assemblies| tiara
+        tiara --> |assemblies| trnascanse
+        trnascanse --> |assemblies| infernal
+        infernal --> |assemblies| genomad
+    end
+
+    subgraph preparation [Binning preparation]
+        %%metro entry: left | assemblies,long_reads
+        %%metro exit: right | assemblies,mapped_reads
+
+        input_hic_reads[ ]
+        filter [Filter assembly]
+        _hidden_map[ ]
+        minimap2[minimap2]
+        bwamem2[bwa-mem2]
+        coverm[coverm]
+
+        input_hic_reads -->|hic_reads| bwamem2
+        _hidden_map -->|assemblies| filter
+        filter -->|long_reads,assemblies| minimap2
+        filter -->|assemblies| bwamem2
+        minimap2 -->|assemblies,mapped_reads| coverm
+
+    end
+
+    subgraph binning [Binning]
+        %%metro entry: left | assemblies,mapped_reads
+        %%metro exit: right | bins
+        %%metro direction: LR
+
+		_hidden_bins_in[ ]
+        circular[Extract circular MAGs]
+        metabat2[MetaBat2]
+        maxbin2[MaxBin2]
+        comebin[ComeBin]
+        semibin2[SemiBin2]
+        vamb[VAMB/taxVAMB]
+        metator[MetaTOR]
+        _hidden_bins_out[ ]
+
+    	_hidden_bins_in -->|assemblies| circular
+        _hidden_bins_in -->|assemblies,mapped_reads| metabat2
+
+        circular -->|bins| metabat2
+        metabat2 -->|assemblies,mapped_reads,bins| maxbin2
+        maxbin2 -->|assemblies,mapped_reads,bins| comebin
+        comebin -->|assemblies,mapped_reads,bins| semibin2
+        semibin2 -->|assemblies,mapped_reads,bins| vamb
+        vamb -->|assemblies,mapped_reads,bins| metator
+    end
+
+    subgraph refinement [Bin refinement]
+        %%metro entry: right | bins
+        %%metro exit: left | bins
+    	%%metro direction: RL
+        dastool[DAS_Tool]
+        binette[Binette]
+
+        dastool -->|bins| binette
+    end
+
+    subgraph binqc [Quality assessment]
+        %%metro entry: right | bins
+        %%metro exit: left | bins
+        %%metro direction: RL
+
+        covermgenome[coverm genome]
+        checkm2[CheckM2]
+
+        covermgenome -->|bins| checkm2
+    end
+
+    subgraph taxonomy [Bin taxonomy]
+        %%metro entry: right | bins
+        %%metro exit: left | bins
+        %%metro direction: RL
+
+        gtdbtk[GTDB-Tk]
+        gtdbtoncbi[GTDB to NCBI]
+
+        gtdbtk -->|bins| gtdbtoncbi
+    end
+
+    subgraph summary [Bin summary]
+        %%metro entry: right | bins
+        %%metro direction: RL
+
+        metabintools[metabintools]
+        output_summaries [ ]
+
+        metabintools -->|bins| output_summaries
+
+    end
+
+    _hidden_asm_out -->|long_reads| minimap2
+    _hidden_asm_out -->|assemblies| gfastats
+
+    genomad -->|assemblies| _hidden_map
+
+    coverm -->|assemblies,mapped_reads| _hidden_bins_in
+    bwamem2 -->|assemblies,mapped_reads| _hidden_bins_in
+
+	metator --> |bins| dastool
+    binette --> |bins| covermgenome
+
+    checkm2 -->|bins| gtdbtk
+    gtdbtoncbi -->|bins| metabintools

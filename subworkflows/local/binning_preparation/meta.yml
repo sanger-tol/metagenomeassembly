@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "binning_preparation"
+description: |
+  Prepare assemblies for binning including filtering, mapping long reads and Hi-C data,
+  and calculating per-contig coverage.
+keywords:
+  - binning
+  - preparation
+  - filtering
+  - mapping
+  - coverage
+components:
+  - filter_assembly
+  - coverm/contig
+  - long_read_mapping
+  - hic_mapping
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_concatenated_assemblies:
+      description: |
+        Concatenated assembly for multi-sample binning.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_long_reads:
+      description: |
+        Long reads for mapping.
+        Structure: [ val(meta), path(reads) ]
+  - ch_hic_reads:
+      description: |
+        Hi-C reads for mapping.
+        Structure: [ val(meta), path(reads) ]
+  - ch_tiara_classifications:
+      description: |
+        Optional TIARA domain classifications for filtering.
+        Structure: [ val(meta), path(tsv) ]
+  - val_binners:
+      description: |
+        Binning configuration.
+  - val_mapping_options:
+      description: |
+        Mapping configuration options.
+output:
+  - filtered_assembly:
+      type: file
+      description: |
+        Filtered assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - circles_fasta:
+      type: file
+      description: |
+        Circular contigs extracted during filtering.
+      pattern: "*.fasta"
+  - circles_list:
+      type: file
+      description: |
+        List of circular contig names.
+  - full_bam:
+      type: file
+      description: |
+        Complete long-read mapped BAM files.
+      pattern: "*.bam"
+  - filtered_bam:
+      type: file
+      description: |
+        Filtered long-read mapped BAM files.
+      pattern: "*.bam"
+  - hic_bam:
+      type: file
+      description: |
+        Hi-C mapped BAM files.
+      pattern: "*.bam"
+  - hic_pairs:
+      type: file
+      description: |
+        Hi-C pairs format files.
+      pattern: "*.pairs"
+  - depths:
+      type: file
+      description: |
+        Per-contig coverage/depth files.
+  - binning_preparation_output:
+      type: file
+      description: |
+        Combined preparation results and metadata.
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

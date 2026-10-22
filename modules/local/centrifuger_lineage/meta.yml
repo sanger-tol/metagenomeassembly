@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "centrifuger_lineage"
+description: Assign taxonomic lineages to contigs using Centrifuger
+keywords:
+  - metagenomics
+  - taxonomy
+  - classification
+  - centrifuger
+tools:
+  - "centrifuger":
+      description: "Centrifuger: rapid and sensitive classification of nucleotide sequences"
+      homepage: "https://github.com/mourisl/centrifuger"
+      tool_dev_url: "https://github.com/mourisl/centrifuger"
+      licence: ["MIT"]
+  - "csvtk":
+      description: "A command-line toolkit for operating on CSV/TSV data files"
+      homepage: "https://bioinf.shenwei.me/csvtk/"
+      tool_dev_url: "https://github.com/shenwei356/csvtk"
+      licence: ["MIT"]
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - classifications:
+        type: file
+        description: "Centrifuger classification results"
+        pattern: "*.tsv"
+  - - meta2:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. `[ id:'ref1' ]`
+    - db:
+        type: directory
+        description: "Centrifuger database directory"
+output:
+  lineage:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.lineage.tsv":
+          type: file
+          description: Tab-delimited file containing contig lineage assignments
+          pattern: "*.lineage.tsv"
+  versions_centrigfuger:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - centrifuger:
+          type: string
+          description: The tool name
+      - 'centrifuger -v 2>&1 | sed "s/Centrifuger v//"':
+          type: string
+          description: Command used to collect the version
+  versions_csvtk:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - csvtk:
+          type: string
+          description: The tool name
+      - 'csvtk version | sed -e "s/csvtk v//g"':
+          type: string
+          description: Command used to collect the version
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - centrifuger:
+          type: string
+          description: The tool name
+      - 'centrifuger -v 2>&1 | sed "s/Centrifuger v//"':
+          type: string
+          description: Command used to collect the version
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - csvtk:
+          type: string
+          description: The tool name
+      - 'csvtk version | sed -e "s/csvtk v//g"':
+          type: string
+          description: Command used to collect the version
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"
