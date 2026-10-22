@@ -44,12 +44,10 @@ lint:
     - validation.summary.beforeText
     - validation.summary.afterText
     - config_defaults:
-        - params.hmm_gtdb_pfam
-        - params.hmm_gtdb_tigrfam
         - params.rfam_rrna_cm
   readme:
     - nextflow_badge
-nf_core_version: 4.1.0
+nf_core_version: 4.2.0
 repository_type: pipeline
 template:
   author: Jim Downie, Will Eagles, Noah Gettle
@@ -63,4 +61,4 @@ template:
     - igenomes
     - fastqc
     - multiqc
-  version: 1.5.0dev
+  version: 2.0.0
