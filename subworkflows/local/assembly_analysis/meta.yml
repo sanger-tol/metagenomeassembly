@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "assembly_analysis"
+description: |
+  Calculate assembly statistics and perform optional taxonomic/viral classification.
+  Includes TIARA domain classification and Genomad viral/plasmid detection.
+keywords:
+  - assembly
+  - statistics
+  - taxonomy
+  - tiara
+  - genomad
+components:
+  - seqkit/stats
+  - tiara/tiara
+  - genomad/endtoend
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_genomad_db:
+      description: |
+        Genomad database directory.
+  - val_enable_tiara:
+      description: |
+        Boolean. Enable TIARA classification.
+  - val_enable_genomad:
+      description: |
+        Boolean. Enable Genomad analysis.
+output:
+  - assembly_statistics:
+      type: file
+      description: |
+        seqkit stats output.
+      pattern: "*.stats"
+  - tiara_classifications:
+      type: file
+      description: |
+        TIARA domain classifications.
+      pattern: "*.tiara"
+  - genomad_results:
+      type: directory
+      description: |
+        Genomad output directory.
+  - assembly_analysis_output:
+      type: file
+      description: |
+        Combined analysis results.
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

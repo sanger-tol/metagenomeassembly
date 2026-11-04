@@ -1,0 +1,116 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "filter_assembly"
+description: Filter assembled contigs by taxonomy classification or other criteria
+keywords:
+  - metagenomics
+  - assembly
+  - taxonomy
+  - filtering
+tools:
+  - "filter_assembly.py":
+      description: "Python script to filter assembly contigs by taxonomy"
+      homepage: "https://github.com/wwood/CoverM"
+      licence: ["GPL v3"]
+
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - fasta:
+        type: file
+        description: "FASTA file containing assembled contigs"
+        pattern: "*.{fasta,fa,fasta.gz,fa.gz}"
+  - - meta2:
+        type: map
+        description: |
+          Groovy Map containing taxonomy information
+          e.g. `[ id:'sample1' ]`
+    - tiara_classifications:
+        type: file
+        description: "Taxonomy classification file(s) from TIARA"
+        pattern: "*.tsv"
+        optional: true
+    - tiara_ids:
+        type: string
+        description: "TIARA classification IDs to filter by"
+        optional: true
+
+output:
+  filtered:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.filtered.fasta":
+          type: file
+          description: Filtered FASTA file
+          pattern: "*.filtered.fasta"
+
+  circles_fasta:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.circles.fasta.gz":
+          type: file
+          description: Gzipped FASTA file containing circular contigs
+          pattern: "*.circles.fasta.gz"
+          optional: true
+
+  circles_list:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.circles.list":
+          type: file
+          description: List of circular contig identifiers
+          pattern: "*.circles.list"
+          optional: true
+
+  exclude_list:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.exclude.list":
+          type: file
+          description: List of excluded contigs
+          pattern: "*.exclude.list"
+
+  include_list:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.include.list":
+          type: file
+          description: List of included contigs
+          pattern: "*.include.list"
+
+  versions:
+    - - ${task.process}:
+          type: string
+      - filter_assembly.py:
+          type: string
+      - "filter_assembly.py --version":
+          type: string
+
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+      - filter_assembly.py:
+          type: string
+
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

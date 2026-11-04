@@ -1,0 +1,10 @@
+- id: Sample1
+  platform: "pacbio_hifi"
+  reads:
+    - /path/to/fasta.gz
+  assembly: /path/to/assembly.fasta.gz
+  assembler: metamdbg
+- id: Sample2
+  platform: "pacbio_hifi"
+  reads:
+    - /path/to/hic.cram

@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "long_read_mapping"
+description: |
+  Map long reads to assemblies with optional filtering of specified contigs.
+keywords:
+  - mapping
+  - long-reads
+  - pacbio
+  - nanopore
+components:
+  - fastx_map_long_reads
+  - filter_bam
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_long_reads:
+      description: |
+        Long reads for mapping.
+        Structure: [ val(meta), path(reads) ]
+  - ch_filter_list:
+      description: |
+        Optional filter list of contigs to exclude from output.
+      pattern: "*.txt"
+  - val_mapping_options:
+      description: |
+        Mapping configuration (reads per chunk, etc).
+output:
+  - bam:
+      type: file
+      description: |
+        Complete long-read mapped BAM files.
+        Structure: [ val(meta), path(bam) ]
+      pattern: "*.bam"
+  - filtered_bam:
+      type: file
+      description: |
+        Filtered long-read mapped BAM files with excluded contigs removed.
+        Structure: [ val(meta), path(bam) ]
+      pattern: "*.bam"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

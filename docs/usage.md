@@ -4,58 +4,93 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
-## Samplesheet input
-
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+`sanger-tol/metagenomeassembly` is a pipeline for the assembly and binning of metagenomic long reads. Input to the pipeline is passed via the `--input` parameter, which takes a YAML or JSON file that describes the samples and their data for processing.
 
 ```bash
 --input '[path to samplesheet file]'
 ```
 
-### Multiple runs of the same sample
-
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
 ### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+Each sample is represented in a separate list element in the input file. The ID field identifies the sample, and the platform field specifies the sequencing technology used to generate the reads, and can be one of `pacbio_hifi`, `oxford_nanopore`, or `illumina_hic`. The reads field is a list of paths to the read files for that sample. Illumina Hi-C data must be provided in unaligned CRAM format - see below for details if you have FASTQ files.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+Sample IDs must be unique for PacBio and ONT entries; IDs for Illumina Hi-C data must match a PacBio or ONT sample ID to be used for Hi-C binning.
 
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+```yaml title="input.yaml"
+- id: SampleName1
+  platform: pacbio_hifi
+  reads:
+    - /path/to/pacbio/file1.fasta.gz
+    - /path/to/pacbio/file2.fasta.gz
+- id: SampleName1
+  platform: illumina_hic
+  reads:
+    - /path/to/pacbio/file1.fasta.gz
+    - /path/to/pacbio/file2.fasta.gz
+- id: SampleName2
+  platform: oxford_nanopore
+  reads:
+    - /path/to/pacbio/file1.fastq.gz
+    - /path/to/pacbio/file2.fastq.gz
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+If you have one, it is possible to provide a pre-computed assembly for a sample to skip the assembly stage. Simply add the `assembly` and `assembler` fields as follows:
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+```yaml
+- id: SampleName1
+  platform: pacbio_hifi
+  reads:
+    - /path/to/pacbio/file1.fasta.gz
+    - /path/to/pacbio/file2.fasta.gz
+  assembly: /path/to/contigs.fasta.gz
+  assembler: metamdbg
+```
+
+Note that some assembler-specific features of the pipeline (such as identification of circular contigs) may not operate if providing contigs from an unsupported assembler.
+
+An [example samplesheet](../assets/example_input.yaml) has been provided with the pipeline.
+
+## Tuning the pipeline
+
+### Required databases
+
+The pipeline requires a number of databases to be provided for a full run.
+
+- [CheckM2](https://zenodo.org/records/14897628) - required to assess bin completeness and contamination. Supply the extracted `.dmnd` file to the parameter `--checkm2_db`.
+- [GTDB-Tk](https://data.gtdb.aau.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/) - required for taxonomic classification of bins. Supply the extracted directory to the parmater `--gtdbtk_db`.
+- [Genomad](https://zenodo.org/records/14886553) - required for plasmid detection. Supply the extracted directory to the parameter `--genomad_db`.
+- [Centrifuger](https://github.com/mourisl/centrifuger) - for binning with TaxVamb, you will need to supply a Centrifuger DB (`.cfg` file) to the parameter `--centrifuger_db`. These can be downloaded with the `centrifuger-download` command from the Centrifuger repository.
+
+### Filtering the assemblies
+
+Each produced assembly can be filtered prior to binning. Specifically, contigs can be length-filtered with the following parameters: `--minimum_contig_size` and `--maximum_contig_size`. Contigs outside of this range will be removed from the assembly prior to binning. Contigs can also be filtered by domain classification from Tiara, such as to remove all Eukaryotic contigs. To do this, supply a comma-separated list of tiara domains (`eukarya`,`prokarya`,`bacteria`,`archaea`,`organelle`, and `unknown`) to `--tiara_exclude_classifications`.
+
+### Selecting binners
+
+The pipeline also includes a large array of binning methods, not all of which may be desirable to run. The parameters to control which binning methods are run are as follows:
+
+- `--extract_circular_contigs` - Extract circular genomes from the assembly prior to binning as individual genomes.
+- `--enable_metabat2` - Enable binning with MetaBAT2.
+- `--enable_maxbin2` - Enable binning with MaxBin2.
+- `--enable_comebin` - Enable binning with ComeBIN.
+- `--enable_semibin2` - Enable binning with SemiBin2.
+- `--enable_vamb` - Enable binning with VAMB.
+- `--enable_taxvamb` - Enable binning with TaxVAMB. Requires a Centrifuger DB to be provided via `--centrifuger_db`.
+- `--enable_metator` - Enable binning with MetaTOR. Requires Hi-C data for at least one sample to be provided.
+
+If multiple samples are provided, the pipeline can also be run in "multisplit mode" via `--enable_multisplit`. In this case, if binning with VAMB or SemiBin2, all assemblies are concatenated and reads from all samples are mapped to the concatenated assembly. The concatenated assembly is then binned and the bins are separated back into their respective samples.
+
+The pipeline also includes two approaches for ensemble bin refinement:
+
+`--enable_dastool` - Enable bin refinement with DASTool. Requires at least two binning methods to be enabled.
+`--enable_binette` - Enable bin refinement with Binette. Requires at least two binning methods to be enabled.
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run sanger-tol/metagenomeassembly --input ./samplesheet.csv --outdir ./results  -profile docker
+nextflow run sanger-tol/metagenomeassembly --input ./input.yaml --outdir ./results  -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -91,6 +126,16 @@ outdir: './results/'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+## Additional setup procedures
+
+### CRAM files for Hi-C and Illumina input data
+
+Hi-C input data must currently be provided in unaligned CRAM format. If you have reads in FASTQ format, you can convert these to CRAM with the following command:
+
+```bash
+samtools import -@8 -r ID:{prefix} -r CN:{hic-kit} -r PU:{prefix} -r SM:{sample_name} {prefix}_R1.fastq.gz {prefix}_R2.fastq.gz -o {prefix}.cram
+```
 
 ### Updating the pipeline
 

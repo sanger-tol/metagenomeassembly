@@ -1,0 +1,76 @@
+process TRNASCANSE {
+    tag "${meta.id}"
+    label "process_medium"
+
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/e6/e67fae15e207274f7007314b675884186eec7d195c82db002cb04cd218f20b8f/data'
+        : 'community.wave.seqera.io/library/trnascan-se_gzip_findutils:15c0475b13b49f03'}"
+
+    input:
+    tuple val(meta), path(fasta)
+    val write_stats
+    val write_fasta
+    val write_gff
+    val write_bed
+
+    output:
+    tuple val(meta), path("*.tsv"), emit: tsv
+    tuple val(meta), path("*.log"), emit: log
+    tuple val(meta), path("*.stats"), emit: stats
+    tuple val(meta), path("*.fasta"), emit: fasta, optional: true
+    tuple val(meta), path("*.gff"), emit: gff, optional: true
+    tuple val(meta), path("*.bed"), emit: bed, optional: true
+    tuple val("${task.process}"), val('tRNAscan-SE'), eval("tRNAscan-SE |& sed '2!d;s/tRNAscan-SE //;s/ .*//'"), topic: versions, emit: versions_trnascanse
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def input = fasta.toString() - ~/\.gz$/
+    def unzip = fasta.getExtension() == "gz" ? "gunzip -c ${fasta} > ${input}" : ""
+    def cleanup = fasta.getExtension() == "gz" ? "rm ${input}" : ""
+    def stats_output = write_stats ? "--stats ${prefix}.stats" : ""
+    def fasta_output = write_fasta ? "--fasta ${prefix}.fasta" : ""
+    def gff_output = write_gff ? "--gff ${prefix}.gff" : ""
+    def bed_output = write_bed ? "--bed ${prefix}.bed" : ""
+    """
+    ${unzip}
+
+    ## larger genomes can fill up the limited temp space in the singularity container
+    ## expected location of the default config file is with the exectuable
+    ## copy this and modify to use the working dir as the temp directory
+    conf=\$(which tRNAscan-SE).conf
+    cp \${conf} trnascan.conf
+    sed -i s#/tmp#.#g trnascan.conf
+
+    tRNAscan-SE \\
+        --thread ${task.cpus} \\
+        -c trnascan.conf \\
+        ${args} \\
+        -o ${prefix}.tsv \\
+        -l ${prefix}.log \\
+        ${stats_output} \\
+        ${fasta_output} \\
+        ${gff_output} \\
+        ${bed_output} \\
+        ${input}
+
+    find . -name "*.fasta" -exec gzip {} \\;
+
+    ${cleanup}
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.tsv
+    touch ${prefix}.log
+    touch ${prefix}.stats
+    echo "" | gzip > ${prefix}.fasta.gz
+    touch ${prefix}.gff
+    touch ${prefix}.bed
+    """
+}
