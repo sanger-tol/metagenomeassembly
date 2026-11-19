@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "binning"
+description: |
+  Metagenomic binning of assemblies using one or more binning algorithms.
+  Available binners: circular, metabat2, maxbin2, comebin, semibin2, vamb, taxvamb, metator.
+keywords:
+  - binning
+  - metabat2
+  - maxbin2
+  - comebin
+  - semibin2
+  - vamb
+  - metator
+components:
+  - metabat2/metabat2
+  - maxbin2
+  - comebin/runcomebin
+  - semibin/singleeasybin
+  - semibin/multieasybin
+  - vamb/bin
+  - metator/pipeline
+  - seqkit/split2
+  - binning_vamb
+  - binning_vamb (as taxvamb)
+  - create_contig2bin
+  - convert_depths
+  - fix_bin_contigs
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_circular_contigs:
+      description: |
+        Circular contigs as separate bins.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_depths:
+      description: |
+        Contig depth/coverage TSV files.
+        Structure: [ val(meta), path(tsv) ]
+  - ch_bams:
+      description: |
+        Mapped BAM files.
+        Structure: [ val(meta), path(bam) ]
+  - ch_hic_pairs:
+      description: |
+        Hi-C pairs files.
+        Structure: [ val(meta), path(pairs) ]
+  - ch_centrifuger_db:
+      description: |
+        Centrifuger database (for taxvamb).
+  - val_binners:
+      description: |
+        Configuration specifying which binners to run.
+output:
+  - bins:
+      type: file
+      description: |
+        Binned FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - contig2bin:
+      type: file
+      description: |
+        Contig to bin mapping files.
+        Structure: [ val(meta), path(tsv) ]
+      pattern: "*.tsv"
+  - binning_output:
+      type: file
+      description: |
+        Combined binning results and metadata.
+  - centrifuger:
+      type: file
+      description: |
+        Centrifuger classification output (if taxvamb enabled).
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"

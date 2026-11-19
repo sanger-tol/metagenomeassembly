@@ -4,13 +4,191 @@
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
-                "nf-core": {}
+                "nf-core": {
+                    "binette": {
+                        "branch": "master",
+                        "git_sha": "37067b1a7b2fbac52c87b937556cd4df3f31c2e4",
+                        "installed_by": ["modules"]
+                    },
+                    "bwamem2/index": {
+                        "branch": "master",
+                        "git_sha": "62ce917fd775aaef732eb82019de069c765adfd3",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "centrifuger/centrifuger": {
+                        "branch": "master",
+                        "git_sha": "fd621e0378a3692aa31943d0d4bd49c435b9efcf",
+                        "installed_by": ["modules"]
+                    },
+                    "checkm2/predict": {
+                        "branch": "master",
+                        "git_sha": "deb8254027c27a9e505befc68ab449db1f3dadef",
+                        "installed_by": ["modules"]
+                    },
+                    "comebin/runcomebin": {
+                        "branch": "master",
+                        "git_sha": "974db4cfc4dfe066c896a3a1af35dfa37eeec7a7",
+                        "installed_by": ["modules"]
+                    },
+                    "coverm/contig": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
+                    "coverm/genome": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
+                    "csvtk/concat": {
+                        "branch": "master",
+                        "git_sha": "2f74af306499775ab48db1ed4077d2fa5aecf9c4",
+                        "installed_by": ["modules"]
+                    },
+                    "csvtk/join": {
+                        "branch": "master",
+                        "git_sha": "b5803eb47964c7fa2c455b6c1e60d408ead4f2b3",
+                        "installed_by": ["modules"]
+                    },
+                    "dastool/dastool": {
+                        "branch": "master",
+                        "git_sha": "5be91832f7c6a2d229f900a239d9532c9ae133c7",
+                        "installed_by": ["modules"]
+                    },
+                    "genomad/endtoend": {
+                        "branch": "master",
+                        "git_sha": "781f2625386fe0bf2f337c7b99f56e618c59fc99",
+                        "installed_by": ["modules"]
+                    },
+                    "gfastats": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
+                    "gtdbtk/classifywf": {
+                        "branch": "master",
+                        "git_sha": "b581ebb37c529fa07e22c38d128a7c5c273ed286",
+                        "installed_by": ["modules"]
+                    },
+                    "gtdbtk/gtdbtoncbimajorityvote": {
+                        "branch": "master",
+                        "git_sha": "b581ebb37c529fa07e22c38d128a7c5c273ed286",
+                        "installed_by": ["modules"]
+                    },
+                    "gunzip": {
+                        "branch": "master",
+                        "git_sha": "0902eac3012baaf4f9ab6513c8c55acc9353c96c",
+                        "installed_by": ["modules"]
+                    },
+                    "infernal/cmsearch": {
+                        "branch": "master",
+                        "git_sha": "409e23bfd3515418268c43692ebea7b53a81d895",
+                        "installed_by": ["modules"]
+                    },
+                    "maxbin2": {
+                        "branch": "master",
+                        "git_sha": "0853ee37feb67f35fb7432e805def5fed7c2ee3d",
+                        "installed_by": ["modules"]
+                    },
+                    "metabat2/metabat2": {
+                        "branch": "master",
+                        "git_sha": "5be91832f7c6a2d229f900a239d9532c9ae133c7",
+                        "installed_by": ["modules"]
+                    },
+                    "metamdbg/asm": {
+                        "branch": "master",
+                        "git_sha": "fd67bc24ff4bd097b749dfcf4deb207d88f55fd3",
+                        "installed_by": ["modules"]
+                    },
+                    "metator/pipeline": {
+                        "branch": "master",
+                        "git_sha": "f8a9948c6768a730936a8c8a2abc80f705495cf2",
+                        "installed_by": ["modules"]
+                    },
+                    "minimap2/index": {
+                        "branch": "master",
+                        "git_sha": "135d883a43b1a2324b4112cd270cf22e20835533",
+                        "installed_by": ["cram_map_illumina_hic", "fastx_map_long_reads"]
+                    },
+                    "myloasm": {
+                        "branch": "master",
+                        "git_sha": "2a55fbb146d13f5058756c27cbf0b2e41e2a0729",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/myloasm/myloasm.diff"
+                    },
+                    "pyrodigal": {
+                        "branch": "master",
+                        "git_sha": "0ca6ca6c6e068635d01f979d0aed2f59c5d7cec4",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/faidx": {
+                        "branch": "master",
+                        "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
+                        "installed_by": ["bam_samtools_merge_markdup", "modules"]
+                    },
+                    "samtools/index": {
+                        "branch": "master",
+                        "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "samtools/merge": {
+                        "branch": "master",
+                        "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
+                        "installed_by": ["bam_samtools_merge_markdup"]
+                    },
+                    "samtools/splitheader": {
+                        "branch": "master",
+                        "git_sha": "9339809fcb90af8a8b7051e6cd914894d5c52002",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "semibin/multieasybin": {
+                        "branch": "master",
+                        "git_sha": "9f8642c41bf67d2787820e4c4aa34c0356a0d464",
+                        "installed_by": ["modules"]
+                    },
+                    "semibin/singleeasybin": {
+                        "branch": "master",
+                        "git_sha": "9f8642c41bf67d2787820e4c4aa34c0356a0d464",
+                        "installed_by": ["modules"]
+                    },
+                    "seqkit/replace": {
+                        "branch": "master",
+                        "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/seqkit/replace/seqkit-replace.diff"
+                    },
+                    "seqkit/split2": {
+                        "branch": "master",
+                        "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
+                        "installed_by": ["modules"]
+                    },
+                    "seqkit/stats": {
+                        "branch": "master",
+                        "git_sha": "d07a945f421a4a91ce4e5a22db63e0e7f8741607",
+                        "installed_by": ["modules"]
+                    },
+                    "tiara/tiara": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
+                    "trnascanse": {
+                        "branch": "master",
+                        "git_sha": "610fdc0f12df14140cfa6164a4c8b61132d74a2e",
+                        "installed_by": ["modules"]
+                    },
+                    "vamb/bin": {
+                        "branch": "master",
+                        "git_sha": "7844e96252d0693fb2331969a1c9790eb831b0f6",
+                        "installed_by": ["modules"]
+                    }
+                }
             },
             "subworkflows": {
                 "nf-core": {
                     "utils_nextflow_pipeline": {
                         "branch": "master",
-                        "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",
+                        "git_sha": "1a545fcbd762911c21a64ced3dbef99b2b51ac75",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nfcore_pipeline": {
@@ -21,6 +199,61 @@
                     "utils_nfschema_plugin": {
                         "branch": "master",
                         "git_sha": "a7b27fd25bfa8dcc07d299e88bd790585901a436",
+                        "installed_by": ["subworkflows"]
+                    }
+                }
+            }
+        },
+        "https://github.com/sanger-tol/nf-core-modules.git": {
+            "modules": {
+                "sanger-tol": {
+                    "cramalign/bwamem2alignhic": {
+                        "branch": "main",
+                        "git_sha": "3f65725eb72ebad4004d9c5b18817121c5e39a3f",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "cramalign/gencramchunks": {
+                        "branch": "main",
+                        "git_sha": "d4ca71bc08dc21d68af38c147cbd972c8e25c3e0",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "cramalign/minimap2alignhic": {
+                        "branch": "main",
+                        "git_sha": "3f65725eb72ebad4004d9c5b18817121c5e39a3f",
+                        "installed_by": ["cram_map_illumina_hic"]
+                    },
+                    "fastxalign/minimap2align": {
+                        "branch": "main",
+                        "git_sha": "3f65725eb72ebad4004d9c5b18817121c5e39a3f",
+                        "installed_by": ["fastx_map_long_reads"]
+                    },
+                    "fastxalign/pyfastxindex": {
+                        "branch": "main",
+                        "git_sha": "2e28234fb0e2970767dab28310c7eb553ad40081",
+                        "installed_by": ["fastx_map_long_reads"]
+                    },
+                    "samtools/mergedup": {
+                        "branch": "main",
+                        "git_sha": "729e9c8cfa83bc64c95ea6024dd5477c936e305e",
+                        "installed_by": ["bam_samtools_merge_markdup"]
+                    }
+                }
+            },
+            "subworkflows": {
+                "sanger-tol": {
+                    "bam_samtools_merge_markdup": {
+                        "branch": "main",
+                        "git_sha": "dabc24fcfd9184c4bc95c6f48745c92aeee94c24",
+                        "installed_by": ["cram_map_illumina_hic", "fastx_map_long_reads"]
+                    },
+                    "cram_map_illumina_hic": {
+                        "branch": "main",
+                        "git_sha": "fcfc2688aa0f1b50ad2bf013ceebc347d44487b3",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "fastx_map_long_reads": {
+                        "branch": "main",
+                        "git_sha": "56feb127ba9f1cfdb25118db9101c108c6e7c697",
                         "installed_by": ["subworkflows"]
                     }
                 }

@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sanger-tol/nf-core-modules/main/subworkflows/yaml-schema.json
+name: "hic_mapping"
+description: |
+  Map Hi-C reads to assemblies and convert to pairs format.
+keywords:
+  - mapping
+  - hi-c
+  - illumina
+  - pairs
+components:
+  - cram_map_illumina_hic
+  - samtools/faidx
+  - pairtools/parseselectsort
+input:
+  - ch_assemblies:
+      description: |
+        Assembly FASTA files.
+        Structure: [ val(meta), path(fasta) ]
+  - ch_hic_reads:
+      description: |
+        Hi-C CRAM/reads files.
+        Structure: [ val(meta), path(reads) ]
+  - ch_filter_list:
+      description: |
+        Optional filter list of contigs to exclude.
+      pattern: "*.txt"
+  - val_mapping_options:
+      description: |
+        Mapping configuration (aligner, chunk settings).
+output:
+  - bam:
+      type: file
+      description: |
+        Hi-C mapped BAM files.
+        Structure: [ val(meta), path(bam) ]
+      pattern: "*.bam"
+  - pairs:
+      type: file
+      description: |
+        Hi-C pairs format files.
+        Structure: [ val(meta), path(pairs) ]
+      pattern: "*.pairs"
+authors:
+  - "@prototaxites"
+maintainers:
+  - "@prototaxites"
